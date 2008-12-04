@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Cuando haces un hello se expande este hilo por parte del servidor.
  * @author pitidecaner
  */
 public class Cliente extends Thread{
@@ -21,16 +21,17 @@ public class Cliente extends Thread{
     private String _ip;
     private int _puerto;
     private Socket _conn;
+    private ListaArchivos _listaArchivos;
+    private TablaClientes _tablaClientes;
     
     /**
      * La clase cliente mantiene los datos necesarios para la comunicación 
      * con un cliente. 
-     * Para empezar comenzará un hilo de ejecución que recibira todos los datos
-     * que el cliente envia al conectar, estos son:
+     * Para empezar comenzará un hilo de ejecución que recibirá todos los datos
+     * que el cliente envía al conectar, estos son:
      * 
      * - nombre usuario,
      * - puerto por el que el usuario escucha a otros clientes.
-     * 
      * - lista de ficheros compartidos que tiene el cliente.
      * 
      * El cliente nos suministrará estos datos.
@@ -41,7 +42,10 @@ public class Cliente extends Thread{
      * @param t         La lista de clientes conectados al servidor en este momento.
      */
     public Cliente(Socket conexion, ListaArchivos l, TablaClientes t){
-        _conn  =conexion;
+       
+        _conn  = conexion;
+        _tablaClientes = t;
+        _listaArchivos = l;
     }
     
     @Override
@@ -51,23 +55,25 @@ public class Cliente extends Thread{
             ObjectInputStream flujo = new ObjectInputStream(_conn.getInputStream());
 
             // recibe datos
-            // read version!!!
+            // read version!!! Si la version no es correcta lanza excepcion
             if (Config.protocolVersion() == flujo.readInt()){
-                // TODO:  elevar excepción 
+                // TODO:  Trabajar en ESA EXCEPCION 
             } 
-                       
-            _puerto = flujo.readInt();
-                        
+                              
             // obtener IP & puerto de escucha para otros clientes.
             _ip = _conn.getRemoteSocketAddress().toString();
+            _puerto = flujo.readInt();
             _nmb = (String) flujo.readObject();
 
             
             // crea estructuras
+            // TODO:
+            
+            
             // recibe lista de ficheros.
             ListaArchivos archivosCliente = (ListaArchivos)flujo.readObject();
-            
-            
+            // TODO: Esta lista de archivos se añade a la tabla de archivos 
+            // y se marca esos archivos como que este cliente los tiene
             
             // atiende peticiones.
        
@@ -83,8 +89,10 @@ public class Cliente extends Thread{
 
             
         } catch (IOException ex) {
+            
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
         }
             
