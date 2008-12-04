@@ -5,11 +5,12 @@
 
 package servidoregorilla;
 
-import com.apple.crypto.provider.MessageDigestMD5;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.DigestException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,7 @@ public class Archivo implements Serializable{
             
             FileInputStream fs = null;
             try {
-                MessageDigestMD5 ms = new MessageDigestMD5();
+                MessageDigest ms = MessageDigest.getInstance("md5");
                 fs = new FileInputStream(f);
                 
                 int leidos = 0;
@@ -50,16 +51,18 @@ public class Archivo implements Serializable{
 
                 do {
                     fs.read (buff, chunk, leidos);
-                    ms.engineUpdate(buff, total, leidos);
+                    ms.digest(buff, total, leidos);
                     total+= leidos;
                 } while (leidos == chunk);
                 
                 fs.close();
                 
-                this.hash = new String (ms.engineDigest());
+                this.hash = new String (ms.digest());
                 this.nombre = f.getName();
                 this.size = f.length();
                 
+            } catch (DigestException ex) {
+                Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoSuchAlgorithmException ex) {
