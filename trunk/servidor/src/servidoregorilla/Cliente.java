@@ -56,7 +56,7 @@ public class Cliente extends Thread{
 
             // recibe datos
             // read version!!! Si la version no es correcta lanza excepcion
-            if (Config.protocolVersion() == flujo.readInt()){
+            if (Config.protocolVersion(flujo.readInt())){
                 // TODO:  Trabajar en ESA EXCEPCION 
             } 
                               
