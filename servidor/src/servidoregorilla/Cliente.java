@@ -36,8 +36,9 @@ public class Cliente extends Thread{
      * El cliente nos suministrará estos datos.
      * 
      * @param conexion  conexion recien abierta con el cliente
-     * @param l         lista de ficheros del servidor.
-     * @param t         
+     * @param l         lista de ficheros del servidor, los que tienen todos los 
+     *                  usuarios conectados en conjunto.
+     * @param t         La lista de clientes conectados al servidor en este momento.
      */
     public Cliente(Socket conexion, ListaArchivos l, TablaClientes t){
         _conn  =conexion;
