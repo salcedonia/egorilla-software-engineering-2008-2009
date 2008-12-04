@@ -17,10 +17,12 @@ import java.util.Properties;
  */
 class Config{   
     
-    static private int[] _protoVersion;
     
     static private Properties _prop;
     static private File       _file;
+    
+    static private int[] _protoVersion;
+    static private int   _puerto;
     
     /**
      * para inicializar esta clase se lee el fuichero de configuración indicado.
@@ -47,6 +49,12 @@ class Config{
         for (int i = 0; i < split.length; i++) {
             _protoVersion[i] = Integer.parseInt(split[i]);
         }
+        
+        /*
+         * puerto por el que escucha el servidor las conexiones de los clientes.
+         * Será un número entero.
+         */
+        _puerto = Integer.parseInt(_prop.getProperty("puerto"));
     }
 
     /**
@@ -67,5 +75,13 @@ class Config{
         while ((!existe) &&(i<_protoVersion.length))
             existe = (_protoVersion[i++]== v)? true: false;
         return existe;
+    }
+  
+    /**
+     * puerto por el que escucha el servidor las conexiones de los clientes.
+     * Será un número entero.
+     */
+    static int puerto() {
+        return _puerto;
     }
 }
