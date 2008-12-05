@@ -5,6 +5,9 @@
 
 package servidoregorilla;
 
+import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.Datos.TablaClientes;
+import servidoregorilla.protocolo.Protocolo;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +28,7 @@ public class Main {
         
         // variables we need
         Server eGorilla;
-        Cliente c;
+        Protocolo p;
         TablaClientes tablaClientes;
         ListaArchivos archivos;
         
@@ -47,11 +50,15 @@ public class Main {
         //  listen connectinons
         while (_loop){
             try {
-                c = eGorilla.listen();
+                p = eGorilla.listen();
+                
+                // read version!!! Si la version no es correcta lanza excepcion
+                // diferentes versiones pueden tener diferente modo de actuación 
+                // en el servidor.
+                
                 System.out.println("cliente conectado");
                
-                c.start();
-                tablaClientes.add(c);
+                p.start();
                 
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

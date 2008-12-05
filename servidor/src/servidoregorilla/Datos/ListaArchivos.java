@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla;
+package servidoregorilla.Datos;
 
+import servidoregorilla.paquete.Archivo;
 import java.io.Serializable;
 import java.util.Hashtable;
 

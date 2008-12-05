@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla;
+package servidoregorilla.paquete;
 
 import java.io.File;
 import java.io.FileInputStream;
