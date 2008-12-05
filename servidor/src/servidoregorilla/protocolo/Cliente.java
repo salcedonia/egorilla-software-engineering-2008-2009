@@ -5,12 +5,11 @@
 
 package servidoregorilla.protocolo;
 
+import Networking.PeerConn;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.Datos.TablaClientes;
-import servidoregorilla.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.Socket;
+import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,9 +20,9 @@ import java.util.logging.Logger;
 public class Cliente extends Thread implements Protocolo{
     
     private String _nmb;
-    private String _ip;
+    private InetAddress _ip;
     private int _puerto;
-    private Socket _conn;
+    private PeerConn _conn;
     private ListaArchivos _listaArchivos;
     private TablaClientes _tablaClientes;
     
@@ -44,7 +43,7 @@ public class Cliente extends Thread implements Protocolo{
      *                  usuarios conectados en conjunto.
      * @param t         La lista de clientes conectados al servidor en este momento.
      */
-    public Cliente(Socket conexion, ListaArchivos l, TablaClientes t){
+    public Cliente(PeerConn conexion, ListaArchivos l, TablaClientes t){
        
         _conn  = conexion;
         _tablaClientes = t;
@@ -55,14 +54,12 @@ public class Cliente extends Thread implements Protocolo{
     public void run (){
         try {
             
-            ObjectInputStream flujo = new ObjectInputStream(_conn.getInputStream());
-
             // recibe datos
 
             // obtener IP & puerto de escucha para otros clientes.
-            _ip = _conn.getRemoteSocketAddress().toString();
-            _puerto = flujo.readInt();
-            _nmb = (String) flujo.readObject();
+            _ip = _conn.getip();
+            _puerto = _conn.reciveInt();
+            _nmb = (String) _conn.reciveObject();
 
             
             // crea estructuras
@@ -70,7 +67,7 @@ public class Cliente extends Thread implements Protocolo{
             
             
             // recibe lista de ficheros.
-            ListaArchivos archivosCliente = (ListaArchivos)flujo.readObject();
+            ListaArchivos archivosCliente = (ListaArchivos)_conn.reciveObject();
             // TODO: Esta lista de archivos se añade a la tabla de archivos 
             // y se marca esos archivos como que este cliente los tiene
             

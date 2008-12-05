@@ -5,6 +5,7 @@
 
 package servidoregorilla.server;
 
+import Networking.PeerConn;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
@@ -31,12 +32,11 @@ public class Server {
     }
     
     public Protocolo listen() throws IOException{
-        Socket conn  = _soket.accept();
+
+        PeerConn conn = new PeerConn(_soket.accept());
         
-        ObjectInputStream flujo = new ObjectInputStream(conn.getInputStream());
-        switch (flujo.readInt()){    // read protocol version
+        switch (conn.reciveInt()){    // read protocol version
             case 1:
-                flujo.close();
                  return new Cliente(conn, _l, _t);
             case 2:
                 // hacer otra cosa, otra version, modo consola o lo que sea
