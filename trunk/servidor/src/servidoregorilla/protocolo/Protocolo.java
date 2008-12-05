@@ -3,14 +3,14 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla;
-
-import java.util.HashSet;
+package servidoregorilla.protocolo;
 
 /**
  *
  * @author pitidecaner
  */
-public class TablaClientes extends HashSet<Cliente>{
-    
+public interface Protocolo {
+
+    public void start();
+
 }

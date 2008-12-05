@@ -12,8 +12,8 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import servidoregorilla.Archivo;
-import servidoregorilla.ListaArchivos;
+import servidoregorilla.paquete.Archivo;
+import servidoregorilla.Datos.ListaArchivos;
 
 /**
  *

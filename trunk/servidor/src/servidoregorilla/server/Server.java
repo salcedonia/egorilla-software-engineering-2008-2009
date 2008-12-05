@@ -6,10 +6,13 @@
 package servidoregorilla.server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
-import servidoregorilla.Cliente;
-import servidoregorilla.ListaArchivos;
-import servidoregorilla.TablaClientes;
+import java.net.Socket;
+import servidoregorilla.protocolo.Cliente;
+import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.protocolo.Protocolo;
+import servidoregorilla.Datos.TablaClientes;
 
 /**
  *
@@ -27,7 +30,20 @@ public class Server {
         
     }
     
-    public Cliente listen() throws IOException{
-        return new Cliente(_soket.accept(), _l, _t);
+    public Protocolo listen() throws IOException{
+        Socket conn  = _soket.accept();
+        
+        ObjectInputStream flujo = new ObjectInputStream(conn.getInputStream());
+        switch (flujo.readInt()){    // read protocol version
+            case 1:
+                flujo.close();
+                 return new Cliente(conn, _l, _t);
+            case 2:
+                // hacer otra cosa, otra version, modo consola o lo que sea
+                break;
+            default:
+                throw new IOException("version protocolo invalida");
+        }
+        return null;
     }
 }

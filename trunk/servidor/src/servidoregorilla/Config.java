@@ -57,25 +57,25 @@ class Config{
         _puerto = Integer.parseInt(_prop.getProperty("puerto"));
     }
 
-    /**
-     * comprueba si la version del protocolo está entre las toleradas por esta
-     * implementación.
-     * 
-     * Este número nos permite discernir si un cliente habla la versión correcta
-     * o no.
-     * 
-     * en caso de que no resulte compatible, se deshechara esta conexion.
-     * 
-     * @param v la version del cliente a comprobar .
-     * @return si la versión v es compatible o no.
-     */
-    static boolean protocolVersion(int v){
-        boolean existe = false;
-        int i = 0;
-        while ((!existe) &&(i<_protoVersion.length))
-            existe = (_protoVersion[i++]== v)? true: false;
-        return existe;
-    }
+//    /**
+//     * comprueba si la version del protocolo está entre las toleradas por esta
+//     * implementación.
+//     * 
+//     * Este número nos permite discernir si un cliente habla la versión correcta
+//     * o no.
+//     * 
+//     * en caso de que no resulte compatible, se deshechara esta conexion.
+//     * 
+//     * @param v la version del cliente a comprobar .
+//     * @return si la versión v es compatible o no.
+//     */
+//    static boolean protocolVersion(int v){
+//        boolean existe = false;
+//        int i = 0;
+//        while ((!existe) &&(i<_protoVersion.length))
+//            existe = (_protoVersion[i++]== v)? true: false;
+//        return existe;
+//    }
   
     /**
      * puerto por el que escucha el servidor las conexiones de los clientes.

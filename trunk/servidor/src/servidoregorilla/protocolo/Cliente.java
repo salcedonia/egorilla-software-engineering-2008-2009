@@ -3,8 +3,11 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla;
+package servidoregorilla.protocolo;
 
+import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.Datos.TablaClientes;
+import servidoregorilla.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -15,7 +18,7 @@ import java.util.logging.Logger;
  * Cuando haces un hello se expande este hilo por parte del servidor.
  * @author pitidecaner
  */
-public class Cliente extends Thread{
+public class Cliente extends Thread implements Protocolo{
     
     private String _nmb;
     private String _ip;
@@ -55,11 +58,7 @@ public class Cliente extends Thread{
             ObjectInputStream flujo = new ObjectInputStream(_conn.getInputStream());
 
             // recibe datos
-            // read version!!! Si la version no es correcta lanza excepcion
-            if (Config.protocolVersion(flujo.readInt())){
-                // TODO:  Trabajar en ESA EXCEPCION 
-            } 
-                              
+
             // obtener IP & puerto de escucha para otros clientes.
             _ip = _conn.getRemoteSocketAddress().toString();
             _puerto = flujo.readInt();
