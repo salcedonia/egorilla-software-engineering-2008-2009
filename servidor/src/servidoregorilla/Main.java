@@ -14,57 +14,71 @@ import java.util.logging.Logger;
 import servidoregorilla.server.Server;
 
 /**
- *
+ * Clase Main de la aplicación Servidor de servidor.
+ * 
  * @author pitidecaner
+ * @author Salcedonia
  */
 public class Main {
 
+    // ATRIBUTOS
     public static boolean _loop = true;
     
     /**
-     * @param args the command line arguments
+     * Método main del servidor.
+     * 
+     * @param args Argumentos de la línea de comandos.
      */
     public static void main(String[] args) {
         
-        // variables we need
-        Server eGorilla;
-        Protocolo p;
+        Server servidor;
+        Protocolo protocolo;
         TablaClientes tablaClientes;
         ListaArchivos archivos;
         
-        //  read config and set enviroment
-        
-        
-        //  initiate stuff
+       /* 
+        * Iniciamos la tabla de clientes y la lista de archivos asociados
+        * al servidor.
+        * TODO: Integración con base de datos?
+        */
         tablaClientes = new TablaClientes();
         archivos =  new ListaArchivos();
         
         try {
-             eGorilla = new Server(6969,archivos, tablaClientes);
-        } catch (IOException ex) {
+        
+            // Creamos el servidor
+            servidor = new Server(6969, archivos, tablaClientes);
+        } 
+        catch (IOException ex) {
+        
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             return;
         }
-        System.out.println("escuchando por puerto 6969");
+        
+        System.out.println("Escuchando por puerto 6969");
 
-        //  listen connectinons
+        //  Escuchamos conexiones 
         while (_loop){
+            
             try {
-                p = eGorilla.listen();
                 
-                // read version!!! Si la version no es correcta lanza excepcion
-                // diferentes versiones pueden tener diferente modo de actuación 
-                // en el servidor.
+                // Escuchamos conexiones
+                protocolo = servidor.listen();
                 
-                System.out.println("cliente conectado");
+                /*
+                 * Si la version no es correcta lanza excepcion
+                 * diferentes versiones pueden tener diferente modo de actuación 
+                 * en el servidor.
+                 */
+                System.out.println("Cliente conectado");
                
-                p.start();
+                // Lanzamos el hilo de ejecución asociado a la conexión
+                protocolo.start();
+            } 
+            catch (IOException ex) {
                 
-            } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
     }
-
 }

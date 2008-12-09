@@ -9,9 +9,13 @@ import servidoregorilla.protocolo.Cliente;
 import java.util.HashSet;
 
 /**
- *
+ * Clase que proporciona los métodos y atributos necesarios para el manejo de
+ * tablas que contienen la información relativa a los clientes.
+ * 
  * @author pitidecaner
+ * @author Salcedonia
  */
 public class TablaClientes extends HashSet<Cliente>{
     
+    // TODO:
 }
