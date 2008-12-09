@@ -6,55 +6,56 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * El objeto config es el almacen de la configuración persistente del servidor.
+ * La clase Config es el almacén de la configuración persistente del servidor.
  * Se leerá a partir de un fichero de configuración y será accesible allí donde 
  * sea necesario.
  * 
- * Una vez inicializado se podran leer todos los campos en cualquier hambito. 
- * Por ello es necesario que se inicialice en el arranque del servidor.
+ * Una vez inicializado se podrán leer todos los campos en cualquier ámbito 
+ * siendo necesario que se inicialice en el arranque del servidor.
  * 
  * @author pitidecaner
  */
-class Config{   
+public class Config{   
     
-    
-    static private Properties _prop;
+    // ATRIBUTOS
+    static private Properties _properties;
     static private File       _file;
     
-    static private int[] _protoVersion;
+    static private int[] _versionProtocolo;
     static private int   _puerto;
     
     /**
-     * para inicializar esta clase se lee el fuichero de configuración indicado.
-     * se almacena el path para escribir este fichero cuando sea necesario.
+     * Para inicializar esta clase se lee el fichero de configuración indicado.
      * 
-     * @param f el fichero de configuración 
-     * @throws java.io.IOException en caso de no encontrar el fichero de 
+     * @param f El fichero de configuración asociado.
+     * @throws java.io.IOException Se lanza en caso de no encontrar el fichero de 
      * configuración indicado.
      */
     static public void leeConfig(File f) throws IOException {
 
-        _prop = new Properties();
-        _prop.load(new FileInputStream(f));
+        // Cargamos el fichero de properties
+        _properties = new Properties();
+        _properties.load(new FileInputStream(f));
 
         /*
-         * Primer parámetro: version del protocolo.
-         * será una lista con todas las  dersiones  del protocolo admintidos por
-         * el servidor separados por : , ó ;
+         * Primer parámetro: Versión del protocolo.
+         * 
+         * Consistirá en una lista con todas las versiones del protocolo admitidos 
+         * por el servidor separados por : , ó ;
          * Las diferentes versiones se indicarán con un número entero.
          */
-        String tmp = _prop.getProperty("VersionProtocolo");
+        String tmp = _properties.getProperty("VersionProtocolo");
         String[] split = tmp.split(":,;");
-        _protoVersion = new int[split.length];
+        _versionProtocolo = new int[split.length];
         for (int i = 0; i < split.length; i++) {
-            _protoVersion[i] = Integer.parseInt(split[i]);
+            _versionProtocolo[i] = Integer.parseInt(split[i]);
         }
         
         /*
-         * puerto por el que escucha el servidor las conexiones de los clientes.
+         * Puerto por el que escucha el servidor las conexiones de los clientes.
          * Será un número entero.
          */
-        _puerto = Integer.parseInt(_prop.getProperty("puerto"));
+        _puerto = Integer.parseInt(_properties.getProperty("puerto"));
     }
 
 //    /**
@@ -72,16 +73,30 @@ class Config{
 //    static boolean protocolVersion(int v){
 //        boolean existe = false;
 //        int i = 0;
-//        while ((!existe) &&(i<_protoVersion.length))
-//            existe = (_protoVersion[i++]== v)? true: false;
+//        while ((!existe) &&(i<_versionProtocolo.length))
+//            existe = (_versionProtocolo[i++]== v)? true: false;
 //        return existe;
 //    }
   
     /**
-     * puerto por el que escucha el servidor las conexiones de los clientes.
-     * Será un número entero.
+     * Devuelve la versión del protocolo que se está utilizando.
+     * 
+     * @return La versión del protocolo que se está utilizando.
      */
-    static int puerto() {
+    static int[] getVersion(){
+        
+        return _versionProtocolo;
+    }
+    
+    /**
+     * Devuelve el número entero que identifica al puerto por el que escucha el 
+     * servidor las conexiones de los clientes.
+     * 
+     * @return El número entero que identifica al puerto por el que escucha el 
+     * servidor las conexiones de los clientes.
+     */
+    static int getPuerto() {
+        
         return _puerto;
     }
 }

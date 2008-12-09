@@ -16,63 +16,88 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase que trata todo lo relacionado con los archivos que se comparten en
+ * el servidor. 
+ * 
  * @author pitidecaner
+ * @author Salcedonia
  */
 public class Archivo implements Serializable{
 
-    public String nombre;
-    public String hash;
-    public long   size;
-    //TODO: tipo
-    
-    public Archivo(){
-    }
-    
+    // ATRIBUTOS
+    public String _nombre;
+    public String _hash;
+    public long _tamaño;
+    public TipoArchivo _tipo;
+
     /**
-     * genera la información de un archivo a partir un identificador de fichero.
+     * Constructor de la clase Archivo.
+     */
+    public Archivo() {
+        
+    }
+        
+    /**
+     * Constructor de la clase Archivo. Genera la información de un archivo a 
+     * partir un identificador de fichero.
      * 
-     * @param f
+     * @param f Identificador de fichero.
      */
     public Archivo(File f){
-        {
+        
+        //TODO: si el fichero no existe o no es un fichero... excepcion
+        FileInputStream fs = null;
 
-            //TODO: si el fichero no existe o no es un fichero... excepcion
+        try {
+
+            // Aplicamos md5 al fichero para asignarle un hash único
+            MessageDigest ms = MessageDigest.getInstance("md5");
             
-            FileInputStream fs = null;
-            try {
-                MessageDigest ms = MessageDigest.getInstance("md5");
-                fs = new FileInputStream(f);
-                
-                int leidos = 0;
-                int total = 0;
-                int chunk = 1024 * 4;
-                byte[] buff = new byte[chunk];
+            // Recibimos los datos relativos al archivo
+            fs = new FileInputStream(f);
 
-                do {
-                    fs.read (buff, chunk, leidos);
-                    ms.digest(buff, total, leidos);
-                    total+= leidos;
-                } while (leidos == chunk);
-                
+            int leidos = 0;
+            int total = 0;
+            int chunk = 1024 * 4;
+            byte[] buff = new byte[chunk];
+
+            do {
+
+                fs.read (buff, chunk, leidos);
+                ms.digest(buff, total, leidos);
+                total += leidos;
+            } while (leidos == chunk);
+
+            fs.close();
+
+            // Configuramos el tipo de archivo en función de los datos recibidos
+            _hash = new String (ms.digest());
+            _nombre = f.getName();
+            _tamaño = f.length();
+            // TODO: Asignarle el tipo de archivo
+        } 
+        catch (DigestException ex) {
+
+            Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (IOException ex) {
+
+            Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        catch (NoSuchAlgorithmException ex) {
+
+            Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        finally {
+
+            try {
+
+                // Cerramos el flujo de entrada
                 fs.close();
-                
-                this.hash = new String (ms.digest());
-                this.nombre = f.getName();
-                this.size = f.length();
-                
-            } catch (DigestException ex) {
+            } 
+            catch (IOException ex) {
+
                 Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                try {
-                    fs.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
-                }
             }
         }
     }

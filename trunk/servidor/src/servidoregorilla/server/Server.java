@@ -7,43 +7,69 @@ package servidoregorilla.server;
 
 import Networking.PeerConn;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 import servidoregorilla.protocolo.Cliente;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.protocolo.Protocolo;
 import servidoregorilla.Datos.TablaClientes;
 
 /**
- *
+ * Clase que implementa el servidor.
+ * 
  * @author pitidecaner
+ * @author Salcedonia
  */
 public class Server {
 
-    private ServerSocket _soket;
+    // ATRIBUTOS
+    private ServerSocket _serverSocket; // Servidor de escucha
+    private ListaArchivos _listaArchivos; // Lista de archivos asociada al servidor
+    private TablaClientes _tablaClientes; // Tabla de clientes asociada al servidor
     
-    private ListaArchivos _l;
-    private TablaClientes _t;
-    
-    public Server(int puerto, ListaArchivos l, TablaClientes t) throws IOException{
-        _soket = new ServerSocket(puerto);
+    /**
+     * Constructor de la clase Server. Crea un servidor de escucha en el 
+     * puerto indicado. Almacenamos la lista de archivos y la tabla de 
+     * clientes asociada a ese servidor.
+     * 
+     * @param puerto Puerto en el que se queda escuchando el servidor.
+     * @param lista Lista de archivos asociada al servidor.
+     * @param tabla Tabla de archivos asociada al servidor.
+     * @throws java.io.IOException Se lanza la excepción cuando ocurre un error
+     * al crear el servidor de escucha.
+     */
+    public Server(int puerto, ListaArchivos lista, TablaClientes tabla) throws IOException{
         
+        _serverSocket = new ServerSocket(puerto);
+        _listaArchivos = lista;
+        _tablaClientes = tabla;
     }
     
+    /**
+     * Escucha y crea conexiones de tipo peer según van llegando.
+     * 
+     * @return Un objeto de tipo Protocolo que se está utilizando.
+     * @throws java.io.IOException Se genera la excepcion cuando se produce
+     * algún problema en la red.
+     */
     public Protocolo listen() throws IOException{
 
-        PeerConn conn = new PeerConn(_soket.accept());
+        // Crea una conexión de tipo peer según va llegando
+        PeerConn conexion = new PeerConn(_serverSocket.accept());
         
-        switch (conn.reciveInt()){    // read protocol version
+        // Leemos la versión del protocolo y actuamos en consecuencia
+        switch (conexion.reciveInt()){ 
+            
             case 1:
-                 return new Cliente(conn, _l, _t);
+                // Versión del cliente
+                return new Cliente(conexion, _listaArchivos, _tablaClientes);
             case 2:
-                // hacer otra cosa, otra version, modo consola o lo que sea
+                // TODO: Modo consola o lo que sea
                 break;
             default:
-                throw new IOException("version protocolo invalida");
+                // Lanzamos una excepción por error de protocolo
+                throw new IOException("Versión de protocolo no válida");
         }
+        
         return null;
     }
 }

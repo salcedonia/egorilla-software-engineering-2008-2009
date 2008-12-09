@@ -12,92 +12,106 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 /**
- * Se trata de un wrapper para encapsular todas las comunicaciones con un peer.
- * esto nos evita el uso de streams y otras clases en todas las comunicaciones.
+ * Clase que hace las veces de un wrapper para encapsular todas las comunicaciones 
+ * con un peer determinado, evitando el uso de streams y otras clases en todas 
+ * las comunicaciones relativas a los peers.
  * 
  * @author pitidecaner
+ * @author Salcedonia 
  */
 public class PeerConn {
 
-    private Socket             _conn;
-    private ObjectInputStream  _objIn;
-    private ObjectOutputStream _objOut;
+    // ATRIBUTOS
+    private Socket _conexion; // Conexión entre los peers
+    private ObjectInputStream  _objetoEntrada; // Flujo de entrada para objetos
+    private ObjectOutputStream _objetoSalida; // Flujo de salida para objetos
     
     /**
-     * Conexion con peer, constructor:
+     * Constructor de la clase PeerConn. Se genera una clase que representa la 
+     * conexión recibida. Esta conexion se puede utilizar para enviar y recibir 
+     * datos con un operador remoto sea quien sea.
      * 
-     * Se genera una clase que representa la conexion recibida. Esta conexion se
-     * puede utilizar para enviar y recibir datos con un operador remoto sea quien
-     * sea.
-     * 
-     * @param s socket abierto con peer.
+     * @param conexion Socket abierto con peer.
+     * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
-    public PeerConn(Socket s) throws IOException{
-        _conn = s;
-        _objIn = new ObjectInputStream(s.getInputStream());
-        _objOut = new ObjectOutputStream(s.getOutputStream());
+    public PeerConn(Socket conexion) throws IOException{
+        
+        _conexion = conexion;
+        _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
+        _objetoSalida = new ObjectOutputStream(conexion.getOutputStream());
     }
 
-    public InetAddress getip() {
+    /**
+     * Devuelve la dirección IP asociada a la conexión establecida.
+     * 
+     * @return La dirección IP asociada a la conexión establecida.
+     */
+    public InetAddress getIP() {
+        
         // TODO: comentar y parsear la dirección
-        return _conn.getInetAddress();
+        return _conexion.getInetAddress();
     }
  
     /**
-     * lee un integer transmitido por el peer.
-     * esta lectura es bloqueante, por lo que si no se produce, el hilo se quedara
-     * bloqueado en este punto sin progresar hasta recibir la instancia.
+     * Lee un integer transmitido por el peer. Esta lectura es bloqueante, por 
+     * lo que si no se produce, el hilo se quedará bloqueado en este punto sin 
+     * progresar hasta recibir la instancia.
      * 
-     * @return el entero recibido.
-    * @throws java.io.IOException en caso de error con la conexion
+     * @return El entero recibido por el conexion.
+     * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public synchronized int reciveInt() throws IOException{
-        return _objIn.readInt();
+        
+        return _objetoEntrada.readInt();
     }
     
     /**
-     * Envia un numero entero con signo.
+     * Envía un número entero con signo por el conexion.
      * 
-     * @param i en entero a enviar
-    * @throws java.io.IOException en caso de error con la conexion
+     * @param num en entero a enviar por el conexion.
+     * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
-    public synchronized void sendInt(int i) throws IOException{
-        _objOut.writeInt(i);
+    public synchronized void sendInt(int num) throws IOException{
+    
+        _objetoSalida.writeInt(num);
     }
     
     /**
-     * lee un objeto transimitido por el peer.
-     * esta lectura es bloqueante, por lo que si no se produce, el hilo se quedara
-     * bloqueado en este punto sin progresar hasta recibir la instancia.
+     * Lee un objeto transimitido por el peer. Esta lectura es bloqueante, por 
+     * lo que si no se produce, el hilo se quedará bloqueado en este punto sin 
+     * progresar hasta recibir la instancia.
      * 
-     * @return el objeto leido
-     * @throws java.io.IOException en caso de error de transmisión.
-     * @throws java.lang.ClassNotFoundException si el objeto no puede ser reconicido.
+     * @return El objeto leído del peer.
+     * @throws java.io.IOException Se lanza en caso de error de transmisión.
+     * @throws java.lang.ClassNotFoundException Se lanza si el objeto no puede 
+     * ser reconocido.
      */
     public synchronized  Object reciveObject() throws IOException, ClassNotFoundException{
-        return _objIn.readObject();   
+        
+        return _objetoEntrada.readObject();   
     }
     
    /**
-    * envia un objeto por la conexion establecida.
+    * Envía un objeto por el conexion. 
     * 
-    * @param o el objeto a transmitir, debe ser serializable.
-    * @throws java.io.IOException en caso de error con la conexion
+    * @param o Objeto a transmitir, debe ser serializable.
+    * @throws java.io.IOException Se lanza en caso de error con la conexión.
     */
     public void sendObject(Object o) throws IOException{
-        _objOut.writeObject(o);
+        
+        _objetoSalida.writeObject(o);
     }
     
     /**
-     * Finaliza conexion con peer.
-     * esto termina toda comunicación con este.
+     * Finaliza conexión con peer terminando toda comunicación con éste, cerrando
+     * la conexión y los flujos de entrada y de salida.
      * 
-     * @throws java.io.IOException  en caso de error. si la connexion ya esta 
-     * cerrada por ejemplo.
+     * @throws java.io.IOException Se lanza en caso de error.
      */
-    public synchronized   void close() throws IOException{
-        _objIn.close();
-        _objOut.close();
-        _conn.close();
+    public synchronized void close() throws IOException{
+        
+        _objetoEntrada.close();
+        _objetoSalida.close();
+        _conexion.close();
     }
 }
