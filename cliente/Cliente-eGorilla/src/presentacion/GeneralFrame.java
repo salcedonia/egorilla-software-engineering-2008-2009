@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import presentacion.buscador.BuscadorPanel;
 import presentacion.buscador.GUIBuscador;
 import presentacion.configuracion.GUIConfiguracion;
+import presentacion.descargas.GUIDescargas;
 import presentacion.servidores.GUIServidores;
 
 /**
@@ -141,6 +142,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         mainPanel.add( "Servidores", GUIServidores.instancia().getPanel());
         mainPanel.add( "Buscador", GUIBuscador.instancia().getPanel());
         mainPanel.add( "Configuracion", GUIConfiguracion.instancia().getPanel());
+        mainPanel.add( "Descargas", GUIDescargas.instancia().getPanel());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -204,7 +206,7 @@ public class GeneralFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_cargarBuscador
 
     private void cargarTrafico(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarTrafico
-        // TODO add your handling code here:
+        ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Descargas" );
 }//GEN-LAST:event_cargarTrafico
 
     private void cargarConfiguracion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarConfiguracion
