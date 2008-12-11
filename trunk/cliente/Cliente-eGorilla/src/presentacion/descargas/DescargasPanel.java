@@ -61,6 +61,7 @@ public class DescargasPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setEnabled(false);
         jTable1.setName("jTable1"); // NOI18N
         jScrollPane2.setViewportView(jTable1);
 
