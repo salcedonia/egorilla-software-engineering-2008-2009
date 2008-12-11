@@ -86,10 +86,7 @@ public class ServidoresPanel extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Nombre del Servidor", "IP", "Descripciçon", "Usuarios", "Número máximo de usuarios", "Archivos", "Preferencia"
@@ -192,7 +189,7 @@ public class ServidoresPanel extends javax.swing.JPanel {
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 109;
+        gridBagConstraints.ipadx = 120;
         gridBagConstraints.ipady = 1;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(7, 20, 0, 3);

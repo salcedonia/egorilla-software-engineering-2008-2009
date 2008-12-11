@@ -73,40 +73,37 @@ public class BuscadorPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.gridheight = 2;
-        gridBagConstraints.ipadx = 84;
+        gridBagConstraints.ipadx = 100;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 16, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 13, 0, 0);
         add(jTextField1, gridBagConstraints);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 14;
-        gridBagConstraints.ipadx = 394;
+        gridBagConstraints.gridwidth = 9;
+        gridBagConstraints.ipadx = 400;
         gridBagConstraints.ipady = 9;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(9, 3, 0, 13);
+        gridBagConstraints.insets = new java.awt.Insets(9, 13, 0, 0);
         add(jSeparator1, gridBagConstraints);
 
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(20, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 7, 0, 0);
         add(jButton1, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Nombre", "Tamaño", "Disponibilidad", "Fuentes", "Tipo", "Identificador de archivo"
@@ -134,15 +131,15 @@ public class BuscadorPanel extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        gridBagConstraints.gridwidth = 7;
+        gridBagConstraints.gridwidth = 19;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 357;
-        gridBagConstraints.ipady = 153;
+        gridBagConstraints.ipady = 163;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(17, 10, 0, 0);
+        gridBagConstraints.insets = new java.awt.Insets(17, 10, 0, 21);
         add(jScrollPane1, gridBagConstraints);
 
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
@@ -152,24 +149,25 @@ public class BuscadorPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 27, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 10, 7, 0);
         add(jButton2, gridBagConstraints);
 
         jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
         jButton3.setName("jButton3"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 8;
+        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(10, 39, 27, 0);
+        gridBagConstraints.insets = new java.awt.Insets(20, 19, 7, 0);
         add(jButton3, gridBagConstraints);
 
         jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
         jButton4.setName("jButton4"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 5;
+        gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 10;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(20, 9, 0, 0);
