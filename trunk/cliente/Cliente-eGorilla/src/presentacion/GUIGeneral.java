@@ -11,9 +11,12 @@ package presentacion;
  */
 public abstract class GUIGeneral {
 
+    private static GUIGeneral instancia;
+
     //Todos los eventos de actualización
 	public static final int MOSTRAR_MENU = 0;
-	private static GUIGeneral instancia;
+	public static final int MOSTRAR_CONECTADO = 1;
+	public static final int MOSTRAR_DESCONECTADO = 2;
 
 
 	// Devuelve la instancia única de la clase

@@ -17,12 +17,13 @@ public class eGorillaControlGeneralImpl extends eGorillaControlGeneral{
     public void action(int evento, Object params) {
         // Sólo se gestionan eventos que redirigen el control a los controladores específicos de cada módulo
 		switch (evento) {
-			case SERVIDORES:
-				ServidoresControl.instancia().iniciar();
+			case CONECTAR:
+                GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_CONECTADO, null);
 				break;
-			case BUSCAR:
-				//GestionClientesControl.instancia().iniciar();
+			case DESCONECTAR:
+				GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_DESCONECTADO, null);
 				break;
+
 		}
     }
 
