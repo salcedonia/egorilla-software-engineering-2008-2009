@@ -13,8 +13,9 @@ public abstract class eGorillaControlGeneral {
 
     private static eGorillaControlGeneral instancia;
 
-    public static final int SERVIDORES = 0;
-	public static final int BUSCAR = 1;
+    public static final int CONECTAR = 0;
+    public static final int DESCONECTAR = 1;
+
 
 	// Devuelve la única instanciad de eGorillaControlGeneral
 	public static eGorillaControlGeneral instancia() {

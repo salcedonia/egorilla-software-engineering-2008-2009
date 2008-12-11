@@ -14,7 +14,6 @@ package presentacion;
 import java.awt.CardLayout;
 import java.awt.Image;
 import javax.swing.JPanel;
-import presentacion.buscador.BuscadorPanel;
 import presentacion.buscador.GUIBuscador;
 import presentacion.configuracion.GUIConfiguracion;
 import presentacion.descargas.GUIDescargas;
@@ -54,8 +53,9 @@ public class GeneralFrame extends javax.swing.JFrame {
         bConfiguracion = new javax.swing.JButton();
         bEstadisticas = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        estado = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
+        conexion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GeneralFrame.class);
@@ -78,6 +78,7 @@ public class GeneralFrame extends javax.swing.JFrame {
 
         bConectar.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bConectar.setText(resourceMap.getString("bConectar.text")); // NOI18N
+        bConectar.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bConectar.setMaximumSize(new java.awt.Dimension(83, 23));
         bConectar.setMinimumSize(new java.awt.Dimension(83, 23));
         bConectar.setName("bConectar"); // NOI18N
@@ -144,11 +145,14 @@ public class GeneralFrame extends javax.swing.JFrame {
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
+        estado.setText(resourceMap.getString("estado.text")); // NOI18N
+        estado.setName("estado"); // NOI18N
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator2.setName("jSeparator2"); // NOI18N
+
+        conexion.setText(resourceMap.getString("conexion.text")); // NOI18N
+        conexion.setName("conexion"); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -156,17 +160,20 @@ public class GeneralFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                .addComponent(estado, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(98, 98, 98))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(conexion)
+                .addGap(60, 60, 60))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(estado)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(conexion))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -224,21 +231,21 @@ public class GeneralFrame extends javax.swing.JFrame {
 
     private void cargarServidores(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarServidores
 
-       ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Servidores" );
-       
+        ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Servidores" );
 }//GEN-LAST:event_cargarServidores
 
     private void cargarBuscador(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarBuscador
        
         ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Buscador" );
-        
 }//GEN-LAST:event_cargarBuscador
 
     private void cargarTrafico(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarTrafico
+
         ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Descargas" );
 }//GEN-LAST:event_cargarTrafico
 
     private void cargarConfiguracion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarConfiguracion
+
         ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Configuracion" );
 }//GEN-LAST:event_cargarConfiguracion
 
@@ -247,7 +254,11 @@ public class GeneralFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_cargarEstadisticas
 
 private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
-// TODO add your handling code here:
+
+    if(bConectar.getText().equals("Conectar"))
+        eGorillaControlGeneral.instancia().action(eGorillaControlGeneral.CONECTAR, null);
+    else
+        eGorillaControlGeneral.instancia().action(eGorillaControlGeneral.DESCONECTAR, null);
 }//GEN-LAST:event_conexion
 
     // Recoge el evento de actualización
@@ -264,6 +275,16 @@ private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
 			case GUIGeneral.MOSTRAR_MENU:
 				setVisible(true);
 				break;
+            case GUIGeneral.MOSTRAR_CONECTADO:
+				bConectar.setText("Desconectar");
+                conexion.setText("Conectado");
+                estado.setText("eGorilla conectado");
+				break;
+            case GUIGeneral.MOSTRAR_DESCONECTADO:
+				bConectar.setText("Conectar");
+                conexion.setText("Desconectado");
+                estado.setText("eGorilla desconectado");
+				break;
 		}
 	}
 
@@ -274,7 +295,8 @@ private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
     private javax.swing.JButton bEstadisticas;
     private javax.swing.JButton bServidores;
     private javax.swing.JButton bTrafico;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel conexion;
+    private javax.swing.JLabel estado;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
