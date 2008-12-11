@@ -12,6 +12,7 @@ import servidoregorilla.protocolo.Cliente;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.protocolo.Protocolo;
 import servidoregorilla.Datos.TablaClientes;
+import servidoregorilla.paquete.TipoArchivo;
 
 /**
  * Clase que implementa el servidor.
@@ -42,6 +43,9 @@ public class Server {
         _serverSocket = new ServerSocket(puerto);
         _listaArchivos = lista;
         _tablaClientes = tabla;
+        
+        // Inicializamos los datos relativos a las extensiones de archivo
+        TipoArchivo.iniciarTiposArchivo();
     }
     
     /**
