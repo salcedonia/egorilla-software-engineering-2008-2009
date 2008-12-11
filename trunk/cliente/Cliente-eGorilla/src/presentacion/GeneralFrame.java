@@ -205,7 +205,7 @@ public class GeneralFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_cargarTrafico
 
     private void cargarConfiguracion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarConfiguracion
-        // TODO add your handling code here:
+        
 }//GEN-LAST:event_cargarConfiguracion
 
     private void cargarEstadisticas(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarEstadisticas
