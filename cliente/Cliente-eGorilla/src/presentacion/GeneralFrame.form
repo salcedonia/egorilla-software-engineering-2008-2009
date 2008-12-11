@@ -32,25 +32,25 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="mainPanel" alignment="0" pref="624" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="bConectar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bServidores" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bBuscar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bTrafico" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bEstadisticas" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bConfiguracion" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
+              <Component id="bConectar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="bServidores" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bBuscar" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bTrafico" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bEstadisticas" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bConfiguracion" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="106" max="32767" attributes="0"/>
           </Group>
           <Component id="jSeparator1" alignment="1" pref="644" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="mainPanel" pref="624" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -70,7 +70,7 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="mainPanel" pref="181" max="32767" attributes="0"/>
-              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
               <Component id="jSeparator1" min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -161,7 +161,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="mainPanel.add( &quot;Servidores&quot;, GUIServidores.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Buscador&quot;, GUIBuscador.instancia().getPanel());"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="mainPanel.add( &quot;Servidores&quot;, GUIServidores.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Buscador&quot;, GUIBuscador.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Configuracion&quot;, GUIConfiguracion.instancia().getPanel());"/>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="GeneralFrame_mainPanel"/>
       </AuxValues>
 
