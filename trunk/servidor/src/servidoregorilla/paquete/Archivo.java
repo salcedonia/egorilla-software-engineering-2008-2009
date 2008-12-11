@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,7 +75,7 @@ public class Archivo implements Serializable{
             _hash = new String (ms.digest());
             _nombre = f.getName();
             _tamaño = f.length();
-            // TODO: Asignarle el tipo de archivo
+            _tipo= asignarTipoArchivo(f);
         } 
         catch (DigestException ex) {
 
@@ -100,5 +101,25 @@ public class Archivo implements Serializable{
                 Logger.getLogger(Archivo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    /**
+     * Devuelve el enumerado con el tipo de archivo correspondiente a la extensión 
+     * que se pasa como parámetro.
+     * 
+     * @param f Referencia al fichero.
+     * @return El enumerado con el tipo de archivo correspondiente a la extensión 
+     * que se pasa como parámetro.
+     */
+    private TipoArchivo asignarTipoArchivo(File f) {
+        
+        String fileName = null;   
+        String extension;  
+        fileName = fileName.trim();
+
+        int dotPos = fileName.lastIndexOf(".");
+        extension = fileName.substring(dotPos);
+
+        return TipoArchivo.devuelveTipo(extension);
     }
 }

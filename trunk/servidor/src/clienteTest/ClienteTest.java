@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.paquete.TipoArchivo;
 
 /**
  * Clase que implemeta un test de prueba del servidor.
@@ -47,12 +48,14 @@ public class ClienteTest {
             a._hash = "abc";
             a._nombre = "hola que tal";
             a._tamaño = 1231;
+            a._tipo = TipoArchivo.VIDEO;
             arch.addArchivo(a);
             
             a = new Archivo();
             a._hash = "abcd";
             a._nombre = "adios";
             a._tamaño = 123431;
+            a._tipo = TipoArchivo.AUDIO;
             arch.addArchivo(a);
             
             // Mandamos la lista de archivos asociada al cliente
