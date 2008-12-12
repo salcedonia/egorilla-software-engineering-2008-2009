@@ -59,7 +59,7 @@
               <Table columnCount="7" rowCount="0">
                 <Column editable="false" title="Nombre del Servidor" type="java.lang.String"/>
                 <Column editable="false" title="IP" type="java.lang.String"/>
-                <Column editable="false" title="Descripci&#xe7;on" type="java.lang.String"/>
+                <Column editable="false" title="Descripci&#xf3;n" type="java.lang.String"/>
                 <Column editable="false" title="Usuarios" type="java.lang.String"/>
                 <Column editable="false" title="N&#xfa;mero m&#xe1;ximo de usuarios" type="java.lang.String"/>
                 <Column editable="false" title="Archivos" type="java.lang.String"/>

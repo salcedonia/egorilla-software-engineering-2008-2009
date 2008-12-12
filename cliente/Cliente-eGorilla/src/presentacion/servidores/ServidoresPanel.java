@@ -89,7 +89,7 @@ public class ServidoresPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nombre del Servidor", "IP", "Descripciçon", "Usuarios", "Número máximo de usuarios", "Archivos", "Preferencia"
+                "Nombre del Servidor", "IP", "Descripción", "Usuarios", "Número máximo de usuarios", "Archivos", "Preferencia"
             }
         ) {
             Class[] types = new Class [] {

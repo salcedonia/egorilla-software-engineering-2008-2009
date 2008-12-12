@@ -30,7 +30,7 @@ public class GeneralFrame extends javax.swing.JFrame {
     public GeneralFrame() {
         
         initComponents();
-        this.setExtendedState(this.MAXIMIZED_BOTH);
+        setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
         
     }
@@ -64,9 +64,14 @@ public class GeneralFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GeneralFrame.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setBounds(new java.awt.Rectangle(0, 0, 0, 0));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setExtendedState(MAXIMIZED_BOTH);
         setForeground(resourceMap.getColor("Form.foreground")); // NOI18N
         setIconImage(getIconImage());
         setIconImages(getIconImages());
+        setLocationByPlatform(true);
+        setMinimumSize(new java.awt.Dimension(436, 436));
         setName("Form"); // NOI18N
 
         mainPanel.setName("mainPanel"); // NOI18N
