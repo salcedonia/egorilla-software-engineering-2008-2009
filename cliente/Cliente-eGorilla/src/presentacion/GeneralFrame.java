@@ -44,187 +44,161 @@ public class GeneralFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        bServidores = new javax.swing.JButton();
-        bConectar = new javax.swing.JButton();
-        bBuscar = new javax.swing.JButton();
-        bTrafico = new javax.swing.JButton();
         mainPanel = new javax.swing.JPanel();
-        jSeparator1 = new javax.swing.JSeparator();
-        bConfiguracion = new javax.swing.JButton();
-        bEstadisticas = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         estado = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jSeparator2 = new javax.swing.JSeparator();
         conexion = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
+        bConectar = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        bServidores = new javax.swing.JButton();
+        bBuscar = new javax.swing.JButton();
+        bTrafico = new javax.swing.JButton();
+        bEstadisticas = new javax.swing.JButton();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        bConfiguracion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GeneralFrame.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setForeground(resourceMap.getColor("Form.foreground")); // NOI18N
         setIconImage(getIconImage());
         setIconImages(getIconImages());
         setName("Form"); // NOI18N
 
-        bServidores.setFont(resourceMap.getFont("Form.font")); // NOI18N
-        bServidores.setText(resourceMap.getString("bServidores.text")); // NOI18N
-        bServidores.setMaximumSize(new java.awt.Dimension(83, 23));
-        bServidores.setMinimumSize(new java.awt.Dimension(83, 23));
-        bServidores.setName("bServidores"); // NOI18N
-        bServidores.setPreferredSize(new java.awt.Dimension(83, 23));
-        bServidores.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                cargarServidores(evt);
-            }
-        });
+        mainPanel.setName("mainPanel"); // NOI18N
+        mainPanel.setPreferredSize(new java.awt.Dimension(800, 600));
+        mainPanel.setLayout(new java.awt.CardLayout());
+        mainPanel.add( "Servidores", GUIServidores.instancia().getPanel());
+        mainPanel.add( "Buscador", GUIBuscador.instancia().getPanel());
+        mainPanel.add( "Configuracion", GUIConfiguracion.instancia().getPanel());
+        mainPanel.add( "Descargas", GUIDescargas.instancia().getPanel());
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jPanel1.add(jSeparator1, java.awt.BorderLayout.NORTH);
+
+        estado.setText(resourceMap.getString("estado.text")); // NOI18N
+        estado.setName("estado"); // NOI18N
+        jPanel1.add(estado, java.awt.BorderLayout.CENTER);
+
+        jPanel2.setMinimumSize(new java.awt.Dimension(40, 20));
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setPreferredSize(new java.awt.Dimension(100, 20));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        jPanel2.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 10, 20));
+
+        conexion.setText(resourceMap.getString("conexion.text")); // NOI18N
+        conexion.setName("conexion"); // NOI18N
+        jPanel2.add(conexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 0, 90, -1));
+
+        jPanel1.add(jPanel2, java.awt.BorderLayout.EAST);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jToolBar1.border.title"))); // NOI18N
+        jToolBar1.setFloatable(false);
+        jToolBar1.setForeground(resourceMap.getColor("jToolBar1.foreground")); // NOI18N
+        jToolBar1.setRollover(true);
+        jToolBar1.setBorderPainted(false);
+        jToolBar1.setName("jToolBar1"); // NOI18N
+        jToolBar1.setOpaque(false);
 
         bConectar.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bConectar.setText(resourceMap.getString("bConectar.text")); // NOI18N
         bConectar.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        bConectar.setMaximumSize(new java.awt.Dimension(83, 23));
-        bConectar.setMinimumSize(new java.awt.Dimension(83, 23));
+        bConectar.setMaximumSize(new java.awt.Dimension(70, 70));
+        bConectar.setMinimumSize(new java.awt.Dimension(70, 70));
         bConectar.setName("bConectar"); // NOI18N
-        bConectar.setPreferredSize(new java.awt.Dimension(83, 23));
+        bConectar.setPreferredSize(new java.awt.Dimension(70, 70));
         bConectar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 conexion(evt);
             }
         });
+        jToolBar1.add(bConectar);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        jToolBar1.add(jSeparator3);
+
+        bServidores.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bServidores.setText(resourceMap.getString("bServidores.text")); // NOI18N
+        bServidores.setMaximumSize(new java.awt.Dimension(70, 70));
+        bServidores.setMinimumSize(new java.awt.Dimension(70, 70));
+        bServidores.setName("bServidores"); // NOI18N
+        bServidores.setPreferredSize(new java.awt.Dimension(70, 70));
+        bServidores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cargarServidores(evt);
+            }
+        });
+        jToolBar1.add(bServidores);
 
         bBuscar.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bBuscar.setLabel(resourceMap.getString("bBuscar.label")); // NOI18N
-        bBuscar.setMaximumSize(new java.awt.Dimension(83, 23));
-        bBuscar.setMinimumSize(new java.awt.Dimension(83, 23));
+        bBuscar.setMaximumSize(new java.awt.Dimension(70, 70));
+        bBuscar.setMinimumSize(new java.awt.Dimension(70, 70));
         bBuscar.setName("bBuscar"); // NOI18N
-        bBuscar.setPreferredSize(new java.awt.Dimension(83, 23));
+        bBuscar.setPreferredSize(new java.awt.Dimension(70, 70));
         bBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarBuscador(evt);
             }
         });
+        jToolBar1.add(bBuscar);
 
         bTrafico.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bTrafico.setText(resourceMap.getString("bTrafico.text")); // NOI18N
-        bTrafico.setMaximumSize(new java.awt.Dimension(83, 23));
-        bTrafico.setMinimumSize(new java.awt.Dimension(83, 23));
+        bTrafico.setMaximumSize(new java.awt.Dimension(70, 70));
+        bTrafico.setMinimumSize(new java.awt.Dimension(70, 70));
         bTrafico.setName("bTrafico"); // NOI18N
-        bTrafico.setPreferredSize(new java.awt.Dimension(83, 23));
+        bTrafico.setPreferredSize(new java.awt.Dimension(70, 70));
         bTrafico.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarTrafico(evt);
             }
         });
-
-        mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(800, 600));
-        mainPanel.setLayout(new java.awt.CardLayout());
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-
-        bConfiguracion.setFont(resourceMap.getFont("Form.font")); // NOI18N
-        bConfiguracion.setText(resourceMap.getString("bConfiguracion.text")); // NOI18N
-        bConfiguracion.setMaximumSize(new java.awt.Dimension(83, 23));
-        bConfiguracion.setMinimumSize(new java.awt.Dimension(83, 23));
-        bConfiguracion.setName("bConfiguracion"); // NOI18N
-        bConfiguracion.setPreferredSize(new java.awt.Dimension(83, 23));
-        bConfiguracion.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                cargarConfiguracion(evt);
-            }
-        });
+        jToolBar1.add(bTrafico);
 
         bEstadisticas.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bEstadisticas.setText(resourceMap.getString("bEstadisticas.text")); // NOI18N
-        bEstadisticas.setMaximumSize(new java.awt.Dimension(83, 23));
-        bEstadisticas.setMinimumSize(new java.awt.Dimension(83, 23));
+        bEstadisticas.setMaximumSize(new java.awt.Dimension(70, 70));
+        bEstadisticas.setMinimumSize(new java.awt.Dimension(70, 70));
         bEstadisticas.setName("bEstadisticas"); // NOI18N
-        bEstadisticas.setPreferredSize(new java.awt.Dimension(83, 23));
+        bEstadisticas.setPreferredSize(new java.awt.Dimension(70, 70));
         bEstadisticas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarEstadisticas(evt);
             }
         });
+        jToolBar1.add(bEstadisticas);
 
-        jPanel1.setName("jPanel1"); // NOI18N
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        jToolBar1.add(jSeparator4);
 
-        estado.setText(resourceMap.getString("estado.text")); // NOI18N
-        estado.setName("estado"); // NOI18N
+        bConfiguracion.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bConfiguracion.setText(resourceMap.getString("bConfiguracion.text")); // NOI18N
+        bConfiguracion.setMaximumSize(new java.awt.Dimension(70, 70));
+        bConfiguracion.setMinimumSize(new java.awt.Dimension(70, 70));
+        bConfiguracion.setName("bConfiguracion"); // NOI18N
+        bConfiguracion.setPreferredSize(new java.awt.Dimension(70, 70));
+        bConfiguracion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cargarConfiguracion(evt);
+            }
+        });
+        jToolBar1.add(bConfiguracion);
 
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jSeparator2.setName("jSeparator2"); // NOI18N
-
-        conexion.setText(resourceMap.getString("conexion.text")); // NOI18N
-        conexion.setName("conexion"); // NOI18N
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(estado, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(conexion)
-                .addGap(60, 60, 60))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(estado)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(conexion))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        mainPanel.add( "Servidores", GUIServidores.instancia().getPanel());
-        mainPanel.add( "Buscador", GUIBuscador.instancia().getPanel());
-        mainPanel.add( "Configuracion", GUIConfiguracion.instancia().getPanel());
-        mainPanel.add( "Descargas", GUIDescargas.instancia().getPanel());
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(bConectar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bServidores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bTrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bConfiguracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bServidores, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bTrafico, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bConectar, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(bEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(bConfiguracion, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -298,8 +272,12 @@ private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
     private javax.swing.JLabel conexion;
     private javax.swing.JLabel estado;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
 
