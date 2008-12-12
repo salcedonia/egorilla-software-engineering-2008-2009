@@ -80,6 +80,7 @@
       <SubComponents>
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="jTable1.background"/>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="9" rowCount="0">
                 <Column editable="false" title="Nombre" type="java.lang.String"/>

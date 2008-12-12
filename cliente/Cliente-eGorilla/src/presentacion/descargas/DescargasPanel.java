@@ -67,6 +67,7 @@ public class DescargasPanel extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        jTable1.setBackground(resourceMap.getColor("jTable1.background")); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
