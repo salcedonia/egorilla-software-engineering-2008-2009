@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla.Datos;
+package servidoregorilla.datos;
 
-import servidoregorilla.protocolo.Cliente;
+import servidoregorilla.protocolo.ConexionCliente;
 import java.util.HashSet;
 
 /**
@@ -15,7 +15,7 @@ import java.util.HashSet;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class TablaClientes extends HashSet<Cliente>{
+public class TablaClientes extends HashSet<ConexionCliente>{
     
     // TODO:
 }

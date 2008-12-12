@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla.Datos;
+package servidoregorilla.datos;
 
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.protocolo.Cliente;
+import servidoregorilla.protocolo.ConexionCliente;
 
 /**
  * La clase cliente archivo es la relación muchos a muchos entre los clientes
@@ -32,7 +32,7 @@ public class Cliente_Archivo {
      * @param a Archivo buscado.
      * @param c Cliente propietario del archivo.
      */
-    public void addRelacion(Archivo a, Cliente c){
+    public void addRelacion(Archivo a, ConexionCliente c){
         
         // TODO:
     }
@@ -45,7 +45,7 @@ public class Cliente_Archivo {
      * 
      * @param c Cliente a dar de baja.
      */
-    public void removeRelacion(Cliente c){
+    public void removeRelacion(ConexionCliente c){
         
         //TODO:
     }
