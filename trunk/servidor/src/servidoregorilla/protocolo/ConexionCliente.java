@@ -34,7 +34,7 @@ public class ConexionCliente extends Thread implements Peticion{
     private InetAddress _IP;
     private int _puerto;
     private PeerConn _conexion;
-    private ListaArchivos _listaArchivos;
+    private ListaArchivos _listaArchivosGlobal;
     private TablaClientes _tablaClientes;
     
     /**
@@ -50,7 +50,7 @@ public class ConexionCliente extends Thread implements Peticion{
        
         _conexion  = conexion;
         _tablaClientes = tabla;
-        _listaArchivos = lista;
+        _listaArchivosGlobal = lista;
     }
     
     /**
@@ -68,8 +68,8 @@ public class ConexionCliente extends Thread implements Peticion{
             _puerto = _conexion.reciveInt();
             _nombre = (String) _conexion.reciveObject();
 
-            // Crea estructuras
-            // TODO:
+            // de alta en la lista de clientes.
+            _tablaClientes.addCliente(this);
                  
             // Recibe lista de ficheros.
             ListaArchivos archivosCliente = (ListaArchivos)_conexion.reciveObject();
@@ -84,10 +84,12 @@ public class ConexionCliente extends Thread implements Peticion{
         catch (IOException ex) {
             
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }        catch (ClassNotFoundException ex) {
-            
+        }   catch (ClassNotFoundException ex) {
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }       
+        }   catch (Exception ex) {
+            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public int getVersion() {
@@ -100,5 +102,24 @@ public class ConexionCliente extends Thread implements Peticion{
 
     public void addListaArchivos(ListaArchivos l) {
        //void
+    }
+
+    /**
+     * devuelve la conexion con este cliente.
+     *
+     * @return PeerConn con dicho cliente.
+     */
+    public PeerConn getConnexion(){
+        return _conexion;
+    }
+
+    /**
+     * devuelve el nombre de usuario que usa este cliente. ojo! no es unico.
+     * cada cliente se puede poner el nombre que quiera y no seran validados
+     * 
+     * @return el nombre de usuario
+     */
+    public String getNombre(){
+        return _nombre;
     }
 }
