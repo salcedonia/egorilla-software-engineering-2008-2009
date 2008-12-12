@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import servidoregorilla.paquete.DatosCliente;
 
 /**
  * Clase que implementa un hilo de ejecución que se expande por parte del 
@@ -27,16 +28,14 @@ import java.util.logging.Logger;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class ConexionCliente extends Thread implements Peticion{
+public class ConexionCliente extends Thread{
     
-    // ATRIBUTOS
-    private String _nombre;
-    private InetAddress _IP;
-    private int _puerto;
-    private PeerConn _conexion;
-    private ListaArchivos _listaArchivosGlobal;
-    private TablaClientes _tablaClientes;
-    
+
+    private PeerConn _conn;
+    private DatosCliente _datos;
+    private ListaArchivos _listaGlobalArchivos;
+    private TablaClientes _tablaDeClientes ;
+
     /**
      * Constructor de la clase Cliente. Almacenamos los datos proporcionados
      * por el servidor al conectarse.
@@ -46,11 +45,15 @@ public class ConexionCliente extends Thread implements Peticion{
      * usuarios conectados en conjunto.
      * @param tabla La lista de clientes conectados al servidor en este momento.
      */
-    public ConexionCliente(PeerConn conexion, ListaArchivos lista, TablaClientes tabla){
-       
-        _conexion  = conexion;
-        _tablaClientes = tabla;
-        _listaArchivosGlobal = lista;
+    public ConexionCliente(PeerConn conexion, DatosCliente datos, ListaArchivos archivos, TablaClientes clientes) {
+        _conn = conexion;
+        _datos = datos;
+        _listaGlobalArchivos = archivos;
+        _tablaDeClientes = clientes;
+    }
+
+    public PeerConn getConnexion() {
+       return _conn;
     }
     
     /**
@@ -58,31 +61,20 @@ public class ConexionCliente extends Thread implements Peticion{
      */
     @Override
     public void run () {
-        
         try {
-            
-            // Recibe datos del cliente conectado
+            // recibe los archivos del cliente 
+            ListaArchivos archivosCliente = (ListaArchivos)_conn.reciveObject();
 
-            // Obtenemos IP & puerto de escucha para otros clientes.
-            _IP = _conexion.getIP();
-            _puerto = _conexion.reciveInt();
-            _nombre = (String) _conexion.reciveObject();
+            // alta del cliente en el sistema
+            _tablaDeClientes.add(this);
 
-            // de alta en la lista de clientes.
-            _tablaClientes.addCliente(this);
-                 
-            // Recibe lista de ficheros.
-            ListaArchivos archivosCliente = (ListaArchivos)_conexion.reciveObject();
-            
-            // TODO: Esta lista de archivos se añade a la tabla de archivos 
-            // y se marca esos archivos como que este cliente los tiene
-            
-            //este hilo muere aquí
-            _conexion.setReady();
-        } 
- 
+            // alta de los archivos en el sistema
+            _listaGlobalArchivos.actualizarDesdeListaCliente(this, _listaGlobalArchivos);
+
+            // listo para usar!
+            _conn.setReady();
+        }
         catch (IOException ex) {
-            
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
         }   catch (ClassNotFoundException ex) {
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,36 +82,5 @@ public class ConexionCliente extends Thread implements Peticion{
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    public int getVersion() {
-        return 1;
-    }
-
-    public void addTablaClientes(TablaClientes t) {
-       //void
-    }
-
-    public void addListaArchivos(ListaArchivos l) {
-       //void
-    }
-
-    /**
-     * devuelve la conexion con este cliente.
-     *
-     * @return PeerConn con dicho cliente.
-     */
-    public PeerConn getConnexion(){
-        return _conexion;
-    }
-
-    /**
-     * devuelve el nombre de usuario que usa este cliente. ojo! no es unico.
-     * cada cliente se puede poner el nombre que quiera y no seran validados
-     * 
-     * @return el nombre de usuario
-     */
-    public String getNombre(){
-        return _nombre;
     }
 }
