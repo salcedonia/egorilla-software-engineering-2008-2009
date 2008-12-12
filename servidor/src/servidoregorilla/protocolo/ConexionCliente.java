@@ -5,9 +5,9 @@
 
 package servidoregorilla.protocolo;
 
-import Networking.PeerConn;
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.Datos.TablaClientes;
+import networking.PeerConn;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.datos.TablaClientes;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.logging.Level;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class Cliente extends Thread implements Protocolo{
+public class ConexionCliente extends Thread implements Peticion{
     
     // ATRIBUTOS
     private String _nombre;
@@ -46,7 +46,7 @@ public class Cliente extends Thread implements Protocolo{
      * usuarios conectados en conjunto.
      * @param tabla La lista de clientes conectados al servidor en este momento.
      */
-    public Cliente(PeerConn conexion, ListaArchivos lista, TablaClientes tabla){
+    public ConexionCliente(PeerConn conexion, ListaArchivos lista, TablaClientes tabla){
        
         _conexion  = conexion;
         _tablaClientes = tabla;
@@ -77,24 +77,28 @@ public class Cliente extends Thread implements Protocolo{
             // TODO: Esta lista de archivos se añade a la tabla de archivos 
             // y se marca esos archivos como que este cliente los tiene
             
-            // TODO: Atiende peticiones.
-               
-            // TODO: Recibe datos
-
-            // TODO: Crea estructuras
-
-            // TODO: recibe lista de ficheros.
-
-            // TODO: atiende peticiones. 
-    
+            //este hilo muere aquí
+            _conexion.setReady();
         } 
+ 
         catch (IOException ex) {
             
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        } 
-        catch (ClassNotFoundException ex) {
+            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }        catch (ClassNotFoundException ex) {
             
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
         }       
-    } 
+    }
+
+    public int getVersion() {
+        return 1;
+    }
+
+    public void addTablaClientes(TablaClientes t) {
+       //void
+    }
+
+    public void addListaArchivos(ListaArchivos l) {
+       //void
+    }
 }
