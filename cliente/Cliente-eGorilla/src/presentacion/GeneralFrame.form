@@ -154,7 +154,6 @@
         <Property name="floatable" type="boolean" value="false"/>
         <Property name="foreground" type="java.awt.Color" resourceKey="botonera.foreground"/>
         <Property name="rollover" type="boolean" value="true"/>
-        <Property name="borderPainted" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="botonera" noResource="true"/>
         <Property name="opaque" type="boolean" value="false"/>
       </Properties>
