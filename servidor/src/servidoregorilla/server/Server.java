@@ -2,9 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servidoregorilla.server;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import networking.PeerConn;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,17 +22,16 @@ import servidoregorilla.paquete.TipoArchivo;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class Server extends Thread{
+public class Server extends Thread {
 
     // ATRIBUTOS
     private ServerSocket _serverSocket; // Servidor de escucha
     private ListaArchivos _listaArchivos; // Lista de archivos asociada al servidor
     private TablaClientes _tablaClientes; // Tabla de clientes asociada al servidor
-    private boolean _loop;
-    
+    private boolean _loopConnPool;
     private Vector<PeerConn> _activeCons;
     private Vector<PeerConn> _waitCons;
-    
+
     /**
      * Constructor de la clase Server. Crea un servidor de escucha en el 
      * puerto indicado. Almacenamos la lista de archivos y la tabla de 
@@ -43,16 +43,25 @@ public class Server extends Thread{
      * @throws java.io.IOException Se lanza la excepción cuando ocurre un error
      * al crear el servidor de escucha.
      */
-    public Server(int puerto, ListaArchivos lista, TablaClientes tabla) throws IOException{
-        
+    public Server(int puerto, ListaArchivos lista, TablaClientes tabla) throws IOException {
+
         _serverSocket = new ServerSocket(puerto);
         _listaArchivos = lista;
         _tablaClientes = tabla;
-        
+
+        // prepare connections pools
+        _waitCons = new Vector<PeerConn>();
+        _activeCons = new Vector<PeerConn>();
+
         // Inicializamos los datos relativos a las extensiones de archivo
         TipoArchivo.iniciarTiposArchivo();
+
+
+        //activamos el pool de conexiones.
+        this._loopConnPool = true;
+        this.start();
     }
-    
+
     /**
      * Escucha y crea conexiones de tipo peer según van llegando.
      * 
@@ -60,40 +69,38 @@ public class Server extends Thread{
      * @throws java.io.IOException Se genera la excepcion cuando se produce
      * algún problema en la red.
      */
-    public Peticion listen() throws IOException{
+    public Peticion listen() throws IOException {
 
         // Crea una conexión de tipo peer según va llegando
         PeerConn conexion = new PeerConn(_serverSocket.accept());
-        
-        Peticion peticion = null;
-        
+
         // encolamos el peercon al peerconnpool
         _waitCons.add(conexion);
         conexion.setWait();
-        
+
         // Leemos la versión del peticion y actuamos en consecuencia
-        peticion = new ConexionCliente(conexion, _listaArchivos, _tablaClientes);
+        Peticion peticion = new ConexionCliente(conexion, _listaArchivos, _tablaClientes);
         proccesRecivedData(peticion);
-             
+
         return null;
     }
-    
 
     public synchronized void proccesRecivedData(Peticion peticion) throws IOException {
         switch (peticion.getVersion()) {
 
             case 1:
-                // Versión del cliente
                 // Lanzamos el hilo de ejecución asociado a la conexión
                 System.out.println("Cliente conectado");
                 peticion.start();
+                break;
+                
             case 2:
                 // resuelve query
                 peticion.addListaArchivos(_listaArchivos);
                 peticion.addTablaClientes(_tablaClientes);
-                
+
                 peticion.start();
-               
+
                 break;
             default:
                 /*
@@ -104,45 +111,55 @@ public class Server extends Thread{
                 throw new IOException("Versión de peticion no válida");
         }
     }
-    
-    
-      public void run() {
 
-        while (_loop) {
-         
-            for (PeerConn peerConn : _activeCons) {
+    public void run() {
+         PeerConn p;
+        while (_loopConnPool) {
+            for (int i=0; i< _activeCons.size(); i++){
+                p = _activeCons.elementAt(i);
                 try {
 
-                    // leer un objeto, se hara timeout.
-                    Peticion pet = (Peticion) peerConn.reciveObject();
-                    
+                    // leer un objeto, se hara timeout a los 10 milisegundos.
+                    Peticion pet = (Peticion) p.reciveObject(10);
+
                     // y si el objeto es válido, se procesa.
                     this.proccesRecivedData(pet);
-                   
+
                 } catch (ClassNotFoundException ex) {
                     //TODO: no entiende el peticion
                 } catch (SocketTimeoutException timeoutEx) {
-                    //TODO: timeout, a otra cosa mariposa
+                    // timeout, a otra cosa mariposa
                 } catch (Exception ex) {
-                    //TODO: error grande, hay desconexio, elimina del manojo y continua.
+                    // error io, perdida la comunicación.
+                    _activeCons.remove(p);
+
+                    // TODO: dar de baja al tipo en todas partes.
+                    _tablaClientes.removeCliente(p);
+
+                    //TODO: logear la desconexion
+                    System.out.print("cliente desconectado");
+
+                    break;
                 }
             }
-            
+
             // if waitconns are ready, put back into active
-            for (PeerConn p : _waitCons) {
-                if (p.ready()){
+           
+            for (int i=0; i<_waitCons.size(); i++){
+                p = _waitCons.elementAt(i);
+                if (p.ready()) {
                     _waitCons.remove(p);
                     _activeCons.add(p);
+                    i--;
                 }
             }
-            
+
             try {
-                // dormir 2 segundos
-                this.sleep(2000);
+                // dormir 100 milisegundos
+                this.sleep(100);
             } catch (InterruptedException ex) {
                 // TODO: algo que hacer si es despertado aqui??
             }
         }
     }
-
 }

@@ -39,7 +39,7 @@ public class PeerConn {
      */
     public PeerConn(Socket conexion) throws IOException{
         _conexion = conexion;
-        _conexion.setSoTimeout(1000);
+
         _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
         _objetoSalida = new ObjectOutputStream(conexion.getOutputStream());
     }
@@ -68,7 +68,7 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public synchronized int reciveInt() throws IOException{
-       
+        _conexion.setSoTimeout(0);
         return _objetoEntrada.readInt();
     }
     
@@ -79,7 +79,7 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public synchronized void sendInt(int num) throws IOException{
-    
+     _conexion.setSoTimeout(0);
         _objetoSalida.writeInt(num);
     }
     
@@ -94,12 +94,26 @@ public class PeerConn {
      * ser reconocido.
      */
     public synchronized  Object reciveObject() throws IOException, ClassNotFoundException{
-        
-        
-
+        _conexion.setSoTimeout(0);
         return _objetoEntrada.readObject();   
     }
-    
+        /**
+     * Lee un objeto transimitido por el peer. Esta lectura es bloqueante, por
+     * lo que si no se produce, el hilo se quedará bloqueado en este punto sin
+     * progresar hasta recibir la instancia.
+     *
+     * @param  timeout, milisegundos a esperar antes de lanzar excecpion SocketTimeoutException
+     * @return El objeto leído del peer.
+     * @throws java.io.IOException Se lanza en caso de error de transmisión.
+     * @throws java.lang.ClassNotFoundException Se lanza si el objeto no puede
+     * ser reconocido.
+     */
+    public synchronized  Object reciveObject(int timeout) throws IOException, ClassNotFoundException{
+        _conexion.setSoTimeout(1000);
+        return _objetoEntrada.readObject();
+    }
+
+
    /**
     * Envía un objeto por el conexion. 
     * 
@@ -107,7 +121,7 @@ public class PeerConn {
     * @throws java.io.IOException Se lanza en caso de error con la conexión.
     */
     public void sendObject(Object o) throws IOException{
-        
+         _conexion.setSoTimeout(0);
         _objetoSalida.writeObject(o);
     }
     
@@ -118,7 +132,6 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error.
      */
     public synchronized void close() throws IOException{
-        
         _objetoEntrada.close();
         _objetoSalida.close();
         _conexion.close();
