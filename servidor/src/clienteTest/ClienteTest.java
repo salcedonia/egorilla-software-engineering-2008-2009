@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -36,30 +37,31 @@ public class ClienteTest {
             Socket conexion = new Socket("127.0.0.1", 6969);
             
             ObjectOutputStream out = new ObjectOutputStream(conexion.getOutputStream());
-            
-            // Realizamos la identificación
-            out.writeInt(1);                             // Versión del peticion.
-            out.writeInt(4000);                          // puerto de escucha otros clientes.
-            out.writeObject(new String("pitidecaner"));  // id del usuario.
-         
+
+            DatosCliente me = new DatosCliente();
+            me.nombreUsuario ="dePruebas";
+            me.puertoEscucha = 4000;
+
+            out.writeObject(me);
+
             // Creamos una lista con 2 archivos
             ListaArchivos arch = new ListaArchivos();
             Archivo a = new Archivo();
             a._hash = "abc";
             a._nombre = "hola que tal";
-            a._tamaño = 1231;
+            a._tama = 1231;
             a._tipo = TipoArchivo.VIDEO;
             arch.addArchivo(a);
             
             a = new Archivo();
             a._hash = "abcd";
             a._nombre = "adios";
-            a._tamaño = 123431;
+            a._tama = 123431;
             a._tipo = TipoArchivo.AUDIO;
             arch.addArchivo(a);
             
             // Mandamos la lista de archivos asociada al cliente
-     //       out.writeObject(arch);
+            out.writeObject(arch);
             
             System.in.read();
             

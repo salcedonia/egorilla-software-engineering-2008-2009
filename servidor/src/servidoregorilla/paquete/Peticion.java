@@ -3,9 +3,7 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla.protocolo;
-
-import servidoregorilla.datos.*;
+package servidoregorilla.paquete;
 
 /**
  * Interfaz que proporciona los métodos necesarios que implementan todos
@@ -15,15 +13,7 @@ import servidoregorilla.datos.*;
  * @author pitidecaner
  * @author Salcedonia
  */
-public interface Peticion {
+public interface Peticion{
 
     public int getVersion();
-    
-    /**
-     * Comienza el hilo de ejecución del cliente que se conecta al servidor.
-     */
-    public void start();
-    
-    public void addTablaClientes(TablaClientes t);
-    public void addListaArchivos(ListaArchivos l);
 }

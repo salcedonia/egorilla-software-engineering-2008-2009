@@ -4,6 +4,7 @@
  */
 package servidoregorilla.server;
 
+import servidoregorilla.paquete.Peticion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import networking.PeerConn;
@@ -14,6 +15,7 @@ import java.util.Vector;
 import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.protocolo.*;
 import servidoregorilla.datos.TablaClientes;
+import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -69,7 +71,7 @@ public class Server extends Thread {
      * @throws java.io.IOException Se genera la excepcion cuando se produce
      * algún problema en la red.
      */
-    public Peticion listen() throws IOException {
+    public void listen() throws IOException {
 
         // Crea una conexión de tipo peer según va llegando
         PeerConn conexion = new PeerConn(_serverSocket.accept());
@@ -77,29 +79,29 @@ public class Server extends Thread {
         // encolamos el peercon al peerconnpool
         _waitCons.add(conexion);
         conexion.setWait();
-
-        // Leemos la versión del peticion y actuamos en consecuencia
-        Peticion peticion = new ConexionCliente(conexion, _listaArchivos, _tablaClientes);
-        proccesRecivedData(peticion);
-
-        return null;
+        try {
+            // tratamos el paquete recibido
+            proccesRecivedData((Peticion) conexion.reciveObject(),conexion);
+        } catch (ClassNotFoundException ex) {
+            System.err.print("recibida version desconocida");
+        }
     }
 
-    public synchronized void proccesRecivedData(Peticion peticion) throws IOException {
+    public synchronized void proccesRecivedData(Peticion peticion, PeerConn conn) throws IOException {
         switch (peticion.getVersion()) {
 
             case 1:
+
+                ConexionCliente  altaCliente = new ConexionCliente(conn, (DatosCliente)peticion, _listaArchivos, _tablaClientes);
                 // Lanzamos el hilo de ejecución asociado a la conexión
                 System.out.println("Cliente conectado");
-                peticion.start();
+                altaCliente.start();
                 break;
                 
             case 2:
-                // resuelve query
-                peticion.addListaArchivos(_listaArchivos);
-                peticion.addTablaClientes(_tablaClientes);
 
-                peticion.start();
+                // resuelve query
+
 
                 break;
             default:
@@ -123,7 +125,7 @@ public class Server extends Thread {
                     Peticion pet = (Peticion) p.reciveObject(10);
 
                     // y si el objeto es válido, se procesa.
-                    this.proccesRecivedData(pet);
+                    this.proccesRecivedData(pet, p);
 
                 } catch (ClassNotFoundException ex) {
                     //TODO: no entiende el peticion

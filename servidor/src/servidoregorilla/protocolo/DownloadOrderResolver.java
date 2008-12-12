@@ -13,7 +13,7 @@ import servidoregorilla.datos.TablaClientes;
  *
  * @author pitidecaner
  */
-public class DownloadOrder extends Thread implements Peticion, Serializable{
+public class DownloadOrderResolver extends Thread {
 
     public int getVersion() {
       return 3;

@@ -28,7 +28,7 @@ public class Archivo implements Serializable{
     // ATRIBUTOS
     public String _nombre;
     public String _hash;
-    public long _tamaño;
+    public long _tama;
     public TipoArchivo _tipo;
 
     /**
@@ -74,7 +74,7 @@ public class Archivo implements Serializable{
             // Configuramos el tipo de archivo en función de los datos recibidos
             _hash = new String (ms.digest());
             _nombre = f.getName();
-            _tamaño = f.length();
+            _tama = f.length();
             _tipo= asignarTipoArchivo(f);
         } 
         catch (DigestException ex) {
@@ -121,5 +121,41 @@ public class Archivo implements Serializable{
         extension = fileName.substring(dotPos);
 
         return TipoArchivo.devuelveTipo(extension);
+    }
+
+    /**
+     * recupera el nombre de este archivo
+     * @return el nombre del archivo
+     */
+    public String getNombre() {
+        return _nombre;
+    }
+
+    /**
+     * recupera el hash de este archivo
+     *  el hash es unico para el archivo indempendientemente del nombre que tenga
+     * dos archivos con el mismo hash seran el mismo siempre.
+     * @return el hash del archivo
+     */
+    public String getHash() {
+        return _hash;
+    }
+
+    /**
+     * recupera el tamaño de este archivo
+     * @return el tamaño del archivo
+     */
+    public long  getSize() {
+        return _tama;
+    }
+
+    /**
+     * Compara dos instancias para saber si referencian al mismo archivo
+     *
+     * @param archivo, el archivo a comparar con este
+     *
+     */
+    public boolean comparaArchivo(Archivo a) {
+        return _hash.contentEquals(a.getHash());
     }
 }

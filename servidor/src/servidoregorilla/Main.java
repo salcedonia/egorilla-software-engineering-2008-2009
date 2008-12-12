@@ -7,7 +7,7 @@ package servidoregorilla;
 
 import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.datos.TablaClientes;
-import servidoregorilla.protocolo.Peticion;
+import servidoregorilla.paquete.Peticion;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -63,8 +63,7 @@ public class Main {
             try {
                 
                 // Escuchamos conexiones
-                peticion = servidor.listen();
-                
+                servidor.listen();
                 
             } 
             catch (IOException ex) {

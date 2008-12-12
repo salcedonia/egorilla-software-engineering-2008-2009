@@ -14,7 +14,7 @@ import servidoregorilla.datos.TablaClientes;
  *
  * @author pitidecaner
  */
-public class Query extends Thread implements Peticion, Serializable{
+public class QueryResolver extends Thread{
       
     private TablaClientes _tabCli;
     private ListaArchivos _listarch;
