@@ -5,13 +5,14 @@
 
 package servidoregorilla.server;
 
-import Networking.PeerConn;
+import networking.PeerConn;
 import java.io.IOException;
 import java.net.ServerSocket;
-import servidoregorilla.protocolo.Cliente;
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.protocolo.Protocolo;
-import servidoregorilla.Datos.TablaClientes;
+import java.net.SocketTimeoutException;
+import java.util.Vector;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.protocolo.*;
+import servidoregorilla.datos.TablaClientes;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -20,12 +21,16 @@ import servidoregorilla.paquete.TipoArchivo;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class Server {
+public class Server extends Thread{
 
     // ATRIBUTOS
     private ServerSocket _serverSocket; // Servidor de escucha
     private ListaArchivos _listaArchivos; // Lista de archivos asociada al servidor
     private TablaClientes _tablaClientes; // Tabla de clientes asociada al servidor
+    private boolean _loop;
+    
+    private Vector<PeerConn> _activeCons;
+    private Vector<PeerConn> _waitCons;
     
     /**
      * Constructor de la clase Server. Crea un servidor de escucha en el 
@@ -51,29 +56,93 @@ public class Server {
     /**
      * Escucha y crea conexiones de tipo peer según van llegando.
      * 
-     * @return Un objeto de tipo Protocolo que se está utilizando.
+     * @return Un objeto de tipo peticion que se está utilizando.
      * @throws java.io.IOException Se genera la excepcion cuando se produce
      * algún problema en la red.
      */
-    public Protocolo listen() throws IOException{
+    public Peticion listen() throws IOException{
 
         // Crea una conexión de tipo peer según va llegando
         PeerConn conexion = new PeerConn(_serverSocket.accept());
         
-        // Leemos la versión del protocolo y actuamos en consecuencia
-        switch (conexion.reciveInt()){ 
-            
-            case 1:
-                // Versión del cliente
-                return new Cliente(conexion, _listaArchivos, _tablaClientes);
-            case 2:
-                // TODO: Modo consola o lo que sea
-                break;
-            default:
-                // Lanzamos una excepción por error de protocolo
-                throw new IOException("Versión de protocolo no válida");
-        }
+        Peticion peticion = null;
         
+        // encolamos el peercon al peerconnpool
+        _waitCons.add(conexion);
+        conexion.setWait();
+        
+        // Leemos la versión del peticion y actuamos en consecuencia
+        peticion = new ConexionCliente(conexion, _listaArchivos, _tablaClientes);
+        proccesRecivedData(peticion);
+             
         return null;
     }
+    
+
+    public synchronized void proccesRecivedData(Peticion peticion) throws IOException {
+        switch (peticion.getVersion()) {
+
+            case 1:
+                // Versión del cliente
+                // Lanzamos el hilo de ejecución asociado a la conexión
+                System.out.println("Cliente conectado");
+                peticion.start();
+            case 2:
+                // resuelve query
+                peticion.addListaArchivos(_listaArchivos);
+                peticion.addTablaClientes(_tablaClientes);
+                
+                peticion.start();
+               
+                break;
+            default:
+                /*
+                 * Si la version no es correcta lanza excepcion
+                 * diferentes versiones pueden tener diferente modo de actuación
+                 * en el servidor.
+                 */
+                throw new IOException("Versión de peticion no válida");
+        }
+    }
+    
+    
+      public void run() {
+
+        while (_loop) {
+         
+            for (PeerConn peerConn : _activeCons) {
+                try {
+
+                    // leer un objeto, se hara timeout.
+                    Peticion pet = (Peticion) peerConn.reciveObject();
+                    
+                    // y si el objeto es válido, se procesa.
+                    this.proccesRecivedData(pet);
+                   
+                } catch (ClassNotFoundException ex) {
+                    //TODO: no entiende el peticion
+                } catch (SocketTimeoutException timeoutEx) {
+                    //TODO: timeout, a otra cosa mariposa
+                } catch (Exception ex) {
+                    //TODO: error grande, hay desconexio, elimina del manojo y continua.
+                }
+            }
+            
+            // if waitconns are ready, put back into active
+            for (PeerConn p : _waitCons) {
+                if (p.ready()){
+                    _waitCons.remove(p);
+                    _activeCons.add(p);
+                }
+            }
+            
+            try {
+                // dormir 2 segundos
+                this.sleep(2000);
+            } catch (InterruptedException ex) {
+                // TODO: algo que hacer si es despertado aqui??
+            }
+        }
+    }
+
 }
