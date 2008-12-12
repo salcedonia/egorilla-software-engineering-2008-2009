@@ -3,13 +3,14 @@
  * and open the template in the editor.
  */
 
-package Networking;
+package networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import servidoregorilla.server.Server;
 
 /**
  * Clase que hace las veces de un wrapper para encapsular todas las comunicaciones 
@@ -26,6 +27,8 @@ public class PeerConn {
     private ObjectInputStream  _objetoEntrada; // Flujo de entrada para objetos
     private ObjectOutputStream _objetoSalida; // Flujo de salida para objetos
     
+    private boolean _ready;
+
     /**
      * Constructor de la clase PeerConn. Se genera una clase que representa la 
      * conexión recibida. Esta conexion se puede utilizar para enviar y recibir 
@@ -35,8 +38,8 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public PeerConn(Socket conexion) throws IOException{
-        
         _conexion = conexion;
+        _conexion.setSoTimeout(1000);
         _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
         _objetoSalida = new ObjectOutputStream(conexion.getOutputStream());
     }
@@ -51,6 +54,10 @@ public class PeerConn {
         // TODO: comentar y parsear la dirección
         return _conexion.getInetAddress();
     }
+
+    public boolean ready() {
+        return _ready;
+    }
  
     /**
      * Lee un integer transmitido por el peer. Esta lectura es bloqueante, por 
@@ -61,7 +68,7 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public synchronized int reciveInt() throws IOException{
-        
+       
         return _objetoEntrada.readInt();
     }
     
@@ -88,6 +95,8 @@ public class PeerConn {
      */
     public synchronized  Object reciveObject() throws IOException, ClassNotFoundException{
         
+        
+
         return _objetoEntrada.readObject();   
     }
     
@@ -113,5 +122,14 @@ public class PeerConn {
         _objetoEntrada.close();
         _objetoSalida.close();
         _conexion.close();
+    }
+    
+    
+    public void setReady(){
+        _ready =true;
+    }
+    
+    public void setWait(){
+        _ready = false;
     }
 }
