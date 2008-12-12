@@ -21,7 +21,7 @@ public class Config{
     static private Properties _properties;
     static private File       _file;
     
-    static private int[] _versionProtocolo;
+    static private int[] _versionpeticion;
     static private int   _puerto;
     
     /**
@@ -38,17 +38,17 @@ public class Config{
         _properties.load(new FileInputStream(f));
 
         /*
-         * Primer parámetro: Versión del protocolo.
+         * Primer parámetro: Versión del peticion.
          * 
-         * Consistirá en una lista con todas las versiones del protocolo admitidos 
+         * Consistirá en una lista con todas las versiones del peticion admitidos 
          * por el servidor separados por : , ó ;
          * Las diferentes versiones se indicarán con un número entero.
          */
-        String tmp = _properties.getProperty("VersionProtocolo");
+        String tmp = _properties.getProperty("Versionpeticion");
         String[] split = tmp.split(":,;");
-        _versionProtocolo = new int[split.length];
+        _versionpeticion = new int[split.length];
         for (int i = 0; i < split.length; i++) {
-            _versionProtocolo[i] = Integer.parseInt(split[i]);
+            _versionpeticion[i] = Integer.parseInt(split[i]);
         }
         
         /*
@@ -59,7 +59,7 @@ public class Config{
     }
 
 //    /**
-//     * comprueba si la version del protocolo está entre las toleradas por esta
+//     * comprueba si la version del peticion está entre las toleradas por esta
 //     * implementación.
 //     * 
 //     * Este número nos permite discernir si un cliente habla la versión correcta
@@ -73,19 +73,19 @@ public class Config{
 //    static boolean protocolVersion(int v){
 //        boolean existe = false;
 //        int i = 0;
-//        while ((!existe) &&(i<_versionProtocolo.length))
-//            existe = (_versionProtocolo[i++]== v)? true: false;
+//        while ((!existe) &&(i<_versionpeticion.length))
+//            existe = (_versionpeticion[i++]== v)? true: false;
 //        return existe;
 //    }
   
     /**
-     * Devuelve la versión del protocolo que se está utilizando.
+     * Devuelve la versión del peticion que se está utilizando.
      * 
-     * @return La versión del protocolo que se está utilizando.
+     * @return La versión del peticion que se está utilizando.
      */
     static int[] getVersion(){
         
-        return _versionProtocolo;
+        return _versionpeticion;
     }
     
     /**

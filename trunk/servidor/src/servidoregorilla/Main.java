@@ -5,9 +5,9 @@
 
 package servidoregorilla;
 
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.Datos.TablaClientes;
-import servidoregorilla.protocolo.Protocolo;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.datos.TablaClientes;
+import servidoregorilla.protocolo.Peticion;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +32,7 @@ public class Main {
     public static void main(String[] args) {
         
         Server servidor;
-        Protocolo protocolo;
+        Peticion peticion;
         TablaClientes tablaClientes;
         ListaArchivos archivos;
         
@@ -63,17 +63,9 @@ public class Main {
             try {
                 
                 // Escuchamos conexiones
-                protocolo = servidor.listen();
+                peticion = servidor.listen();
                 
-                /*
-                 * Si la version no es correcta lanza excepcion
-                 * diferentes versiones pueden tener diferente modo de actuación 
-                 * en el servidor.
-                 */
-                System.out.println("Cliente conectado");
-               
-                // Lanzamos el hilo de ejecución asociado a la conexión
-                protocolo.start();
+                
             } 
             catch (IOException ex) {
                 
