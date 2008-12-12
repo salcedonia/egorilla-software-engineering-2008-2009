@@ -117,7 +117,6 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setForeground(resourceMap.getColor("botonera.foreground")); // NOI18N
         jToolBar1.setRollover(true);
-        jToolBar1.setBorderPainted(false);
         jToolBar1.setName("botonera"); // NOI18N
         jToolBar1.setOpaque(false);
 

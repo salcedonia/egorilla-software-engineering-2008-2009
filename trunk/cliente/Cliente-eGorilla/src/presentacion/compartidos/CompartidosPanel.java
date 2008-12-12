@@ -48,16 +48,23 @@ public class CompartidosPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         explorador = new javax.swing.JTree();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        bRecargar = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Archivos compartidos"));
-        setLayout(new java.awt.GridBagLayout());
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
+
+        jSplitPane1.setDividerLocation(200);
+        jSplitPane1.setName("jSplitPane1"); // NOI18N
+
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -80,19 +87,14 @@ public class CompartidosPanel extends javax.swing.JPanel {
         explorador.setName("explorador"); // NOI18N
         jScrollPane1.setViewportView(explorador);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 67;
-        gridBagConstraints.ipady = 257;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(30, 10, 0, 0);
-        add(jScrollPane1, gridBagConstraints);
+        jPanel1.add(jScrollPane1);
 
+        jSplitPane1.setLeftComponent(jPanel1);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+
+        jScrollPane2.setAutoscrolls(true);
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         jTable1.setBackground(new java.awt.Color(235, 233, 237));
@@ -108,34 +110,21 @@ public class CompartidosPanel extends javax.swing.JPanel {
         jTable1.setPreferredSize(new java.awt.Dimension(300, 64));
         jScrollPane2.setViewportView(jTable1);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 287;
-        gridBagConstraints.ipady = 253;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(30, 10, 0, 12);
-        add(jScrollPane2, gridBagConstraints);
+        jPanel2.add(jScrollPane2);
 
-        bRecargar.setText("recargar");
-        bRecargar.setName("bRecargar"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(30, 10, 19, 0);
-        add(bRecargar, gridBagConstraints);
+        jSplitPane1.setRightComponent(jPanel2);
+
+        add(jSplitPane1);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton bRecargar;
     private javax.swing.JTree explorador;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 
