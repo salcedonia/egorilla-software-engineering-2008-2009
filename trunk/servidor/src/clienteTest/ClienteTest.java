@@ -12,7 +12,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -38,7 +38,7 @@ public class ClienteTest {
             ObjectOutputStream out = new ObjectOutputStream(conexion.getOutputStream());
             
             // Realizamos la identificación
-            out.writeInt(1);                             // Versión del protocolo.
+            out.writeInt(1);                             // Versión del peticion.
             out.writeInt(4000);                          // puerto de escucha otros clientes.
             out.writeObject(new String("pitidecaner"));  // id del usuario.
          
@@ -59,7 +59,11 @@ public class ClienteTest {
             arch.addArchivo(a);
             
             // Mandamos la lista de archivos asociada al cliente
-            out.writeObject(arch);
+     //       out.writeObject(arch);
+            
+            System.in.read();
+            
+       
         } 
         catch (UnknownHostException ex) {
         
