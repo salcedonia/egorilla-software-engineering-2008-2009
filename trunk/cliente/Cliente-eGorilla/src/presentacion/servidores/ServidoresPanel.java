@@ -84,6 +84,7 @@ public class ServidoresPanel extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        jTable1.setBackground(resourceMap.getColor("jTable1.background")); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

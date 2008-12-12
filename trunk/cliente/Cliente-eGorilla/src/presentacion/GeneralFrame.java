@@ -15,6 +15,7 @@ import java.awt.CardLayout;
 import java.awt.Image;
 import javax.swing.JPanel;
 import presentacion.buscador.GUIBuscador;
+import presentacion.compartidos.GUICompartidos;
 import presentacion.configuracion.GUIConfiguracion;
 import presentacion.descargas.GUIDescargas;
 import presentacion.servidores.GUIServidores;
@@ -57,6 +58,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         bServidores = new javax.swing.JButton();
         bBuscar = new javax.swing.JButton();
         bTrafico = new javax.swing.JButton();
+        bCompartidos = new javax.swing.JButton();
         bEstadisticas = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         bConfiguracion = new javax.swing.JButton();
@@ -81,6 +83,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         mainPanel.add( "Buscador", GUIBuscador.instancia().getPanel());
         mainPanel.add( "Configuracion", GUIConfiguracion.instancia().getPanel());
         mainPanel.add( "Descargas", GUIDescargas.instancia().getPanel());
+        mainPanel.add( "Compartidos", GUICompartidos.instancia().getPanel());
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setName("jPanel1"); // NOI18N
@@ -110,12 +113,12 @@ public class GeneralFrame extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
-        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("jToolBar1.border.title"))); // NOI18N
+        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("botonera.border.title"))); // NOI18N
         jToolBar1.setFloatable(false);
-        jToolBar1.setForeground(resourceMap.getColor("jToolBar1.foreground")); // NOI18N
+        jToolBar1.setForeground(resourceMap.getColor("botonera.foreground")); // NOI18N
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
-        jToolBar1.setName("jToolBar1"); // NOI18N
+        jToolBar1.setName("botonera"); // NOI18N
         jToolBar1.setOpaque(false);
 
         bConectar.setFont(resourceMap.getFont("Form.font")); // NOI18N
@@ -173,6 +176,22 @@ public class GeneralFrame extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(bTrafico);
+
+        bCompartidos.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bCompartidos.setText(resourceMap.getString("bCompartidos.text")); // NOI18N
+        bCompartidos.setFocusable(false);
+        bCompartidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bCompartidos.setMaximumSize(new java.awt.Dimension(70, 70));
+        bCompartidos.setMinimumSize(new java.awt.Dimension(70, 70));
+        bCompartidos.setName("bCompartidos"); // NOI18N
+        bCompartidos.setPreferredSize(new java.awt.Dimension(70, 70));
+        bCompartidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bCompartidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cargarCompartidos(evt);
+            }
+        });
+        jToolBar1.add(bCompartidos);
 
         bEstadisticas.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bEstadisticas.setText(resourceMap.getString("bEstadisticas.text")); // NOI18N
@@ -240,6 +259,11 @@ private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
         eGorillaControlGeneral.instancia().action(eGorillaControlGeneral.DESCONECTAR, null);
 }//GEN-LAST:event_conexion
 
+private void cargarCompartidos(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarCompartidos
+
+    ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Compartidos" );
+}//GEN-LAST:event_cargarCompartidos
+
     // Recoge el evento de actualización
     public Image getIconImage() {
 		
@@ -269,6 +293,7 @@ private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bBuscar;
+    private javax.swing.JButton bCompartidos;
     private javax.swing.JButton bConectar;
     private javax.swing.JButton bConfiguracion;
     private javax.swing.JButton bEstadisticas;
