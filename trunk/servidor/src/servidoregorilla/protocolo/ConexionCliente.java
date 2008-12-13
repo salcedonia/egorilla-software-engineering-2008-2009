@@ -5,11 +5,10 @@
 
 package servidoregorilla.protocolo;
 
-import networking.PeerConn;
-import servidoregorilla.datos.ListaArchivos;
-import servidoregorilla.datos.TablaClientes;
+import Networking.PeerConn;
+import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.Datos.TablaClientes;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.DatosCliente;
@@ -35,6 +34,7 @@ public class ConexionCliente extends Thread{
     private DatosCliente _datos;
     private ListaArchivos _listaGlobalArchivos;
     private TablaClientes _tablaDeClientes ;
+    private String _direccion;
 
     /**
      * Constructor de la clase Cliente. Almacenamos los datos proporcionados
@@ -65,11 +65,14 @@ public class ConexionCliente extends Thread{
             // recibe los archivos del cliente 
             ListaArchivos archivosCliente = (ListaArchivos)_conn.reciveObject();
 
+            // averigua la dirección de origen.
+            this._datos.ip = _conn.getIP();
+            
             // alta del cliente en el sistema
             _tablaDeClientes.add(this);
 
             // alta de los archivos en el sistema
-            _listaGlobalArchivos.actualizarDesdeListaCliente(this, _listaGlobalArchivos);
+            _listaGlobalArchivos.actualizarDesdeListaCliente(this, archivosCliente);
 
             // listo para usar!
             _conn.setReady();
@@ -83,4 +86,8 @@ public class ConexionCliente extends Thread{
         }
 
     }
+    
+    public String getDireccion(){
+        return _direccion;
+}
 }

@@ -12,6 +12,10 @@ import java.io.Serializable;
  * @author Pitidecaner
  */
 public class Query implements Serializable, Peticion{
+    
+    public String cadenaBusqueda;
+    public TipoArchivo tipo;
+    
     public int getVersion() {
         return 2;
     }

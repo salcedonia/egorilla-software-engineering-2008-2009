@@ -9,12 +9,14 @@ import java.io.Serializable;
 
 /**
  *
- * @author Pitidecaner
+ * @author pitidecaner
  */
-public class DownloadOrder implements Peticion,Serializable{
-    public String hash;
+public class QueryAnswer implements Serializable{
 
-    public int getVersion() {
-        return 3;
-}
+    public Archivo[] lista;
+
+    public QueryAnswer(Archivo[] l) {
+       lista = l;
+    }
+    
 }

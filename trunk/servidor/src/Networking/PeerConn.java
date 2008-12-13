@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package networking;
+package Networking;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -49,10 +49,11 @@ public class PeerConn {
      * 
      * @return La dirección IP asociada a la conexión establecida.
      */
-    public InetAddress getIP() {
+    public String getIP() {
         
-        // TODO: comentar y parsear la dirección
-        return _conexion.getInetAddress();
+        InetAddress adr = _conexion.getInetAddress();
+       
+        return adr.getHostName();
     }
 
     public boolean ready() {
