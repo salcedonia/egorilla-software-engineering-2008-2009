@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class DatosCliente implements Serializable, Peticion{
 
     public String nombreUsuario;
+    public String ip;
     public int    puertoEscucha;
 
     public int getVersion() {

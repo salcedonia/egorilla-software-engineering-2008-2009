@@ -2,12 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servidoregorilla.datos;
+package servidoregorilla.Datos;
 
 import servidoregorilla.paquete.Archivo;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Vector;
+import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.TipoArchivo;
 import servidoregorilla.protocolo.ConexionCliente;
 
 /**
@@ -19,7 +20,7 @@ import servidoregorilla.protocolo.ConexionCliente;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class ListaArchivos extends HashSet<Archivo> implements Serializable {
+public class ListaArchivos extends Vector<Archivo> implements Serializable {
 
     Vector<Cliente_Archivo> _relaccion;
 
@@ -34,6 +35,7 @@ public class ListaArchivos extends HashSet<Archivo> implements Serializable {
      * @param a Archivo a añadir a la lista de archivos.
      */
     public synchronized void addArchivo(Archivo a) {
+        this.add(a);
     }
 
     /**
@@ -43,7 +45,8 @@ public class ListaArchivos extends HashSet<Archivo> implements Serializable {
      */
     public synchronized void removeArchivo(Archivo a) {
 
-        this.remove(a._hash);
+        // TODO: esto no puede funcionar asi
+        this.remove(a);
     }
 
     /**
@@ -79,5 +82,47 @@ public class ListaArchivos extends HashSet<Archivo> implements Serializable {
                 }
             }
         }
+    }
+
+    /**
+     * buscar por nombre, la versión actual busca aquellos archivos que se llaman
+     * exactamente como el nombre indicado.
+     * 
+     * @param nmb buscado
+     * @return un array con coincidencias
+     */
+    public Archivo[] buscar(String nmb){
+        Vector<Archivo> lista = new Vector<Archivo>();
+        
+        for (Archivo a : this) {
+            if (a._nombre.contentEquals(nmb))
+                lista.add(a);
+}
+        
+        Archivo[] ars= new Archivo[lista.size()];
+        return lista.toArray(ars);
+    }
+    
+    public Archivo[] buscar(TipoArchivo tipo){
+        Vector<Archivo> lista = new Vector<Archivo>();
+        
+        for (Archivo a : this) {
+            if (a._tipo == tipo)
+                lista.add(a);
+        }
+        
+        Archivo[] ars= new Archivo[lista.size()];
+        return lista.toArray(ars);
+    }
+    
+    public DatosCliente[] propietarios (String hash){
+        Vector<DatosCliente> lista = new Vector<DatosCliente>();
+        
+        for (Archivo a : this) {
+            
+        }
+        
+        DatosCliente[] clientes= new DatosCliente[lista.size()];
+        return lista.toArray(clientes);
     }
 }

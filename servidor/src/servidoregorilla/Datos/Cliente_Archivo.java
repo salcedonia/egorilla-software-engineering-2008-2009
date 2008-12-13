@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla.datos;
+package servidoregorilla.Datos;
 
 import java.util.Vector;
 import servidoregorilla.protocolo.ConexionCliente;

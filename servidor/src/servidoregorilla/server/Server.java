@@ -5,17 +5,17 @@
 package servidoregorilla.server;
 
 import servidoregorilla.paquete.Peticion;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import networking.PeerConn;
+import Networking.PeerConn;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.util.Vector;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.protocolo.*;
-import servidoregorilla.datos.TablaClientes;
+import servidoregorilla.Datos.TablaClientes;
 import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.DownloadOrder;
+import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -88,6 +88,7 @@ public class Server extends Thread {
     }
 
     public synchronized void proccesRecivedData(Peticion peticion, PeerConn conn) throws IOException {
+
         switch (peticion.getVersion()) {
 
             case 1:
@@ -101,8 +102,17 @@ public class Server extends Thread {
             case 2:
 
                 // resuelve query
+                QueryResolver qresolutor = new QueryResolver(_listaArchivos, (Query)peticion, conn);
+                qresolutor.start();
 
+                break;
 
+            case 3:
+
+                // resuelve download order
+                DownloadOrderResolver dresolutor = new DownloadOrderResolver(_listaArchivos,(DownloadOrder)peticion ,conn);
+                dresolutor.start();
+                
                 break;
             default:
                 /*
@@ -114,6 +124,14 @@ public class Server extends Thread {
         }
     }
 
+    
+    /**
+     * Esto es el famoso PeerConnPool
+     * 
+     * se encarga de escuchar a TODOS los clientes, esto tiene un poblema de 
+     * rendimiento y habra que paralelizarlo un poco.
+     * 
+     */
     public void run() {
          PeerConn p;
         while (_loopConnPool) {

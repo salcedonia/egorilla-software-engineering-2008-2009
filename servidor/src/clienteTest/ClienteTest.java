@@ -6,14 +6,17 @@
 package clienteTest;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.Query;
+import servidoregorilla.paquete.QueryAnswer;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -37,6 +40,7 @@ public class ClienteTest {
             Socket conexion = new Socket("127.0.0.1", 6969);
             
             ObjectOutputStream out = new ObjectOutputStream(conexion.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(conexion.getInputStream());
 
             DatosCliente me = new DatosCliente();
             me.nombreUsuario ="dePruebas";
@@ -63,16 +67,28 @@ public class ClienteTest {
             // Mandamos la lista de archivos asociada al cliente
             out.writeObject(arch);
             
+             System.out.print("pulsa intro:");
             System.in.read();
             
+            // prueba de Query
+            Query q =  new Query();
+            q.cadenaBusqueda = "adios";
        
+            out.writeObject(q);
+            
+            System.out.print("pulsa intro:");
+            System.in.read();
+            
+            QueryAnswer respuesta = (QueryAnswer) in.readObject();
+            
+            for (int i=0; i< respuesta.lista.length; i++) {
+                System.out.println(respuesta.lista[i]._nombre);
         } 
-        catch (UnknownHostException ex) {
         
-            Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, null, ex);
         } 
         catch (IOException ex) {
-        
+            Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
