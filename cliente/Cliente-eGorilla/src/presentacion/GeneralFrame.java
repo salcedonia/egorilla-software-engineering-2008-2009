@@ -18,6 +18,7 @@ import presentacion.buscador.GUIBuscador;
 import presentacion.compartidos.GUICompartidos;
 import presentacion.configuracion.GUIConfiguracion;
 import presentacion.descargas.GUIDescargas;
+import presentacion.estadisticas.GUIEstadisticas;
 import presentacion.servidores.GUIServidores;
 
 /**
@@ -84,6 +85,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         mainPanel.add( "Configuracion", GUIConfiguracion.instancia().getPanel());
         mainPanel.add( "Descargas", GUIDescargas.instancia().getPanel());
         mainPanel.add( "Compartidos", GUICompartidos.instancia().getPanel());
+        mainPanel.add( "Estadisticas", GUIEstadisticas.instancia().getPanel());
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setName("jPanel1"); // NOI18N
@@ -247,7 +249,8 @@ public class GeneralFrame extends javax.swing.JFrame {
 }//GEN-LAST:event_cargarConfiguracion
 
     private void cargarEstadisticas(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cargarEstadisticas
-        // TODO add your handling code here:
+
+        ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Estadisticas" );
 }//GEN-LAST:event_cargarEstadisticas
 
 private void conexion(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_conexion
