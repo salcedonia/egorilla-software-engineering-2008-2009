@@ -52,7 +52,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="mainPanel.add( &quot;Servidores&quot;, GUIServidores.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Buscador&quot;, GUIBuscador.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Configuracion&quot;, GUIConfiguracion.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Descargas&quot;, GUIDescargas.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Compartidos&quot;, GUICompartidos.instancia().getPanel());"/>
+        <AuxValue name="JavaCodeGenerator_AddingCodePre" type="java.lang.String" value="mainPanel.add( &quot;Servidores&quot;, GUIServidores.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Buscador&quot;, GUIBuscador.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Configuracion&quot;, GUIConfiguracion.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Descargas&quot;, GUIDescargas.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Compartidos&quot;, GUICompartidos.instancia().getPanel());&#xd;&#xa;mainPanel.add( &quot;Estadisticas&quot;, GUIEstadisticas.instancia().getPanel());"/>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="GeneralFrame_mainPanel"/>
       </AuxValues>
       <Constraints>
