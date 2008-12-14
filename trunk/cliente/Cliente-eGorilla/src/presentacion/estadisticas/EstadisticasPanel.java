@@ -58,6 +58,17 @@ public class EstadisticasPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jPanel2 = new javax.swing.JPanel();
+        jSplitPane2 = new javax.swing.JSplitPane();
+        jSplitPane3 = new javax.swing.JSplitPane();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jButton3 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jButton2 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jButton1 = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Estadisticas"));
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.LINE_AXIS));
@@ -263,17 +274,71 @@ public class EstadisticasPanel extends javax.swing.JPanel {
         jSplitPane1.setLeftComponent(jPanel1);
 
         jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 475, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 352, Short.MAX_VALUE)
-        );
+        jSplitPane2.setDividerLocation(250);
+        jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane2.setName("jSplitPane2"); // NOI18N
+
+        jSplitPane3.setDividerLocation(250);
+        jSplitPane3.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+        jSplitPane3.setName("jSplitPane3"); // NOI18N
+
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setLayout(new java.awt.CardLayout());
+
+        jScrollPane4.setName("jScrollPane4"); // NOI18N
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/presentacion/estadisticas/resources/conexion.jpg"))); // NOI18N
+        jButton3.setBorder(null);
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton3.setName("jButton3"); // NOI18N
+        jScrollPane4.setViewportView(jButton3);
+
+        jPanel4.add(jScrollPane4, "card3");
+
+        jSplitPane3.setBottomComponent(jPanel4);
+
+        jPanel5.setName("jPanel5"); // NOI18N
+        jPanel5.setLayout(new java.awt.CardLayout());
+
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/presentacion/estadisticas/resources/subidas.jpg"))); // NOI18N
+        jButton2.setBorder(null);
+        jButton2.setBorderPainted(false);
+        jButton2.setContentAreaFilled(false);
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.setName("jButton2"); // NOI18N
+        jScrollPane3.setViewportView(jButton2);
+
+        jPanel5.add(jScrollPane3, "card3");
+
+        jSplitPane3.setLeftComponent(jPanel5);
+
+        jSplitPane2.setBottomComponent(jSplitPane3);
+
+        jPanel6.setName("jPanel6"); // NOI18N
+        jPanel6.setLayout(new java.awt.CardLayout());
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/presentacion/estadisticas/resources/descargas.jpg"))); // NOI18N
+        jButton1.setAutoscrolls(true);
+        jButton1.setBorder(null);
+        jButton1.setBorderPainted(false);
+        jButton1.setContentAreaFilled(false);
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton1.setName("jButton1"); // NOI18N
+        jScrollPane2.setViewportView(jButton1);
+
+        jPanel6.add(jScrollPane2, "card3");
+
+        jSplitPane2.setLeftComponent(jPanel6);
+
+        jPanel2.add(jSplitPane2);
 
         jSplitPane1.setRightComponent(jPanel2);
 
@@ -284,12 +349,23 @@ public class EstadisticasPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bReiniciar;
     private javax.swing.JLabel fechaEstadisticas;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JTree jTree1;
     // End of variables declaration//GEN-END:variables
 
