@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.DownloadOrder;
+import servidoregorilla.paquete.DownloadOrderAnswer;
 import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.QueryAnswer;
 import servidoregorilla.paquete.TipoArchivo;
@@ -67,8 +69,6 @@ public class ClienteTest {
             // Mandamos la lista de archivos asociada al cliente
             out.writeObject(arch);
             
-             System.out.print("pulsa intro:");
-            System.in.read();
             
             // prueba de Query
             Query q =  new Query();
@@ -76,14 +76,23 @@ public class ClienteTest {
        
             out.writeObject(q);
             
-            System.out.print("pulsa intro:");
-            System.in.read();
-            
             QueryAnswer respuesta = (QueryAnswer) in.readObject();
             
-            for (int i=0; i< respuesta.lista.length; i++) {
+            for (int i=0; i< respuesta.lista.length; i++) 
                 System.out.println(respuesta.lista[i]._nombre);
-        } 
+             
+            // prueba el download order.
+            DownloadOrder orden = new DownloadOrder("abcd");
+            out.writeObject(orden);
+            
+            
+            DownloadOrderAnswer resp =(DownloadOrderAnswer) in.readObject();
+            
+            for (int i=0; i< resp.lista.length; i++) 
+                System.out.println(resp.lista[i].nombreUsuario);
+                  
+            System.out.print("pulsa una tecla");
+            System.in.read();
         
         } 
         catch (IOException ex) {
