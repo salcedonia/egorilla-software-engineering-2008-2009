@@ -55,6 +55,10 @@ public class ConexionCliente extends Thread{
     public PeerConn getConnexion() {
        return _conn;
     }
+
+    public DatosCliente getDatosCliente() {
+       return _datos;
+    }
     
     /**
      * Método que ejecuta el hilo.

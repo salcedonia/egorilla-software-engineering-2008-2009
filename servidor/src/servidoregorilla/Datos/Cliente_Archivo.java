@@ -26,5 +26,6 @@ public class Cliente_Archivo {
         _nombresArchivo = new Vector<String>();
         _nombresArchivo.add(nomb);
         _propietarios = new Vector<ConexionCliente>();
+        _propietarios.add(con);
     }
 }

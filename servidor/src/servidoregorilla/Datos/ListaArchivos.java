@@ -118,8 +118,13 @@ public class ListaArchivos extends Vector<Archivo> implements Serializable {
     public DatosCliente[] propietarios (String hash){
         Vector<DatosCliente> lista = new Vector<DatosCliente>();
         
-        for (Archivo a : this) {
-            
+        for (Cliente_Archivo r : _relaccion) {
+            if (r._hash.contentEquals(hash)){
+                for (ConexionCliente cliente : r._propietarios) {
+                    lista.add(cliente.getDatosCliente());
+                }
+                break;
+            }
         }
         
         DatosCliente[] clientes= new DatosCliente[lista.size()];

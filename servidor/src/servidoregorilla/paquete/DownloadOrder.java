@@ -14,6 +14,10 @@ import java.io.Serializable;
 public class DownloadOrder implements Peticion,Serializable{
     public String hash;
 
+    public DownloadOrder(String h){
+        hash = h;
+    }
+    
     public int getVersion() {
         return 3;
 }

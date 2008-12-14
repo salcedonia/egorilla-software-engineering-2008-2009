@@ -28,6 +28,7 @@ public class DownloadOrderResolver extends Thread {
       
         _orden = downloadOrder;
         _conn = conn;
+        _listaGlobal = l;
     }
 
     
