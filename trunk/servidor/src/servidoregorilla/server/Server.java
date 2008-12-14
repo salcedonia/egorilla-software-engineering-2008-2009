@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servidoregorilla.server;
 
 import servidoregorilla.paquete.Peticion;
@@ -87,6 +83,14 @@ public class Server extends Thread {
         }
     }
 
+    /**
+     * Este método analiza el paquete recibido y lanza un hilo de ejecución que 
+     * se encarga de procesar la orden.
+     * 
+     * @param peticion la peticion del cliente. puede ser una conexion, un query, Download order
+     * @param conn la conexion con el cliente que solicito
+     * @throws java.io.IOException puede haber un porblema si no se reconoce el paquete recibido.
+     */
     public synchronized void proccesRecivedData(Peticion peticion, PeerConn conn) throws IOException {
 
         switch (peticion.getVersion()) {
@@ -128,9 +132,11 @@ public class Server extends Thread {
     /**
      * Esto es el famoso PeerConnPool
      * 
-     * se encarga de escuchar a TODOS los clientes, esto tiene un poblema de 
+     * Se encarga de escuchar a TODOS los clientes, esto tiene un poblema de 
      * rendimiento y habra que paralelizarlo un poco.
      * 
+     * Es la versión preliminar, conexiones TCP que se mantienen durante toda la 
+     * sesión del cliente.
      */
     public void run() {
          PeerConn p;
