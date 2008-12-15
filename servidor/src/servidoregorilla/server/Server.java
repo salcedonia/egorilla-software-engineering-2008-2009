@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package servidoregorilla.server;
 
 import servidoregorilla.paquete.Peticion;
@@ -12,8 +16,8 @@ import servidoregorilla.Datos.TablaClientes;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.Query;
-import servidoregorilla.paquete.TipoArchivo;
 
+/*****************************************************************************/
 /**
  * Clase que implementa el servidor.
  * 
@@ -23,13 +27,17 @@ import servidoregorilla.paquete.TipoArchivo;
 public class Server extends Thread {
 
     // ATRIBUTOS
-    private ServerSocket _serverSocket; // Servidor de escucha
-    private ListaArchivos _listaArchivos; // Lista de archivos asociada al servidor
-    private TablaClientes _tablaClientes; // Tabla de clientes asociada al servidor
-    private boolean _loopConnPool;
-    private Vector<PeerConn> _activeCons;
-    private Vector<PeerConn> _waitCons;
+    private ServerSocket _servidorDeEscucha; // Servidor de escucha
 
+    private ListaArchivos _listaArchivos; // Lista de archivos asociada al servidor
+
+    private TablaClientes _tablaClientes; // Tabla de clientes asociada al servidor
+
+    private boolean _loopConnPool;
+    private Vector<PeerConn> _conexionesActivas;
+    private Vector<PeerConn> _conexionesEnEspera;
+
+    /*****************************************************************************/
     /**
      * Constructor de la clase Server. Crea un servidor de escucha en el 
      * puerto indicado. Almacenamos la lista de archivos y la tabla de 
@@ -43,23 +51,22 @@ public class Server extends Thread {
      */
     public Server(int puerto, ListaArchivos lista, TablaClientes tabla) throws IOException {
 
-        _serverSocket = new ServerSocket(puerto);
+        _servidorDeEscucha = new ServerSocket(puerto);
         _listaArchivos = lista;
         _tablaClientes = tabla;
 
         // prepare connections pools
-        _waitCons = new Vector<PeerConn>();
-        _activeCons = new Vector<PeerConn>();
+        _conexionesEnEspera = new Vector<PeerConn>();
+        _conexionesActivas = new Vector<PeerConn>();
 
-        // Inicializamos los datos relativos a las extensiones de archivo
-        TipoArchivo.iniciarTiposArchivo();
-
-
-        //activamos el pool de conexiones.
-        this._loopConnPool = true;
-        this.start();
+        // Activamos el pool de conexiones.
+        _loopConnPool = true;
+        
+        // Lanzamos el hilo de ejecución
+        start();
     }
 
+    /*****************************************************************************/
     /**
      * Escucha y crea conexiones de tipo peer según van llegando.
      * 
@@ -67,22 +74,29 @@ public class Server extends Thread {
      * @throws java.io.IOException Se genera la excepcion cuando se produce
      * algún problema en la red.
      */
-    public void listen() throws IOException {
+    public void escuchar() throws IOException {
 
         // Crea una conexión de tipo peer según va llegando
-        PeerConn conexion = new PeerConn(_serverSocket.accept());
+        PeerConn conexion = new PeerConn(_servidorDeEscucha.accept());
 
-        // encolamos el peercon al peerconnpool
-        _waitCons.add(conexion);
-        conexion.setWait();
+        // Encolamos la conexión al pool de conexiones en espera
+        _conexionesEnEspera.add(conexion);
+        
+        // Le decimos que espere
+        conexion.espera();
+        
         try {
+            
             // tratamos el paquete recibido
-            proccesRecivedData((Peticion) conexion.reciveObject(),conexion);
-        } catch (ClassNotFoundException ex) {
+            procesarDatosRecibidos((Peticion) conexion.recibirObjeto(), conexion);
+        } 
+        catch (ClassNotFoundException ex) {
+        
             System.err.print("recibida version desconocida");
         }
     }
 
+    /*****************************************************************************/
     /**
      * Este método analiza el paquete recibido y lanza un hilo de ejecución que 
      * se encarga de procesar la orden.
@@ -91,22 +105,25 @@ public class Server extends Thread {
      * @param conn la conexion con el cliente que solicito
      * @throws java.io.IOException puede haber un porblema si no se reconoce el paquete recibido.
      */
-    public synchronized void proccesRecivedData(Peticion peticion, PeerConn conn) throws IOException {
+    public synchronized void procesarDatosRecibidos(Peticion peticion, PeerConn conn) throws IOException {
 
         switch (peticion.getVersion()) {
 
             case 1:
 
-                ConexionCliente  altaCliente = new ConexionCliente(conn, (DatosCliente)peticion, _listaArchivos, _tablaClientes);
-                // Lanzamos el hilo de ejecución asociado a la conexión
+                // Creamos una nueva conexion con el cliente
+                ConexionCliente altaCliente = new ConexionCliente(conn, (DatosCliente) peticion, _listaArchivos, _tablaClientes);
+                
                 System.out.println("Cliente conectado");
+                
+                // Lanzamos el hilo de ejecución asociado a la conexión
                 altaCliente.start();
                 break;
-                
+
             case 2:
 
                 // resuelve query
-                QueryResolver qresolutor = new QueryResolver(_listaArchivos, (Query)peticion, conn);
+                QueryResolver qresolutor = new QueryResolver(_listaArchivos, (Query) peticion, conn);
                 qresolutor.start();
 
                 break;
@@ -114,9 +131,9 @@ public class Server extends Thread {
             case 3:
 
                 // resuelve download order
-                DownloadOrderResolver dresolutor = new DownloadOrderResolver(_listaArchivos,(DownloadOrder)peticion ,conn);
+                DownloadOrderResolver dresolutor = new DownloadOrderResolver(_listaArchivos, (DownloadOrder) peticion, conn);
                 dresolutor.start();
-                
+
                 break;
             default:
                 /*
@@ -128,7 +145,7 @@ public class Server extends Thread {
         }
     }
 
-    
+    /*****************************************************************************/
     /**
      * Esto es el famoso PeerConnPool
      * 
@@ -139,17 +156,17 @@ public class Server extends Thread {
      * sesión del cliente.
      */
     public void run() {
-         PeerConn p;
+        PeerConn p;
         while (_loopConnPool) {
-            for (int i=0; i< _activeCons.size(); i++){
-                p = _activeCons.elementAt(i);
+            for (int i = 0; i < _conexionesActivas.size(); i++) {
+                p = _conexionesActivas.elementAt(i);
                 try {
 
                     // leer un objeto, se hara timeout a los 10 milisegundos.
-                    Peticion pet = (Peticion) p.reciveObject(10);
+                    Peticion pet = (Peticion) p.recibirObjeto(10);
 
                     // y si el objeto es válido, se procesa.
-                    this.proccesRecivedData(pet, p);
+                    this.procesarDatosRecibidos(pet, p);
 
                 } catch (ClassNotFoundException ex) {
                     //TODO: no entiende el peticion
@@ -157,7 +174,7 @@ public class Server extends Thread {
                     // timeout, a otra cosa mariposa
                 } catch (Exception ex) {
                     // error io, perdida la comunicación.
-                    _activeCons.remove(p);
+                    _conexionesActivas.remove(p);
 
                     // TODO: dar de baja al tipo en todas partes.
                     _tablaClientes.removeCliente(p);
@@ -169,13 +186,13 @@ public class Server extends Thread {
                 }
             }
 
-            // if waitconns are ready, put back into active
-           
-            for (int i=0; i<_waitCons.size(); i++){
-                p = _waitCons.elementAt(i);
-                if (p.ready()) {
-                    _waitCons.remove(p);
-                    _activeCons.add(p);
+            // if waitconns are getListo, put back into active
+
+            for (int i = 0; i < _conexionesEnEspera.size(); i++) {
+                p = _conexionesEnEspera.elementAt(i);
+                if (p.getListo()) {
+                    _conexionesEnEspera.remove(p);
+                    _conexionesActivas.add(p);
                     i--;
                 }
             }
