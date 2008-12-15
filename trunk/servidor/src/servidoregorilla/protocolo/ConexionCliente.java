@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servidoregorilla.protocolo;
 
 import Networking.PeerConn;
@@ -13,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.DatosCliente;
 
+/*****************************************************************************/
 /**
  * Clase que implementa un hilo de ejecución que se expande por parte del 
  * servidor cuando alguien se identifica.
@@ -27,71 +27,98 @@ import servidoregorilla.paquete.DatosCliente;
  * @author pitidecaner
  * @author Salcedonia
  */
-public class ConexionCliente extends Thread{
-    
+public class ConexionCliente extends Thread {
 
-    private PeerConn _conn;
-    private DatosCliente _datos;
+    // ATRIBUTOS
+    private PeerConn _conexion;
+    private DatosCliente _datosCliente;
     private ListaArchivos _listaGlobalArchivos;
-    private TablaClientes _tablaDeClientes ;
+    private TablaClientes _tablaDeClientes;
     private String _direccion;
 
+/*****************************************************************************/
     /**
      * Constructor de la clase Cliente. Almacenamos los datos proporcionados
      * por el servidor al conectarse.
      * 
      * @param conexion Conexión recién abierta con el cliente.
-     * @param lista Lista de ficheros del servidor, los que tienen todos los 
+     * @param datos Datos del cliente.
+     * @param archivos Lista de ficheros del servidor, los que tienen todos los 
      * usuarios conectados en conjunto.
-     * @param tabla La lista de clientes conectados al servidor en este momento.
+     * @param clientes La lista de clientes conectados al servidor en este momento.
      */
     public ConexionCliente(PeerConn conexion, DatosCliente datos, ListaArchivos archivos, TablaClientes clientes) {
-        _conn = conexion;
-        _datos = datos;
+        _conexion = conexion;
+        _datosCliente = datos;
         _listaGlobalArchivos = archivos;
         _tablaDeClientes = clientes;
     }
 
-    public PeerConn getConnexion() {
-       return _conn;
+/*****************************************************************************/
+    /**
+     * Devuelve la conexión asociada a ese cliente.
+     * 
+     * @return La conexión asociada a ese cliente.
+     */
+    public PeerConn getConexion() {
+        return _conexion;
     }
 
+/*****************************************************************************/
+    /**
+     * Devuelve los datos del cliente asociado.
+     * 
+     * @return Los datos del cliente asociado.
+     */
     public DatosCliente getDatosCliente() {
-       return _datos;
+        return _datosCliente;
     }
-    
+
+/*****************************************************************************/
+    /**
+     * Devuelve la dirección.
+     * 
+     * @return La dirección.
+     */
+    public String getDireccion() {
+        return _direccion;
+    }
+
+/*****************************************************************************/
     /**
      * Método que ejecuta el hilo.
      */
     @Override
-    public void run () {
-        try {
-            // recibe los archivos del cliente 
-            ListaArchivos archivosCliente = (ListaArchivos)_conn.reciveObject();
+    public void run() {
 
-            // averigua la dirección de origen.
-            this._datos.ip = _conn.getIP();
-            
-            // alta del cliente en el sistema
+        try {
+            // Recibe los archivos del cliente 
+            ListaArchivos archivosCliente = (ListaArchivos) _conexion.recibirObjeto();
+
+            // Averigua la dirección de origen.
+            _datosCliente.setIP(_conexion.getIP());
+
+            // Alta del cliente en el sistema
             _tablaDeClientes.add(this);
 
-            // alta de los archivos en el sistema
+            // Alta de los archivos en el sistema
             _listaGlobalArchivos.actualizarDesdeListaCliente(this, archivosCliente);
 
-            // listo para usar!
-            _conn.setReady();
-        }
+            // Listo para usar!
+            _conexion.listo();
+            
+        } 
         catch (IOException ex) {
+
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }   catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
+
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }   catch (Exception ex) {
+        } 
+        catch (Exception ex) {
+
             Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-    
-    public String getDireccion(){
-        return _direccion;
-}
 }

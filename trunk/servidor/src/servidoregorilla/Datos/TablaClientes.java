@@ -31,7 +31,7 @@ public class TablaClientes extends HashSet<ConexionCliente>{
 
     public void removeCliente (PeerConn c){
         for (ConexionCliente cliente : this) {
-            if (cliente.getConnexion() == c){
+            if (cliente.getConexion() == c){
                 this.remove(cliente);
                 return;
             }

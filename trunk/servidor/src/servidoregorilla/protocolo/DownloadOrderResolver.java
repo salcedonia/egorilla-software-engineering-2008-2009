@@ -7,58 +7,61 @@ import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.DownloadOrderAnswer;
 
+/*****************************************************************************/
 /**
  * Realiza la busqueda de todos los clientes que tienen el fichero indicado
  * 
- * 
  * @author pitidecaner
+ * @author Salcedonia
  */
 public class DownloadOrderResolver extends Thread {
 
-    private PeerConn _conn;
-    private DownloadOrder _orden;
-    private ListaArchivos _listaGlobal;
+    // ATRIBUTOS
+    private PeerConn _conexion; // Conexión asociada
+    private DownloadOrder _ordenDescarga; // Orden de descarga
+    private ListaArchivos _listaGlobal; // Lista de archivos global
     
+/*****************************************************************************/
     /**
+     * Constructor de la clase DownloadOrderResolver.
      * 
-     * 
-     * @param l la lista global de archivos dados de alta en el sistema
-     * @param downloadOrder la orden dada por el cliente
-     * @param conn la connexion por la que debemos contestar.
+     * @param lista la lista global de archivos dados de alta en el sistema
+     * @param ordenDescarga la orden dada por el cliente
+     * @param conexion la connexion por la que debemos contestar.
      */
-    public DownloadOrderResolver(ListaArchivos l,DownloadOrder downloadOrder, PeerConn conn) {
+    public DownloadOrderResolver(ListaArchivos lista, DownloadOrder ordenDescarga, PeerConn conexion) {
       
-        _orden = downloadOrder;
-        _conn = conn;
-        _listaGlobal = l;
+        _ordenDescarga = ordenDescarga;
+        _conexion = conexion;
+        _listaGlobal = lista;
     }
-
-    
+ 
+/*****************************************************************************/
     /**
-     * realiza la busqueda de las direcciones de todos los clientes que tengan 
-     * el fichero indicado 
+     * Realiza la búsqueda de las direcciones de todos los clientes que tengan 
+     * el fichero indicado. 
      */
+    @Override
     public void run(){
        
-        // busca a todos los clientes con este archivo.
-        DatosCliente [] l = _listaGlobal.propietarios(_orden.hash);
+        // Busca a todos los clientes con este archivo.
+        DatosCliente [] propietarios = _listaGlobal.getPropietarios(_ordenDescarga.getHash());
         
+        // Compone respuesta
+        DownloadOrderAnswer respuesta = new DownloadOrderAnswer(propietarios);
         
-        // compone respuesta
-        DownloadOrderAnswer answer = new DownloadOrderAnswer(l);
-        
-        // envia
-                try {
+        // Envía la respuesta al cliente que la solicitó
+        try {
             // enviar a cliente.
-            _conn.sendObject(answer);
+            _conexion.enviarObjeto(respuesta);
+            
         } catch (IOException ex) {
-         // TODO: tenemos un problema, hacer algo, habra que darlo de baja, o no?
-            // si se ha interrumpido la conexion se dara cuenta el peerconnpool
-            // si 
-    }
-
-        // hemos acabado aqui
-        _conn.setReady();
+         // TODO: Si se ha interrumpido la conexion el pool se habrá dado cuenta
+            // y actuará en consecuencia
+        }
+        
+        // Hemos acabado aquí
+        _conexion.listo();
     }
     
 }

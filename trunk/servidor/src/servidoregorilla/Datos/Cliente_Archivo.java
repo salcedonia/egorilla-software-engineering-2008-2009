@@ -8,24 +8,35 @@ package servidoregorilla.Datos;
 import java.util.Vector;
 import servidoregorilla.protocolo.ConexionCliente;
 
+/*****************************************************************************/
 /**
-
+ * Clase que controla los propietarios de un determinado archivo y los distintos
+ * nombres conexion el que referencian al mismo dentro de la red.
  * 
  * @author pitidecaner
  * @author Salcedonia
  */
 public class Cliente_Archivo {
 
-    public String         _hash;
-    public Vector<String> _nombresArchivo;
-    public Vector<ConexionCliente> _propietarios;
+    // ATRIBUTOS
+    public String         _hash; // Hash del archivo
+    public Vector<String> _nombresArchivo; // Lista de nombres asociadas al hash
+    public Vector<ConexionCliente> _propietarios; // Lista de propietarios del archivo
 
-    public Cliente_Archivo(String hash,String nomb, ConexionCliente con){
+/*****************************************************************************/
+    /**
+     * Constructor de la clase Cliente_Archivo.
+     * 
+     * @param hash hash del archivo.
+     * @param nombre Nombre del archivo.
+     * @param conexion Cliente que tiene el archivo.
+     */
+    public Cliente_Archivo(String hash, String nombre, ConexionCliente conexion){
         super();
         _hash = hash;
         _nombresArchivo = new Vector<String>();
-        _nombresArchivo.add(nomb);
+        _nombresArchivo.add(nombre);
         _propietarios = new Vector<ConexionCliente>();
-        _propietarios.add(con);
+        _propietarios.add(conexion);
     }
 }

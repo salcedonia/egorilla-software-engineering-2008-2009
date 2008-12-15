@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/*****************************************************************************/
 /**
  * La clase Config es el almacén de la configuración persistente del servidor.
  * Se leerá a partir de un fichero de configuración y será accesible allí donde 
@@ -19,11 +20,11 @@ public class Config{
     
     // ATRIBUTOS
     static private Properties _properties;
-    static private File       _file;
-    
+    static private File       _file;   
     static private int[] _versionpeticion;
     static private int   _puerto;
     
+/*****************************************************************************/
     /**
      * Para inicializar esta clase se lee el fichero de configuración indicado.
      * 
@@ -58,6 +59,7 @@ public class Config{
         _puerto = Integer.parseInt(_properties.getProperty("puerto"));
     }
 
+/*****************************************************************************/
 //    /**
 //     * comprueba si la version del peticion está entre las toleradas por esta
 //     * implementación.
@@ -78,6 +80,7 @@ public class Config{
 //        return existe;
 //    }
   
+/*****************************************************************************/
     /**
      * Devuelve la versión del peticion que se está utilizando.
      * 
@@ -88,6 +91,7 @@ public class Config{
         return _versionpeticion;
     }
     
+/*****************************************************************************/
     /**
      * Devuelve el número entero que identifica al puerto por el que escucha el 
      * servidor las conexiones de los clientes.
