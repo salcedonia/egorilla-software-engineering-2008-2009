@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.server.Server;
 
+/*****************************************************************************/
 /**
  * Clase Main de la aplicación Servidor de servidor.
  * 
@@ -24,6 +25,7 @@ public class Main {
     // ATRIBUTOS
     public static boolean _loop = true;
     
+/*****************************************************************************/
     /**
      * Método main del servidor.
      * 
@@ -63,7 +65,7 @@ public class Main {
             try {
                 
                 // Escuchamos conexiones
-                servidor.listen();
+                servidor.escuchar();
                 
             } 
             catch (IOException ex) {

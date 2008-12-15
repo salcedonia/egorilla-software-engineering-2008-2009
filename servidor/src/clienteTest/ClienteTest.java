@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
@@ -45,51 +44,49 @@ public class ClienteTest {
             ObjectInputStream in = new ObjectInputStream(conexion.getInputStream());
 
             DatosCliente me = new DatosCliente();
-            me.nombreUsuario ="dePruebas";
-            me.puertoEscucha = 4000;
+            me.setNombreUsuario("dePruebas");
+            me.setPuertoEscucha(4000);
 
             out.writeObject(me);
 
-            // Creamos una lista con 2 archivos
+            // Creamos una _lista con 2 archivos
             ListaArchivos arch = new ListaArchivos();
             Archivo a = new Archivo();
             a._hash = "abc";
             a._nombre = "hola que tal";
-            a._tama = 1231;
+            a._tamaño = 1231;
             a._tipo = TipoArchivo.VIDEO;
-            arch.addArchivo(a);
+            arch.añadirArchivo(a);
             
             a = new Archivo();
             a._hash = "abcd";
             a._nombre = "adios";
-            a._tama = 123431;
+            a._tamaño = 123431;
             a._tipo = TipoArchivo.AUDIO;
-            arch.addArchivo(a);
+            arch.añadirArchivo(a);
             
-            // Mandamos la lista de archivos asociada al cliente
+            // Mandamos la _lista de archivos asociada al cliente
             out.writeObject(arch);
-            
             
             // prueba de Query
             Query q =  new Query();
-            q.cadenaBusqueda = "adios";
+            q.setCadenaBusqueda("adios");
        
             out.writeObject(q);
             
             QueryAnswer respuesta = (QueryAnswer) in.readObject();
             
-            for (int i=0; i< respuesta.lista.length; i++) 
-                System.out.println(respuesta.lista[i]._nombre);
+            for (int i=0; i< respuesta.getLista().length; i++) 
+                System.out.println(respuesta.getLista()[i]._nombre);
              
             // prueba el download order.
             DownloadOrder orden = new DownloadOrder("abcd");
             out.writeObject(orden);
             
-            
             DownloadOrderAnswer resp =(DownloadOrderAnswer) in.readObject();
             
-            for (int i=0; i< resp.lista.length; i++) 
-                System.out.println(resp.lista[i].nombreUsuario);
+            for (int i=0; i< resp.getLista().length; i++) 
+                System.out.println(resp.getLista()[i].getNombreUsuario());
                   
             System.out.print("pulsa una tecla");
             System.in.read();
@@ -97,7 +94,8 @@ public class ClienteTest {
         } 
         catch (IOException ex) {
             Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

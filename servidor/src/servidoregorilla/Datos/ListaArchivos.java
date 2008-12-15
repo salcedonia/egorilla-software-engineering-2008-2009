@@ -11,6 +11,7 @@ import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.TipoArchivo;
 import servidoregorilla.protocolo.ConexionCliente;
 
+/*****************************************************************************/
 /**
  * Clase de Lista de archivos que proporciona todos los métodos necesarios para
  * el tratamiento de éste tipo de objetos.
@@ -22,87 +23,109 @@ import servidoregorilla.protocolo.ConexionCliente;
  */
 public class ListaArchivos extends Vector<Archivo> implements Serializable {
 
-    Vector<Cliente_Archivo> _relaccion;
+    // ATRIBUTOS
+    Vector<Cliente_Archivo> _relacion;
 
+/*****************************************************************************/
+    /**
+     * Constructor de la clase ListaArchivos.
+     */
     public ListaArchivos() {
         super();
-        _relaccion = new Vector<Cliente_Archivo>();
+        _relacion = new Vector<Cliente_Archivo>();
     }
 
+/*****************************************************************************/
     /**
      * Añade un archivo a la lista de archivos.
      * 
      * @param a Archivo a añadir a la lista de archivos.
      */
-    public synchronized void addArchivo(Archivo a) {
-        this.add(a);
+    public synchronized void añadirArchivo(Archivo a) {
+        add(a);
     }
 
+/*****************************************************************************/
     /**
      * Elimina un archivo de la lista de archivos.
      * 
      * @param a Archivo a eliminar de la lista de archivos.
      */
-    public synchronized void removeArchivo(Archivo a) {
+    public synchronized void eliminarArchivo(Archivo a) {
 
         // TODO: esto no puede funcionar asi
-        this.remove(a);
+        remove(a);
     }
 
+/*****************************************************************************/
     /**
-     * Actualiza la BBDD del servidor con los ficheros que tiene un cliente recien
-     * conectado, se comprueba si cada uno de los archivos pertenecian antes al sistema.
-     * en tal caso solo se añade la referencia a este cliente y el posible nombre
+     * Actualiza la BBDD del servidor con los ficheros que tiene un cliente recién
+     * conectado, se comprueba si cada uno de los archivos pertenecían antes al sistema.
+     * en tal caso sólo se añade la referencia a este cliente y el posible nombre
      * distinto del archivo.
      *
-     * @param c la conexion con el cliente.
-     * @param listarchvos la lista de archivos de este cliente.
+     * @param conexion la conexión con el cliente.
+     * @param listaArchivos la lista de archivos de este cliente.
      */
-    public void actualizarDesdeListaCliente(ConexionCliente c, ListaArchivos listarchvos) {
+    public void actualizarDesdeListaCliente(ConexionCliente conexion, ListaArchivos listaArchivos) {
 
         boolean encontrado = false;
-        for (Archivo ar : listarchvos) {
+        for (Archivo archivo : listaArchivos) {
 
             // buscalo en la BBDD
-            for (Archivo arch : this) {
-                encontrado = arch.comparaArchivo(ar);
-            }
+            for (Archivo archivoAux : this) 
+                encontrado = archivoAux.comparaArchivo(archivo);
 
             // si no existe darlo de alta
             if (!encontrado) {
-                this.add(ar);
-                this._relaccion.add(new Cliente_Archivo(ar.getHash(), ar.getNombre(), c));
-            } else {
-                // tomar nota de la relacción, de existir.
-                for (Cliente_Archivo rel : _relaccion) {
-                    if (rel._hash.contentEquals(ar.getHash())) {
-                        rel._propietarios.add(c);
-                        rel._nombresArchivo.add(ar.getNombre());
+                
+                add(archivo);
+                _relacion.add(new Cliente_Archivo(archivo.getHash(), archivo.getNombre(), conexion));
+            } 
+            else {
+                
+                // tomar nota de la relación, de existir.
+                for (Cliente_Archivo rel : _relacion) {
+                    if (rel._hash.contentEquals(archivo.getHash())) {
+                        
+                        rel._propietarios.add(conexion);
+                        rel._nombresArchivo.add(archivo.getNombre());
                     }
                 }
             }
         }
     }
 
+/*****************************************************************************/
     /**
-     * buscar por nombre, la versión actual busca aquellos archivos que se llaman
+     * Buscar por nombre, la versión actual busca aquellos archivos que se llaman
      * exactamente como el nombre indicado.
      * 
-     * @param nmb buscado
-     * @return un array con coincidencias
+     * @param nombre Nombre del archivo buscado.
+     * 
+     * @return Un array con los datos de los clientes que tienen ese archivo.
      */
-    public Archivo[] buscar(String nmb){
+    public Archivo[] buscar(String nombre){
+        
         Vector<Archivo> lista = new Vector<Archivo>();
         
         for (Archivo a : this) {
-            if (a._nombre.contentEquals(nmb))
+            if (a._nombre.contentEquals(nombre))
                 lista.add(a);
-}
+        }
         
         Archivo[] ars= new Archivo[lista.size()];
         return lista.toArray(ars);
     }
     
+/*****************************************************************************/
+    /**
+     * Buscar por tipo de archivo.
+     * 
+     * @param tipo Tipo del archivo buscado.
+     * 
+     * @return Un array con los datos de los clientes que tienen ese archivo.
+     */
     public Archivo[] buscar(TipoArchivo tipo){
         Vector<Archivo> lista = new Vector<Archivo>();
         
@@ -115,10 +138,18 @@ public class ListaArchivos extends Vector<Archivo> implements Serializable {
         return lista.toArray(ars);
     }
     
-    public DatosCliente[] propietarios (String hash){
+/*****************************************************************************/
+    /**
+     * Búsqueda por hash.
+     *  
+     * @param hash Hash del archivo a buscar.
+     * 
+     * @return Un array con los datos de los clientes que tienen ese archivo.
+     */
+    public DatosCliente[] getPropietarios (String hash){
         Vector<DatosCliente> lista = new Vector<DatosCliente>();
         
-        for (Cliente_Archivo r : _relaccion) {
+        for (Cliente_Archivo r : _relacion) {
             if (r._hash.contentEquals(hash)){
                 for (ConexionCliente cliente : r._propietarios) {
                     lista.add(cliente.getDatosCliente());

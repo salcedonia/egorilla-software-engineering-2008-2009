@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,9 +27,10 @@ public class Archivo implements Serializable{
     // ATRIBUTOS
     public String _nombre;
     public String _hash;
-    public long _tama;
+    public long _tamaño;
     public TipoArchivo _tipo;
 
+    /*****************************************************************************/
     /**
      * Constructor de la clase Archivo.
      */
@@ -38,6 +38,7 @@ public class Archivo implements Serializable{
         
     }
         
+    /*****************************************************************************/
     /**
      * Constructor de la clase Archivo. Genera la información de un archivo a 
      * partir un identificador de fichero.
@@ -74,8 +75,8 @@ public class Archivo implements Serializable{
             // Configuramos el tipo de archivo en función de los datos recibidos
             _hash = new String (ms.digest());
             _nombre = f.getName();
-            _tama = f.length();
-            _tipo= asignarTipoArchivo(f);
+            _tamaño = f.length();
+           // _tipo= asignarTipoArchivo(f);
         } 
         catch (DigestException ex) {
 
@@ -103,6 +104,7 @@ public class Archivo implements Serializable{
         }
     }
 
+    /*****************************************************************************/
     /**
      * Devuelve el enumerado con el tipo de archivo correspondiente a la extensión 
      * que se pasa como parámetro.
@@ -111,7 +113,7 @@ public class Archivo implements Serializable{
      * @return El enumerado con el tipo de archivo correspondiente a la extensión 
      * que se pasa como parámetro.
      */
-    private TipoArchivo asignarTipoArchivo(File f) {
+/*    private TipoArchivo asignarTipoArchivo(File f) {
         
         String fileName = null;   
         String extension;  
@@ -121,34 +123,39 @@ public class Archivo implements Serializable{
         extension = fileName.substring(dotPos);
 
         return TipoArchivo.devuelveTipo(extension);
-    }
+    }*/
 
+    /*****************************************************************************/
     /**
-     * recupera el nombre de este archivo
-     * @return el nombre del archivo
+     * Recupera el nombre de este archivo
+     * @return El nombre del archivo
      */
     public String getNombre() {
         return _nombre;
     }
 
+    /*****************************************************************************/
     /**
-     * recupera el hash de este archivo
-     *  el hash es unico para el archivo indempendientemente del nombre que tenga
-     * dos archivos con el mismo hash seran el mismo siempre.
-     * @return el hash del archivo
+     * Recupera el hash de este archivo. El hash es unico para el archivo 
+     * independientemente del nombre que tenga por lo que dos archivos con el 
+     * mismo hash serán el mismo siempre.
+     * 
+     * @return el hash del archivo.
      */
     public String getHash() {
         return _hash;
     }
 
+    /*****************************************************************************/
     /**
-     * recupera el tamaño de este archivo
-     * @return el tamaño del archivo
+     * Recupera el tamaño de este archivo.
+     * @return El tamaño del archivo.
      */
     public long  getSize() {
-        return _tama;
+        return _tamaño;
     }
 
+    /*****************************************************************************/
     /**
      * Compara dos instancias para saber si referencian al mismo archivo
      *
