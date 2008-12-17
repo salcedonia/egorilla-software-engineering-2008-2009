@@ -6,6 +6,12 @@
 
 package presentacion.buscador;
 
+import control.ControlAplicacion;
+import java.awt.Component;
+import servidoregorilla.paquete.Archivo;
+import servidoregorilla.paquete.Query;
+import servidoregorilla.paquete.QueryAnswer;
+
 /**
  *
  * @author  Mnemo
@@ -15,6 +21,9 @@ public class BuscadorPanel extends javax.swing.JPanel {
     /** Creates new form BuscadorPanel */
     public BuscadorPanel() {
         initComponents();
+
+        // listener del control.
+           ControlAplicacion.addBuscadorListener(this);
     }
 
     /** This method is called from within the constructor to
@@ -191,11 +200,14 @@ public class BuscadorPanel extends javax.swing.JPanel {
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 // TODO add your handling code here:
+    String consulta;
+
     // Leer el textbox
-    
-    // Crear Query
-    
-    // 
+    consulta = jTextField1.getText();
+   
+    //procesar query
+    ControlAplicacion.query(consulta);
+
 }//GEN-LAST:event_jButton1ActionPerformed
 
     //Inicia la interfaz
@@ -216,7 +228,22 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 				break;
                                 
                         case GUIBuscador.EVENTO_RECIBIR_BUSQUEDA:
-                            // Rellenar la tabla con los elementos recibidos en object
+                            QueryAnswer ans = (QueryAnswer) object;
+
+                            if (ans.getLista().length > 0) {
+                                Object data[][] = new Object[ans.getLista().length][6];
+
+                                for (int i=0; i< ans.getLista().length; i++) {
+                                    data[i][0] = ans.getLista()[i]._nombre;
+                                    data[i][1] = String.valueOf(ans.getLista()[i]._tamaño);
+                                    data[i][2] = "";
+                                    data[i][3] = "";
+                                    data[i][4] = ans.getLista()[i]._tipo.toString();
+                                    data[i][4] = ans.getLista()[i]._hash;
+                                }
+
+                                // TODO: como coño se mete esto en la puta tabla????????????
+                            }
 				break;
                                 
 		}
