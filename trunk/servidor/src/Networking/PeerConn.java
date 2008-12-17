@@ -40,8 +40,8 @@ public class PeerConn {
 
         _conexion = conexion;
         
-        _objetoSalida = new ObjectOutputStream(conexion.getOutputStream());
-        _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
+        _objetoEntrada = null;
+        _objetoSalida = null;
     }
 
 /*****************************************************************************/
@@ -78,6 +78,9 @@ public class PeerConn {
      */
     public synchronized int recibirEntero() throws IOException {
 
+        if (_objetoEntrada == null)
+                    _objetoEntrada = new ObjectInputStream(_conexion.getInputStream());
+
         _conexion.setSoTimeout(0);
         return _objetoEntrada.readInt();
     }
@@ -90,6 +93,9 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public synchronized void enviarEntero(int num) throws IOException {
+
+        if (_objetoSalida == null)
+            _objetoSalida = new ObjectOutputStream(_conexion.getOutputStream());
 
         _conexion.setSoTimeout(0);
         _objetoSalida.writeInt(num);
@@ -107,7 +113,9 @@ public class PeerConn {
      * ser reconocido.
      */
     public synchronized Object recibirObjeto() throws IOException, ClassNotFoundException {
-
+        if (_objetoEntrada == null)
+                    _objetoEntrada = new ObjectInputStream(_conexion.getInputStream());
+        
         _conexion.setSoTimeout(0);
         return _objetoEntrada.readObject();
     }
@@ -127,6 +135,8 @@ public class PeerConn {
      * ser reconocido.
      */
     public synchronized Object recibirObjeto(int timeout) throws IOException, ClassNotFoundException {
+        if (_objetoEntrada == null)
+            _objetoEntrada = new ObjectInputStream(_conexion.getInputStream());
 
         _conexion.setSoTimeout(1000);
         return _objetoEntrada.readObject();
@@ -140,6 +150,9 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error con la conexión.
      */
     public void enviarObjeto(Object o) throws IOException {
+         if (_objetoSalida == null)
+            _objetoSalida = new ObjectOutputStream(_conexion.getOutputStream());
+
         _conexion.setSoTimeout(0);
         _objetoSalida.writeObject(o);
     }
@@ -152,8 +165,10 @@ public class PeerConn {
      * @throws java.io.IOException Se lanza en caso de error.
      */
     public synchronized void cerrarComunicacion() throws IOException {
-        _objetoEntrada.close();
-        _objetoSalida.close();
+        if (_objetoEntrada != null)
+            _objetoEntrada.close();
+        if (_objetoSalida == null)
+            _objetoSalida.close();
         _conexion.close();
     }
 
