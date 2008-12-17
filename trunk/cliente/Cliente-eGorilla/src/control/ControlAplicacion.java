@@ -10,11 +10,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JPanel;
+import presentacion.buscador.BuscadorPanel;
+import presentacion.buscador.GUIBuscador;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
@@ -25,6 +30,12 @@ public class ControlAplicacion {
     
     private static PeerConn _conn;
     private static boolean  _conectado = false;
+
+    private static Vector<BuscadorPanel> _panelesBuscador = new Vector<BuscadorPanel>();
+
+    public static void addBuscadorListener(BuscadorPanel p) {
+        _panelesBuscador.add(p);
+    }
 
     public static boolean conectado() {
         return _conectado;
@@ -76,7 +87,22 @@ public class ControlAplicacion {
     }
 
     public static void query(String cad){
-        
+        servidoregorilla.paquete.QueryAnswer answer = null;
+        servidoregorilla.paquete.Query q = new Query();
+        q.setCadenaBusqueda(cad);
+        try {
+            _conn.enviarObjeto(q);
+            answer = (servidoregorilla.paquete.QueryAnswer)_conn.recibirObjeto();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //TODO: procesar answer!!!!!!
+        for (BuscadorPanel buscador : _panelesBuscador) {
+            buscador.update(GUIBuscador.EVENTO_RECIBIR_BUSQUEDA, answer);
+        }
     }
     
     public static void bajar(String hash){
