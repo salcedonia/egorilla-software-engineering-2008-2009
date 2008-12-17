@@ -19,10 +19,17 @@ import presentacion.buscador.GUIBuscador;
 import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.DatosCliente;
+import servidoregorilla.paquete.DownloadOrder;
+import servidoregorilla.paquete.DownloadOrderAnswer;
 import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.TipoArchivo;
 
 /**
+ * Un control rudimentario para la aplicacion
+ *
+ * Basicamente responde a las llamadas de la interfaz de forma imperativa
+ *
+ * // TODO: hacer un control de verdad.
  *
  * @author usuario_local
  */
@@ -40,7 +47,14 @@ public class ControlAplicacion {
     public static boolean conectado() {
         return _conectado;
     }
-    
+
+
+    /**
+     *
+     * realiza la conexion a un servidor de este cliente.
+     *
+     * @throws java.io.IOException
+     */
     public static void conectar() throws IOException{
               // Crea una conexion de prueba
            // Socket conexion = new Socket("127.0.0.1", 6969);
@@ -76,7 +90,12 @@ public class ControlAplicacion {
             
             _conectado = true;
     }
-    
+
+    /**
+     *
+     * cierra la conexion con el servidor.
+     *
+     */
     public static void close(){
         try {
             _conn.cerrarComunicacion();
@@ -86,6 +105,16 @@ public class ControlAplicacion {
         _conectado = false;
     }
 
+
+    /****
+     *
+     * pregunta al servidor por algun fichero con algunos datos proporcionados por
+     * el cliente.
+     *
+     * //TODO: buscar algo mas que por el nombre
+     *
+     * @param cad nombre de fichero buscado
+     */
     public static void query(String cad){
         servidoregorilla.paquete.QueryAnswer answer = null;
         servidoregorilla.paquete.Query q = new Query();
@@ -104,8 +133,30 @@ public class ControlAplicacion {
             buscador.update(GUIBuscador.EVENTO_RECIBIR_BUSQUEDA, answer);
         }
     }
-    
+
+
+    /**
+     *
+     * da la orden para proceder a bajar un fichero.
+     *
+     * @param hash el identificador unico de este fichero.
+     */
     public static void bajar(String hash){
-        
+
+        DownloadOrder orden = new DownloadOrder(hash);
+        DownloadOrderAnswer answer = null;
+        try {
+            _conn.enviarObjeto(orden);
+            answer = (DownloadOrderAnswer)_conn.recibirObjeto();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (answer != null){
+
+            Download d = new Download(answer, hash);
+            d.start();
+        }
     }
 }

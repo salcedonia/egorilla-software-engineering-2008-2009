@@ -5,6 +5,9 @@
 
 package presentacion.buscador;
 
+import control.ControlAplicacion;
+import control.Download;
+import java.util.ResourceBundle.Control;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -29,7 +32,7 @@ public class SelectionListener implements ListSelectionListener {
                 int last = e.getLastIndex();
             }
 
-
+            ControlAplicacion.bajar("abcd");
 
 //
 //            // If cell selection is enabled, both row and column change events are fired

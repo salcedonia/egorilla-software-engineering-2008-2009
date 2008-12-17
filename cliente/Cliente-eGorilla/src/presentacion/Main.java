@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import control.FileServer;
 import javax.swing.UIManager;
 
 /**
@@ -30,6 +31,11 @@ public class Main {
 
         SplashScreen sp = new SplashScreen(resourceMap.getImageIcon("imageSplash.icon").getImage());
         sp.open(3000);
+
+        
+        // TODO: ojo con esto, el puerto de ecucha esta puesto muy mal
+        FileServer fs = new FileServer(4000);
+        fs.start();
 
         try {
             Thread.sleep(3001);
