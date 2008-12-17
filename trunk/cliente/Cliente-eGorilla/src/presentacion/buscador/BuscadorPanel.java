@@ -118,7 +118,7 @@ public class BuscadorPanel extends javax.swing.JPanel {
         jTable1.setBackground(resourceMap.getColor("jTableBusquedas.background")); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Nombre", "Tamaño", "Disponibilidad", "Fuentes", "Tipo", "Identificador de archivo"
@@ -142,6 +142,7 @@ public class BuscadorPanel extends javax.swing.JPanel {
         jTable1.setMinimumSize(new java.awt.Dimension(400, 273));
         jTable1.setName("jTableBusquedas"); // NOI18N
         jTable1.setPreferredSize(new java.awt.Dimension(450, 32));
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
         jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title0")); // NOI18N
         jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title1")); // NOI18N
@@ -239,10 +240,13 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                     data[i][2] = "";
                                     data[i][3] = "";
                                     data[i][4] = ans.getLista()[i]._tipo.toString();
-                                    data[i][4] = ans.getLista()[i]._hash;
+                                    data[i][5] = ans.getLista()[i]._hash;
                                 }
 
-                                // TODO: como coño se mete esto en la puta tabla????????????
+                                jTable1.setModel(new javax.swing.table.DefaultTableModel(
+                                                  data,
+                                                  new String [] {"Nombre", "Tamaño", "Disponibilidad",
+                                                              "Fuentes", "Tipo", "Identificador de archivo"}));
                             }
 				break;
                                 
