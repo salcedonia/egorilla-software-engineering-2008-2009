@@ -180,7 +180,7 @@ public class Server extends Thread {
                     _tablaClientes.removeCliente(p);
 
                     //TODO: logear la desconexion
-                    System.out.print("cliente desconectado");
+                    System.out.println("cliente desconectado");
 
                     break;
                 }

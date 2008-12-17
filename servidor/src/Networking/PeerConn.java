@@ -39,9 +39,9 @@ public class PeerConn {
     public PeerConn(Socket conexion) throws IOException {
 
         _conexion = conexion;
-
-        _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
+        
         _objetoSalida = new ObjectOutputStream(conexion.getOutputStream());
+        _objetoEntrada = new ObjectInputStream(conexion.getInputStream());
     }
 
 /*****************************************************************************/
