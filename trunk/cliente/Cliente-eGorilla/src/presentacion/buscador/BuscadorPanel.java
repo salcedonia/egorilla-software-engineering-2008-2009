@@ -247,6 +247,11 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                                   data,
                                                   new String [] {"Nombre", "Tamaño", "Disponibilidad",
                                                               "Fuentes", "Tipo", "Identificador de archivo"}));
+
+                                SelectionListener listener = new SelectionListener(jTable1);
+                        jTable1.getSelectionModel().addListSelectionListener(listener);
+                        jTable1.getColumnModel().getSelectionModel()
+                                                .addListSelectionListener(listener);
                             }
 				break;
                                 
