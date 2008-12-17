@@ -32,8 +32,10 @@ public class ControlAplicacion {
     
     public static void conectar() throws IOException{
               // Crea una conexion de prueba
-            Socket conexion = new Socket("127.0.0.1", 6969);
-            
+           // Socket conexion = new Socket("127.0.0.1", 6969);
+        Socket conexion = new Socket("192.168.1.32", 6969);
+
+
             _conn = new PeerConn(conexion);
           
             DatosCliente me = new DatosCliente();
