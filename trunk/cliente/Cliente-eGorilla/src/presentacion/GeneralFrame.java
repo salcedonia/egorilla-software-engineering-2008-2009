@@ -11,8 +11,12 @@
 
 package presentacion;
 
+import control.ControlAplicacion;
 import java.awt.CardLayout;
 import java.awt.Image;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import presentacion.buscador.GUIBuscador;
 import presentacion.compartidos.GUICompartidos;
@@ -134,6 +138,11 @@ public class GeneralFrame extends javax.swing.JFrame {
                 conexion(evt);
             }
         });
+        bConectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bConectarActionPerformed(evt);
+            }
+        });
         jToolBar1.add(bConectar);
 
         jSeparator3.setName("jSeparator3"); // NOI18N
@@ -161,6 +170,11 @@ public class GeneralFrame extends javax.swing.JFrame {
         bBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarBuscador(evt);
+            }
+        });
+        bBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bBuscarActionPerformed(evt);
             }
         });
         jToolBar1.add(bBuscar);
@@ -265,6 +279,23 @@ private void cargarCompartidos(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 
     ((CardLayout)mainPanel.getLayout()).show( mainPanel,"Compartidos" );
 }//GEN-LAST:event_cargarCompartidos
+
+private void bConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bConectarActionPerformed
+// TODO add your handling code here:
+    
+    if(!ControlAplicacion.conectado())
+        try {
+            ControlAplicacion.conectar();
+        } catch (IOException ex) {
+            Logger.getLogger(GeneralFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    else
+        ControlAplicacion.close();
+}//GEN-LAST:event_bConectarActionPerformed
+
+private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_bBuscarActionPerformed
 
     // Recoge el evento de actualización
     public Image getIconImage() {

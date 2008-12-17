@@ -91,6 +91,11 @@ public class BuscadorPanel extends javax.swing.JPanel {
 
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
         jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 7;
         gridBagConstraints.gridy = 0;
@@ -104,7 +109,7 @@ public class BuscadorPanel extends javax.swing.JPanel {
         jTable1.setBackground(resourceMap.getColor("jTableBusquedas.background")); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null}
             },
             new String [] {
                 "Nombre", "Tamaño", "Disponibilidad", "Fuentes", "Tipo", "Identificador de archivo"
@@ -129,6 +134,12 @@ public class BuscadorPanel extends javax.swing.JPanel {
         jTable1.setName("jTableBusquedas"); // NOI18N
         jTable1.setPreferredSize(new java.awt.Dimension(450, 32));
         jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title0")); // NOI18N
+        jTable1.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title1")); // NOI18N
+        jTable1.getColumnModel().getColumn(2).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title2")); // NOI18N
+        jTable1.getColumnModel().getColumn(3).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title3")); // NOI18N
+        jTable1.getColumnModel().getColumn(4).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title4")); // NOI18N
+        jTable1.getColumnModel().getColumn(5).setHeaderValue(resourceMap.getString("jTableBusquedas.columnModel.title5")); // NOI18N
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -178,6 +189,15 @@ public class BuscadorPanel extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleName(resourceMap.getString("Form.AccessibleContext.accessibleName")); // NOI18N
     }// </editor-fold>//GEN-END:initComponents
 
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+// TODO add your handling code here:
+    // Leer el textbox
+    
+    // Crear Query
+    
+    // 
+}//GEN-LAST:event_jButton1ActionPerformed
+
     //Inicia la interfaz
 	private void iniciar() {
 		setVisible(true);
@@ -192,8 +212,13 @@ public class BuscadorPanel extends javax.swing.JPanel {
 			case GUIBuscador.EVENTO1:
 				//cargarBuscador();
 				break;
-            case GUIBuscador.EVENTO2:
+                        case GUIBuscador.EVENTO2:
 				break;
+                                
+                        case GUIBuscador.EVENTO_RECIBIR_BUSQUEDA:
+                            // Rellenar la tabla con los elementos recibidos en object
+				break;
+                                
 		}
 	}
 

@@ -15,7 +15,8 @@ public abstract class GUIBuscador {
 	//Todos los eventos de actualización
 	public static final int EVENTO1 = 1;
 	public static final int EVENTO2 = 2;
-
+        public static final int EVENTO_RECIBIR_BUSQUEDA = 3;
+       
 	// Devuelve la instancia única de la clase
 	public static GUIBuscador instancia() {
 		if (instancia == null)
