@@ -5,6 +5,7 @@
 
 package presentacion;
 
+import control.ControlAplicacion;
 import presentacion.servidores.ServidoresControl;
 
 /**
@@ -18,10 +19,24 @@ public class eGorillaControlGeneralImpl extends eGorillaControlGeneral{
         // Sólo se gestionan eventos que redirigen el control a los controladores específicos de cada módulo
 		switch (evento) {
 			case CONECTAR:
-                GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_CONECTADO, null);
+
+                if(!ControlAplicacion.conectado())
+                    try {
+                        ControlAplicacion.conectar();
+                        GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_CONECTADO, null);
+                } catch (Exception ex) {
+                    GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_ERROR, "Error al intentar conectarse con el servidor");
+                }
+                
 				break;
 			case DESCONECTAR:
-				GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_DESCONECTADO, null);
+                try {
+                        ControlAplicacion.close();
+                        GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_DESCONECTADO, null);
+                } catch (Exception ex) {
+                    GUIGeneral.instancia().update(GUIGeneral.MOSTRAR_ERROR, "Error al intentar desconectarse con el servidor");
+                }
+
 				break;
 
 		}

@@ -7,9 +7,9 @@
 package presentacion.buscador;
 
 import control.ControlAplicacion;
-import java.awt.Component;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.QueryAnswer;
 
 /**
@@ -176,7 +176,16 @@ public class BuscadorPanel extends javax.swing.JPanel {
         add(jButton2, gridBagConstraints);
 
         jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
+        jButton3.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        jButton3.setMaximumSize(new java.awt.Dimension(81, 23));
+        jButton3.setMinimumSize(new java.awt.Dimension(81, 23));
         jButton3.setName("jButton3"); // NOI18N
+        jButton3.setPreferredSize(new java.awt.Dimension(81, 23));
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                limpiarTabla(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 5;
@@ -186,7 +195,15 @@ public class BuscadorPanel extends javax.swing.JPanel {
         add(jButton3, gridBagConstraints);
 
         jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
+        jButton4.setMaximumSize(new java.awt.Dimension(81, 23));
+        jButton4.setMinimumSize(new java.awt.Dimension(81, 23));
         jButton4.setName("jButton4"); // NOI18N
+        jButton4.setPreferredSize(new java.awt.Dimension(81, 23));
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                limpiarBusqueda(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 8;
         gridBagConstraints.gridy = 0;
@@ -203,13 +220,48 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 // TODO add your handling code here:
     String consulta;
 
-    // Leer el textbox
-    consulta = jTextField1.getText();
-   
-    //procesar query
-    ControlAplicacion.query(consulta);
+    if(ControlAplicacion.conectado()){
+
+        // Leer el textbox
+        consulta = jTextField1.getText().trim();
+
+        if(consulta.length()!=0){
+
+            //procesar query
+            ControlAplicacion.query(consulta);
+        }else{
+
+            JOptionPane.showMessageDialog(null,
+                                "Debe de informar el campo nombre",
+                                "Busqueda no informada",
+                                JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+
+    }else{
+
+        JOptionPane.showMessageDialog(null,
+                                "¡No se ha conectado a ningún servidor!",
+                                "Error conexión",
+                                JOptionPane.WARNING_MESSAGE);
+
+    }
+    
 
 }//GEN-LAST:event_jButton1ActionPerformed
+
+private void limpiarTabla(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limpiarTabla
+
+    DefaultTableModel modelo = (DefaultTableModel)jTable1.getModel();
+
+    modelo.setRowCount(0);
+
+}//GEN-LAST:event_limpiarTabla
+
+private void limpiarBusqueda(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_limpiarBusqueda
+
+    jTextField1.setText("");
+}//GEN-LAST:event_limpiarBusqueda
 
     //Inicia la interfaz
 	private void iniciar() {
@@ -225,38 +277,58 @@ private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 			case GUIBuscador.EVENTO1:
 				//cargarBuscador();
 				break;
-                        case GUIBuscador.EVENTO2:
+            case GUIBuscador.EVENTO2:
 				break;
                                 
-                        case GUIBuscador.EVENTO_RECIBIR_BUSQUEDA:
-                            QueryAnswer ans = (QueryAnswer) object;
+            case GUIBuscador.EVENTO_RECIBIR_BUSQUEDA:
+                QueryAnswer ans = (QueryAnswer) object;
 
-                            if (ans.getLista().length > 0) {
-                                Object data[][] = new Object[ans.getLista().length][6];
+                if (ans.getLista().length > 0) {
 
-                                for (int i=0; i< ans.getLista().length; i++) {
-                                    data[i][0] = ans.getLista()[i]._nombre;
-                                    data[i][1] = String.valueOf(ans.getLista()[i]._tamaño);
-                                    data[i][2] = "";
-                                    data[i][3] = "";
-                                    data[i][4] = ans.getLista()[i]._tipo.toString();
-                                    data[i][5] = ans.getLista()[i]._hash;
-                                }
+                    insertarBusquedas(ans.getLista());
 
-                                jTable1.setModel(new javax.swing.table.DefaultTableModel(
-                                                  data,
-                                                  new String [] {"Nombre", "Tamaño", "Disponibilidad",
-                                                              "Fuentes", "Tipo", "Identificador de archivo"}));
+                }
 
-                                SelectionListener listener = new SelectionListener(jTable1);
-                        jTable1.getSelectionModel().addListSelectionListener(listener);
-                        jTable1.getColumnModel().getSelectionModel()
-                                                .addListSelectionListener(listener);
-                            }
 				break;
-                                
 		}
 	}
+
+    private void insertarBusquedas(Archivo[] archivo){
+
+        Object data[][] = new Object[archivo.length][6];
+
+        for (int i=0; i< archivo.length; i++) {
+            data[i][0] = archivo[i]._nombre;
+            data[i][1] = String.valueOf(archivo[i]._tamaño);
+            data[i][2] = "";
+            data[i][3] = "";
+            data[i][4] = archivo[i]._tipo.toString();
+            data[i][5] = archivo[i]._hash;
+        }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            data,
+            new String [] {
+                "Nombre", "Tamaño", "Disponibilidad", "Fuentes", "Tipo", "Identificador de archivo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
