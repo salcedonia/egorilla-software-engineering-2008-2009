@@ -5,7 +5,7 @@
 
 package control;
 
-import networking.PeerConn;
+import Networking.PeerConn;
 import control.filemanagement.GestorCompartidos;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import presentacion.buscador.BuscadorPanel;
 import presentacion.buscador.GUIBuscador;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
@@ -72,22 +72,16 @@ public class ControlAplicacion {
             DatosCliente me = new DatosCliente();
             me.setNombreUsuario("dePruebas");
             me.setPuertoEscucha(4000);
-            System.out.println("Adios0");
             _conn.enviarObjeto(me);
-			System.out.println("Adios0b");
 
             ListaArchivos arch;
 
             // ojo, puede no tener ningun archivo, pero el servidor los espera.
-            if (_compartidos != null){
-			System.out.println("pollas2");
+            if (_compartidos != null)
                 arch = _compartidos.getArchivosCompartidos();
-				System.out.println("pollas3");
-				}
             else
                 arch = new ListaArchivos();
 				
-		     System.out.println("Adios1");
              for(int i = 0; i < arch.size(); i++){
 				System.out.println(arch.elementAt(i).getNombre());
 			}

@@ -51,7 +51,6 @@ public class Main {
             ControlAplicacion.compartidos (gestionCompartidos);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            return;
         }
 
         try {
