@@ -52,14 +52,14 @@ public class ClienteTest {
             // Creamos una _lista con 2 archivos
             ListaArchivos arch = new ListaArchivos();
             Archivo a = new Archivo();
-            a._hash = "abc";
+          //  a._hash = "abc";
             a._nombre = "hola que tal";
             a._tamaño = 1231;
             a._tipo = TipoArchivo.VIDEO;
             arch.añadirArchivo(a);
             
             a = new Archivo();
-            a._hash = "abcd";
+          //  a._hash = "abcd";
             a._nombre = "adios";
             a._tamaño = 123431;
             a._tipo = TipoArchivo.AUDIO;

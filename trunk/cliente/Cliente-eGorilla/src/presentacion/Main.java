@@ -4,7 +4,13 @@
  */
 package presentacion;
 
+import control.ControlAplicacion;
 import control.FileServer;
+import control.filemanagement.GestorCompartidos;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 
 /**
@@ -34,8 +40,19 @@ public class Main {
 
         
         // TODO: ojo con esto, el puerto de ecucha esta puesto muy mal
+        // hay que leerlo de la configuracion. properties o lo que sea
         FileServer fs = new FileServer(4000);
         fs.start();
+
+
+        try {
+            // TODO: darle forma a esta mierda.
+            GestorCompartidos getionCompartidos = new GestorCompartidos(new File("."));
+            ControlAplicacion.compatidos (getionCompartidos);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
 
         try {
             Thread.sleep(3001);
