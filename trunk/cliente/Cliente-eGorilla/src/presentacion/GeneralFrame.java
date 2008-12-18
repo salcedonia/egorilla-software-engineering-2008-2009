@@ -17,6 +17,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import presentacion.buscador.GUIBuscador;
 import presentacion.compartidos.GUICompartidos;
@@ -78,7 +79,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         setIconImage(getIconImage());
         setIconImages(getIconImages());
         setLocationByPlatform(true);
-        setMinimumSize(new java.awt.Dimension(436, 436));
+        setMinimumSize(new java.awt.Dimension(520, 436));
         setName("Form"); // NOI18N
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -283,14 +284,7 @@ private void cargarCompartidos(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
 private void bConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bConectarActionPerformed
 // TODO add your handling code here:
     
-    if(!ControlAplicacion.conectado())
-        try {
-            ControlAplicacion.conectar();
-        } catch (IOException ex) {
-            Logger.getLogger(GeneralFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    else
-        ControlAplicacion.close();
+    
 }//GEN-LAST:event_bConectarActionPerformed
 
 private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
@@ -320,6 +314,12 @@ private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 				bConectar.setText("Conectar");
                 conexion.setText("Desconectado");
                 estado.setText("eGorilla desconectado");
+				break;
+            case GUIGeneral.MOSTRAR_ERROR:
+				JOptionPane.showMessageDialog(null,
+                                params,
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
 				break;
 		}
 	}

@@ -17,6 +17,7 @@ public abstract class GUIGeneral {
 	public static final int MOSTRAR_MENU = 0;
 	public static final int MOSTRAR_CONECTADO = 1;
 	public static final int MOSTRAR_DESCONECTADO = 2;
+    public static final int MOSTRAR_ERROR = 3;
 
 
 	// Devuelve la instancia única de la clase
