@@ -7,8 +7,8 @@ package control.filemanagement;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.paquete.Archivo;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.paquete.*;
 
 /**
  * esta clase se encarga de gestionar todos los archiovos compartidos del usuario
@@ -20,20 +20,24 @@ import servidoregorilla.paquete.Archivo;
  */
 public class GestorCompartidos {
 
-    Vector<Archivo> _lista;
+    ListaArchivos _lista;
 
     public GestorCompartidos(File path) throws IOException {
 
-        _lista = new Vector<Archivo>();
+        _lista = new ListaArchivos();
 
         if (!path.isDirectory()) {
             throw new IOException("el path no es un directorio válido");
         }
         File[] ficherosComp = path.listFiles();
         for (File a : ficherosComp) {
-            if (!a.isDirectory())
-                _lista.add(new Archivo(a));
+            if (!a.isDirectory()){
+			    System.out.println( new Archivo(a).getNombre() );
+				}
         }
+		for(int i = 0; i < _lista.size(); i++){
+				System.out.println(_lista.elementAt(i).getNombre());
+			}
     }
 
     /**
@@ -42,6 +46,6 @@ public class GestorCompartidos {
      * @return la lista de archivos en la carpeta compartidos
      */
     public ListaArchivos getArchivosCompartidos(){
-        return (ListaArchivos)_lista;
+        return _lista;
     }
 }

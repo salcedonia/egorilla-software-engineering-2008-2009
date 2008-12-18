@@ -299,7 +299,7 @@ private void limpiarBusqueda(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_l
 
         for (int i=0; i< archivo.length; i++) {
             data[i][0] = archivo[i]._nombre;
-            data[i][1] = String.valueOf(archivo[i]._tamaño);
+            data[i][1] = String.valueOf(archivo[i]._tama);
             data[i][2] = "";
             data[i][3] = "";
             data[i][4] = archivo[i]._tipo.toString();

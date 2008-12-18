@@ -27,7 +27,7 @@ public class Archivo implements Serializable{
     // ATRIBUTOS
     public String _nombre;
     public String _hash;
-    public long _tamaño;
+    public long _tama;
     public TipoArchivo _tipo;
 
     /*****************************************************************************/
@@ -74,7 +74,7 @@ public class Archivo implements Serializable{
             // Configuramos el tipo de archivo en función de los datos recibidos
             _hash = new String (ms.digest());
             _nombre = f.getName();
-            _tamaño = f.length();
+            _tama = f.length();
            // _tipo= asignarTipoArchivo(f);
         } 
         catch (DigestException ex) {
@@ -151,7 +151,7 @@ public class Archivo implements Serializable{
      * @return El tamaño del archivo.
      */
     public long  getSize() {
-        return _tamaño;
+        return _tama;
     }
 
     /*****************************************************************************/

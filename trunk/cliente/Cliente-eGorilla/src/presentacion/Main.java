@@ -47,8 +47,8 @@ public class Main {
 
         try {
             // TODO: darle forma a esta mierda.
-            GestorCompartidos getionCompartidos = new GestorCompartidos(new File("."));
-            ControlAplicacion.compatidos (getionCompartidos);
+            GestorCompartidos gestionCompartidos = new GestorCompartidos(new File("./compartidos"));
+            ControlAplicacion.compartidos (gestionCompartidos);
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             return;

@@ -4,9 +4,9 @@
  */
 package servidoregorilla.protocolo;
 
-import Networking.PeerConn;
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.Datos.TablaClientes;
+import networking.PeerConn;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.datos.TablaClientes;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
