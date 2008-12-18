@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.DownloadOrderAnswer;

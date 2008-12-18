@@ -4,9 +4,9 @@
  */
 package servidoregorilla.protocolo;
 
-import networking.PeerConn;
-import servidoregorilla.datos.ListaArchivos;
-import servidoregorilla.datos.TablaClientes;
+import Networking.PeerConn;
+import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.Datos.TablaClientes;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,6 +103,11 @@ public class ConexionCliente extends Thread {
 
             // Alta de los archivos en el sistema
             _listaGlobalArchivos.actualizarDesdeListaCliente(this, archivosCliente);
+
+
+            // log
+            System.out.println("conectado " +_datosCliente.getNombreUsuario()+ " desde "+ _conexion.getIP());
+            System.out.println("   aporta "+archivosCliente.size()+ " archivos");
 
             // Listo para usar!
             _conexion.listo();
