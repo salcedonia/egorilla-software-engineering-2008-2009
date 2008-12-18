@@ -7,7 +7,7 @@ package control.filemanagement;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.*;
 
 /**
@@ -32,7 +32,7 @@ public class GestorCompartidos {
         File[] ficherosComp = path.listFiles();
         for (File a : ficherosComp) {
             if (!a.isDirectory()){
-			    System.out.println( new Archivo(a).getNombre() );
+			    _lista.add(new Archivo(a));
 				}
         }
 		for(int i = 0; i < _lista.size(); i++){

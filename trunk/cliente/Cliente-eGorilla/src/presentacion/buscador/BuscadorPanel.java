@@ -284,9 +284,7 @@ private void limpiarBusqueda(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_l
                 QueryAnswer ans = (QueryAnswer) object;
 
                 if (ans.getLista().length > 0) {
-
                     insertarBusquedas(ans.getLista());
-
                 }
 
 				break;

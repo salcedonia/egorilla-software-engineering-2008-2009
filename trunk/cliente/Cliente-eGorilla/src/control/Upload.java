@@ -5,7 +5,7 @@
 
 package control;
 
-import networking.PeerConn;
+import Networking.PeerConn;
 import control.chunk.FileChunk;
 import java.io.IOException;
 import java.net.Socket;
