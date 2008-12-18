@@ -85,7 +85,10 @@ public class EstadisticasPanel extends javax.swing.JPanel {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bReiniciar.setText("Reiniciar");
+        bReiniciar.setMaximumSize(new java.awt.Dimension(81, 23));
+        bReiniciar.setMinimumSize(new java.awt.Dimension(81, 23));
         bReiniciar.setName("bReiniciar"); // NOI18N
+        bReiniciar.setPreferredSize(new java.awt.Dimension(81, 23));
         jPanel3.add(bReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 5, -1, -1));
 
         jLabel1.setText("Última puesta a cero de estadisticas: ");
