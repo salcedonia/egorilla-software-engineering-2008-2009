@@ -6,6 +6,7 @@
 package control;
 
 import Networking.PeerConn;
+import control.filemanagement.GestorCompartidos;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -37,11 +38,16 @@ public class ControlAplicacion {
     
     private static PeerConn _conn;
     private static boolean  _conectado = false;
+    private static GestorCompartidos _compartidos = null;
 
     private static Vector<BuscadorPanel> _panelesBuscador = new Vector<BuscadorPanel>();
 
     public static void addBuscadorListener(BuscadorPanel p) {
         _panelesBuscador.add(p);
+    }
+
+    public static void compatidos(GestorCompartidos comp) {
+        _compartidos = comp;
     }
 
     public static boolean conectado() {
@@ -70,21 +76,29 @@ public class ControlAplicacion {
             _conn.enviarObjeto(me);
 
             // Creamos una _lista con 2 archivos
-            ListaArchivos arch = new ListaArchivos();
-            Archivo a = new Archivo();
-            a._hash = "abc";
-            a._nombre = "hola que tal";
-            a._tamaño = 1231;
-            a._tipo = TipoArchivo.VIDEO;
-            arch.añadirArchivo(a);
-            
-            a = new Archivo();
-            a._hash = "abcd";
-            a._nombre = "adios";
-            a._tamaño = 123431;
-            a._tipo = TipoArchivo.AUDIO;
-            arch.añadirArchivo(a);
-            
+//            ListaArchivos arch = new ListaArchivos();
+//            Archivo a = new Archivo();
+//            a._hash = "abc";
+//            a._nombre = "hola que tal";
+//            a._tamaño = 1231;
+//            a._tipo = TipoArchivo.VIDEO;
+//            arch.añadirArchivo(a);
+//
+//            a = new Archivo();
+//            a._hash = "abcd";
+//            a._nombre = "adios";
+//            a._tamaño = 123431;
+//            a._tipo = TipoArchivo.AUDIO;
+//            arch.añadirArchivo(a);
+
+            ListaArchivos arch;
+
+            // ojo, puede no tener ningun archivo, pero el servidor los espera.
+            if (_compartidos == null)
+                arch = _compartidos.getArchivosCompartidos();
+            else
+                arch = new ListaArchivos();
+
             // Mandamos la _lista de archivos asociada al cliente
             _conn.enviarObjeto(arch);    
             

@@ -53,19 +53,18 @@ public class Archivo implements Serializable{
         try {
 
             // Aplicamos md5 al fichero para asignarle un hash único
-            MessageDigest ms = MessageDigest.getInstance("md5");
+            MessageDigest ms = MessageDigest.getInstance("MD5");
             
             // Recibimos los datos relativos al archivo
             fs = new FileInputStream(f);
 
             int leidos = 0;
             int total = 0;
-            int chunk = 1024 * 4;
+            int chunk = 1024 * 1024 * 4;
             byte[] buff = new byte[chunk];
 
             do {
-
-                fs.read (buff, chunk, leidos);
+                leidos = fs.read (buff, total, chunk);
                 ms.digest(buff, total, leidos);
                 total += leidos;
             } while (leidos == chunk);
