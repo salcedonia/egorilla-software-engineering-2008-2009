@@ -126,7 +126,10 @@ public class ServidoresPanel extends javax.swing.JPanel {
         add(jScrollPane1, gridBagConstraints);
 
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setMaximumSize(new java.awt.Dimension(81, 23));
+        jButton1.setMinimumSize(new java.awt.Dimension(81, 23));
         jButton1.setName("jButton1"); // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(81, 23));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
