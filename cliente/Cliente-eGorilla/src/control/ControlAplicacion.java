@@ -5,7 +5,7 @@
 
 package control;
 
-import Networking.PeerConn;
+import networking.PeerConn;
 import control.filemanagement.GestorCompartidos;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import presentacion.buscador.BuscadorPanel;
 import presentacion.buscador.GUIBuscador;
-import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
@@ -46,7 +46,7 @@ public class ControlAplicacion {
         _panelesBuscador.add(p);
     }
 
-    public static void compatidos(GestorCompartidos comp) {
+    public static void compartidos(GestorCompartidos comp) {
         _compartidos = comp;
     }
 
@@ -72,33 +72,25 @@ public class ControlAplicacion {
             DatosCliente me = new DatosCliente();
             me.setNombreUsuario("dePruebas");
             me.setPuertoEscucha(4000);
-
+            System.out.println("Adios0");
             _conn.enviarObjeto(me);
-
-            // Creamos una _lista con 2 archivos
-//            ListaArchivos arch = new ListaArchivos();
-//            Archivo a = new Archivo();
-//            a._hash = "abc";
-//            a._nombre = "hola que tal";
-//            a._tamaño = 1231;
-//            a._tipo = TipoArchivo.VIDEO;
-//            arch.añadirArchivo(a);
-//
-//            a = new Archivo();
-//            a._hash = "abcd";
-//            a._nombre = "adios";
-//            a._tamaño = 123431;
-//            a._tipo = TipoArchivo.AUDIO;
-//            arch.añadirArchivo(a);
+			System.out.println("Adios0b");
 
             ListaArchivos arch;
 
             // ojo, puede no tener ningun archivo, pero el servidor los espera.
-            if (_compartidos == null)
+            if (_compartidos != null){
+			System.out.println("pollas2");
                 arch = _compartidos.getArchivosCompartidos();
+				System.out.println("pollas3");
+				}
             else
                 arch = new ListaArchivos();
-
+				
+		     System.out.println("Adios1");
+             for(int i = 0; i < arch.size(); i++){
+				System.out.println(arch.elementAt(i).getNombre());
+			}
             // Mandamos la _lista de archivos asociada al cliente
             _conn.enviarObjeto(arch);    
             

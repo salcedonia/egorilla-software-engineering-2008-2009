@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import servidoregorilla.paquete.Archivo;
-import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.DownloadOrderAnswer;
@@ -54,14 +54,14 @@ public class ClienteTest {
             Archivo a = new Archivo();
           //  a._hash = "abc";
             a._nombre = "hola que tal";
-            a._tamaño = 1231;
+            a._tama = 1231;
             a._tipo = TipoArchivo.VIDEO;
             arch.añadirArchivo(a);
             
             a = new Archivo();
           //  a._hash = "abcd";
             a._nombre = "adios";
-            a._tamaño = 123431;
+            a._tama = 123431;
             a._tipo = TipoArchivo.AUDIO;
             arch.añadirArchivo(a);
             

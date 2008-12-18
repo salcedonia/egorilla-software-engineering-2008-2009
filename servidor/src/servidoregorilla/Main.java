@@ -5,8 +5,8 @@
 
 package servidoregorilla;
 
-import servidoregorilla.Datos.ListaArchivos;
-import servidoregorilla.Datos.TablaClientes;
+import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.datos.TablaClientes;
 import servidoregorilla.paquete.Peticion;
 import java.io.IOException;
 import java.util.logging.Level;

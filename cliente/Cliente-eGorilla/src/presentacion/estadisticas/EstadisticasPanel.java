@@ -105,11 +105,11 @@ public class EstadisticasPanel extends javax.swing.JPanel {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Estadisticas");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Transferencia");
-        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Índice SU/DE Sesión: En espera...");
+        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Indice SU/DE Sesión: En espera...");
         treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Sesión Índice SU/DE (Excluidas Subidas a amigos): En espera...");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Sesión indice SU/DE (Excluidas Subidas a amigos): En espera...");
         treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Índice SU/DE Acumulado: En espera...");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Indice SU/DE Acumulado: En espera...");
         treeNode2.add(treeNode3);
         treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Subidas");
         javax.swing.tree.DefaultMutableTreeNode treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("Sesión");

@@ -5,9 +5,9 @@
 
 package servidoregorilla.protocolo;
 
-import Networking.PeerConn;
+import networking.PeerConn;
 import java.io.IOException;
-import servidoregorilla.Datos.ListaArchivos;
+import servidoregorilla.datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.QueryAnswer;
