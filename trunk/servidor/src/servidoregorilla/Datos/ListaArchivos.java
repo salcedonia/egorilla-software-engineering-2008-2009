@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package servidoregorilla.datos;
+package servidoregorilla.Datos;
 
 import servidoregorilla.paquete.Archivo;
 import java.io.Serializable;
@@ -72,9 +72,11 @@ public class ListaArchivos extends Vector<Archivo> implements Serializable {
         boolean encontrado = false;
         for (Archivo archivo : listaArchivos) {
 
+            encontrado = false;
             // buscalo en la BBDD
-            for (Archivo archivoAux : this) 
-                encontrado = archivoAux.comparaArchivo(archivo);
+            for (int i = 0; (!encontrado)&&(i < this.size()); i++)
+                encontrado = this.get(i).comparaArchivo(archivo);
+           
 
             // si no existe darlo de alta
             if (!encontrado) {
@@ -110,7 +112,7 @@ public class ListaArchivos extends Vector<Archivo> implements Serializable {
         Vector<Archivo> lista = new Vector<Archivo>();
         
         for (Archivo a : this) {
-            if (a._nombre.contentEquals(nombre))
+            if (a._nombre.contains(nombre))
                 lista.add(a);
         }
         

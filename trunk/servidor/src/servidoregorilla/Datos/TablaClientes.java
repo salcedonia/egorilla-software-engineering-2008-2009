@@ -3,11 +3,11 @@
  * and open the template in the editor.
  */
 
-package servidoregorilla.datos;
+package servidoregorilla.Datos;
 
 import servidoregorilla.protocolo.ConexionCliente;
 import java.util.HashSet;
-import networking.PeerConn;
+import Networking.PeerConn;
 
 /**
  * Clase que proporciona los métodos y atributos necesarios para el manejo de

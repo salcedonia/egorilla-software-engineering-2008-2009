@@ -71,6 +71,9 @@ public class Archivo implements Serializable{
 
             fs.close();
 
+
+            _tipo = getTipo(f.getName());
+
             // Configuramos el tipo de archivo en función de los datos recibidos
             _hash = new String (ms.digest());
             _nombre = f.getName();
@@ -163,5 +166,14 @@ public class Archivo implements Serializable{
      */
     public boolean comparaArchivo(Archivo a) {
         return _hash.contentEquals(a.getHash());
+    }
+
+    // TODO:  devuelve cosas reales aqui
+    private TipoArchivo getTipo(String name) {
+        return TipoArchivo.OTROS;
+    }
+
+    public String toString(){
+        return _nombre + "["+_hash+"]";
     }
 }

@@ -5,9 +5,9 @@
 
 package servidoregorilla.protocolo;
 
-import networking.PeerConn;
+import Networking.PeerConn;
 import java.io.IOException;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.Archivo;
 import servidoregorilla.paquete.Query;
 import servidoregorilla.paquete.QueryAnswer;
@@ -63,7 +63,10 @@ public class QueryResolver extends Thread{
 
         // Compone respuesta
         QueryAnswer respuesta = new QueryAnswer(lista);
-        
+
+        // log
+        System.out.println("consulta "+_consulta.getCadenaBusqueda()+" desde "+ _conexion.getIP());
+        System.out.println("   "+ respuesta.getLista().length+" coincidencias");
         try {
             // Enviar a cliente.
             _conexion.enviarObjeto(respuesta);

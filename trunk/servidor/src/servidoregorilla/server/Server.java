@@ -5,14 +5,14 @@
 package servidoregorilla.server;
 
 import servidoregorilla.paquete.Peticion;
-import networking.PeerConn;
+import Networking.PeerConn;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.util.Vector;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.protocolo.*;
-import servidoregorilla.datos.TablaClientes;
+import servidoregorilla.Datos.TablaClientes;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.Query;

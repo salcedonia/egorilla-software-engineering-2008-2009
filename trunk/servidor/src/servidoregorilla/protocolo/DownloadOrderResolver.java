@@ -1,8 +1,8 @@
 package servidoregorilla.protocolo;
 
-import networking.PeerConn;
+import Networking.PeerConn;
 import java.io.IOException;
-import servidoregorilla.datos.ListaArchivos;
+import servidoregorilla.Datos.ListaArchivos;
 import servidoregorilla.paquete.DatosCliente;
 import servidoregorilla.paquete.DownloadOrder;
 import servidoregorilla.paquete.DownloadOrderAnswer;
