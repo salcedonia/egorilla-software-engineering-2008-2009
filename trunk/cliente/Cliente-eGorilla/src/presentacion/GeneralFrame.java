@@ -136,6 +136,8 @@ public class GeneralFrame extends javax.swing.JFrame {
         bConectar.setAlignmentX(0.5F);
         bConectar.setDoubleBuffered(true);
         bConectar.setFocusCycleRoot(true);
+        bConectar.setFocusPainted(false);
+        bConectar.setFocusable(false);
         bConectar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         bConectar.setIconTextGap(-10);
         bConectar.setMargin(new java.awt.Insets(0, 0, 0, 0));
