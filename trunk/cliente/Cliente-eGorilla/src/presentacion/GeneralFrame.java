@@ -81,7 +81,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         setIconImage(getIconImage());
         setIconImages(getIconImages());
         setLocationByPlatform(true);
-        setMinimumSize(new java.awt.Dimension(520, 436));
+        setMinimumSize(new java.awt.Dimension(560, 500));
         setName("Form"); // NOI18N
 
         mainPanel.setName("mainPanel"); // NOI18N
@@ -125,6 +125,7 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("botonera.border.title"))); // NOI18N
         jToolBar1.setForeground(resourceMap.getColor("botonera.foreground")); // NOI18N
         jToolBar1.setRollover(true);
+        jToolBar1.setAutoscrolls(true);
         jToolBar1.setDoubleBuffered(true);
         jToolBar1.setName("botonera"); // NOI18N
         jToolBar1.setOpaque(false);
@@ -182,6 +183,7 @@ public class GeneralFrame extends javax.swing.JFrame {
 
         bBuscar.setFont(resourceMap.getFont("Form.font")); // NOI18N
         bBuscar.setIcon(resourceMap.getIcon("bBuscar.icon")); // NOI18N
+        bBuscar.setAlignmentX(0.5F);
         bBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         bBuscar.setIconTextGap(-5);
         bBuscar.setLabel(resourceMap.getString("bBuscar.label")); // NOI18N

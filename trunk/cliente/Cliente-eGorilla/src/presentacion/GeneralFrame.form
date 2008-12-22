@@ -22,7 +22,7 @@
     </Property>
     <Property name="locationByPlatform" type="boolean" value="true"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[520, 436]"/>
+      <Dimension value="[560, 500]"/>
     </Property>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
   </Properties>
@@ -153,6 +153,7 @@
         </Property>
         <Property name="foreground" type="java.awt.Color" resourceKey="botonera.foreground"/>
         <Property name="rollover" type="boolean" value="true"/>
+        <Property name="autoscrolls" type="boolean" value="true"/>
         <Property name="doubleBuffered" type="boolean" value="true"/>
         <Property name="name" type="java.lang.String" value="botonera" noResource="true"/>
         <Property name="opaque" type="boolean" value="false"/>
@@ -234,6 +235,7 @@
           <Properties>
             <Property name="font" type="java.awt.Font" resourceKey="Form.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="bBuscar.icon"/>
+            <Property name="alignmentX" type="float" value="0.5"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="iconTextGap" type="int" value="-5"/>
             <Property name="label" type="java.lang.String" resourceKey="bBuscar.label"/>
