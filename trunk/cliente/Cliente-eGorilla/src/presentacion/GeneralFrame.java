@@ -35,7 +35,9 @@ public class GeneralFrame extends javax.swing.JFrame {
 
     /** Creates new form GeneralFrame */
     public GeneralFrame() {
-        
+
+        mapaRecursos = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(GeneralFrame.class);
+
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
@@ -121,19 +123,27 @@ public class GeneralFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("botonera.border.title"))); // NOI18N
-        jToolBar1.setFloatable(false);
         jToolBar1.setForeground(resourceMap.getColor("botonera.foreground")); // NOI18N
         jToolBar1.setRollover(true);
+        jToolBar1.setDoubleBuffered(true);
         jToolBar1.setName("botonera"); // NOI18N
         jToolBar1.setOpaque(false);
 
         bConectar.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bConectar.setIcon(resourceMap.getIcon("bConectar.icon")); // NOI18N
         bConectar.setText(resourceMap.getString("bConectar.text")); // NOI18N
+        bConectar.setAlignmentX(0.5F);
+        bConectar.setDoubleBuffered(true);
+        bConectar.setFocusCycleRoot(true);
+        bConectar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bConectar.setIconTextGap(-10);
         bConectar.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bConectar.setMaximumSize(new java.awt.Dimension(70, 70));
         bConectar.setMinimumSize(new java.awt.Dimension(70, 70));
         bConectar.setName("bConectar"); // NOI18N
         bConectar.setPreferredSize(new java.awt.Dimension(70, 70));
+        bConectar.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bConectar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bConectar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 conexion(evt);
@@ -150,11 +160,19 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(jSeparator3);
 
         bServidores.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bServidores.setIcon(resourceMap.getIcon("bServidores.icon")); // NOI18N
         bServidores.setText(resourceMap.getString("bServidores.text")); // NOI18N
+        bServidores.setAlignmentX(0.5F);
+        bServidores.setDoubleBuffered(true);
+        bServidores.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bServidores.setIconTextGap(-5);
+        bServidores.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bServidores.setMaximumSize(new java.awt.Dimension(70, 70));
         bServidores.setMinimumSize(new java.awt.Dimension(70, 70));
         bServidores.setName("bServidores"); // NOI18N
         bServidores.setPreferredSize(new java.awt.Dimension(70, 70));
+        bServidores.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bServidores.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bServidores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarServidores(evt);
@@ -163,11 +181,17 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(bServidores);
 
         bBuscar.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bBuscar.setIcon(resourceMap.getIcon("bBuscar.icon")); // NOI18N
+        bBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bBuscar.setIconTextGap(-5);
         bBuscar.setLabel(resourceMap.getString("bBuscar.label")); // NOI18N
+        bBuscar.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bBuscar.setMaximumSize(new java.awt.Dimension(70, 70));
         bBuscar.setMinimumSize(new java.awt.Dimension(70, 70));
         bBuscar.setName("bBuscar"); // NOI18N
         bBuscar.setPreferredSize(new java.awt.Dimension(70, 70));
+        bBuscar.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bBuscar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bBuscar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarBuscador(evt);
@@ -181,11 +205,18 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(bBuscar);
 
         bTrafico.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bTrafico.setIcon(resourceMap.getIcon("bTrafico.icon")); // NOI18N
         bTrafico.setText(resourceMap.getString("bTrafico.text")); // NOI18N
+        bTrafico.setAlignmentX(0.5F);
+        bTrafico.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bTrafico.setIconTextGap(-7);
+        bTrafico.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bTrafico.setMaximumSize(new java.awt.Dimension(70, 70));
         bTrafico.setMinimumSize(new java.awt.Dimension(70, 70));
         bTrafico.setName("bTrafico"); // NOI18N
         bTrafico.setPreferredSize(new java.awt.Dimension(70, 70));
+        bTrafico.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bTrafico.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bTrafico.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarTrafico(evt);
@@ -194,13 +225,17 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(bTrafico);
 
         bCompartidos.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bCompartidos.setIcon(resourceMap.getIcon("bCompartidos.icon")); // NOI18N
         bCompartidos.setText(resourceMap.getString("bCompartidos.text")); // NOI18N
-        bCompartidos.setFocusable(false);
+        bCompartidos.setAlignmentX(0.5F);
         bCompartidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bCompartidos.setIconTextGap(-5);
+        bCompartidos.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bCompartidos.setMaximumSize(new java.awt.Dimension(70, 70));
         bCompartidos.setMinimumSize(new java.awt.Dimension(70, 70));
         bCompartidos.setName("bCompartidos"); // NOI18N
         bCompartidos.setPreferredSize(new java.awt.Dimension(70, 70));
+        bCompartidos.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         bCompartidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bCompartidos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -210,11 +245,18 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(bCompartidos);
 
         bEstadisticas.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bEstadisticas.setIcon(resourceMap.getIcon("bEstadisticas.icon")); // NOI18N
         bEstadisticas.setText(resourceMap.getString("bEstadisticas.text")); // NOI18N
+        bEstadisticas.setAlignmentX(0.5F);
+        bEstadisticas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bEstadisticas.setIconTextGap(-5);
+        bEstadisticas.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bEstadisticas.setMaximumSize(new java.awt.Dimension(70, 70));
         bEstadisticas.setMinimumSize(new java.awt.Dimension(70, 70));
         bEstadisticas.setName("bEstadisticas"); // NOI18N
         bEstadisticas.setPreferredSize(new java.awt.Dimension(70, 70));
+        bEstadisticas.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bEstadisticas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bEstadisticas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarEstadisticas(evt);
@@ -226,11 +268,18 @@ public class GeneralFrame extends javax.swing.JFrame {
         jToolBar1.add(jSeparator4);
 
         bConfiguracion.setFont(resourceMap.getFont("Form.font")); // NOI18N
+        bConfiguracion.setIcon(resourceMap.getIcon("bConfiguracion.icon")); // NOI18N
         bConfiguracion.setText(resourceMap.getString("bConfiguracion.text")); // NOI18N
+        bConfiguracion.setAlignmentX(0.5F);
+        bConfiguracion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bConfiguracion.setIconTextGap(-5);
+        bConfiguracion.setMargin(new java.awt.Insets(0, 0, 0, 0));
         bConfiguracion.setMaximumSize(new java.awt.Dimension(70, 70));
         bConfiguracion.setMinimumSize(new java.awt.Dimension(70, 70));
         bConfiguracion.setName("bConfiguracion"); // NOI18N
         bConfiguracion.setPreferredSize(new java.awt.Dimension(70, 70));
+        bConfiguracion.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        bConfiguracion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         bConfiguracion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 cargarConfiguracion(evt);
@@ -309,11 +358,13 @@ private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 				bConectar.setText("Desconectar");
                 conexion.setText("Conectado");
                 estado.setText("eGorilla conectado");
+                bConectar.setIcon(mapaRecursos.getIcon("bDesconectar.icon"));
 				break;
             case GUIGeneral.MOSTRAR_DESCONECTADO:
 				bConectar.setText("Conectar");
                 conexion.setText("Desconectado");
                 estado.setText("eGorilla desconectado");
+                bConectar.setIcon(mapaRecursos.getIcon("bConectar.icon"));
 				break;
             case GUIGeneral.MOSTRAR_ERROR:
 				JOptionPane.showMessageDialog(null,
@@ -343,5 +394,5 @@ private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
-
+    private org.jdesktop.application.ResourceMap mapaRecursos;
 }

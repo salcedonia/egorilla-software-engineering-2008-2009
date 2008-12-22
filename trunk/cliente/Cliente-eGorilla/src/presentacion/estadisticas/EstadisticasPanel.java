@@ -82,22 +82,21 @@ public class EstadisticasPanel extends javax.swing.JPanel {
         jPanel3.setMinimumSize(new java.awt.Dimension(100, 30));
         jPanel3.setName("jPanel3"); // NOI18N
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 30));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         bReiniciar.setText("Reiniciar");
-        bReiniciar.setMaximumSize(new java.awt.Dimension(81, 23));
-        bReiniciar.setMinimumSize(new java.awt.Dimension(81, 23));
+        bReiniciar.setMaximumSize(new java.awt.Dimension(81, 25));
+        bReiniciar.setMinimumSize(new java.awt.Dimension(81, 25));
         bReiniciar.setName("bReiniciar"); // NOI18N
-        bReiniciar.setPreferredSize(new java.awt.Dimension(81, 23));
-        jPanel3.add(bReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(13, 5, -1, -1));
+        bReiniciar.setPreferredSize(new java.awt.Dimension(81, 25));
+        jPanel3.add(bReiniciar);
 
-        jLabel1.setText("Última puesta a cero de estadisticas: ");
+        jLabel1.setText("Última puesta a cero: ");
         jLabel1.setName("jLabel1"); // NOI18N
-        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
+        jPanel3.add(jLabel1);
 
         fechaEstadisticas.setText("15/12/2008 22:12:48");
         fechaEstadisticas.setName("fechaEstadisticas"); // NOI18N
-        jPanel3.add(fechaEstadisticas, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
+        jPanel3.add(fechaEstadisticas);
 
         jPanel1.add(jPanel3, java.awt.BorderLayout.NORTH);
 
@@ -105,11 +104,11 @@ public class EstadisticasPanel extends javax.swing.JPanel {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Estadisticas");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Transferencia");
-        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Indice SU/DE Sesión: En espera...");
+        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Índice SU/DE Sesión: En espera...");
         treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Sesión indice SU/DE (Excluidas Subidas a amigos): En espera...");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Sesión Índice SU/DE (Excluidas Subidas a amigos): En espera...");
         treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Indice SU/DE Acumulado: En espera...");
+        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Índice SU/DE Acumulado: En espera...");
         treeNode2.add(treeNode3);
         treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("Subidas");
         javax.swing.tree.DefaultMutableTreeNode treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("Sesión");
