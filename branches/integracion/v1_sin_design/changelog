@@ -1,0 +1,12 @@
+- Nombres de paquetes arreglados.
+- Añadidas dos clases en servidoregorilla\paquete para el cálculo del MD5.
+- Se listan los ficheros compartidos de un directorio local del cliente y se actualizan en el servidor si no están repetidos (según MD5). ( Falta relacion Cliente<s>-Archivo - actualizarListaGlobalArchivos) 
+- Arreglado el tipo de archivo según extensión y tipos MIME.
+- Cambiado contentEquals en buscar por contains.
+- Las busquedas son case sensitive, decir que hacer, si dejarlo o no.
+YA NO HAY GUI - Búsquedas arregladas desde el GUI, solo se mostraban dos por los valores pasados a un método del JTable.
+- Cliente en consola con funciones de Conectar, Desconectar y Buscar.
+
+Nota: BAT - Win
+      SH  - *NIX
+En linux puede dar warnings al compilar por la codificación que se ha usado en los .java, pero funciona igual.
