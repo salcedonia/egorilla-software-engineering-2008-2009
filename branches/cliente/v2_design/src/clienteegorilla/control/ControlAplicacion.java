@@ -7,7 +7,7 @@ package clienteegorilla.control;
 
 import red.PeerConn;
 import clienteegorilla.control.gestionficheros.GestorCompartidos;
-import java.io.IOException;
+import java.io.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -32,6 +32,10 @@ public class ControlAplicacion {
     private static PeerConn _conn;
     private static boolean  _conectado = false;
     private static GestorCompartidos _compartidos = null;
+    private static DatosCliente me;
+    private static PeticionConsulta pConsulta;
+    private static PeticionDescarga pDescarga;
+
 
     /*private static Vector<BuscadorPanel> _panelesBuscador = new Vector<BuscadorPanel>();
 
@@ -42,8 +46,13 @@ public class ControlAplicacion {
     public ControlAplicacion(){
     }
 
-    public static void compartidos(GestorCompartidos comp) {
-        _compartidos = comp;
+    public static void compartidos(String nombreDirectorio) {
+      try{
+      _compartidos = new GestorCompartidos( new File( nombreDirectorio ) );
+      } catch (IOException ex) {
+          // hacer algo, como poner un directorio por defecto (no)
+          // tal vez lo detecte dentro como no directorio o comprobar path dentro.
+        }
     }
 
     public static boolean conectado() {
@@ -65,7 +74,7 @@ public class ControlAplicacion {
 
             _conn = new PeerConn(conexion);
           
-            DatosCliente me = new DatosCliente();
+            me = new DatosCliente();
             me.setNombreUsuario("dePruebas");
             me.setPuertoEscucha(4000);
             //System.out.println("Adios0");
@@ -73,24 +82,14 @@ public class ControlAplicacion {
             _conn.enviarObjeto(me);
             //System.out.println("Adios0b");
 
-            ListaArchivos arch;
-
-            // ojo, puede no tener ningun archivo, pero el servidor los espera.
-            if (_compartidos != null){
-                arch = _compartidos.getArchivosCompartidos();
-            }
-            else{
-              System.out.println("No hay ficheros compartidos, lista vacia");
-                arch = new ListaArchivos();
-            }
-				
+	
 		     //System.out.println("Adios1");
              /*for(int i = 0; i < arch.size(); i++){
                System.out.println(arch.elementAt(i).getNombre());
 			}*/
             // Mandamos la _lista de archivos asociada al cliente
-            System.out.println("Se mando info de <"+ arch.size() +"> archivos compartidos");
-            _conn.enviarObjeto(arch);    
+            System.out.println("Se mando info de <"+ _compartidos.getArchivosCompartidos().size() +"> archivos compartidos");
+            _conn.enviarObjeto( _compartidos.getArchivosCompartidos() );    
             
             _conectado = true;
     }
@@ -121,7 +120,7 @@ public class ControlAplicacion {
      */
     public static RespuestaPeticionConsulta consultar(String cad){
         RespuestaPeticionConsulta respuestaConsulta = null;
-        PeticionConsulta pConsulta = new PeticionConsulta();
+        pConsulta = new PeticionConsulta();
 
         pConsulta.setCadenaBusqueda(cad);
         try {
@@ -149,7 +148,7 @@ public class ControlAplicacion {
     /*CAMBIADO DEL VOID A ...*/
     public static RespuestaPeticionDescarga bajar(String hash){
 
-        PeticionDescarga pDescarga = new PeticionDescarga( hash );
+        pDescarga = new PeticionDescarga( hash );
         RespuestaPeticionDescarga respuestaDescarga = null;
         try {
             _conn.enviarObjeto( pDescarga );

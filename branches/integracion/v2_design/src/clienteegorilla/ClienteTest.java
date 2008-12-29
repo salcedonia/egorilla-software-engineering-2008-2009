@@ -41,16 +41,8 @@ public class ClienteTest {
       ServidorFicheros fs = new ServidorFicheros(4000);
       fs.start();
         
-      try {
-            GestorCompartidos gestionCompartidos = new GestorCompartidos( new File("compartidos"));
-
-            ControlAplicacion.compartidos( gestionCompartidos );
-
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteTest.class.getName()).log(Level.SEVERE, 
-                null, ex);
-            return;
-        }
+        String nombreDirectorio = "compartidos";
+           ControlAplicacion.compartidos( nombreDirectorio );
 
         /*try {
             Thread.sleep(3001);
