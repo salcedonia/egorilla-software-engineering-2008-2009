@@ -1,0 +1,86 @@
+format 62
+
+classcanvas 128069 class_ref 128069 // Usuario
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 24 236 2000
+end
+usecasecanvas 128197 usecase_ref 128069 // ConfigurarCliente
+  xyzwh 194 61 3005 64 32 label_xy 185 93
+end
+usecasecanvas 128325 usecase_ref 128197 // ConsultarDescargas
+  xyzwh 192 196 3005 64 32 label_xy 175 228
+end
+usecasecanvas 128453 usecase_ref 128325 // ConsultarCompartidos
+  xyzwh 192 125 3005 64 32 label_xy 171 157
+end
+usecasecanvas 128581 usecase_ref 128453 // ConsultarEstadísticas
+  xyzwh 193 270 3005 64 32 label_xy 173 302
+end
+usecasecanvas 128709 usecase_ref 128581 // ConectarServidor
+  xyzwh 192 367 3005 64 32 label_xy 182 399
+end
+usecasecanvas 128837 usecase_ref 128709 // BuscarArchivos
+  xyzwh 193 445 3005 64 32 label_xy 186 477
+end
+usecasecanvas 128965 usecase_ref 128837 // DesconectarServidor
+  xyzwh 193 515 3005 64 32 label_xy 174 547
+end
+usecasecanvas 129093 usecase_ref 128965 // IniciarDescarga
+  xyzwh 411 67 3005 64 32 label_xy 406 99
+end
+usecasecanvas 129221 usecase_ref 129093 // PausarDescarga
+  xyzwh 415 132 3005 64 32 label_xy 407 164
+end
+usecasecanvas 129349 usecase_ref 129221 // ReanudarDescarga
+  xyzwh 413 202 3005 64 32 label_xy 398 234
+end
+usecasecanvas 129477 usecase_ref 129349 // PrevisualizarDescarga
+  xyzwh 414 266 3005 64 32 label_xy 392 298
+end
+usecasecanvas 129605 usecase_ref 129477 // CancelarDescarga
+  xyzwh 415 340 3005 64 32 label_xy 402 372
+end
+classcanvas 130373 class_ref 128197 // Servidor
+  class_drawing_mode default show_context_mode default show_stereotype_properties default
+  xyz 596 430 2000
+end
+subject 130885 ""
+  xyzwh 110 14 2000 457 582
+textcanvas 131013 "Cliente"
+  font large_bold  xyzwh 125 22 2005 77 25
+simplerelationcanvas 129733 simplerelation_ref 128069
+  from ref 129093 z 3004 stereotype "<<include>>" xyz 299 146 3000 to ref 128325
+end
+simplerelationcanvas 129861 simplerelation_ref 128197
+  from ref 129221 z 3004 stereotype "<<include>>" xyz 305 177 3000 to ref 128325
+end
+simplerelationcanvas 129989 simplerelation_ref 128325
+  from ref 129349 z 3004 stereotype "<<include>>" xyz 304 213 3000 to ref 128325
+end
+simplerelationcanvas 130117 simplerelation_ref 128453
+  from ref 129477 z 3004 stereotype "<<include>>" xyz 305 244 3000 to ref 128325
+end
+simplerelationcanvas 130245 simplerelation_ref 128581
+  from ref 129605 z 3004 stereotype "<<include>>" xyz 305 283 3000 to ref 128325
+end
+line 130501 ----
+  from ref 130373 z 1999 to ref 128837
+line 130629 ----
+  from ref 130373 z 1999 to ref 128709
+line 130757 ----
+  from ref 130373 z 1999 to ref 128965
+line 131141 ----
+  from ref 128069 z 1999 to ref 128197
+line 131269 ----
+  from ref 128069 z 1999 to ref 128453
+line 131397 ----
+  from ref 128069 z 1999 to ref 128325
+line 131525 ----
+  from ref 128069 z 1999 to ref 128581
+line 131653 ----
+  from ref 128069 z 1999 to ref 128709
+line 131781 ----
+  from ref 128069 z 1999 to ref 128837
+line 131909 ----
+  from ref 128069 z 1999 to ref 128965
+end

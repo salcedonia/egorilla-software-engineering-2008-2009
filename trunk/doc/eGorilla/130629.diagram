@@ -1,0 +1,47 @@
+format 62
+
+packagecanvas 128069 
+  package_ref 131269 // buscador
+    xyzwh 103 48 2005 519 359
+end
+classcanvas 128197 class_ref 133573 // EventoPanelBuscador
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 456 200 2010
+end
+classcanvas 128325 class_ref 133829 // PestanaPanelBuscador
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 449 333 2010
+end
+classcanvas 128453 class_ref 133317 // AccionPanelBuscador
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 457 108 2010
+end
+classcanvas 128581 class_ref 133445 // ControlPanelBuscador
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 147 116 2015
+end
+classcanvas 128709 class_ref 133701 // GUIPanelBuscador
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  xyz 159 267 2010
+end
+relationcanvas 128837 relation_ref 130629 // <association>
+  from ref 128581 z 2009 to ref 128709
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129093 relation_ref 130885 // <composition>
+  from ref 128709 z 2009 to ref 128325
+  no_role_a no_role_b
+  multiplicity_a_pos 434 345 3000 multiplicity_b_pos 281 307 3000
+end
+relationcanvas 129349 relation_ref 131141 // <aggregation>
+  from ref 128709 z 2009 to ref 128197
+  no_role_a no_role_b
+  multiplicity_a_pos 441 245 3000 multiplicity_b_pos 281 280 3000
+end
+relationcanvas 129477 relation_ref 131269 // <aggregation>
+  from ref 128581 z 2009 to ref 128453
+  no_role_a no_role_b
+  multiplicity_a_pos 442 142 3000 multiplicity_b_pos 291 142 3000
+end
+end

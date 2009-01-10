@@ -1,0 +1,1552 @@
+format 62
+"Cliente" // Cliente
+  revision 2
+  modified_by 69 "S@L-c"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  usecaseview 128069 "Vista de Casos de Uso"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    usecasediagram 128069 "Diagrama de Casos de Uso General"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 128069 "Usuario"
+      visibility package stereotype "actor"
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    usecase 128069 "ConfigurarCliente"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128197 "ConsultarDescargas"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128325 "ConsultarCompartidos"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128453 "ConsultarEstadÌsticas"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128581 "ConectarServidor"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128709 "BuscarArchivos"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+    end
+
+    usecase 128837 "DesconectarServidor"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      associated_diagram usecasediagram_ref 128069 // Diagrama de Casos de Uso General
+    end
+
+    usecase 128965 "IniciarDescarga"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      simplerelation 128069
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128197 // ConsultarDescargas
+      end
+    end
+
+    usecase 129093 "PausarDescarga"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      simplerelation 128197
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128197 // ConsultarDescargas
+      end
+    end
+
+    usecase 129221 "ReanudarDescarga"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      simplerelation 128325
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128197 // ConsultarDescargas
+      end
+    end
+
+    usecase 129349 "PrevisualizarDescarga"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      simplerelation 128453
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128197 // ConsultarDescargas
+      end
+    end
+
+    usecase 129477 "CancelarDescarga"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
+      simplerelation 128581
+	-_->
+	  stereotype "include"
+	  on usecase_ref 128197 // ConsultarDescargas
+      end
+    end
+
+    class 128197 "Servidor"
+      visibility package stereotype "actor"
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+  end
+
+  classview 128069 "Vista de Clases"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 128325 "General"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      comment "Vision general de la estructura de la aplicaci√≥n cliente."
+      size A4
+    end
+
+    class 132421 "Main"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130501 // <association>
+	relation 129861 ----
+	  a role_name "" private
+	    classrelation_ref 130501 // <association>
+	  b role_name "" private
+	    classrelation_ref 130629 // <association>
+      end
+
+      classrelation 130757 // <association>
+	relation 129989 ----
+	  a role_name "" private
+	    classrelation_ref 130757 // <association>
+	  b role_name "" private
+	    classrelation_ref 130885 // <association>
+      end
+
+      classrelation 131013 // <association>
+	relation 130117 ----
+	  a role_name "" private
+	    classrelation_ref 131013 // <association>
+	  b role_name "" private
+	    classrelation_ref 131141 // <association>
+      end
+
+      classrelation 136773 // <association>
+	relation_ref 132933 // <association>
+      end
+
+      classrelation 138181 // <association>
+	relation 133701 ----
+	  a role_name "" private
+	    classrelation_ref 138181 // <association>
+	  b role_name "" private
+	    classrelation_ref 138309 // <association>
+      end
+    end
+
+    class 132549 "Clienteservidor"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130885 // <association>
+	relation_ref 129989 // <association>
+      end
+    end
+
+    class 132677 "ControlAplicacion"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 132805 "DescargaArchivo"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 132933 "SubidaArchivo"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 133061 "ChunkArchivo"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 133189 "GestorCompartidos"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131141 // <association>
+	relation_ref 130117 // <association>
+      end
+    end
+
+    class 133317 "AccionPanelBuscador"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 133445 // <aggregation>
+	relation_ref 131269 // <aggregation>
+      end
+    end
+
+    class 133445 "ControlPanelBuscador"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132037 // <association>
+	relation 130629 ----
+	  a role_name "" private
+	    classrelation_ref 132037 // <association>
+	  b role_name "" private
+	    classrelation_ref 132165 // <association>
+      end
+
+      classrelation 133317 // <aggregation>
+	relation 131269 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 133317 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 133445 // <aggregation>
+      end
+    end
+
+    class 133573 "EventoPanelBuscador"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 132805 // <aggregation>
+	relation 131013 o---
+	  a role_name "" private
+	    classrelation_ref 132805 // <aggregation>
+	  b role_name "" private
+	    classrelation_ref 132933 // <aggregation>
+      end
+
+      classrelation 133189 // <aggregation>
+	relation_ref 131141 // <aggregation>
+      end
+    end
+
+    class 133701 "GUIPanelBuscador"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132165 // <association>
+	relation_ref 130629 // <association>
+      end
+
+      classrelation 132293 // <association>
+	relation 130757 ----
+	  a role_name "" private
+	    classrelation_ref 132293 // <association>
+	  b role_name "" private
+	    classrelation_ref 132421 // <association>
+      end
+
+      classrelation 132549 // <composition>
+	relation 130885 *---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 132549 // <composition>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 132677 // <composition>
+      end
+
+      classrelation 132933 // <aggregation>
+	relation_ref 131013 // <aggregation>
+      end
+
+      classrelation 133061 // <aggregation>
+	relation 131141 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 133061 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 133189 // <aggregation>
+      end
+
+      classrelation 137285 // <association>
+	relation_ref 133189 // <association>
+      end
+    end
+
+    class 133829 "PestanaPanelBuscador"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132421 // <association>
+	relation_ref 130757 // <association>
+      end
+
+      classrelation 132677 // <composition>
+	relation_ref 130885 // <composition>
+      end
+    end
+
+    class 133957 "AccionPanelCompartidos"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 136261 // <aggregation>
+	relation_ref 132677 // <aggregation>
+      end
+    end
+
+    class 134085 "ControlPanelCompartidos"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 135877 // <association>
+	relation 132549 ----
+	  a role_name "" private
+	    classrelation_ref 135877 // <association>
+	  b role_name "" private
+	    classrelation_ref 136005 // <association>
+      end
+
+      classrelation 136133 // <aggregation>
+	relation 132677 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 136133 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 136261 // <aggregation>
+      end
+    end
+
+    class 134213 "EventoPanelCompartidos"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 136517 // <aggregation>
+	relation_ref 132805 // <aggregation>
+      end
+    end
+
+    class 134341 "GUIPanelCompartidos"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 136005 // <association>
+	relation_ref 132549 // <association>
+      end
+
+      classrelation 136389 // <aggregation>
+	relation 132805 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 136389 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 136517 // <aggregation>
+      end
+
+      classrelation 138053 // <association>
+	relation_ref 133573 // <association>
+      end
+    end
+
+    class 134469 "AccionPanelConfiguracion"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 134469 // <aggregation>
+	relation_ref 131781 // <aggregation>
+      end
+    end
+
+    class 134597 "EventoPanelConfiguracion"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 134725 // <aggregation>
+	relation_ref 131909 // <aggregation>
+      end
+    end
+
+    class 134725 "GUIPanelConfiguracion"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 134597 // <aggregation>
+	relation 131909 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 134597 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 134725 // <aggregation>
+      end
+
+      classrelation 134981 // <association>
+	relation_ref 132037 // <association>
+      end
+
+      classrelation 137541 // <association>
+	relation_ref 133317 // <association>
+      end
+    end
+
+    class 134853 "SplashScreen"
+      visibility package 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130629 // <association>
+	relation_ref 129861 // <association>
+      end
+
+      classrelation 138309 // <association>
+	relation_ref 133701 // <association>
+      end
+    end
+
+    class 134981 "ControlPanelTrafico"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131525 // <aggregation>
+	relation 130373 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 131525 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 131653 // <aggregation>
+      end
+
+      classrelation 131781 // <association>
+	relation 130501 ----
+	  a role_name "" private
+	    classrelation_ref 131781 // <association>
+	  b role_name "" private
+	    classrelation_ref 131909 // <association>
+      end
+    end
+
+    class 135109 "EventoPanelTrafico"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 131397 // <aggregation>
+	relation_ref 130245 // <aggregation>
+      end
+    end
+
+    class 135237 "AccionPanelTrafico"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 131653 // <aggregation>
+	relation_ref 130373 // <aggregation>
+      end
+    end
+
+    class 135365 "GUIPanelTrafico"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 131269 // <aggregation>
+	relation 130245 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 131269 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 131397 // <aggregation>
+      end
+
+      classrelation 131909 // <association>
+	relation_ref 130501 // <association>
+      end
+
+      classrelation 137029 // <association>
+	relation_ref 133061 // <association>
+      end
+    end
+
+    class 135493 "ControlPanelServidores"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 135493 // <aggregation>
+	relation_ref 132293 // <aggregation>
+      end
+    end
+
+    class 135621 "EventoPanelServidores"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 135749 // <aggregation>
+	relation_ref 132421 // <aggregation>
+      end
+    end
+
+    class 135749 "AccionPanelServidores"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 135109 // <association>
+	relation 132165 ----
+	  a role_name "" private
+	    classrelation_ref 135109 // <association>
+	  b role_name "" private
+	    classrelation_ref 135237 // <association>
+      end
+
+      classrelation 135365 // <aggregation>
+	relation 132293 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 135365 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 135493 // <aggregation>
+      end
+    end
+
+    class 135877 "GUIPanelServidores"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 135237 // <association>
+	relation_ref 132165 // <association>
+      end
+
+      classrelation 135621 // <aggregation>
+	relation 132421 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 135621 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 135749 // <aggregation>
+      end
+    end
+
+    class 136005 "AccionPanelEstadisiticas"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 133701 // <aggregation>
+	relation_ref 131397 // <aggregation>
+      end
+    end
+
+    class 136133 "ControlPanelEstadisticas"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 133573 // <aggregation>
+	relation 131397 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 133573 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 133701 // <aggregation>
+      end
+
+      classrelation 134213 // <association>
+	relation_ref 131653 // <association>
+      end
+    end
+
+    class 136261 "EventoPanelEstadisticas"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 133957 // <aggregation>
+	relation_ref 131525 // <aggregation>
+      end
+    end
+
+    class 136389 "GUIPanelEstadisticas"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 133829 // <aggregation>
+	relation 131525 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 133829 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 133957 // <aggregation>
+      end
+
+      classrelation 134085 // <association>
+	relation 131653 ----
+	  a role_name "" private
+	    classrelation_ref 134085 // <association>
+	  b role_name "" private
+	    classrelation_ref 134213 // <association>
+      end
+
+      classrelation 137797 // <association>
+	relation_ref 133445 // <association>
+      end
+    end
+
+    class 136517 "ControlVentanaPrincipal"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129605 // <association>
+	relation_ref 129349 // <association>
+      end
+
+      classrelation 129733 // <aggregation>
+	relation 129477 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 129733 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 129861 // <aggregation>
+      end
+
+      attribute 129477 "_ventanaPrincipal"
+	private type class_ref 136901 // GUIVentanaPrincipal
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      operation 129605 "ControlVentanaPrincipal"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+	comment "Constructor de la clase ControlVentanaPrincipal."
+      end
+
+      operation 129733 "tratarAccion"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "accion" type class_ref 136773 // AccionVentanaPrincipal
+	  param in name "params" explicit_type "Object"
+	
+	
+	
+	
+	
+	comment "Trata la accion producida sobre la ventana principal."
+      end
+    end
+
+    class 136645 "EventoVentanaPrincipal"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 130117 // <composition>
+	relation_ref 129605 // <composition>
+      end
+
+      classrelation 130373 // <aggregation>
+	relation_ref 129733 // <aggregation>
+      end
+    end
+
+    class 136773 "AccionVentanaPrincipal"
+      visibility public stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl "${comment}${visibility}final class ${name} {
+${items}}
+"
+      python_2_2 python_decl "class ${name}:
+${docstring}${members}
+"
+      idl_decl "${comment}enum ${name} {
+${items}};
+"
+      explicit_switch_type ""
+      
+      classrelation 129861 // <aggregation>
+	relation_ref 129477 // <aggregation>
+      end
+    end
+
+    class 136901 "GUIVentanaPrincipal"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 129349 "GUIVentanaPrincipal"
+	public explicit_return_type ""
+	nparams 0
+	
+	
+	
+	
+	
+	comment "Constructor de la clase GUIVentanaPrincipal."
+      end
+
+      operation 129477 "IniciarComponentes"
+	public explicit_return_type "void"
+	nparams 0
+	
+	
+	
+	
+	
+      end
+
+      classrelation 129477 // <association>
+	relation 129349 ----
+	  a role_name "" private
+	    classrelation_ref 129477 // <association>
+	  b role_name "" private
+	    classrelation_ref 129605 // <association>
+      end
+
+      classrelation 129989 // <composition>
+	relation 129605 *---
+	  a role_name "" private
+	    classrelation_ref 129989 // <composition>
+	  b role_name "" private
+	    classrelation_ref 130117 // <composition>
+      end
+
+      classrelation 130245 // <aggregation>
+	relation 129733 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 130245 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 130373 // <aggregation>
+      end
+
+      attribute 129349 "_controlVentanaPrincipal"
+	private type class_ref 136517 // ControlVentanaPrincipal
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129605 "_btnBuscar"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129733 "_btnCompartidos"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129861 "_btnAyuda"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 129989 "_btnEstadisticas"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130117 "_btnTrafico"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130245 "_btnServidores"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130373 "_btnConfiguracion"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130501 "_btnConectar"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130629 "_lblConexion"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130757 "_lblEstado"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130885 "_panelEstado"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 131013 "_panelConexion"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 131141 "_panelPrincipal"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 131269 "_botonera"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 131397 "_separador1"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 131525 "_separador2"
+	private explicit_type ""
+	cpp_decl ""
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 136645 // <association>
+	relation 132933 ----
+	  a role_name "" private
+	    classrelation_ref 136645 // <association>
+	  b role_name "" private
+	    classrelation_ref 136773 // <association>
+      end
+
+      classrelation 136901 // <association>
+	relation 133061 ----
+	  a role_name "" private
+	    classrelation_ref 136901 // <association>
+	  b role_name "" private
+	    classrelation_ref 137029 // <association>
+      end
+
+      classrelation 137157 // <association>
+	relation 133189 ----
+	  a role_name "" private
+	    classrelation_ref 137157 // <association>
+	  b role_name "" private
+	    classrelation_ref 137285 // <association>
+      end
+
+      classrelation 137413 // <association>
+	relation 133317 ----
+	  a role_name "" private
+	    classrelation_ref 137413 // <association>
+	  b role_name "" private
+	    classrelation_ref 137541 // <association>
+      end
+
+      classrelation 137669 // <association>
+	relation 133445 ----
+	  a role_name "" private
+	    classrelation_ref 137669 // <association>
+	  b role_name "" private
+	    classrelation_ref 137797 // <association>
+      end
+
+      classrelation 137925 // <association>
+	relation 133573 ----
+	  a role_name "" private
+	    classrelation_ref 137925 // <association>
+	  b role_name "" private
+	    classrelation_ref 138053 // <association>
+      end
+    end
+
+    classdiagram 130373 "VentanaPrincipal"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 130501 "Trafico"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 130629 "Buscador"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 130757 "Estadisticas"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 130885 "Configuracion"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 131013 "Servidores"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 131141 "Compartidos"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 137029 "ControlPanelConfiguracion"
+      visibility public 
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 134341 // <aggregation>
+	relation 131781 o---
+	  a role_name "" multiplicity "*" private
+	    classrelation_ref 134341 // <aggregation>
+	  b role_name "" multiplicity "1" private
+	    classrelation_ref 134469 // <aggregation>
+      end
+
+      classrelation 134853 // <association>
+	relation 132037 ----
+	  a role_name "" private
+	    classrelation_ref 134853 // <association>
+	  b role_name "" private
+	    classrelation_ref 134981 // <association>
+      end
+    end
+  end
+
+  package_ref 130629 // aplicacion
+
+  package_ref 130757 // control
+
+  package_ref 130885 // interfaz
+
+  package_ref 131013 // gestion_ficheros
+
+  package_ref 131269 // buscador
+
+  package_ref 131397 // compartidos
+
+  package_ref 131525 // configuracion
+
+  package_ref 131653 // estadisticas
+
+  package_ref 131781 // trafico
+
+  package_ref 131909 // servidores
+
+  package_ref 132037 // principal
+
+  package_ref 132165 // splash_screen
+end
