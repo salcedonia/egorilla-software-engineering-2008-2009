@@ -1,0 +1,45 @@
+window_sizes 1024 719 240 720 536 109
+diagrams
+  usecasediagram_ref 128069 // Diagrama de Casos de Uso General
+    618 428 100 4 0 0
+  usecasediagram_ref 128197 // Diagrama de Casos de Uso General
+    618 428 100 4 0 0
+  classdiagram_ref 128453 // General
+    774 536 100 4 0 0
+  classdiagram_ref 129605 // Logica
+    618 428 100 4 0 0
+  classdiagram_ref 129733 // Datos
+    618 428 100 4 0 0
+  classdiagram_ref 129861 // Protocolos
+    618 428 100 4 0 0
+  classdiagram_ref 129989 // Paquete
+    618 428 100 4 0 0
+  classdiagram_ref 130117 // Red
+    618 428 100 4 0 0
+  classdiagram_ref 130245 // Ejecucion
+    618 428 100 4 0 0
+  active  classdiagram_ref 128325 // General
+    778 536 100 4 0 0
+  classdiagram_ref 130373 // VentanaPrincipal
+    618 428 100 4 0 0
+  classdiagram_ref 130501 // Trafico
+    618 428 100 4 0 0
+  classdiagram_ref 131013 // Servidores
+    618 428 100 4 0 0
+  classdiagram_ref 130629 // Buscador
+    618 428 100 4 0 0
+  classdiagram_ref 131141 // Compartidos
+    618 428 100 4 0 0
+  classdiagram_ref 130885 // Configuracion
+    618 428 100 4 0 0
+  classdiagram_ref 130757 // Estadisticas
+    618 428 100 4 0 0
+end
+show_stereotypes
+selected classdiagram_ref 128325 // General
+open
+  classview_ref 128069 // Vista de Clases
+  
+  package_ref 128197 // Servidor
+end
+end
