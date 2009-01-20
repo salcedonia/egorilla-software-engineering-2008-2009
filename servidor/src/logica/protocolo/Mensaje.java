@@ -14,7 +14,7 @@ package logica.protocolo;
  * @author pitidecaner
  * @author Salcedonia
  */
-public interface Peticion{
+public interface Mensaje{
 
 //	*****************************************************************************//
     /**
@@ -22,5 +22,5 @@ public interface Peticion{
      * 
      * @return La versión del protocolo correspondiente.
      */
-	public Protocolo getProtocolo();
+	public ProtocoloServidor getProtocolo();
 }

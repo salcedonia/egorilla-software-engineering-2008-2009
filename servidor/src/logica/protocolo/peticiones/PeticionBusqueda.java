@@ -3,8 +3,8 @@ package logica.protocolo.peticiones;
 import java.io.Serializable;
 
 import logica.paquete.TipoArchivo;
-import logica.protocolo.Peticion;
-import logica.protocolo.Protocolo;
+import logica.protocolo.Mensaje;
+import logica.protocolo.ProtocoloServidor;
 
 //*****************************************************************************//
 /**
@@ -13,7 +13,7 @@ import logica.protocolo.Protocolo;
  * 
  * @author Pitidecaner
  */
-public class PeticionBusqueda implements Serializable, Peticion{
+public class PeticionBusqueda implements Serializable, Mensaje{
     
     // CONSTANTES
 	private static final long serialVersionUID = 1L;
@@ -28,9 +28,9 @@ public class PeticionBusqueda implements Serializable, Peticion{
      * 
      * @return El protocolo de búsqueda de archivos.
      */
-    public Protocolo getProtocolo() {
+    public ProtocoloServidor getProtocolo() {
    
-        return Protocolo.BUSQUEDA_ARCHIVOS;
+        return ProtocoloServidor.BUSQUEDA_ARCHIVOS;
     }
 
 //  *****************************************************************************//

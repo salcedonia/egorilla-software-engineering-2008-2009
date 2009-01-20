@@ -93,10 +93,11 @@ public class ConexionCliente extends Thread {
             // Recibe los archivos del cliente 
             ListaArchivos archivosCliente = (ListaArchivos) _conexion.recibirObjeto();
 
-			for(int i = 0; i < archivosCliente.size(); i++){
-				System.out.println(archivosCliente.elementAt(i).getNombre());
-			}
-			System.out.println("Archivos del cliente <" + archivosCliente.size() +">");
+            for(int i = 0; i < archivosCliente.size(); i++){
+                System.out.println(archivosCliente.elementAt(i).getNombre());
+            }
+            System.out.println("Archivos del cliente <" + archivosCliente.size() +">");
+                        
             // Averigua la dirección de origen.
             _datosCliente.setIP(_conexion.getIP());
 
@@ -106,11 +107,11 @@ public class ConexionCliente extends Thread {
             // Alta de los archivos en el sistema
             _listaGlobalArchivos.actualizarDesdeListaCliente(this, archivosCliente);
             System.out.println("Archivos en la lista global <" +_listaGlobalArchivos.size() + ">");
-			for(int i = 0; i < _listaGlobalArchivos.size(); i++){
-				System.out.println(_listaGlobalArchivos.elementAt(i).getNombre());
-			}
+            for(int i = 0; i < _listaGlobalArchivos.size(); i++){
+                System.out.println(_listaGlobalArchivos.elementAt(i).getNombre());
+            }
+            
             // Listo para usar!
-			
             _conexion.listo();           
         } 
         catch (IOException ex) {

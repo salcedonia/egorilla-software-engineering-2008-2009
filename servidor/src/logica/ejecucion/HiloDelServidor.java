@@ -88,7 +88,7 @@ public class HiloDelServidor extends Thread {
         try {
             
             // tratamos el paquete recibido
-            procesarDatosRecibidos((Peticion) conexion.recibirObjeto(), conexion);
+            procesarDatosRecibidos((Mensaje) conexion.recibirObjeto(), conexion);
         } 
         catch (ClassNotFoundException ex) {
         
@@ -105,7 +105,7 @@ public class HiloDelServidor extends Thread {
      * @param conexion la conexion con el cliente que solicito
      * @throws IOException puede haber un porblema si no se reconoce el paquete recibido.
      */
-    public synchronized void procesarDatosRecibidos(Peticion peticion, ConexionPeer conexion) throws IOException {
+    private synchronized void procesarDatosRecibidos(Mensaje peticion, ConexionPeer conexion) throws IOException {
 
         switch (peticion.getProtocolo()) {
 
@@ -169,7 +169,7 @@ public class HiloDelServidor extends Thread {
     			try {
 
                     // leer un objeto, se hara timeout a los 10 milisegundos.
-                    Peticion pet = (Peticion) p.recibirObjeto(10);
+                    Mensaje pet = (Mensaje) p.recibirObjeto(10);
 
                     // y si el objeto es válido, se procesa.
                     this.procesarDatosRecibidos(pet, p);

@@ -2,8 +2,8 @@ package logica.datos;
 
 import java.io.Serializable;
 
-import logica.protocolo.Peticion;
-import logica.protocolo.Protocolo;
+import logica.protocolo.Mensaje;
+import logica.protocolo.ProtocoloServidor;
 
 //*****************************************************************************//
 /**
@@ -12,7 +12,7 @@ import logica.protocolo.Protocolo;
  * @author Pitidecaner
  * @author Salcedonia
  */
-public class DatosCliente implements Serializable, Peticion{
+public class DatosCliente implements Serializable, Mensaje{
 
     // CONSTANTES
 	private static final long serialVersionUID = 1L;
@@ -28,9 +28,9 @@ public class DatosCliente implements Serializable, Peticion{
      * 
      * @return Por defecto es la 1.
      */
-    public Protocolo getProtocolo() {
+    public ProtocoloServidor getProtocolo() {
         
-    	return Protocolo.CONEXION_CLIENTE_SERVIDOR;
+    	return ProtocoloServidor.CONEXION_CLIENTE_SERVIDOR;
     }
 
 //  *****************************************************************************//

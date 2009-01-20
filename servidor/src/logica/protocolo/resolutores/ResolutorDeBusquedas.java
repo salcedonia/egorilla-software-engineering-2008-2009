@@ -2,7 +2,7 @@ package logica.protocolo.resolutores;
 
 import logica.datos.ListaArchivos;
 import logica.paquete.Archivo;
-import logica.protocolo.Protocolo;
+import logica.protocolo.ProtocoloServidor;
 import logica.protocolo.peticiones.PeticionBusqueda;
 import logica.protocolo.respuestas.RespuestaABusqueda;
 import logica.red.ConexionPeer;
@@ -75,8 +75,8 @@ public class ResolutorDeBusquedas extends Thread{
      * 
      * @return El protocolo asociado a la búsqueda de archivos.
      */
-    public Protocolo getProtocolo() {
+    public ProtocoloServidor getProtocolo() {
 
-        return Protocolo.BUSQUEDA_ARCHIVOS;
+        return ProtocoloServidor.BUSQUEDA_ARCHIVOS;
     }
 }
