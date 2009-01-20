@@ -6,7 +6,7 @@ package logica.protocolo;
  * 
  * @author S@L-c
  */
-public enum Protocolo {
+public enum ProtocoloServidor {
 
 	CONEXION_CLIENTE_SERVIDOR, BUSQUEDA_ARCHIVOS, DESCARGA_ARCHIVOS;
 }

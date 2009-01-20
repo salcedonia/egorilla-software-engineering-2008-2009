@@ -2,8 +2,8 @@ package logica.protocolo.peticiones;
 
 import java.io.Serializable;
 
-import logica.protocolo.Peticion;
-import logica.protocolo.Protocolo;
+import logica.protocolo.Mensaje;
+import logica.protocolo.ProtocoloServidor;
 
 
 //*****************************************************************************//
@@ -14,7 +14,7 @@ import logica.protocolo.Protocolo;
  * @author Pitidecaner
  * @author Salcedonia
  */
-public class PeticionDescarga implements Peticion, Serializable{
+public class PeticionDescarga implements Mensaje, Serializable{
     
     // CONSTANTES
 	private static final long serialVersionUID = 1L;
@@ -39,9 +39,9 @@ public class PeticionDescarga implements Peticion, Serializable{
      * 
      * @return El protocolo que estamos utilizando
      */
-    public Protocolo getProtocolo() {
+    public ProtocoloServidor getProtocolo() {
 
-    	return Protocolo.DESCARGA_ARCHIVOS;
+    	return ProtocoloServidor.DESCARGA_ARCHIVOS;
     }
 
 //  *****************************************************************************//
