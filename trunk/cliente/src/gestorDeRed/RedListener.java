@@ -5,6 +5,8 @@
 
 package gestorDeRed;
 
+import logica.protocolo.Mensaje;
+
 /**
  * Todo artefacto que pretende recibir paquetes de la red, debe inplementar esta
  * interfaz.
