@@ -6,7 +6,7 @@
 package gestorDeRed;
 
 import java.util.Vector;
-
+import  logica.protocolo.Mensaje;
 
 /**
  *  Punto que aglutina todas las comunicaciónes de red. 
