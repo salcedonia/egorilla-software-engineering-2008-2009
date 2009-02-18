@@ -45,7 +45,10 @@ public class ControlVentanaPrincipal {
                     try {
                     	
                     	// Nos conectamos
-                        ControlAplicacion.conectarAServidor();
+                        Object[] parametros=new Object[2];
+                        parametros[0]="127.0.0.1";
+                        parametros[1]=6969;
+                        ControlAplicacion.conectarAServidor(parametros);
                         
                         // Avisamos al GUI de la ventana principal para que se actualice
                         _ventanaPrincipal.tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_CONECTADO, null);

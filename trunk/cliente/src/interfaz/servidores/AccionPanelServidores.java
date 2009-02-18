@@ -8,5 +8,8 @@ package interfaz.servidores;
  * @author S@L-c
  */
 public enum AccionPanelServidores {
+    
+    CONECTAR_CON_SERVIDOR,
+    AÑADIR_SERVIDOR;
 
 }

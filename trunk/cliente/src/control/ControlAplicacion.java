@@ -51,6 +51,11 @@ public class ControlAplicacion {
         
     	return _conectado;
     }
+    
+    public static ConexionPeer get_Conexion()
+    {
+        return _conexion;
+    }
 
 //  ************************************************************************************//
     /**
@@ -59,10 +64,11 @@ public class ControlAplicacion {
      * @throws IOException Se lanza la excepción cuando se produce 
      * algún fallo entre la comunicación entre el cliente y el servidor.
      */
-    public static void conectarAServidor() throws IOException{
+    public static void conectarAServidor(Object[] parametros ) throws IOException{
          
     	// Crea una conexion de prueba
-		Socket conexion = new Socket("127.0.0.1", 6969);
+        
+		Socket conexion = new Socket((String)parametros[0],(Integer) parametros[1]);
 
 		// Crea el wrapper
 		_conexion = new ConexionPeer(conexion);
