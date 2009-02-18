@@ -1,2 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project-private xmlns="http://www.netbeans.org/ns/project-private/1"/>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/aplicacion/Main.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/control/ClienteServidor.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/control/ControlAplicacion.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/control/DescargaArchivo.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/control/SubidaArchivo.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/control/gestion_ficheros/GestorCompartidos.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/buscador/AccionPanelBuscador.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/buscador/ControlPanelBuscador.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/buscador/EventoPanelBuscador.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/buscador/GUIPanelBuscador.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/buscador/PestanaPanelBuscador.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/principal/AccionVentanaPrincipal.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/principal/ControlVentanaPrincipal.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/principal/EventoVentanaPrincipal.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/principal/GUIVentanaPrincipal.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/servidores/AccionPanelServidores.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/servidores/ControlPanelServidores.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/servidores/EventoPanelServidores.java</file>
+        <file>file:/C:/Users/David/Documents/NetBeansProjects/cliente/src/interfaz/servidores/GUIPanelServidores.java</file>
+    </open-files>
+</project-private>

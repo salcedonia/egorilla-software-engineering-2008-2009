@@ -32,7 +32,16 @@ public class ControlPanelServidores {
 	 * @param accion Acción producida.
 	 * @param parametros Parametros asociados a la acción.
 	 */
-	public void tratarAccion(AccionPanelServidores evento, Object parametros){
+	public void accionPanelServidores(AccionPanelServidores accion, Object parametros){
+            
+            switch(accion){
 		
-	}
+                case AÑADIR_SERVIDOR:
+                    _panelServidores.tratarEventos(EventoPanelServidores.MOSTRAR_SERVIDOR_PUERTO_IP_EN_PANEL, parametros);
+                    
+                    
+		
+            }
+        }
+            
 }
