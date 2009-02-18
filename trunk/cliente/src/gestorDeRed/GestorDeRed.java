@@ -21,7 +21,7 @@ public class GestorDeRed {
 
     static GestorDeRed _singleton = null;   // singleton
 
-    private Vector<RedListener> _listeners;
+    private Vector<RedListener> _listeners; // listeners
 
     /**
      * Constructor privado
