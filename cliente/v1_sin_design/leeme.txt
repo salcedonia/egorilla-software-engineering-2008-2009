@@ -1,0 +1,2 @@
+- Para evitar tener duplicados (y tener que estar actualzando ambas por separado) en las clases que comparten el cliente y en el servidor, se ha dejado todo en integracion.
+- En nuevas versiones se va a intentar resolver este problema mediante diferentes soluciones: lib con clases comunes, enlaces simbólicos o similar, directorio compartido, etc

@@ -1,0 +1,1 @@
+- Para esta versión sin diseño no existe ningún tipo de documento, tan sólo los comentarios del código, pero sin ninguna otra auxiliar.
