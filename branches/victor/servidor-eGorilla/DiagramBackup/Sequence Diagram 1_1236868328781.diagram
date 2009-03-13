@@ -1,0 +1,31 @@
+<XMI xmi.version="1.2"  xmlns:UML="org.omg.xmi.namespace.UML"  timestamp="12 de marzo de 2009 15:32:40 CET" >
+<XMI.content>
+<UML:Diagram isVisible="false"  zoom="1.0"  name="CUS1 2 N 2 Apagar"  xmi.id="DCE.FE1F3AC2-F0C8-E39D-F324-C364BEEAC177" >
+<UML:GraphElement.position>
+     <XMI.field>0</XMI.field>
+     <XMI.field>0</XMI.field>
+</UML:GraphElement.position>
+<UML:GraphNode.size>
+     <XMI.field>880</XMI.field>
+     <XMI.field>623</XMI.field>
+</UML:GraphNode.size>
+<UML:Diagram.viewport>
+     <XMI.field>0</XMI.field>
+     <XMI.field>0</XMI.field>
+</UML:Diagram.viewport>
+<UML:DiagramElement.property>
+<UML:Property value="DCE.823941EC-6807-F37E-E763-9A563286B13C"  key="netbeans-diagram-namespace" />
+<UML:Property value="DCE.734806DE-6725-FDFC-31D8-808A05B8E246"  xmi.id="Property2_PEID"  key="netbeans-diagram-projectID" />
+<UML:Property value="false"  key="Show Message Numbers" />
+<UML:Property value="true"  key="Show Return Messages" />
+</UML:DiagramElement.property>
+<UML:GraphElement.semanticModel>
+<UML:SimpleSemanticModelElement presentation=""  xmi.id="DCE.FE1F3AC2-F0C8-E39D-F324-C364BEEAC177"  typeinfo="Sequence Diagram" />
+</UML:GraphElement.semanticModel>
+<UML:GraphElement.contained>
+</UML:GraphElement.contained>
+<UML:Diagram.owner>
+</UML:Diagram.owner>
+</UML:Diagram>
+</XMI.content>
+</XMI>
