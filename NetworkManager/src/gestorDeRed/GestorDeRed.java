@@ -19,7 +19,7 @@ public interface GestorDeRed<E>{
      * dicho puerto se deja a discrección de quien instancie la implementación
      * de esta interface.
      */
-    public void comienzaEscucha();
+    public void comienzaEscucha() throws NetError;
 
     /**
      * envía un paquete de tipo E a la dirección especificada
@@ -27,14 +27,14 @@ public interface GestorDeRed<E>{
      * @param destino destino en formato ip v4
      * @param port puerto a enviar
      */
-    public void envia(E var, Inet4Address destino, int port);
+    public void envia(E var, Inet4Address destino, int port) throws NetError;
     /**
      * envía un paquete de tipo E a la dirección especificada
      * @param var el paquete a enviar
      * @param host el nombre de host o ip
      * @param port el puerto
      */
-    public void envia(E var, String host, int port);
+    public void envia(E var, String host, int port) throws NetError;
 
     /**
      * registra un receptor que se hara cargo de los mensajes recibidos por el
