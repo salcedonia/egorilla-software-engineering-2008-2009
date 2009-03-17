@@ -35,14 +35,14 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * @param var el paquete a enviar
      * @param destino destino en formato ip v4
      */
-    public synchronized void envia(E var, Inet4Address destino, int puerto) {
+    public synchronized void envia(E var, Inet4Address destino, int puerto) throws NetError {
         try {
             Socket s = new Socket(destino, puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(var);
 
         } catch (IOException ex) {
-            Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+           throw new NetError("error al conectar con " + destino.getHostAddress() + ":" + puerto);
         }
     }
     /**
@@ -51,14 +51,14 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * @param host el nombre de host o ip
      * @param port el puerto
      */
-    public synchronized void envia(E var, String host, int port) {
+    public synchronized void envia(E var, String host, int port)  throws NetError{
         try {
             Socket s = new Socket(host, port);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(var);
 
         } catch (IOException ex) {
-            Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+             throw new NetError("error al conectar con " + host  + ":" + port);
         }
     }
 
@@ -78,12 +78,12 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * dicho puerto se deja a discrección de quien instancie la implementación
      * de esta interface.
      */
-    public void comienzaEscucha() {
+    public void comienzaEscucha()  throws NetError{
        this.start();
     }
 
     @Override
-    public void run(){
+    public void run() {
         try {
             ServerSocket sock = new ServerSocket(_puerto);
 
