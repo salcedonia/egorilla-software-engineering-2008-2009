@@ -13,4 +13,8 @@ import mensajes.TipoMensaje;
  */
 public interface Mensaje {
     public TipoMensaje getTipoMensaje();
+    
+    public void setDestino (String destino, int puerto);
+    public String destino();
+    public int puerto();
 }

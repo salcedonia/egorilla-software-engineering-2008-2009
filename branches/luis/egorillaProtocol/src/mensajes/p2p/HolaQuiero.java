@@ -28,4 +28,18 @@ public class HolaQuiero implements Mensaje, Serializable{
     public String nombre;
     public String hash;
     
+    private String _destino;
+    private int    _puerto;
+    
+    public void setDestino(String destino, int puerto) {
+        _destino = destino;
+        _puerto  = puerto;
+    }
+    public String destino() {
+        return _destino;
+    }
+    public int puerto() {
+        return _puerto;
+    }
+    
 }
