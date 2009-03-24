@@ -21,6 +21,9 @@ import protocoloEgorilla.DatosCliente;
  */
 public class RespuestaPeticionDescarga implements Mensaje, Serializable{
     
+    public String hash;
+    public String nombre;
+    
     // ATRIBUTOS
     private DatosCliente[] _lista;
 

@@ -11,5 +11,5 @@ package gestorDeRed;
  */
 public interface Receptor<E> {
 
-   public void recibeMensaje (E msj);
+   public void recibeMensaje (E msj, String ip, int port);
 }

@@ -14,6 +14,7 @@ import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
+import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.Fragmento;
@@ -32,15 +33,18 @@ public class GestorEgorilla extends Thread{
     
     private GestorSubidas _gestorSubidas;
     
+    private GestorClientes _gestorClientes;
     
     private boolean _conectado;
     private String  _serverIP;
     private int  _serverPort;
     
-    public GestorEgorilla(GestorDescargas gd) {
+    public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDescargas = gd;
         _gestorSubidas = new GestorSubidas(this);
+        _gestorDeRed = gr; 
+        _gestorClientes = new GestorClientes();
     }
     
     /**
@@ -66,13 +70,10 @@ public class GestorEgorilla extends Thread{
      */
     public void comienzaP2P(){
         // TODO: 6969 fijado a capon
-        _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(6969);
+     //  _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(6969);
         _gestorDeRed.registraReceptor(new ServidorEgorilla(this, _gestorDescargas));
-        try {
-            _gestorDeRed.comienzaEscucha();
-        } catch (NetError ex) {
-            Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       
+        _gestorDeRed.comienzaEscucha();
     }
 
     /**
@@ -155,5 +156,27 @@ public class GestorEgorilla extends Thread{
                     Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
             }
         }while (true);
+    }
+
+    /**
+     * tras la respuesta del servidor, se comienza la descarga de un fichero desde 
+     * los clientes indicados
+     * @param a fichero a descargar
+     * @param lista lista de clientes que lo contienen
+     */
+    void DescargaFichero(Archivo a, DatosCliente[] lista) {
+        
+        for (DatosCliente cliente : lista) {
+            _gestorClientes.addClienteDescarga(cliente.getIP(), a);
+        }
+        _gestorDescargas.altaFichero(a);
+        
+        
+        // ahora se envia el HolaQuiero a todos los clientes que lo tienen
+        for (DatosCliente cliente : lista) {
+            HolaQuiero q = new HolaQuiero(a);
+            q.setDestino(cliente.getIP(),cliente.getPuertoEscucha());
+            this.addMensajeParaEnviar(q);
+        }
     }
 }
