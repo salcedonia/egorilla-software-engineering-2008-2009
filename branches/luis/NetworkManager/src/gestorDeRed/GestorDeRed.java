@@ -19,7 +19,7 @@ public interface GestorDeRed<E>{
      * dicho puerto se deja a discrección de quien instancie la implementación
      * de esta interface.
      */
-    public void comienzaEscucha() throws NetError;
+    public void comienzaEscucha();
 
     /**
      * envía un paquete de tipo E a la dirección especificada

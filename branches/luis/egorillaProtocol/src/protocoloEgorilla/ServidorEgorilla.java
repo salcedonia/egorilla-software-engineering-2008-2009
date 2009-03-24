@@ -11,6 +11,9 @@ import mensajes.Mensaje;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
 import mensajes.p2p.Tengo;
+import mensajes.p2p.Toma;
+import mensajes.serverclient.RespuestaPeticionDescarga;
+import peerToPeer.Fragmento;
 import peerToPeer.GestorDescargas;
 
 /**
@@ -49,6 +52,7 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 
                 // Apunto para servir más adelante.
                 Dame pkg = (Dame) msj;
+              
                 _gestor.nuevaSubida(new Archivo(pkg.nombre, pkg.hash), ip, port, pkg.fragmentos);
                 
                 // YA SE CONTESTARA CON TOMA, no aki
@@ -66,7 +70,7 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                     
                 Tengo resp = new Tengo();
                 resp.hash = quiero.hash;
-                resp.nombre = quiero.nombre;  // deberia poner el nombre que tengo yo para este fichero
+                resp.nombre = quiero.nombre;  //TODO: deberia poner el nombre que tengo yo para este fichero
                     
                 // recupero fragmentos
                 resp.fragmentos =  _descargas.getFragmentos(quiero.hash);
@@ -77,7 +81,8 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 _gestor.addMensajeParaEnviar(resp);
                 }
                 else{
-                    // no lo tengo, invento un fichero y lo envio
+                    // no lo tengo, envio una estructura vacia
+                    
                 }
                 break;
                 
@@ -85,13 +90,16 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
             case Tengo:
                 
                 // evaluar fragmentos que tiene tengo y tienen y decidir cuales quiero
-                // por ahora todos!
+                // por ahora todos! 
                 
                 Tengo reciv = (Tengo) msj;
                 Dame respuesta =  new Dame();
                 
                 respuesta.hash = reciv.hash;
                 respuesta.nombre = reciv.nombre;
+                
+                // comprobar al menos que no estemos hablando un conjunto vacio
+                // en ese caso es que el peer no tiene el archivo que buscamos
                 respuesta.fragmentos = reciv.fragmentos;
                 
                 // CONTESTA dame
@@ -105,8 +113,28 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 // de paquetes
                 
                 // conozco al peer??
+                //TODO: comprobar esto, por ahora asumo que si
+                
+                Toma paquete = (Toma)msj;
+                                
+                Fragmento f = new Fragmento();
+                f.hash   = paquete.hash;
+                f.nombre = paquete.nombre;
+                f.offset = paquete.offset;
+                f.tama   = paquete.chunk.length;
                 
                 // envio fragmeto a gestor de descargas
+                _descargas.llegaFragmento(f, paquete.chunk);
+                
+                break;
+                
+            case RespuestaPeticionDescarga:
+                
+                RespuestaPeticionDescarga respDes = (RespuestaPeticionDescarga) msj;
+                
+                Archivo a =new Archivo(respDes.nombre, respDes.hash);
+                                
+                _gestor.DescargaFichero(a, respDes.getLista());
                 
                 break;
         }

@@ -5,6 +5,8 @@
 
 package peerToPeer;
 
+import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
+
 /**
  * 
  * representa la información que define un fragmento de un
@@ -37,4 +39,15 @@ public class Fragmento {
      * (todos los fragmentos son de igual tamaño)
      */
     public int num;
+    
+    @Override
+    public boolean equals(Object f) {
+        
+        if ( f instanceof Fragmento){
+            Fragmento b = (Fragmento) f;
+            return (offset == b.offset) && (tama == b.tama);
+        }
+        else
+            return false;
+    }
 }

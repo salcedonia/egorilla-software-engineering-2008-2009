@@ -54,11 +54,11 @@ public class GestorSubidas extends Thread{
             
             elems = _paraEnviar.elements();
             for (elems =_paraEnviar.elements(); elems.hasMoreElements();) {
-                // TODO: acabar esto
+                // TODO: acabar esto 
                 // ir al gestor, recoger el chunk, 
-                // crear paquete Toma
-                // establecer dirección a enviar
-                // encolar para enviar
+                // crear paquete Toma 
+                // establecer dirección a enviar 
+                // encolar para enviar 
                 elems.nextElement();
             }
             

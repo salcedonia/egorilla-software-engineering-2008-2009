@@ -78,7 +78,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * dicho puerto se deja a discrección de quien instancie la implementación
      * de esta interface.
      */
-    public void comienzaEscucha()  throws NetError{
+    public void comienzaEscucha(){
        this.start();
     }
 
@@ -92,8 +92,11 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                Socket s = sock.accept();
                 try {
                     E paquete = (E) new ObjectInputStream(s.getInputStream()).readObject();
+                    String ip = s.getInetAddress().getHostName();
+                    int  port = s.getPort();
+                    
                     for (Receptor<E> receptor : _receptores) {
-                       receptor.recibeMensaje(paquete);
+                       receptor.recibeMensaje(paquete,ip, port);
                 }
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
