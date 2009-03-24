@@ -5,6 +5,7 @@
 
 package peerToPeer;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import protocoloEgorilla.Archivo;
 
@@ -24,6 +25,14 @@ public class GestorDescargas {
         EstadoTemporal e = new EstadoTemporal(a);
         _temporales.put(a.getHash(), e);
     }
+
+    public ArrayList<Fragmento> getFragmentos(String hash) {
+    
+        // si lo tengo entre los temporales, lo busco ahi, si no lo busco en 
+        // otro sitio
+        
+        return _temporales.get(hash).getFragmentos();       
+    }
    
     public void llegaFragmento(Fragmento f, Byte[] chunk){
         
@@ -34,5 +43,15 @@ public class GestorDescargas {
         // actualiza lista fragmentos
         
         // envia a gestor de disco
+    }
+
+    public boolean puedoBajar(String hash) {
+        // tengo este fichero entre los pendientes o completos??
+        if (_temporales.containsKey(hash))// lo tengo en pendientes
+            return true;
+        
+        // probar dnd lo puedo tener
+        
+        return false;
     }
 }

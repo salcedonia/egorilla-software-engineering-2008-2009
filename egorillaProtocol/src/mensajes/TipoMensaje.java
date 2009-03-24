@@ -9,6 +9,21 @@ package mensajes;
  *
  * @author Luis Ayuso
  */
-public enum TipoMensaje {HolaQuiero,Conozco,Tengo,Toma, Altoo, Dame
+public enum TipoMensaje {
+    
+    // mensajes P2P
+    HolaQuiero,
+    Conozco,
+    Tengo,
+    Toma,
+    Altoo, 
+    Dame,
+    
+    // mensajes Servidor-Cliente
+    PeticionConsulta,
+    PeticionDescarga,
+    RespuestaPeticionConsulta,
+    RespuestaPeticionDescarga,
+    DatosCliente
 
 }

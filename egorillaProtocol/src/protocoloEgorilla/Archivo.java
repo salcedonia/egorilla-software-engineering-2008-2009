@@ -82,8 +82,13 @@ public class Archivo implements Serializable{
         }
     }*/
 
-    public Archivo(String nombre, String hash, long tamano, TipoArchivo tipo) {
+  public Archivo(String nombre, String hash, long tamano, TipoArchivo tipo) {
       set( nombre, hash, tamano, tipo);
+    }
+
+   public Archivo(String nombre, String hash) {
+        this._nombre = nombre;
+        this._hash   = hash;
     }
 
     /*****************************************************************************/

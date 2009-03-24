@@ -29,6 +29,12 @@ public class GestorSubidas extends Thread{
         _direcctorio = new Hashtable<String, Integer>();
     }
     
+    /**
+     * establece que se enviarán estos fragmentos a este cliente
+     * @param ip ip del cliente destino
+     * @param puerto puerto a enviar los datos
+     * @param fragmentos lista de fragmentos aceptados por el otro cliente
+     */
     public void comenzarSubida(String ip, int puerto, ArrayList<Fragmento> fragmentos){
         if (_direcctorio.contains(ip)){
             // ya esta la ip, no hacemos nada
@@ -51,6 +57,7 @@ public class GestorSubidas extends Thread{
                 // TODO: acabar esto
                 // ir al gestor, recoger el chunk, 
                 // crear paquete Toma
+                // establecer dirección a enviar
                 // encolar para enviar
                 elems.nextElement();
             }
