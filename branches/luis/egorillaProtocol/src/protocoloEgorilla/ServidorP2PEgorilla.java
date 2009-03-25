@@ -18,18 +18,47 @@ import peerToPeer.GestorDescargas;
 
 /**
  *
+ * Esta clase es lo que implementa la parte servidora de un cliente
+ * esto es, cuando recibe un mensaje, lo decodifica y opera con el
+ * 
+ * se encarga, basicamente de realizar toda la negociación.
+ * 
+ * TODO: muy importante, cada vez que se ejecuta esto deberia hacerse
+ * en un hilo paralelo, para permitir la concurrencia, ahora mismo no
+ * lo hace y esto sera una perdida de rendimiento
+ * 
  * @author Luis Ayuso
  */
-public class ServidorEgorilla implements Receptor<Mensaje> {
+public class ServidorP2PEgorilla implements Receptor<Mensaje>{
 
     private GestorEgorilla _gestor;
     private GestorDescargas _descargas;
     
-    ServidorEgorilla(GestorEgorilla gE, GestorDescargas gD) {
+    /**
+     * constructor básico:
+     * necesita de dos cosas que estan fuera de su hambito, el gestor de egorilla
+     * que es el que basicamente dice que hay que hacer
+     * y el gestor de descargas, que es un modulo exterior que comprueba todo lo 
+     * necesario
+     * 
+     * @param gE gestor eGorilla
+     * @param gD bestor de descargas
+     */
+    ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD) {
        _gestor = gE;
        _descargas = gD;
     }
 
+    /**
+     * 
+     * heredado de la interface, es el metodo por el cual se nos comunica que ha
+     * llegado un mensaje nuevo
+     * 
+     * 
+     * @param msj que?
+     * @param ip de quien?
+     * @param port dnd contesto?
+     */
     public void recibeMensaje(Mensaje msj, String ip, int port) {
         switch (msj.getTipoMensaje()){
             case Altoo:

@@ -6,7 +6,7 @@
 package protocoloEgorilla;
 
 import gestorDeRed.GestorDeRed;
-import gestorDeRed.GestorDeRedTCPimpl;
+import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -71,9 +71,10 @@ public class GestorEgorilla extends Thread{
     public void comienzaP2P(){
         // TODO: 6969 fijado a capon
      //  _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(6969);
-        _gestorDeRed.registraReceptor(new ServidorEgorilla(this, _gestorDescargas));
+        _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas));
        
         _gestorDeRed.comienzaEscucha();
+    //   this.start();
     }
 
     /**
@@ -129,7 +130,7 @@ public class GestorEgorilla extends Thread{
      * @param fragmentos
      */
     public void nuevaSubida(Archivo a, String ip, int puerto,ArrayList<Fragmento> fragmentos){
-        
+        //TODO:
     }
             
     /**
@@ -140,14 +141,15 @@ public class GestorEgorilla extends Thread{
      */
     public synchronized void addMensajeParaEnviar(Mensaje msj){
         _colaSalida.add(msj);
+        if (!this.isAlive())
+            this.start();
     }
     
     public void run(){
-        do{
+        
             try {
-
                 // por cada mensaje al que se le deba dar salida, se le da.
-                if (!_colaSalida.isEmpty()){
+                while (!_colaSalida.isEmpty()){
                     Mensaje msj =_colaSalida.poll();       
                     _gestorDeRed.envia(msj, msj.destino(), msj.puerto());
                 }
@@ -155,7 +157,7 @@ public class GestorEgorilla extends Thread{
             }   catch (NetError ex) {
                     Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }while (true);
+        
     }
 
     /**

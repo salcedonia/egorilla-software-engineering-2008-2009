@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package gestorDeRed;
+package gestorDeRed.TCP;
 
+import gestorDeRed.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -39,7 +40,9 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         try {
             Socket s = new Socket(destino, puerto);
 
-            new ObjectOutputStream(s.getOutputStream()).writeObject(var);
+            Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
+                       
+            new ObjectOutputStream(s.getOutputStream()).writeObject(p);
 
         } catch (IOException ex) {
            throw new NetError("error al conectar con " + destino.getHostAddress() + ":" + puerto);
@@ -54,8 +57,10 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     public synchronized void envia(E var, String host, int port)  throws NetError{
         try {
             Socket s = new Socket(host, port);
-
-            new ObjectOutputStream(s.getOutputStream()).writeObject(var);
+            
+            Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
+                       
+            new ObjectOutputStream(s.getOutputStream()).writeObject(p);
 
         } catch (IOException ex) {
              throw new NetError("error al conectar con " + host  + ":" + port);
@@ -91,12 +96,25 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             while (true){
                Socket s = sock.accept();
                 try {
-                    E paquete = (E) new ObjectInputStream(s.getInputStream()).readObject();
-                    String ip = s.getInetAddress().getHostName();
-                    int  port = s.getPort();
+                    Paquete<E> paquete = (Paquete<E>) new ObjectInputStream(s.getInputStream()).readObject();
                     
+                    /***********************
+                     *    NOTA
+                     * 
+                     * la ip, se usa la publica,
+                     * que es la que se ve desde el lado
+                     * del que recibe, 
+                     * 
+                     * mientras que el puerto se usa el que 
+                     * nos dice el otro peer, no por el que
+                     * envio el fichero.
+                     * 
+                     ***********************/
+                    
+                    String ip = s.getInetAddress().getHostName();
+                   
                     for (Receptor<E> receptor : _receptores) {
-                       receptor.recibeMensaje(paquete,ip, port);
+                       receptor.recibeMensaje(paquete.getDatos(),ip,paquete.getPuertoRemite());
                 }
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
