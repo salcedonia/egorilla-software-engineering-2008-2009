@@ -25,8 +25,8 @@ public class Archivo implements Serializable {
     }
     
     public  Archivo(String nombre, String hash) {
-        _hash = hash;
-        _nombre = nombre;
+        setNombre(nombre);
+        setHash(hash);
     }
     
     /**
