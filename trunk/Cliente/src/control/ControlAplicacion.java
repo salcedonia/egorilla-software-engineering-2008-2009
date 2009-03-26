@@ -6,7 +6,11 @@ import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import gestorDeProtocolos.*;
+import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.PeticionConsulta;
+import mensajes.serverclient.PeticionDescarga;
+import mensajes.serverclient.RespuestaPeticionConsulta;
+import mensajes.serverclient.RespuestaPeticionDescarga;
 import tareas.DescargaArchivo;
 
 /**
@@ -22,7 +26,7 @@ public class ControlAplicacion {
     private static boolean _conectado = false;
     private static GestorCompartidos _gestorCompartidos = null;
     private static DatosCliente _datosCliente;
-    private static PeticionBusqueda _peticionConsulta;
+    private static PeticionConsulta _peticionConsulta;
     private static PeticionDescarga _peticionDescarga;
 
     /**
@@ -100,16 +104,14 @@ public class ControlAplicacion {
      *
      * @param cad nombre de fichero buscado
      */
-    public static RespuestaPeticionBusqueda consultar(String cad) {
+    public static RespuestaPeticionConsulta consultar(String cad) {
         
-        RespuestaPeticionBusqueda respuestaConsulta = null;
-        _peticionConsulta = new PeticionBusqueda();
+        RespuestaPeticionConsulta respuestaConsulta = null;
+        _peticionConsulta = new PeticionConsulta(cad);
 
-        _peticionConsulta.setCadenaBusqueda(cad);
-        
         try {
             _conexionPeer.enviarObjeto(_peticionConsulta);
-            respuestaConsulta = (RespuestaPeticionBusqueda) _conexionPeer.recibirObjeto();
+            respuestaConsulta = (RespuestaPeticionConsulta) _conexionPeer.recibirObjeto();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
