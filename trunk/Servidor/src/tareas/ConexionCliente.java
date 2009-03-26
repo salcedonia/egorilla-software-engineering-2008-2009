@@ -1,12 +1,12 @@
 package tareas;
 
 import datos.*;
-import gestorDeProtocolos.DatosCliente;
 import gestorDeRed.ConexionPeer;
 import java.io.IOException;
 import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mensajes.serverclient.DatosCliente;
 
 /**
  * Clase que implementa un hilo de ejecución que se expande por parte del 

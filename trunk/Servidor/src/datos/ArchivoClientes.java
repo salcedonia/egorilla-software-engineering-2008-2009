@@ -1,7 +1,7 @@
 package datos;
 
-import gestorDeProtocolos.DatosCliente;
 import java.util.*;
+import mensajes.serverclient.DatosCliente;
 import tareas.*;
 
 /**

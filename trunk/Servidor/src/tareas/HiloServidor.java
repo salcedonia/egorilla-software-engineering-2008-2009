@@ -4,10 +4,11 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import datos.*;
-import gestorDeProtocolos.DatosCliente;
-import gestorDeProtocolos.Peticion;
-import gestorDeProtocolos.PeticionBusqueda;
-import gestorDeProtocolos.PeticionDescarga;
+import mensajes.Mensaje;
+import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.PeticionConsulta;
+import mensajes.serverclient.PeticionDescarga;
+
 
 /**
  * Clase que implementa el servidor.
@@ -74,7 +75,7 @@ public class HiloServidor extends Thread {
         try {
             
             // tratamos el paquete recibido
-            procesarDatosRecibidos( (Peticion) conexionAceptada.getConexion().recibirObjeto(), conexionAceptada );
+            procesarDatosRecibidos( (Mensaje) conexionAceptada.getConexion().recibirObjeto(), conexionAceptada );
         } 
         catch (ClassNotFoundException ex) {
         
@@ -90,11 +91,11 @@ public class HiloServidor extends Thread {
      * @param conn la conexion con el cliente que solicito
      * @throws java.io.IOException puede haber un porblema si no se reconoce el paquete recibido.
      */
-    public synchronized void procesarDatosRecibidos(Peticion peticion, ConexionCliente conn) throws IOException {
+    public synchronized void procesarDatosRecibidos(Mensaje peticion, ConexionCliente conn) throws IOException {
 
-        switch (peticion.getVersion()) {
+        switch (peticion.getTipoMensaje()) {
 
-            case 1:
+            case DatosCliente:
 
                 // Tratamos la conexion creada
                 //ConexionCliente altaCliente = _conexionesEnEspera.lastElement();
@@ -108,18 +109,18 @@ public class HiloServidor extends Thread {
                 conn.start();
                 break;
 
-            case 2:
+            case PeticionConsulta:
 
                 // resuelve query
                 System.out.println("PeticionConsulta recibida desde cliente.");
                 //PeticionConsulta pConsulta
-                ProcesarPeticionBusqueda procesarConsulta = new ProcesarPeticionBusqueda( _archivoClientes, (PeticionBusqueda) peticion, conn );
+                ProcesarPeticionBusqueda procesarConsulta = new ProcesarPeticionBusqueda( _archivoClientes, (PeticionConsulta) peticion, conn );
                 procesarConsulta.start();
                 //QueryResolver qresolutor = new QueryResolver(_archivoClientes, (Query) peticion, conn);
                 
                 break;
 
-            case 3:
+            case PeticionDescarga:
 
                 // resuelve download order
                 System.out.println("PeticionDescarga recibida desde cliente.");
@@ -157,7 +158,7 @@ public class HiloServidor extends Thread {
                 try {
 
                     // leer un objeto, se hara timeout a los 10 milisegundos.
-                    Peticion pet = (Peticion) p.getConexion().recibirObjeto(10);
+                    Mensaje pet = (Mensaje) p.getConexion().recibirObjeto(10);
 
                     // y si el objeto es válido, se procesa.
                     //procesarDatosRecibidos(pet, p);
