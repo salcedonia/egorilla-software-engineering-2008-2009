@@ -2,8 +2,9 @@ package tareas;
 
 import java.io.IOException;
 import datos.*;
-import gestorDeProtocolos.PeticionBusqueda;
-import gestorDeProtocolos.RespuestaPeticionBusqueda;
+import mensajes.serverclient.PeticionConsulta;
+import mensajes.serverclient.RespuestaPeticionConsulta;
+
 
 /**
  * Esta clase implementa el hilo que se ejecuta para resolver una consulta.
@@ -16,7 +17,7 @@ public class ProcesarPeticionBusqueda extends Thread{
     // ATRIBUTOS
     private ArchivoClientes _listaGlobalArchivoClientes;
     private ConexionCliente _conexion;
-    private PeticionBusqueda _peticionBusqueda;
+    private PeticionConsulta _peticionBusqueda;
     
     /**
      * La instancia necesita los siguientes datos poder resolver las consultas.
@@ -25,7 +26,7 @@ public class ProcesarPeticionBusqueda extends Thread{
      * @param consulta la consulta recibida por el cliente.
      * @param conexion la conexion por la que contestar.
      */
-    public ProcesarPeticionBusqueda(ArchivoClientes lista, PeticionBusqueda consulta, ConexionCliente conexion){
+    public ProcesarPeticionBusqueda(ArchivoClientes lista, PeticionConsulta consulta, ConexionCliente conexion){
         _listaGlobalArchivoClientes = lista;
         _conexion = conexion;
         _peticionBusqueda = consulta;
@@ -52,7 +53,7 @@ public class ProcesarPeticionBusqueda extends Thread{
         // por ahora solo busca por nombre y tiene que ser exactamente igual
 
         // Compone respuesta
-        RespuestaPeticionBusqueda respuestaBusqueda = new RespuestaPeticionBusqueda( lista );
+        RespuestaPeticionConsulta respuestaBusqueda = new RespuestaPeticionConsulta( lista );
         
         try {
             // Enviar a cliente.

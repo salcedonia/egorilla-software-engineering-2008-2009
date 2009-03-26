@@ -2,9 +2,10 @@ package tareas;
 
 import java.io.IOException;
 import datos.*;
-import gestorDeProtocolos.DatosCliente;
-import gestorDeProtocolos.PeticionDescarga;
-import gestorDeProtocolos.RespuestaPeticionDescarga;
+import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.PeticionDescarga;
+import mensajes.serverclient.RespuestaPeticionDescarga;
+
 
 /**
  * Realiza la busqueda de todos los clientes que tienen el fichero indicado
