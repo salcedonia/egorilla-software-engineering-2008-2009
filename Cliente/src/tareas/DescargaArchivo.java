@@ -1,13 +1,17 @@
 package tareas;
 
 import gestorDeFicheros.ParteDeArchivo;
-import gestorDeProtocolos.RespuestaPeticionDescarga;
+//import gestorDeProtocolos.RespuestaPeticionDescarga;
+
+import gestorDeRed.GestorDeRed;
+
 import gestorDeRed.ConexionPeer;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mensajes.serverclient.RespuestaPeticionDescarga;
 
 /**
  * Hilo de ejecucion particular para la descarga de un archivo entre varios

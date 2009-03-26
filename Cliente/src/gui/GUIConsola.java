@@ -2,9 +2,9 @@ package gui;
 
 import control.ControlAplicacion;
 import datos.Archivo;
-import gestorDeProtocolos.DatosCliente;
-import gestorDeProtocolos.RespuestaPeticionBusqueda;
-import gestorDeProtocolos.RespuestaPeticionDescarga;
+import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.RespuestaPeticionConsulta;
+import mensajes.serverclient.RespuestaPeticionDescarga;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -67,7 +67,7 @@ public class GUIConsola {
                     System.out.print("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
                     cad = br.readLine();
                     //creo q hay que quitar el retorno de carro
-                    RespuestaPeticionBusqueda respuestaConsulta = ControlAplicacion.consultar(cad);
+                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
                     if (respuestaConsulta.getLista().length > 0) {
                         System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
                         insertarBusquedas(respuestaConsulta.getLista());
