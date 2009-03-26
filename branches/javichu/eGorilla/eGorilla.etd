@@ -22,6 +22,7 @@
 
 <UML:Package xmi.id="DCE.5C5C09C9-22B1-9E44-BEFD-F1FF21ACA5CE" name="Analisis" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:Element.ownedElement>
 <UML:Package xmi.id="DCE.434837CA-5B1D-E712-5A98-E0A6FBBF856A" name="Servidor_eGorilla" owner="DCE.5C5C09C9-22B1-9E44-BEFD-F1FF21ACA5CE"><UML:Element.presentation>
+
 </UML:Element.presentation><UML:Element.ownedElement>
 <UML:UseCase xmi.id="DCE.5F5A0066-66B0-A82B-3C9E-08F02A44BB24" name="RealizarPeticiones" owner="DCE.434837CA-5B1D-E712-5A98-E0A6FBBF856A" supplierDependency="DCE.CD581569-D315-3C51-1383-7174EBBF6F7C" associationEnd="DCE.BB58B4EC-D307-8E09-20DA-769C6A6618DB"><UML:Element.presentation>
 </UML:Element.presentation><UML:Element.ownedElement>
@@ -73,6 +74,8 @@
 <UML:Multiplicity xmi.id="DCE.CAC552AB-372F-F67C-B942-3B839251CD6E"/></UML:TypedElement.multiplicity></UML:AssociationEnd></UML:Association.end><UML:Element.presentation>
 </UML:Element.presentation></UML:Association>
 <UML:Package xmi.id="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371" name="Cliente_eGorilla" owner="DCE.5C5C09C9-22B1-9E44-BEFD-F1FF21ACA5CE"><UML:Element.presentation>
+
+
 </UML:Element.presentation><UML:Element.ownedElement>
 <UML:UseCase xmi.id="DCE.FD867FAB-C3DF-43D5-7EAE-B1588C66D5A8" name="ConectarServidor" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371" associationEnd="DCE.541E9F8F-6FD2-2FAF-3CA2-3840DD0FD045 DCE.FF4134D1-C87B-C223-3547-18151F7989A5"><UML:Element.presentation>
 </UML:Element.presentation></UML:UseCase>
@@ -91,7 +94,38 @@
 <UML:UseCase xmi.id="DCE.7EBE9F1B-CE86-6F5F-38B6-FA9DCFBB3107" name="ConsultarAyuda" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371" associationEnd="DCE.27B38BB3-236F-52B7-EC24-D05DE81BC5F6"><UML:Element.presentation>
 </UML:Element.presentation></UML:UseCase>
 <UML:UseCase xmi.id="DCE.E77AD564-06CF-A7E3-6DFD-A349BC06847D" name="ConfigurarCliente_eGorilla" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371" associationEnd="DCE.8D9B735D-C0F2-1AAC-882F-5BE474A34414"><UML:Element.presentation>
-</UML:Element.presentation></UML:UseCase></UML:Element.ownedElement></UML:Package>
+</UML:Element.presentation></UML:UseCase>
+<UML:Package xmi.id="DCE.2F61B96F-17CF-D153-7769-E142E08EE3B6" name="GUI" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+<UML:Package xmi.id="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" name="GestorDeConfiguracion" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+<UML:Package xmi.id="DCE.07F06A06-EC2B-405E-798E-3C33E2584576" name="GestorDeEstadisticas" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+
+<UML:Package xmi.id="DCE.32273024-307A-ADA2-6935-20FAD1BD6470" name="GestorDeArchivos" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
+
+
+</UML:Element.presentation><UML:Element.ownedElement>
+
+
+<UML:Class xmi.id="DCE.51AD74FA-BD97-2664-BB42-37343ED857BE" name="Fragmentador" owner="DCE.32273024-307A-ADA2-6935-20FAD1BD6470"><UML:Element.ownedElement>
+</UML:Element.ownedElement><UML:Element.presentation>
+
+
+</UML:Element.presentation></UML:Class>
+
+<UML:Class xmi.id="DCE.081E3269-2260-02A3-F531-37E7EE09F30B" name="Desfragmentador" owner="DCE.32273024-307A-ADA2-6935-20FAD1BD6470"><UML:Element.ownedElement>
+</UML:Element.ownedElement><UML:Element.presentation>
+
+
+
+</UML:Element.presentation></UML:Class>
+<UML:Interface xmi.id="DCE.18F37859-89C1-5354-A880-341B78AA10BB" name="GestorArchivo" isAbstract="true" owner="DCE.32273024-307A-ADA2-6935-20FAD1BD6470" appliedStereotype="__uri_.\eGorilla.etup#//*[@xmi.id=&quot;DCE.286EE0AA-1EBC-7E72-EC49-2E11EF810FB0&quot;]"><UML:Element.presentation>
+
+
+</UML:Element.presentation></UML:Interface></UML:Element.ownedElement></UML:Package>
+<UML:Package xmi.id="DCE.F412535C-4441-8358-2A0F-99CA1D9EAD62" name="ControlAplicacion" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package></UML:Element.ownedElement></UML:Package>
 
 
 
@@ -641,5 +675,24 @@
 <UML:Comment.body>DSS_CUS_ResponderPeticiones</UML:Comment.body></UML:Comment></UML:Element.ownedElement><UML:InteractionFragment.gateConnector>
 <UML:InterGateConnector xmi.id="DCE.84309AC8-924C-9675-1086-2C3DF4FB68D2" fromGate="DCE.2022D2AB-2308-203C-6752-7AAA05C9E9A5" toGate="DCE.5F084C8F-A0AB-8F00-9B13-4380EC80B749" fragment="DCE.120DDCE3-A40F-CE0A-23BE-2A2D9B5C59C2"/></UML:InteractionFragment.gateConnector><UML:Interaction.message><UML:Message xmi.id="DCE.E896CF92-E864-04BE-4787-ED46C6C0A0E7" sendEvent="DCE.824C7F2D-05F3-9EEC-44B1-C3AA15B7FF5D" receiveEvent="DCE.6EE8779C-1974-9467-8AA3-A4EC86E69A50" initiatingAction="DCE.B40AB5DF-ED8D-8684-ACE5-AE0375017E09" interaction="DCE.120DDCE3-A40F-CE0A-23BE-2A2D9B5C59C2" kind="asynchronous" name="respuesta(infoSalida)"><UML:Element.presentation>
 
-</UML:Element.presentation></UML:Message></UML:Interaction.message></UML:Interaction></UML:Element.ownedElement></UML:Package>
-<UML:Package xmi.id="DCE.A1894A66-3BA6-707B-42B4-EE67D28AA0B1" name="Diseño" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/></UML:Element.ownedElement></UML:Project></XMI.content> </XMI>
+</UML:Element.presentation></UML:Message></UML:Interaction.message></UML:Interaction>
+<UML:Package xmi.id="DCE.B8053B94-433B-6ABC-7ADB-86130984DE86" name="Comunicaciones" owner="DCE.5C5C09C9-22B1-9E44-BEFD-F1FF21ACA5CE"><UML:Element.presentation>
+
+</UML:Element.presentation><UML:Element.ownedElement>
+<UML:Package xmi.id="DCE.44C4629C-B489-53A7-02FC-453844334951" name="GestorDeRed" owner="DCE.B8053B94-433B-6ABC-7ADB-86130984DE86"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+<UML:Package xmi.id="DCE.F9552A2A-4FDD-5BA6-AB00-5D5AD5EF32E2" name="GestorDeProtocolos" owner="DCE.B8053B94-433B-6ABC-7ADB-86130984DE86"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+<UML:Package xmi.id="DCE.5BC8DC4A-6D65-50F2-4BEE-BAB9C92A4C61" name="Datos" owner="DCE.B8053B94-433B-6ABC-7ADB-86130984DE86"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package>
+<UML:Package xmi.id="DCE.21412C41-541F-1D0E-94CB-AB0248C01D33" name="Paquetes" owner="DCE.B8053B94-433B-6ABC-7ADB-86130984DE86"><UML:Element.presentation>
+</UML:Element.presentation></UML:Package></UML:Element.ownedElement></UML:Package>
+
+
+</UML:Element.ownedElement></UML:Package>
+<UML:Package xmi.id="DCE.A1894A66-3BA6-707B-42B4-EE67D28AA0B1" name="Diseño" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/>
+<UML:DataType xmi.id="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" name="void" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/></UML:Element.ownedElement><UML:Package.packageImport>
+<UML:PackageImport xmi.id="DCE.493D23F3-FDF6-E23E-C325-0B11FCE44F95" importingPackage="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:PackageImport.importedPackage>
+<UML:Profile xmi.id="DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9" name="Unnamed" isCloned="true" href=".\eGorilla.etup#//*[@xmi.id=&apos;DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9&apos;]" isDirty="false"/></UML:PackageImport.importedPackage><UML:Element.ownedElement>
+<UML:TaggedValue xmi.id="DCE.CBABD540-737C-3D67-C286-96E8A1F391F5" owner="DCE.493D23F3-FDF6-E23E-C325-0B11FCE44F95" name="autoCreated">
+<UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement></UML:PackageImport></UML:Package.packageImport></UML:Project></XMI.content> </XMI>
