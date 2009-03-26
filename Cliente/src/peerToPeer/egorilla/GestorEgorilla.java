@@ -79,26 +79,26 @@ public class GestorEgorilla extends Thread{
     //   this.start();
     }
 
-    /**
-     * se da la orden de comenzar una descarga.
-     * esto dispara la colsulta de peers al servidor y 
-     * despues comenzar�n las negociaciones con estos
-     * @param a archivo a descargar
-     */
-    public void nuevaDescarga(Archivo a){
-        // se realiza la peticion de descarga al servidor
-        
-        Mensaje  msj = new PeticionDescarga(a._hash);
-        msj.setDestino(_serverIP, _serverPort);
-        
-        // si hemos conectado antes...
-        // lo envia al servidor.
-        if (!_conectado){
-            // TODO: notificar error
-        }
-        else
-            this.addMensajeParaEnviar(msj);      
-    } 
+//    /**
+//     * se da la orden de comenzar una descarga.
+//     * esto dispara la colsulta de peers al servidor y 
+//     * despues comenzar�n las negociaciones con estos
+//     * @param a archivo a descargar
+//     */
+//    public void nuevaDescarga(Archivo a){
+//        // se realiza la peticion de descarga al servidor
+//        
+//        Mensaje  msj = new PeticionDescarga(a._hash);
+//        msj.setDestino(_serverIP, _serverPort);
+//        
+//        // si hemos conectado antes...
+//        // lo envia al servidor.
+//        if (!_conectado){
+//            // TODO: notificar error
+//        }
+//        else
+//            this.addMensajeParaEnviar(msj);      
+//    } 
     
     /**
      * se realiza una consulta, el m�todo es asincrono, as� que no espera respuesta
@@ -135,6 +135,17 @@ public class GestorEgorilla extends Thread{
         //TODO:
     }
             
+    public void nuevaDescarga(Archivo a, DatosCliente[] peers){
+        // tomo nota de estos clientes. 
+        
+        // se les envia HolaQuiero a cada uno de ellos
+        for (DatosCliente cliente : peers) {
+            HolaQuiero hola = new HolaQuiero(a);
+            hola.setDestino(cliente.getIP(), cliente.getPuertoEscucha());
+            _colaSalida.add(hola);
+        }
+    }
+    
     /**
      * se encola un mensaje para darle salida.
      * los mensajes se encolan primero para poder controlar el flujo.

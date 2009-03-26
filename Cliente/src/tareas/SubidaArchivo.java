@@ -13,6 +13,7 @@ import java.util.logging.Logger;
  *
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
  */
+@Deprecated
 public class SubidaArchivo extends Thread {
     
     // ATRIBUTOS
