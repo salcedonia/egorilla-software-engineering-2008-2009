@@ -45,7 +45,9 @@ public class ProcesarPeticionDescarga extends Thread {
         DatosCliente[] propietarios = _listaGlobal.getPropietarios( _peticionDescarga.getHash() );
         
         // Compone respuesta
-        RespuestaPeticionDescarga respuesta = new RespuestaPeticionDescarga( propietarios );
+        RespuestaPeticionDescarga respuesta = new RespuestaPeticionDescarga(_peticionDescarga.getNombre(),
+                                                                            _peticionDescarga.getHash(),
+                                                                            propietarios );
         
         // Envía la respuesta al cliente que la solicitó
         try {
