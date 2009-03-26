@@ -11,7 +11,7 @@ import mensajes.TipoMensaje;
 
 /*****************************************************************************/
 /**
- * Clase que implementa los métodos necesarios para la gestión de las consultas
+ * Clase que implementa los mï¿½todos necesarios para la gestiï¿½n de las consultas
  * de descarga que los clientes realizan al servidor.
  * 
  * @author Pitidecaner
@@ -21,6 +21,7 @@ public class PeticionDescarga implements Mensaje, Serializable{
     
     // ATRIBUTOS
     private String _hash;
+    private String _nombre;
 
 /*****************************************************************************/
     /**
@@ -28,7 +29,8 @@ public class PeticionDescarga implements Mensaje, Serializable{
      * 
      * @param h Hash asociado.
      */
-    public PeticionDescarga(String h){
+    public PeticionDescarga(String n,String h){
+        _nombre = n;
         _hash = h;
     }
     
@@ -53,6 +55,14 @@ public class PeticionDescarga implements Mensaje, Serializable{
         _hash = hash;
     }
 
+    public String getNombre(){
+        return _nombre;
+    }
+    
+    public void setNombre(String nmb){
+        _nombre = nmb;
+    }
+    
     public TipoMensaje getTipoMensaje() {
         return TipoMensaje.PeticionDescarga;
     }

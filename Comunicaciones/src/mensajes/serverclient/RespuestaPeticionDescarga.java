@@ -33,7 +33,9 @@ public class RespuestaPeticionDescarga implements Mensaje, Serializable{
      * 
      * @param lista Lista de clientes asociados.
      */
-    public RespuestaPeticionDescarga(DatosCliente[] lista) {
+    public RespuestaPeticionDescarga(String nmb, String h, DatosCliente[] lista) {
+        nombre = nmb;
+        hash = h;
        _lista = lista;
     }
 
