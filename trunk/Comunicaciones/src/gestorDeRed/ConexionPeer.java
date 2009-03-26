@@ -13,6 +13,7 @@ import java.net.Socket;
  * 
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
  */
+@Deprecated 
 public class ConexionPeer {
 
     // ATRIBUTOS
