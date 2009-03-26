@@ -19,6 +19,7 @@ import mensajes.serverclient.RespuestaPeticionDescarga;
  * 
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
  */
+@Deprecated
 public class DescargaArchivo extends Thread {
 
     // ATRIBUTOS

@@ -77,9 +77,10 @@ public class GUIConsola {
                     break;
                 case '4':
                     System.out.print("\nMD5 del fichero a descargar: ");
-                    cad = br.readLine();
-                    //creo q hay que quitar el retorno de carro
-                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar(cad);
+                    cad = br.readLine();       
+             
+                    // TODO: buscar el nmb de este fichero.
+                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
                     if (respuestaDescarga.getLista().length > 0) {
                         System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
                         insertarDescargas(respuestaDescarga.getLista());

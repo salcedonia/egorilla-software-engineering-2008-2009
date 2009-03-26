@@ -1,16 +1,22 @@
 package control;
 
+import datos.Archivo;
 import gestorDeRed.ConexionPeer;
 import gestorDeFicheros.GestorCompartidos;
+import gestorDeRed.GestorDeRed;
+import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mensajes.Mensaje;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import mensajes.serverclient.RespuestaPeticionDescarga;
+import peerToPeer.descargas.GestorDescargas;
+import peerToPeer.egorilla.GestorEgorilla;
 import tareas.DescargaArchivo;
 
 /**
@@ -29,6 +35,12 @@ public class ControlAplicacion {
     private static PeticionConsulta _peticionConsulta;
     private static PeticionDescarga _peticionDescarga;
 
+    
+    private static GestorDeRed<Mensaje> _red = new GestorDeRedTCPimpl<Mensaje>(4545);
+    private static GestorDescargas      _descargas = new GestorDescargas();
+    private static GestorEgorilla       _egorilla = new GestorEgorilla(_descargas, _red);
+    
+    
     /**
      * 
      */
@@ -72,7 +84,7 @@ public class ControlAplicacion {
 
         _datosCliente = new DatosCliente();
         _datosCliente.setNombreUsuario("dePruebas");
-        _datosCliente.setPuertoEscucha(4000);
+        _datosCliente.setPuertoEscucha(4545);
         System.out.println("Envio nombre-user <" + _datosCliente.getNombreUsuario() + "> y su port-Listen <" + _datosCliente.getPuertoEscucha() + ">");
         _conexionPeer.enviarObjeto(_datosCliente);
 
@@ -127,9 +139,9 @@ public class ControlAplicacion {
      * @param hash El identificador unico de este fichero.
      */
     /*CAMBIADO DEL VOID A ...*/
-    public static RespuestaPeticionDescarga bajar(String hash) {
+    public static RespuestaPeticionDescarga bajar(String nmb,String hash) {
 
-        _peticionDescarga = new PeticionDescarga(hash);
+        _peticionDescarga = new PeticionDescarga(nmb, hash);
         RespuestaPeticionDescarga respuestaDescarga = null;
         try {
             _conexionPeer.enviarObjeto(_peticionDescarga);
@@ -141,8 +153,13 @@ public class ControlAplicacion {
             Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (respuestaDescarga != null) {
-            DescargaArchivo d = new DescargaArchivo(respuestaDescarga, hash);
-            d.start();
+           
+            Archivo a = new Archivo(respuestaDescarga.nombre,respuestaDescarga.hash);
+            
+            _egorilla.nuevaDescarga(a,respuestaDescarga.getLista());
+                       
+            //DescargaArchivo d = new DescargaArchivo(respuestaDescarga, hash);
+            //d.start();
         }
         return respuestaDescarga;
     }
