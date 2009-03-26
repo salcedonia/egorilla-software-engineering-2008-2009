@@ -8,6 +8,7 @@ package peerToPeer.egorilla;
 import datos.Archivo;
 import datos.Fragmento;
 import gestorDeRed.Receptor;
+import java.util.ArrayList;
 import mensajes.Mensaje;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
@@ -44,7 +45,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
      * @param gE gestor eGorilla
      * @param gD bestor de descargas
      */
-    ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD) {
+    public ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD) {
        _gestor = gE;
        _descargas = gD;
     }
@@ -92,15 +93,17 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
             case HolaQuiero:
                 
                 HolaQuiero quiero = (HolaQuiero) msj;
-                
-                // si tengo el fichero
-                if (_descargas.puedoBajar(quiero.hash)){
-                
-                    
+                     
                 Tengo resp = new Tengo();
                 resp.hash = quiero.hash;
                 resp.nombre = quiero.nombre;  //TODO: deberia poner el nombre que tengo yo para este fichero
                     
+                
+                // si tengo el fichero
+                // TODO: hay que buscar entre las descargas pendientes y los ficheros
+                // completos
+                if (_descargas.puedoBajar(quiero.hash)){
+                
                 // recupero fragmentos
                 resp.fragmentos =  _descargas.getFragmentos(quiero.hash);
                 
@@ -111,7 +114,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 }
                 else{
                     // no lo tengo, envio una estructura vacia
-                    
+                    resp.fragmentos = new ArrayList<Fragmento>();
                 }
                 break;
                 
@@ -126,6 +129,10 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 respuesta.hash = reciv.hash;
                 respuesta.nombre = reciv.nombre;
+                
+                // si el Tengo viene vacio, se acaba aqui la ejecución
+                if((reciv.fragmentos == null)||(reciv.fragmentos.isEmpty()))
+                    return;
                 
                 // comprobar al menos que no estemos hablando un conjunto vacio
                 // en ese caso es que el peer no tiene el archivo que buscamos

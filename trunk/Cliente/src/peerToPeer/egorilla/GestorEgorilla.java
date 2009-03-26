@@ -10,8 +10,10 @@ import datos.Fragmento;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
@@ -142,7 +144,8 @@ public class GestorEgorilla extends Thread{
         for (DatosCliente cliente : peers) {
             HolaQuiero hola = new HolaQuiero(a);
             hola.setDestino(cliente.getIP(), cliente.getPuertoEscucha());
-            _colaSalida.add(hola);
+            addMensajeParaEnviar(hola);
+            //_colaSalida.add(hola);
         }
     }
     
@@ -168,9 +171,9 @@ public class GestorEgorilla extends Thread{
                 }
                 //this.wait();
             }   catch (NetError ex) {
+                // TODO: gestor de errores. hay no se ha podido hablar con quien dices
                     Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
     }
 
     /**
@@ -186,9 +189,18 @@ public class GestorEgorilla extends Thread{
         }
         _gestorDescargas.altaFichero(a);
         
+        // antes de nada, debo mirar si estoy entre los propietarios del
+        // fichero, no quiero hablar conmigo mismo
+        Vector<DatosCliente> sinMi = new Vector<DatosCliente>();
+        for (DatosCliente cliente : lista) {
+            // si no soy yo lo agrego 
+            sinMi.add(cliente);
+        }
         
         // ahora se envia el HolaQuiero a todos los clientes que lo tienen
-        for (DatosCliente cliente : lista) {
+        for (Iterator<DatosCliente> it = sinMi.iterator(); it.hasNext();) {
+            DatosCliente cliente = it.next();
+         
             HolaQuiero q = new HolaQuiero(a);
             q.setDestino(cliente.getIP(),cliente.getPuertoEscucha());
             this.addMensajeParaEnviar(q);

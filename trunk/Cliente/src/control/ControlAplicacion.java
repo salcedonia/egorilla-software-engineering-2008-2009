@@ -17,6 +17,7 @@ import mensajes.serverclient.RespuestaPeticionConsulta;
 import mensajes.serverclient.RespuestaPeticionDescarga;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
+import peerToPeer.egorilla.ServidorP2PEgorilla;
 import tareas.DescargaArchivo;
 
 /**
@@ -92,6 +93,10 @@ public class ControlAplicacion {
         System.out.println("Se mando info de <" + _gestorCompartidos.getArchivosCompartidos().size() + "> archivos compartidos");
         _conexionPeer.enviarObjeto(_gestorCompartidos.getArchivosCompartidos());
 
+        // ademas, debemos activar el p2p
+        _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
+        _red.comienzaEscucha();
+        
         _conectado = true;
     }
 
@@ -105,6 +110,9 @@ public class ControlAplicacion {
         } catch (IOException ex) {
             // nothing
         }
+        
+        // tambien acabamos con el p2p
+        _red.terminaEscucha();
         _conectado = false;
     }
 
