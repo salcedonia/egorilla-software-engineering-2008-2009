@@ -23,7 +23,7 @@ public class FicheroPropiedades {
      * Se inicializa el objeto con el nombre del fichero de propiedades especificado. 
      * Además se intenta leer dicho fichero y cargar las propiedades que contiene dentro del objeto (en la variable propiedades)
      */
-    public FicheroPropiedades(String sNomFicheroProps) throws ControlConfiguracionException {
+    public FicheroPropiedades(String sNomFicheroProps) throws ControlConfiguracionClienteException {
         this.sNombreFicheroProp = sNomFicheroProps;
         this.propiedades = new Properties();
         cargarFicheroPropiedades();
@@ -34,26 +34,26 @@ public class FicheroPropiedades {
      * Las propiedades que se leen del fichero SE AÑADEN Y SOBREESCRIBEN las que ya existían en el properties (caso de que hubiera
      * alguna antes)
      */
-    protected void cargarFicheroPropiedades() throws ControlConfiguracionException {
+    protected void cargarFicheroPropiedades() throws ControlConfiguracionClienteException {
         try {
             FileInputStream fichero = new FileInputStream(this.sNombreFicheroProp);
             this.propiedades.load(fichero);
             fichero.close();
         } catch (IOException ioe) {
-            throw new ControlConfiguracionException();
+            throw new ControlConfiguracionClienteException("No se ha podido cargar el fichero" + this.sNombreFicheroProp, ioe);
         }
     }
 
     /**
      * Vuelca las propiedades en memoria (en el objeto properties asociado) al fichero asociado (en disco).
      */
-    protected void grabarFicheroPropiedades() throws ControlConfiguracionException {
+    protected void grabarFicheroPropiedades() throws ControlConfiguracionClienteException {
         try {
             FileOutputStream fichero = new FileOutputStream(this.sNombreFicheroProp);
             this.propiedades.store(fichero, "");
             fichero.close();
         } catch (IOException ioe) {
-            throw new ControlConfiguracionException();
+            throw new ControlConfiguracionClienteException("No se ha podido grabar en el fichero" + this.sNombreFicheroProp, ioe);
         }
     }
 
@@ -76,9 +76,9 @@ public class FicheroPropiedades {
      * y en el disco (fichero asociado).
      * @param sClave
      * @param sValor
-     * @throws gestorDeConfiguracion.ControlConfiguracionException
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
-    public void establecerPropiedad(String sClave, String sValor) throws ControlConfiguracionException {
+    public void establecerPropiedad(String sClave, String sValor) throws ControlConfiguracionClienteException {
         this.propiedades.setProperty(sClave, sValor);
         grabarFicheroPropiedades();
     }
@@ -87,9 +87,9 @@ public class FicheroPropiedades {
      * Establece los valores para el conjunto de propiedades recibido como parámetro (no tienen porqué estar
      * todas), y lo actualiza en memoria (objeto properties asociado) y en el disco (fichero asociado).
      * @param propiedades: objeto Properties que contiene claves y sus valores.
-     * @throws gestorDeConfiguracion.ControlConfiguracionException
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
-    public void establecerConjuntoPropiedades(Properties propiedades) throws ControlConfiguracionException {
+    public void establecerConjuntoPropiedades(Properties propiedades) throws ControlConfiguracionClienteException {
         for (Enumeration e = propiedades.propertyNames(); e.hasMoreElements() ; ) {
             // Obtenemos el objeto
             Object obj = e.nextElement();
