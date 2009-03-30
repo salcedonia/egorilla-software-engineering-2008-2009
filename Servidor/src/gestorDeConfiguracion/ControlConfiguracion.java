@@ -3,6 +3,7 @@ package gestorDeConfiguracion;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.Properties;
 
 /**
@@ -17,12 +18,19 @@ import java.util.Properties;
  */
 public class ControlConfiguracion{   
     
-    // ATRIBUTOS
-    static private Properties _properties;
-    static private File       _file;   
-    static private int[] _versionpeticion;
+    private FicheroConfiguracionServidor fich;
+    static private int[] _versionpeticion; 
     static private int   _puerto;
+    static private InetAddress _dirIP;
+   
     
+   
+    
+    // ATRIBUTOS
+    
+    
+
+
     /**
      * Para inicializar esta clase se lee el fichero de configuración indicado.
      * 
@@ -30,31 +38,35 @@ public class ControlConfiguracion{
      * @throws java.io.IOException Se lanza en caso de no encontrar el fichero de 
      * configuración indicado.
      */
-    static public void leeConfig(File f) throws IOException {
+    /*static*/ public void leeConfig(String fichero) throws IOException, ControlConfiguracionServidorException {
 
         // Cargamos el fichero de properties
-        _properties = new Properties();
-        _properties.load(new FileInputStream(f));
-
-        /*
-         * Primer parámetro: Versión del peticion.
-         * 
-         * Consistirá en una lista con todas las versiones del peticion admitidos 
-         * por el servidor separados por : , ó ;
-         * Las diferentes versiones se indicarán con un número entero.
-         */
-        String tmp = _properties.getProperty("Versionpeticion");
+        this.fich=new FicheroConfiguracionServidor(fichero);
+        
+        String tmp = this.fich.getProperty("Versionpeticion");
         String[] split = tmp.split(":,;");
         _versionpeticion = new int[split.length];
         for (int i = 0; i < split.length; i++) {
             _versionpeticion[i] = Integer.parseInt(split[i]);
         }
         
+
+         /**   
+         * Primer parámetro: Versión del peticion.
+         * 
+         * Consistirá en una lista con todas las versiones del peticion admitidos 
+         * por el servidor separados por : , ó ;
+         * Las diferentes versiones se indicarán con un número entero.
+         */
+       
+       
         /*
          * Puerto por el que escucha el servidor las conexiones de los clientes.
          * Será un número entero.
          */
-        _puerto = Integer.parseInt(_properties.getProperty("puerto"));
+        _puerto = Integer.parseInt(this.fich.getProperty("puerto"));
+        _dirIP= InetAddress.getLocalHost();
+        this.fich.setProperty("direccionIP",_dirIP.toString());
     }
 
 //    /**
@@ -97,5 +109,9 @@ public class ControlConfiguracion{
     static int getPuerto() {
         
         return _puerto;
+    }
+    static InetAddress getDirIP()
+    {
+        return _dirIP;
     }
 }
