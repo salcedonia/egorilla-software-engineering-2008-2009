@@ -94,7 +94,7 @@ public class ControlConfiguracion{
      * 
      * @return La versión del peticion que se está utilizando.
      */
-    static int[] getVersion(){
+    static public int[] getVersion(){
         
         return _versionpeticion;
     }
@@ -106,11 +106,11 @@ public class ControlConfiguracion{
      * @return El número entero que identifica al puerto por el que escucha el 
      * servidor las conexiones de los clientes.
      */
-    static int getPuerto() {
+    static public int getPuerto() {
         
         return _puerto;
     }
-    static InetAddress getDirIP()
+    static public InetAddress getDirIP()
     {
         return _dirIP;
     }

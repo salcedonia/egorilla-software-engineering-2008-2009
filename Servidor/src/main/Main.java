@@ -1,5 +1,7 @@
 package main;
 
+import gestorDeConfiguracion.ControlConfiguracion;
+import gestorDeConfiguracion.ControlConfiguracionServidorException;
 import tareas.HiloServidor;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,13 +20,16 @@ public class Main {
      * 
      * @param args Argumentos de la línea de comandos.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ControlConfiguracionServidorException {
         
         HiloServidor servidor;
         
         try {        
             // Creamos el servidor
-            servidor = new HiloServidor(6969);
+            ControlConfiguracion config= new ControlConfiguracion();
+            config.leeConfig("Configuracion.properties");
+            int puerto=config.getPuerto();
+            servidor = new HiloServidor(puerto);
         } 
         catch (IOException ex) {
         

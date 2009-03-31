@@ -9,7 +9,7 @@ package gestorDeConfiguracion;
  * Control de las excepciones posibles en la clase FicheroConfiguracionServidor
  * @author David
  */
-class ControlConfiguracionServidorException extends Exception {
+public class ControlConfiguracionServidorException extends Exception {
 
     public ControlConfiguracionServidorException (Exception e){
         super(e);
