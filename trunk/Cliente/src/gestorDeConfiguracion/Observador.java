@@ -6,8 +6,8 @@
 package gestorDeConfiguracion;
 
 /**
- * Interfaz general que define la interfaz de un observador siguiendo el patrón
- * del mismo nombre.
+ * Interfaz general de un observador siguiendo el patrón Observador
+ * (el objeto observado lo denomino "el Sujeto").
  * @author F. Javier Sánchez Pardo
  */
 public interface Observador {
