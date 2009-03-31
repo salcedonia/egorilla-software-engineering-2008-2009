@@ -8,20 +8,37 @@ import java.util.Properties;
  * Implementación mediante un patrón Singleton.
  * @author Javier Sánchez Pardo
  */
-public class ControlConfiguracionCliente {
+public class ControlConfiguracionCliente implements Sujeto{
 
     private static ControlConfiguracionCliente _instancia = null;
-    //Variable que contiene el nombre del fichero de propiedades.
+    //Variables con el nombre del fichero de propiedades principal y el de propiedades
+    //por defecto.
     FicheroPropiedades oFicheroPropsPpal;
     FicheroPropiedades oFicheroPropsxDefecto;
 
+    /**
+     * 
+     * @param sNomFicheroPropsPpal: Nombre del fichero principal que contiene la
+     *        configuración principal (valores de propiedades).
+     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuración
+     *        por defecto (valores de propiedades).
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     */   
     protected ControlConfiguracionCliente(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto) throws ControlConfiguracionClienteException {
         super();
         oFicheroPropsPpal = new FicheroPropiedades(sNomFicheroPropsPpal);
         oFicheroPropsxDefecto = new FicheroPropiedades(sNomFicheroPropsxDefecto);
     }
-    ;
 
+    /**
+     * Obtiene la única instancia de esta clase que se permite crear (patrón Singleton)
+     * @param sNomFicheroPropsPpal : Nombre del fichero principal que contiene la
+     *        configuración principal (valores de propiedades).
+     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuración
+     *        por defecto (valores de propiedades).
+     * @return única instancia de esta clase
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     */
     public static ControlConfiguracionCliente obtenerInstancia(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto) throws ControlConfiguracionClienteException {
         if (_instancia == null) {
             _instancia = new ControlConfiguracionCliente(sNomFicheroPropsPpal, sNomFicheroPropsxDefecto);
@@ -78,6 +95,18 @@ public class ControlConfiguracionCliente {
      */
     public void establecerConfiguracion(Properties propiedades) throws ControlConfiguracionClienteException {
         oFicheroPropsPpal.establecerConjuntoPropiedades(propiedades);
+    }
+
+    public void añadirObservador(Observador obs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void quitarObservador(Observador obs) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void notificarObservadores() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
  
 }
