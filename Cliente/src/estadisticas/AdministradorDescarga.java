@@ -43,7 +43,8 @@ class AdministradorDescarga extends ModuloTrafico {
     }
 
     public void llegadaFichero(int cantidad) {
-        ficherosSesion += cantidad;
+        if (cantidad>0)
+            ficherosSesion += cantidad;
     }
 
         public void inicioSesion() {

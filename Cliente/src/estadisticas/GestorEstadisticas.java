@@ -12,19 +12,49 @@ import java.util.List;
  * datos recibidos y enviados para ofrecerlo a quien se los solicites como por
  * ejemplo la GUI. </p>
  * Datos almacenados:
- * Se dispondras de dos lineas de datos, una que ira recogiendo los datos globales de todas
- * las sesiones y otra que recogera los datos de la sesion actual.
+ * <ul>
+ *   <li>Se dispondras la información de los datos enviados y los datos descargados así como 
+ *      la velocidades de subida y descarga.</li>
+ *   <li>Para las velocidades se ofrecera los datos de la última hora en periodos de medio minuto
+ *       por lo tanto estas variables se mostraran de forma discreta aunque se tendra en cuenta todo
+ *       el rango de tiempo. La media de velocidades se calculara por defecto para periodos de 5 minutos;
+ *   </li>   
+ * </ul>
+ * Para el uso del modulo de estadisticas :
+ *  
+ *  <ul>
+ *   <li> 
+ *       Creamos una pedimos una instancia del modulo instancia = GestorEstadisticas.getInstance()</li>
+ *   <li>
+ *       Iniciamos sesion:    instancia.inicioSesion();
+ *   </li>   
+ *   <li>
+ *       Al finalizar cerramos: instancia.cerrar() 
+ *   <li>   
+ *  </ul>
+ *   Es importante realizar el último paso de cerrar las estadisticas ya que con ello liberamos
+ *   los recursos y hacemos persistente los datos,
  * @author Qiang
  */
 public class  GestorEstadisticas  implements ObservadorDatos {
     
      
-    GestorEstadisticas intancia = new GestorEstadisticas();
+    protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;
     AdministradorSubida subida;
-    private GestorEstadisticas() {
+    protected  GestorEstadisticas() {
         descarga = new AdministradorDescarga();
         subida = new AdministradorSubida();
+    }
+    /**
+     *  Devuelve la instacia del Gestor de estadiscticas activo.
+     * @return Gestor de estadisticas.
+     */
+    static public GestorEstadisticas getInstacia() {
+        if (intancia == null) {
+           intancia = new GestorEstadisticas();
+        }
+        return intancia;
     }
     /**
      * Inicia el gestor de estadisticas para poder comenzar a almacenar los
@@ -84,14 +114,13 @@ public class  GestorEstadisticas  implements ObservadorDatos {
      * @return
      */
     int  getFicherosDescargadosSesion(){
-        return getFicherosDescargadosSesion();
+        return descarga.getFicherosDescargadosSesion();
     }
     /**
      * Velocidad de descarga actual.
      * @return
      */
     double getVelocidadActualDescarga() {
-        //TODO: Mejorar esto.
         return descarga.getVelocidadActual();
     }
     
@@ -100,7 +129,6 @@ public class  GestorEstadisticas  implements ObservadorDatos {
      * @return
      */
     double getVelocidadActualSubida() {
-        //TODO: Mejorar esto.
         return subida.getVelocidadActual();
     }
             
