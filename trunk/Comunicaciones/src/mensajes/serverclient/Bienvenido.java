@@ -5,10 +5,47 @@
 
 package mensajes.serverclient;
 
+import mensajes.Mensaje;
+import mensajes.TipoMensaje;
+
 /**
  *
+ * Este mensaje se emite como confirmación de conexion con el servidor.
+ * 
+ * 
  * @author Luis Ayuso
  */
-public class Bienvenido {
+public class Bienvenido implements Mensaje{
 
+    private String _destino;
+    private int _puerto;
+    
+    /**
+     *  numero de archivos dados de alta en el sistema
+     */
+    public long numeroDeArchivos;
+    /**
+     * numero de peers conectados
+     */
+    public long numeroDePeers;
+   
+    public TipoMensaje getTipoMensaje() {
+       return TipoMensaje.Bienvenido;
+    }
+
+    public void setDestino(String destino, int puerto) {
+       _destino = destino;
+       _puerto  = puerto;
+    }
+
+    public String destino() {
+        return _destino;
+    }
+
+    public int puerto() {
+        return _puerto;
+    }
+
+    
+    
 }
