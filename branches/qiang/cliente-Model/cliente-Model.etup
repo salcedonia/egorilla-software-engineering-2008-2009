@@ -13,6 +13,6 @@
    </XMI.header>
 
    <XMI.content>
-   <UML:Profile xmi.id="DCE.0859D2E5-FFA1-459A-2B84-B4DC7F241736" name="Unnamed" isCloned="true" href=".\cliente-Model.etup#//*[@xmi.id=&apos;DCE.0859D2E5-FFA1-459A-2B84-B4DC7F241736&apos;]" isDirty="false"><UML:Element.ownedElement>
-<UML:Stereotype xmi.id="DCE.598D9993-1AF8-7A08-836A-5A241356D4DE" name="interface" owner="__uri_.\cliente-Model.etup#//*[@xmi.id=&apos;DCE.0859D2E5-FFA1-459A-2B84-B4DC7F241736&apos;]"/></UML:Element.ownedElement></UML:Profile></XMI.content>
+   <UML:Profile xmi.id="DCE.DB821E70-BD36-ECF0-86DF-4EADAF09A0CF" name="Unnamed" isCloned="true" href=".\Cliente-Model.etup#//*[@xmi.id=&apos;DCE.DB821E70-BD36-ECF0-86DF-4EADAF09A0CF&apos;]" isDirty="false"><UML:Element.ownedElement>
+<UML:Stereotype xmi.id="DCE.960614DB-0E4E-FCEE-EBD9-1A57E1952D0A" name="interface" owner="__uri_.\Cliente-Model.etup#//*[@xmi.id=&apos;DCE.DB821E70-BD36-ECF0-86DF-4EADAF09A0CF&apos;]"/></UML:Element.ownedElement></UML:Profile></XMI.content>
 </XMI>
