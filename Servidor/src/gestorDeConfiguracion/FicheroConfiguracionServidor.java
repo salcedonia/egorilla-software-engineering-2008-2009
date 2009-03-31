@@ -55,7 +55,7 @@ public class FicheroConfiguracionServidor {
     */
     public void setProperty(String clave,String valor) throws ControlConfiguracionServidorException
     {
-        this.properties.setProperty(valor, valor);
+        this.properties.setProperty(clave, valor);
         try {
             FileOutputStream fichero = new FileOutputStream(this.nombreFicheroProperties);
             this.properties.store(fichero, "");

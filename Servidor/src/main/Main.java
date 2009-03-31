@@ -23,10 +23,10 @@ public class Main {
     public static void main(String[] args) throws IOException, ControlConfiguracionServidorException {
         
         HiloServidor servidor;
-        
+        ControlConfiguracion config= new ControlConfiguracion();
         try {        
             // Creamos el servidor
-            ControlConfiguracion config= new ControlConfiguracion();
+           
             config.leeConfig("Configuracion.properties");
             int puerto=config.getPuerto();
             servidor = new HiloServidor(puerto);
@@ -39,6 +39,7 @@ public class Main {
         }
         
         System.out.println("Escuchando por puerto 6969");
+        
 
         //  Escuchamos conexiones 
         while (_loop){
