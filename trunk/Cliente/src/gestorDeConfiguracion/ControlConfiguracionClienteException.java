@@ -4,8 +4,8 @@ package gestorDeConfiguracion;
 
 /**
  *
- * @author F. Javier S. Pardo
- * Esta clase gestiona las excepciones específicas que se pueden producir dentro
+ * @author F. Javier Sanchez Pardo
+ * Esta clase gestiona las excepciones especificas que se pueden producir dentro
  * del paquete Cliente.gestorDeConfiguracion
  * 
  */

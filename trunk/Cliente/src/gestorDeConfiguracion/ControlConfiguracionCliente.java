@@ -6,16 +6,16 @@ import java.util.Properties;
 
 /**
 
- * Clase que controla la gestión de la configuracion de la aplicacion Cliente eGorilla mediante 
- * 2 archivos de properties: uno que contiene la configuración del usuario y otro que contiene
- * la configuración por defecto.
- * La clase está diseñada siguiendo el patrón Singleton, y además implementa la interfaz Sujeto,
+ * Clase que controla la gestion de la configuracion de la aplicacion Cliente eGorilla mediante 
+ * 2 archivos de properties: uno que contiene la configuracion del usuario y otro que contiene
+ * la configuracion por defecto.
+ * La clase esta disenada siguiendo el patron Singleton, y ademas implementa la interfaz Sujeto,
  * que permite informar a los Observadores cuando se producen cambios en su estado interno.
- * @author Javier Sánchez Pardo
+ * @author F. Javier Sanchez Pardo
  */
 public class ControlConfiguracionCliente implements Sujeto{
 
-    //Variable estática que contiene la instancia única de la clase.
+    //Variable estatica que contiene la instancia unica de la clase.
     private static ControlConfiguracionCliente _instancia = null;
     //Variables con el nombre del fichero de propiedades principal y el de propiedades
     //por defecto.
@@ -25,13 +25,13 @@ public class ControlConfiguracionCliente implements Sujeto{
     ArrayList <Observador> listaObservadores = new ArrayList <Observador>();
     
     //
-    //Implementación de los métodos de la interfaz Sujeto
+    //Implementacion de los metodos de la interfaz Sujeto
     //
     /**
-     * Añade un objeto observador a la estructura de observadores
+     * Anade un objeto observador a la estructura de observadores
      * @param obs: objeto que implementa la interfaz Observador
      */
-    public void añadirObservador(Observador obs) {
+    public void anadirObservador(Observador obs) {
         listaObservadores.add(obs);
     }
     
@@ -45,7 +45,7 @@ public class ControlConfiguracionCliente implements Sujeto{
 
     /**
      * Recorre todos los Observadores registros para notificarles que la
-     * configuración del cliente ha cambiado.
+     * configuracion del cliente ha cambiado.
      */
     public void notificarObservadores() {
         Iterator<Observador> iterador = listaObservadores.iterator();
@@ -57,8 +57,8 @@ public class ControlConfiguracionCliente implements Sujeto{
     /**
      * 
      * @param sNomFicheroPropsPpal: Nombre del fichero principal que contiene la
-     *        configuración principal (valores de propiedades).
-     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuración
+     *        configuracion principal (valores de propiedades).
+     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
      *        por defecto (valores de propiedades).
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */   
@@ -69,12 +69,12 @@ public class ControlConfiguracionCliente implements Sujeto{
     }
 
     /**
-     * Obtiene la única instancia de esta clase que se permite crear (patrón Singleton)
+     * Obtiene la Unica instancia de esta clase que se permite crear (patron Singleton)
      * @param sNomFicheroPropsPpal : Nombre del fichero principal que contiene la
-     *        configuración principal (valores de propiedades).
-     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuración
+     *        configuracion principal (valores de propiedades).
+     * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
      *        por defecto (valores de propiedades).
-     * @return única instancia de esta clase
+     * @return Unica instancia de esta clase
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     public static ControlConfiguracionCliente obtenerInstancia(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto) throws ControlConfiguracionClienteException {
@@ -123,16 +123,18 @@ public class ControlConfiguracionCliente implements Sujeto{
      */
     public void establecerPropiedad(String sClave, String sValor) throws ControlConfiguracionClienteException {
         this.oFicheroPropsPpal.establecerPropiedad(sClave, sValor);
+        notificarObservadores();
     }
 
     /**
-     * Establece los valores para el conjunto de propiedades recibido como parámetro (no tienen porqué estar
+     * Establece los valores para el conjunto de propiedades recibido como parametro (no tienen porque estar
      * todas), y lo actualiza en memoria y en el disco (fichero asociado).
      * @param propiedades: objeto Properties que contiene determinadas claves y sus valores.
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     public void establecerConfiguracion(Properties propiedades) throws ControlConfiguracionClienteException {
         oFicheroPropsPpal.establecerConjuntoPropiedades(propiedades);
+        notificarObservadores();
     }
 
  
