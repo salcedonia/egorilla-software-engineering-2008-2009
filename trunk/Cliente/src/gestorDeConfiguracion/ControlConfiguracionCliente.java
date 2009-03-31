@@ -1,20 +1,58 @@
 package gestorDeConfiguracion;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
 
 /**
- * Clase que controla toda la configuracion de la aplicacion Cliente eGorilla mediante 
- * archivos de properties.
- * Implementación mediante un patrón Singleton.
+
+ * Clase que controla la gestión de la configuracion de la aplicacion Cliente eGorilla mediante 
+ * 2 archivos de properties: uno que contiene la configuración del usuario y otro que contiene
+ * la configuración por defecto.
+ * La clase está diseñada siguiendo el patrón Singleton, y además implementa la interfaz Sujeto,
+ * que permite informar a los Observadores cuando se producen cambios en su estado interno.
  * @author Javier Sánchez Pardo
  */
 public class ControlConfiguracionCliente implements Sujeto{
 
+    //Variable estática que contiene la instancia única de la clase.
     private static ControlConfiguracionCliente _instancia = null;
     //Variables con el nombre del fichero de propiedades principal y el de propiedades
     //por defecto.
-    FicheroPropiedades oFicheroPropsPpal;
-    FicheroPropiedades oFicheroPropsxDefecto;
+    private FicheroPropiedades oFicheroPropsPpal;
+    private FicheroPropiedades oFicheroPropsxDefecto;
+
+    ArrayList <Observador> listaObservadores = new ArrayList <Observador>();
+    
+    //
+    //Implementación de los métodos de la interfaz Sujeto
+    //
+    /**
+     * Añade un objeto observador a la estructura de observadores
+     * @param obs: objeto que implementa la interfaz Observador
+     */
+    public void añadirObservador(Observador obs) {
+        listaObservadores.add(obs);
+    }
+    
+    /**
+     * Quita un objeto observador de la estructura de observadores.
+     * @param obs: objeto que implementa la interfaz Observador
+     */
+    public void quitarObservador(Observador obs) {
+        listaObservadores.remove(obs);
+    }
+
+    /**
+     * Recorre todos los Observadores registros para notificarles que la
+     * configuración del cliente ha cambiado.
+     */
+    public void notificarObservadores() {
+        Iterator<Observador> iterador = listaObservadores.iterator();
+        while (iterador.hasNext()){
+            iterador.next().actualizar (this);
+        }
+    }
 
     /**
      * 
@@ -97,16 +135,5 @@ public class ControlConfiguracionCliente implements Sujeto{
         oFicheroPropsPpal.establecerConjuntoPropiedades(propiedades);
     }
 
-    public void añadirObservador(Observador obs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void quitarObservador(Observador obs) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void notificarObservadores() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
  
 }
