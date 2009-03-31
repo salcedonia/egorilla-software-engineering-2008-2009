@@ -25,5 +25,6 @@ public enum TipoMensaje {
     RespuestaPeticionConsulta,
     RespuestaPeticionDescarga,
     DatosCliente,
-    Bienvenido
+    Bienvenido,
+    keepAlive
 }
