@@ -3,12 +3,12 @@
     <type>com.sun.tools.ide.uml.project</type>
     <configuration>
         <data xmlns="http://www.sun.com/ns/uml-project/1">
-            <name>cliente-Model</name>
+            <name>Cliente-Model</name>
             <minimum-ant-version>1.6</minimum-ant-version>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
-                <foreign-project>cliente</foreign-project>
+                <foreign-project>Cliente</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>
