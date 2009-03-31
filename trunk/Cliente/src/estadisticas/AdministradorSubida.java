@@ -11,12 +11,13 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
- *
+ * Modulo que gestiona las datos que se envian.
+ * @see ModuloTrafico.
  * @author Qiang
  */
 
 public class AdministradorSubida extends ModuloTrafico{
-    private static AdministradorSubida _instancia;
+    //private static AdministradorSubida _instancia;
      // Variables de configuracion de las estadisticas.
     private String ruta = "../stadUpload.bin";
   
@@ -78,13 +79,8 @@ public class AdministradorSubida extends ModuloTrafico{
     }
 
 
-    public synchronized  void reiniciarTodo() {
-        /*inicioSesion();
-        velocidadMediaGlobal = 0;
-        _totalGlobal = 0;
-        // volcarNumeroFicheros(_numFicherosGlobal);
-        // TODO volcarDatosGlobal();
-*/
+    public   void reiniciarTodo() {
+
     }
 
 

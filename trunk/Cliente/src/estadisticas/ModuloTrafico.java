@@ -28,15 +28,21 @@ public abstract class ModuloTrafico {
     protected double velocidadSesion;
     protected int pesoSesion;
     
-    static int tiempoMaximo = 60;
-    static int varianza = 5;    // Cantidad de datos para calcular la velocidad media
+    protected static int tiempoMaximo = 120;
+    protected static int varianza = 10;    // Cantidad de datos para calcular la velocidad media
+    protected static int intervaloActualizacion = 30;
     
     protected void actualizarVelocidades(int count) {
         /* El pivote representa la posicion del array desde donde hay que actualizar 
          * el array de velocidades,abarca desde 0 a listaVelocidadSesion.size()-1.
          */
         //int pivote = Math.max(listaVelocidadSesion.size()-(count+1), 0);
-        int pivote = Math.min(tiempoMaximo - (count + 1), listaVelocidadSesion.isEmpty() ? 0 : listaVelocidadSesion.size() - 1);
+        int pivote =0;
+        if (count == 0) {
+            pivote = Math.max(listaVelocidadSesion.size()-1,0);
+        } else  {
+            pivote = Math.min(tiempoMaximo - (count + 1), listaVelocidadSesion.size());
+        }
         if (listaVelocidadSesion.isEmpty()) {
         }
         if (listaVelocidadSesion.size() > tiempoMaximo - count) {
@@ -47,23 +53,40 @@ public abstract class ModuloTrafico {
         }
         //Apartir de "intervalo", donde viene los bytes llegados calculamos la velocidad media para esa posicion
         List<Double> intervalo;
-
-        for (int i = 0; i <= count; i++) {
-            intervalo = getIntervalo(pivote + i);
-            double cantidad = 0;
-            for (Double valor : intervalo) {
-                cantidad += valor;
+        if (count ==0 ) {
+             intervalo = getIntervalo(pivote);
+                double cantidad = 0;
+                for (Double valor : intervalo) {
+                    cantidad += valor;
+                }
+                int numerador = intervalo.isEmpty() ? 1 : intervalo.size();
+                cantidad = cantidad / (numerador * intervaloActualizacion);
+                if (listaVelocidadSesion.size() <= pivote) {
+                    listaVelocidadSesion.add(pivote, cantidad);
+                } else {
+                    listaVelocidadSesion.set(pivote, cantidad);
+                }
+                //Calculamos la velocidad media de la sesion.
+                velocidadSesion = (((velocidadSesion * pesoSesion) + listaVelocidadSesion.getLast())) / (pesoSesion + 1);
+                pesoSesion++;
+        } else {
+            for (int i = 0; i < count; i++) {
+                intervalo = getIntervalo(pivote + i);
+                double cantidad = 0;
+                for (Double valor : intervalo) {
+                    cantidad += valor;
+                }
+                int numerador = intervalo.isEmpty() ? 1 : intervalo.size();
+                cantidad = cantidad / (numerador * intervaloActualizacion);
+                if (listaVelocidadSesion.size() <= pivote + i) {
+                    listaVelocidadSesion.add(pivote + i, cantidad);
+                } else {
+                    listaVelocidadSesion.set(pivote + i, cantidad);
+                }
+                //Calculamos la velocidad media de la sesion.
+                velocidadSesion = (((velocidadSesion * pesoSesion) + listaVelocidadSesion.getLast())) / (pesoSesion + 1);
+                pesoSesion++;
             }
-            int numerador = intervalo.isEmpty() ? 1 : intervalo.size();
-            cantidad = cantidad / (numerador * 30);
-            if (listaVelocidadSesion.size() <= pivote + i) {
-                listaVelocidadSesion.add(pivote + i, cantidad);
-            } else {
-                listaVelocidadSesion.set(pivote + i, cantidad);
-            }
-            //Calculamos la velocidad media de la sesion.
-            velocidadSesion = (((velocidadSesion * pesoSesion) + listaVelocidadSesion.getLast())) / (pesoSesion + 1);
-            pesoSesion++;
         }
     }
      protected List<Double> getIntervalo(int pivote) {
@@ -88,8 +111,8 @@ public abstract class ModuloTrafico {
     public void llegadaDatos(double longitud) {
         Date nuevaFecha = new Date();
         datosSesion += longitud;
-        // Numero de intervalos a actualizar (0, 60)
-        int numIntervalos = UtilFechas.diferenciaIntervalos(nuevaFecha, ultimaActualizacion, 30);
+        // Numero de intervalos a actualizar (0, 120)
+        int numIntervalos = UtilFechas.diferenciaIntervalos(nuevaFecha, ultimaActualizacion, intervaloActualizacion);
         if (numIntervalos > 0) {
             ultimaActualizacion = nuevaFecha;
         }
@@ -143,7 +166,8 @@ public abstract class ModuloTrafico {
         return velocidad;
     }
     public double getVelocidadActual() {
-        return listaDatosSesion.getLast();
+        this.llegadaDatos(0);
+        return listaVelocidadSesion.getLast();
     }
 
 
