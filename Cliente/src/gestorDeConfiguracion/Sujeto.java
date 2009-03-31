@@ -8,10 +8,10 @@ package gestorDeConfiguracion;
 /**
  * Interfaz general que define la interfaz de un Sujeto siguiendo el patrón
  * Observador.
- * @author F. Javier Sánchez Pardo
+ * @author F. Javier Sanchez Pardo
  */
 public interface Sujeto {
-    public void añadirObservador (Observador obs);
+    public void anadirObservador (Observador obs);
     public void quitarObservador (Observador obs);
     public void notificarObservadores ();
 }

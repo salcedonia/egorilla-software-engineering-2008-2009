@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * Esta clase encapsula el manejo de un fichero de configuracion proporcionando
  * los métodos necesarios para su manipulación.
- * @author F. Javier Sánchez Pardo
+ * @author F. Javier Sanchez Pardo
  * 
  */
 public class FicheroPropiedades {
@@ -100,7 +100,7 @@ public class FicheroPropiedades {
 
     /**
     * Devuelve una cadena con el contenido del objeto properties asociado.
-    * Útil para depurar.
+    * Util para depurar.
     */
     public String toString() {
         String sCadena = "";
