@@ -22,7 +22,7 @@ public class ControlConfiguracionCliente implements Sujeto{
     private FicheroPropiedades oFicheroPropsPpal;
     private FicheroPropiedades oFicheroPropsxDefecto;
 
-    ArrayList <Observador> listaObservadores = new ArrayList <Observador>();
+    private ArrayList <Observador> listaObservadores = new ArrayList <Observador>();
     
     //
     //Implementacion de los metodos de la interfaz Sujeto
