@@ -9,7 +9,201 @@
 
 
 
-<UML:Dependency xmi.id="DCE.CD581569-D315-3C51-1383-7174EBBF6F7C" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061" client="DCE.BAC1D8CF-1317-D1AA-8469-0EE6CB428853" supplier="DCE.5F5A0066-66B0-A82B-3C9E-08F02A44BB24"><UML:Element.presentation>
+<UML:Package name="gestorDeConfiguracion" xmi.id="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11">
+<UML:Element.ownedElement><UML:Interface isAbstract="true" isLeaf="false" visibility="public" name="Observador" xmi.id="DCE.2DB49E98-F620-D216-4743-C716C644AD09" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" clientDependency="" appliedStereotype="__uri_.\eGorilla.etup#//*[@xmi.id=&quot;DCE.1C895C52-9248-8B38-DA41-866E2D5E030A&quot;]" supplierDependency="DCE.C093119A-E871-78FE-129E-22B8763A95AE DCE.B921B8B1-91B5-BFD2-A487-8AAB519B1913 DCE.B12AC7FD-B6FE-0FD9-DA78-EA4D61D6C158" associationEnd="DCE.77F82063-1A83-CC00-9150-7214C40C82E8"><UML:Element.ownedElement><UML:SourceFileArtifact sourcefile="..\..\Cliente\src\gestorDeConfiguracion\Observador.java" xmi.id="DCE.8404E24B-1281-2E5A-789F-9B85921F6EE9" owner="DCE.2DB49E98-F620-D216-4743-C716C644AD09"/><UML:TaggedValue xmi.id="DCE.65D0EBF4-2214-6A2B-E742-210387C407CC" name="documentation">
+<UML:TaggedValue.dataValue> Interfaz general de un observador siguiendo el patron Observador
+ (el objeto observado lo denomino "el Sujeto").
+ @author F. Javier Sanchez Pardo
+ </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="true" name="actualizar" xmi.id="DCE.1F357532-C3A9-A78D-86CC-A82C5C4AF181" owner="DCE.2DB49E98-F620-D216-4743-C716C644AD09" redefiningElement="DCE.001FC6FB-002D-145F-2DFF-85938B3E10A4 DCE.E50BFF9B-F2C1-D2A0-8B38-16CC614F3DA0"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.2B96C853-4F28-DD8D-9239-6ED1B7EB54EE" name="documentation">
+<UML:TaggedValue.dataValue>     
+     @param suj : objeto que ha sufrido un cambio de estado del que depende el 
+     observador. Pasando como parámetro al sujeto se permite que el mismo objeto observador 
+     observe a varios sujetos.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.08A8B391-54AB-910B-C366-3E04B48F99B8" owner="DCE.1F357532-C3A9-A78D-86CC-A82C5C4AF181"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.F55140B8-DB67-D874-0D60-AD1BE9C5C7F4"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" name="suj" xmi.id="DCE.D8D9BCC1-4EEE-C7C2-D092-849E3BA0458F" owner="DCE.1F357532-C3A9-A78D-86CC-A82C5C4AF181"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.E586BE3A-0E0C-D591-6171-8F757B739A0D"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation></UML:Element.ownedElement><UML:Element.presentation>
+</UML:Element.presentation></UML:Interface><UML:Class isAbstract="false" isLeaf="false" visibility="public" name="FicheroPropiedades" xmi.id="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" clientDependency="" associationEnd="DCE.33EF7C53-FC2F-097F-15A4-F1D63F76F7AD"><UML:Element.ownedElement><UML:SourceFileArtifact sourcefile="..\..\Cliente\src\gestorDeConfiguracion\FicheroPropiedades.java" xmi.id="DCE.A39BDD97-B370-D637-FFD1-4C16A9B9DC44" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052"/><UML:TaggedValue xmi.id="DCE.ACF9CC66-BE8E-2413-0E59-B1FC118A9E26" name="documentation">
+<UML:TaggedValue.dataValue> Esta clase encapsula el manejo de un fichero de configuracion proporcionando
+ los métodos necesarios para su manipulación.
+ @author F. Javier Sanchez Pardo
+ 
+ </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" AssociationType="Aggregation" name="sNombreFicheroProp" xmi.id="DCE.E6375955-351A-B19D-0B92-304B46E8FDC5" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052">
+<UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.F546503C-0DB1-4A22-FC79-E0399F834DA8" name="documentation">
+<UML:TaggedValue.dataValue>Nombre del fichero que almacena las propiedades manejadas.
+</UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.B3E15CC3-6136-4FDF-733D-0432B449FC12"/></UML:TypedElement.multiplicity><UML:Attribute.default>
+<UML:Expression xmi.id="DCE.906FB0F8-42AC-95F0-9B6B-4D15748A6925"/></UML:Attribute.default></UML:Attribute><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" AssociationType="Aggregation" name="propiedades" xmi.id="DCE.D263EF37-37AD-B130-2D2D-AC23D51AA51D" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052">
+<UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.43856FCA-7941-1FE2-EA2C-48AF2D0ACF5D" name="documentation">
+<UML:TaggedValue.dataValue>Estructura en memoria que almacena las propiedades leidas del fichero.
+</UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.C64BCB09-D516-7F46-CE8A-F5BEE5625BAA"/></UML:TypedElement.multiplicity><UML:Attribute.default>
+<UML:Expression xmi.id="DCE.874CB7C4-F9D6-49F3-3A0B-6D4C90B80A5A"/></UML:Attribute.default></UML:Attribute><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" isConstructor="true" name="FicheroPropiedades" xmi.id="DCE.60C586DB-4B76-59E0-F99A-7982A7FE6FF2" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.1B071394-7337-6AA2-90A8-09A2F789BDB4" name="documentation">
+<UML:TaggedValue.dataValue>     Se inicializa el objeto con el nombre del fichero de propiedades especificado. 
+     Además se intenta leer dicho fichero y cargar las propiedades que contiene dentro del objeto (en la variable propiedades)
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sNomFicheroProps" xmi.id="DCE.F703E83B-95AD-4403-5AB4-4B3010B1B312" owner="DCE.60C586DB-4B76-59E0-F99A-7982A7FE6FF2"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.CECF672C-5D99-D903-BB27-8D95F52DFB12"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="protected" isLeaf="false" ownerScope="instance" isAbstract="false" name="cargarFicheroPropiedades" xmi.id="DCE.3A43AEB3-1B56-6920-635C-DC4779570926" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.65720F32-87F7-530F-2150-49B50B8F10F5" name="documentation">
+<UML:TaggedValue.dataValue>     Carga en el objeto (en la variable properties asociada) todas las propiedades existentes en el fichero de properties.
+     Las propiedades que se leen del fichero SE AÑADEN Y SOBREESCRIBEN las que ya existían en el properties (caso de que hubiera
+     alguna antes)
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.7D3B5BD8-FB95-D796-F87B-AA2AC6EE66DD" owner="DCE.3A43AEB3-1B56-6920-635C-DC4779570926"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.4FC3033B-D48A-1A14-689C-84C7655830D6"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="protected" isLeaf="false" ownerScope="instance" isAbstract="false" name="grabarFicheroPropiedades" xmi.id="DCE.69CD8F12-890F-D200-BE5B-62D4E6027D98" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.6EE13ED5-B2DF-BA18-E22D-5F55988345CE" name="documentation">
+<UML:TaggedValue.dataValue>     Vuelca las propiedades en memoria (en el objeto properties asociado) al fichero asociado (en disco).
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.AFCC4F38-C522-6FC2-9617-BD8C9B749C15" owner="DCE.69CD8F12-890F-D200-BE5B-62D4E6027D98"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.8AA52BB5-1AC5-159A-46F6-752B31C88276"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerPropiedad" xmi.id="DCE.F5F7A044-2AFC-7B1E-F76D-8FE94C3F7B14" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.89ECACB1-BD8F-4C2C-AEF0-B6F9085B38AE" name="documentation">
+<UML:TaggedValue.dataValue>     Busca el valor de una propiedad (en memoria, en el objeto properties asociado) y lo devuelve.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" xmi.id="DCE.C2E6CCFB-BE90-6B2F-A1F7-158F53B0964F" owner="DCE.F5F7A044-2AFC-7B1E-F76D-8FE94C3F7B14"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.80610432-CBDB-0A4B-785B-9B96BA9F42B6"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sClave" xmi.id="DCE.559A301F-6644-E809-AB76-CDA8CD2D27E6" owner="DCE.F5F7A044-2AFC-7B1E-F76D-8FE94C3F7B14"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.548027F7-CF63-C20F-B92F-1AAEF39278DD"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerConjuntoPropiedades" xmi.id="DCE.3A196548-7D99-5287-C6FB-83FA78332205" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.BB703244-61F2-73AE-0580-77C96ACC01DB" name="documentation">
+<UML:TaggedValue.dataValue>     Devuelve un nuevo objeto Properties con una copia de las propiedades actuales.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" xmi.id="DCE.C04726D3-C6A4-860A-A24B-E234C86B298B" owner="DCE.3A196548-7D99-5287-C6FB-83FA78332205"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.302D30CC-089A-8083-3307-D4654A21684B"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="establecerPropiedad" xmi.id="DCE.C02FD326-201E-CB9C-D1AB-B0A54A383790" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.B6404743-1585-6D0B-6C8B-975087D3C4D8" name="documentation">
+<UML:TaggedValue.dataValue>     Establece un nuevo valor para una propiedad, y lo actualiza en memoria (objeto properties asociado)
+     y en el disco (fichero asociado).
+     @param sClave
+     @param sValor
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.0F9872B4-616E-C70C-45E9-E3472C49ED58" owner="DCE.C02FD326-201E-CB9C-D1AB-B0A54A383790"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.40E63118-74F1-31FD-193D-BD8A9CBA28B0"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sClave" xmi.id="DCE.94315F43-CD71-2654-3EAF-B6499DE55F56" owner="DCE.C02FD326-201E-CB9C-D1AB-B0A54A383790"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.C527527D-230E-3C62-AC34-06F2C0165ABB"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sValor" xmi.id="DCE.FB423EDF-4FCC-03EA-ECFA-18E134B59F0D" owner="DCE.C02FD326-201E-CB9C-D1AB-B0A54A383790"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.A3D06F8E-CC61-CA1A-8D87-6A61E522B70D"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="establecerConjuntoPropiedades" xmi.id="DCE.51AAA3B1-6DB8-5FC7-8EAC-241045F07DC9" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.F0E18F75-6309-206B-EB2C-003902A8C8A0" name="documentation">
+<UML:TaggedValue.dataValue>     Establece los valores para el conjunto de propiedades recibido como parámetro (no tienen porqué estar
+     todas), y lo actualiza en memoria (objeto properties asociado) y en el disco (fichero asociado).
+     @param propiedades: objeto Properties que contiene claves y sus valores.
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.CD435DAC-E364-AC9B-ED2D-D22D0325F1B7" owner="DCE.51AAA3B1-6DB8-5FC7-8EAC-241045F07DC9"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.197CE606-99D8-E961-9CB0-12AEF8A46FC7"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" name="propiedades" xmi.id="DCE.C00D8E78-4F13-218C-FBBF-54CC54D588E0" owner="DCE.51AAA3B1-6DB8-5FC7-8EAC-241045F07DC9"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.E201B7CA-C2B6-6CCA-8739-3DCC1E78FFFB"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="toString" xmi.id="DCE.6FFB128A-C56D-37DE-4740-42FB01FAB34C" owner="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.A35F4CF2-9AF3-9BCF-AC15-D5E28A5F3AA3" name="documentation">
+<UML:TaggedValue.dataValue>    Devuelve una cadena con el contenido del objeto properties asociado.
+    Util para depurar.
+    </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" xmi.id="DCE.CE85851A-D5CC-7DFF-105D-3E48BF5692EB" owner="DCE.6FFB128A-C56D-37DE-4740-42FB01FAB34C"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.17F095B3-7DD2-FC01-92D3-47AC22E7C44E"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation></UML:Element.ownedElement>
+<UML:Element.presentation>
+</UML:Element.presentation></UML:Class><UML:Class isAbstract="false" isLeaf="false" visibility="public" name="ControlConfiguracionCliente" xmi.id="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" clientDependency="DCE.54871E6E-57D5-B3FA-0754-8737268BE3F7" associationEnd="DCE.7EA257A0-BED2-99ED-8CAA-810721A87409 DCE.B3B9F308-A8F9-5D2D-06DB-15EC4E62445D DCE.4BB81DF8-F997-FC41-19BA-84F06291273D DCE.3994EA70-3F53-7864-49D1-AEB6C5C12DC3 DCE.A0D73873-1044-A816-CB69-0EEA545C4A6B" supplierDependency="DCE.88D6BE32-F521-0B4A-5149-B0E5E2322228 DCE.2403FE29-C8A5-6149-FD69-AA04536E2D95"><UML:Element.ownedElement><UML:SourceFileArtifact sourcefile="..\..\Cliente\src\gestorDeConfiguracion\ControlConfiguracionCliente.java" xmi.id="DCE.8670BE92-DE5E-2225-588C-02B745F6CBCD" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"/><UML:TaggedValue xmi.id="DCE.B0491BC8-BD7C-6CA6-EBAC-D32FC51CE570" name="documentation">
+<UML:TaggedValue.dataValue>
+ Clase que controla la gestion de la configuracion de la aplicacion Cliente eGorilla mediante 
+ 2 archivos de properties: uno que contiene la configuracion del usuario y otro que contiene
+ la configuracion por defecto.
+ La clase esta disenada siguiendo el patron Singleton, y ademas implementa la interfaz Sujeto,
+ que permite informar a los Observadores cuando se producen cambios en su estado interno.
+ @author F. Javier Sanchez Pardo
+ </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" isStatic="true" type="ControlConfiguracionCliente" AssociationType="Aggregation" name="_instancia"/><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" type="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" AssociationType="Aggregation" name="oFicheroPropsPpal" xmi.id="DCE.37AA84F8-B056-BEE2-3391-9B3CE29195B6" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6">
+<UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.15B6A84C-8FD5-D750-051B-B99F1745EFB0" name="documentation">
+<UML:TaggedValue.dataValue>Variables con el nombre del fichero de propiedades principal y el de propiedades
+por defecto.
+</UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.DF7A7827-D4E1-DCEB-3DD4-A6B18BBED2C9"/></UML:TypedElement.multiplicity><UML:Attribute.default>
+<UML:Expression xmi.id="DCE.040CF2AF-2DA5-B7E7-3432-0BC8B38BB94E"/></UML:Attribute.default></UML:Attribute><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" type="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" AssociationType="Aggregation" name="oFicheroPropsxDefecto" xmi.id="DCE.004F183E-98CF-6629-014D-03D73C7B6711" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.16A4D9F5-6672-E1D7-854B-09B2FB304D22"/></UML:TypedElement.multiplicity><UML:Attribute.default>
+<UML:Expression xmi.id="DCE.23E75C6B-8066-C33A-B574-A4237601DA40"/></UML:Attribute.default></UML:Attribute><UML:Attribute visibility="private" isLeaf="false" ownerScope="instance" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" name="listaObservadores" xmi.id="DCE.8AE5A541-AD3E-5BCC-088B-89C31CDE8456" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Attribute.default><UML:Expression xmi.id="DCE.6E2B64AE-D2F5-04FA-1A61-C8B1642348C4"><UML:Expression.body>new ArrayList&lt;Observador&gt;()</UML:Expression.body></UML:Expression></UML:Attribute.default>
+<UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.3C8F3491-CBB1-17FE-008B-7339C8B44D49">
+<UML:Multiplicity.range><UML:MultiplicityRange lower="0" upper="*" collectionType="ArrayList" xmi.id="DCE.A2BA3260-D404-4235-F9EB-CE39EE805FE7"/></UML:Multiplicity.range></UML:Multiplicity></UML:TypedElement.multiplicity></UML:Attribute><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="anadirObservador" xmi.id="DCE.26613C1C-1551-311C-77E9-51053D49E409" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" redefinedElement="DCE.3A3AE692-DCE3-E07F-7788-F5B09BD346F4"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.12ECD3A2-DA03-226E-B3AC-B224D16E9812" name="documentation">
+<UML:TaggedValue.dataValue>     Anade un objeto observador a la estructura de observadores
+     @param obs: objeto que implementa la interfaz Observador
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.41505599-BF57-4857-B0A0-9E62E496F248" owner="DCE.26613C1C-1551-311C-77E9-51053D49E409"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.D7341C68-1208-B3FA-5DD2-88543E9931AD"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" name="obs" xmi.id="DCE.98CAA437-CE92-9CFD-0101-6B4FB39751C7" owner="DCE.26613C1C-1551-311C-77E9-51053D49E409"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.74FB9A1F-322F-7EB4-BC97-2E2D8E0B6901"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="quitarObservador" xmi.id="DCE.98ECB8EF-F1D2-7A6E-6067-AAEE303A31F0" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" redefinedElement="DCE.F6FADD23-190D-3304-2AAC-2C6204EA3F92"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.C39C660C-C4B0-C6D0-7861-E15CBB2BD55F" name="documentation">
+<UML:TaggedValue.dataValue>     Quita un objeto observador de la estructura de observadores.
+     @param obs: objeto que implementa la interfaz Observador
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.8BE6D29B-40C8-AAB6-A6E1-5D60241A9E70" owner="DCE.98ECB8EF-F1D2-7A6E-6067-AAEE303A31F0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.D7437DA5-1EBE-F720-6F66-8E8403586108"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" name="obs" xmi.id="DCE.62679B22-9B92-848F-0872-7D07BC3E67B1" owner="DCE.98ECB8EF-F1D2-7A6E-6067-AAEE303A31F0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.0BF8FC12-7E12-5B46-4EA1-CB00A6D83DC1"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="notificarObservadores" xmi.id="DCE.740293B7-3DD6-703E-F08B-BEDBC9EE7289" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" redefinedElement="DCE.06718BFF-650F-E757-8E10-52B600225065"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.3B925B49-908D-0826-4759-AD3E4FD1FE97" name="documentation">
+<UML:TaggedValue.dataValue>     Recorre todos los Observadores registros para notificarles que la
+     configuracion del cliente ha cambiado.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.7E5F91F9-2BF3-962A-FB7A-EDF5A0FC712D" owner="DCE.740293B7-3DD6-703E-F08B-BEDBC9EE7289"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.8A46B37F-D87C-EE50-5EDE-9BEA6948541D"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="protected" isLeaf="false" ownerScope="instance" isAbstract="false" isConstructor="true" name="ControlConfiguracionCliente" xmi.id="DCE.BFAEE141-A546-AA46-DF48-CD9C1A9806F0" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.E7CB28C7-BFD4-0022-600C-10BAD66F3D46" name="documentation">
+<UML:TaggedValue.dataValue>     
+     @param sNomFicheroPropsPpal: Nombre del fichero principal que contiene la
+            configuracion principal (valores de propiedades).
+     @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
+            por defecto (valores de propiedades).
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sNomFicheroPropsPpal" xmi.id="DCE.D9F9F7BB-F19F-D142-2ECB-DFD0A2289D28" owner="DCE.BFAEE141-A546-AA46-DF48-CD9C1A9806F0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.EDEAA591-94DA-DC62-AE61-0D60FACCDD19"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sNomFicheroPropsxDefecto" xmi.id="DCE.47304E89-B267-039D-1C46-19D19B42CDE0" owner="DCE.BFAEE141-A546-AA46-DF48-CD9C1A9806F0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.8371EA93-BC24-9A95-A417-0364ADB62EB1"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" isStatic="true" name="obtenerInstancia" xmi.id="DCE.2E172F85-9A13-9E39-DCE2-FDD4B018C560" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.33728846-C87B-326E-8615-41FF5B5C1075" name="documentation">
+<UML:TaggedValue.dataValue>     Obtiene la Unica instancia de esta clase que se permite crear (patron Singleton)
+     @param sNomFicheroPropsPpal : Nombre del fichero principal que contiene la
+            configuracion principal (valores de propiedades).
+     @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
+            por defecto (valores de propiedades).
+     @return Unica instancia de esta clase
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" xmi.id="DCE.1EB4FF9C-A67C-5B32-4973-51699D1E1879" owner="DCE.2E172F85-9A13-9E39-DCE2-FDD4B018C560"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.9BE303AE-2684-2E71-A900-2BA952536B9C"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sNomFicheroPropsPpal" xmi.id="DCE.9CAA0E68-7A83-93B6-432B-9E45F03C322F" owner="DCE.2E172F85-9A13-9E39-DCE2-FDD4B018C560"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.3CBEDCC1-E743-91EF-7C6F-537471224AAE"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sNomFicheroPropsxDefecto" xmi.id="DCE.D0E8175A-1FC5-CDCF-B305-9103A31A49F4" owner="DCE.2E172F85-9A13-9E39-DCE2-FDD4B018C560"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.FC9EED13-1FFB-EB00-2EA3-275831D5CCC8"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerPropiedad" xmi.id="DCE.8215AD91-F9E0-C380-DFD6-C04F4EDAD7D4" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.A4220033-0A74-9205-574F-3DC4C33D124E" name="documentation">
+<UML:TaggedValue.dataValue>     Busca el valor de una propiedad en el archivo de propiedades actual y lo devuelve.
+     @param sClave: clave a buscar
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" xmi.id="DCE.77F62592-9F68-8B33-3440-EE5B74EFB869" owner="DCE.8215AD91-F9E0-C380-DFD6-C04F4EDAD7D4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.F84B39D1-26E4-D5A5-7127-A508CD6C0310"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sClave" xmi.id="DCE.57B2AB2E-FB2A-888E-A802-80AC9B965AFE" owner="DCE.8215AD91-F9E0-C380-DFD6-C04F4EDAD7D4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.B1344A34-DB79-D8B8-90C8-695341132E8E"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerConfiguracion" xmi.id="DCE.5CF3D96E-9B8B-92C8-CED1-801DE1FD69B6" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.1D8ADFE2-6088-5731-AF06-194C2731A94A" name="documentation">
+<UML:TaggedValue.dataValue>     Devuelve el objeto Properties que almacena todas las propiedades actuales.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" xmi.id="DCE.A2B7770A-793B-F617-BD5C-363F02E2EB35" owner="DCE.5CF3D96E-9B8B-92C8-CED1-801DE1FD69B6"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.9B158BD4-676E-A8D7-ACED-52AAFA385413"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerPropiedadxDefecto" xmi.id="DCE.56876ED4-2B49-AB66-D2E0-5D6A9F1C1076" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.EAA8A191-6864-1F7A-C03C-D759A1EE1CCE" name="documentation">
+<UML:TaggedValue.dataValue>     Busca el valor de una propiedad en el archivo de propiedades POR DEFECTO y lo devuelve.
+     @param sClave: clave a buscar
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" xmi.id="DCE.50732818-D0AA-1AF9-373E-9576B130B691" owner="DCE.56876ED4-2B49-AB66-D2E0-5D6A9F1C1076"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.251A9137-8B00-7657-271D-F7E4A164004B"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sClave" xmi.id="DCE.30B818DA-2C26-E4F9-F1D6-17A8B887FF9C" owner="DCE.56876ED4-2B49-AB66-D2E0-5D6A9F1C1076"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.D4EE987E-60A2-AEA4-9D0B-7296F441A0CE"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="obtenerConfiguracionxDefecto" xmi.id="DCE.8A1EB947-F78B-5416-87DA-E865E2A70E93" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.211E97CB-B97C-2886-B890-651C1CC83E17" name="documentation">
+<UML:TaggedValue.dataValue>     Devuelve el objeto Properties que almacena los valores por defecto de todas las propiedades.
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" xmi.id="DCE.A72B3D85-C52F-6469-9A72-B15F47C66F6B" owner="DCE.8A1EB947-F78B-5416-87DA-E865E2A70E93"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.0A462151-2614-BF14-8E67-316A4C430DA6"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="establecerPropiedad" xmi.id="DCE.CCCEECA5-BB61-3794-37E7-66622E7780F2" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.71D4FD8A-8DFA-27F8-81B4-EA9FC99DCB7C" name="documentation">
+<UML:TaggedValue.dataValue>     Establece un nuevo valor para una propiedad, actualizando el fichero de propiedades
+     asociado.
+     @param sClave
+     @param sValor
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.327F0836-9A24-597C-9B71-59113AC72B2E" owner="DCE.CCCEECA5-BB61-3794-37E7-66622E7780F2"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.50A04811-AEC2-2B85-09EE-DB14EB868EC0"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sClave" xmi.id="DCE.1D900288-33D0-521C-EDAF-37315932461E" owner="DCE.CCCEECA5-BB61-3794-37E7-66622E7780F2"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.A7AAFCF9-8C0A-180F-14DC-0B1BE25B28EC"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="sValor" xmi.id="DCE.16D91FD6-459F-7515-8EE9-83D8B8791983" owner="DCE.CCCEECA5-BB61-3794-37E7-66622E7780F2"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.797C1F27-56BF-BF46-F947-D16F1F5EDE5B"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="false" name="establecerConfiguracion" xmi.id="DCE.4D4BC7A4-5C5D-B95D-1973-B0DC49AF2715" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" raisedException="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1"><UML:Element.ownedElement><UML:TaggedValue xmi.id="DCE.8EB50B95-8CD4-52AB-34C9-6A253DCAF3A5" name="documentation">
+<UML:TaggedValue.dataValue>     Establece los valores para el conjunto de propiedades recibido como parametro (no tienen porque estar
+     todas), y lo actualiza en memoria y en el disco (fichero asociado).
+     @param propiedades: objeto Properties que contiene determinadas claves y sus valores.
+     @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.89B2D3EC-C200-CB3A-7EBE-A54313F6AA36" owner="DCE.4D4BC7A4-5C5D-B95D-1973-B0DC49AF2715"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.1CFAA400-BBBF-F562-8307-5020DD154E07"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" name="propiedades" xmi.id="DCE.516A183C-A914-FDEB-E8E3-2F006F5359D4" owner="DCE.4D4BC7A4-5C5D-B95D-1973-B0DC49AF2715"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.F0B3B193-68CE-7F3C-9DFD-721EBDBCBFFF"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation>
+<UML:Implementation xmi.id="DCE.54871E6E-57D5-B3FA-0754-8737268BE3F7" owner="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" client="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" supplier="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA"><UML:Element.presentation>
+</UML:Element.presentation></UML:Implementation></UML:Element.ownedElement>
+<UML:Element.presentation>
+
+</UML:Element.presentation></UML:Class><UML:Interface isAbstract="true" isLeaf="false" visibility="public" name="Sujeto" xmi.id="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" appliedStereotype="__uri_.\eGorilla.etup#//*[@xmi.id=&quot;DCE.1C895C52-9248-8B38-DA41-866E2D5E030A&quot;]" supplierDependency="DCE.54871E6E-57D5-B3FA-0754-8737268BE3F7" clientDependency="DCE.C093119A-E871-78FE-129E-22B8763A95AE"><UML:Element.ownedElement><UML:SourceFileArtifact sourcefile="..\..\Cliente\src\gestorDeConfiguracion\Sujeto.java" xmi.id="DCE.B1F51BCD-DEBF-640B-0EB6-1243208730A4" owner="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA"/><UML:TaggedValue xmi.id="DCE.FC282129-C4FC-1252-FDF0-C50A66DE99D8" name="documentation">
+<UML:TaggedValue.dataValue> Interfaz general que define la interfaz de un Sujeto siguiendo el patrón
+ Observador.
+ @author F. Javier Sanchez Pardo
+ </UML:TaggedValue.dataValue></UML:TaggedValue><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="true" name="anadirObservador" xmi.id="DCE.3A3AE692-DCE3-E07F-7788-F5B09BD346F4" owner="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" redefiningElement="DCE.26613C1C-1551-311C-77E9-51053D49E409"><UML:Element.ownedElement><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.ABC6910E-A7C6-FC15-FC18-742877D4CE69" owner="DCE.3A3AE692-DCE3-E07F-7788-F5B09BD346F4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.2D5084BA-612C-7E91-6FB6-453B67A3027B"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" name="obs" xmi.id="DCE.A6B2B04F-E853-820D-FE13-43CD5779C49B" owner="DCE.3A3AE692-DCE3-E07F-7788-F5B09BD346F4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.021E8D76-DA4D-A6CD-2B9B-C8A22E037E2D"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="true" name="quitarObservador" xmi.id="DCE.F6FADD23-190D-3304-2AAC-2C6204EA3F92" owner="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" redefiningElement="DCE.98ECB8EF-F1D2-7A6E-6067-AAEE303A31F0"><UML:Element.ownedElement><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.4D29CEF3-BB6D-C17D-4456-89ED204695D1" owner="DCE.F6FADD23-190D-3304-2AAC-2C6204EA3F92"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.47832EB5-7363-8938-8EA3-F11EE5FDDA8D"/></UML:TypedElement.multiplicity></UML:Parameter><UML:Parameter visibility="package" isQuery="false" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" name="obs" xmi.id="DCE.1940C4EC-A17D-6FBB-A7E0-A12BC1BE487A" owner="DCE.F6FADD23-190D-3304-2AAC-2C6204EA3F92"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.E905362A-6BDA-858B-30A4-4D9183AB728E"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation><UML:Operation visibility="public" isLeaf="false" ownerScope="instance" isAbstract="true" name="notificarObservadores" xmi.id="DCE.06718BFF-650F-E757-8E10-52B600225065" owner="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" redefiningElement="DCE.740293B7-3DD6-703E-F08B-BEDBC9EE7289"><UML:Element.ownedElement><UML:Parameter visibility="package" direction="result" isQuery="false" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" xmi.id="DCE.4CD2FA48-658A-A7A2-B8C3-C34F6AA53DEE" owner="DCE.06718BFF-650F-E757-8E10-52B600225065"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.9476A17B-2247-23A9-8F90-5F211489477D"/></UML:TypedElement.multiplicity></UML:Parameter></UML:Element.ownedElement></UML:Operation></UML:Element.ownedElement><UML:Element.presentation>
+</UML:Element.presentation></UML:Interface>
+
+<UML:Aggregation xmi.id="DCE.09F80550-84A8-F8FC-DBA6-233C82FA502B" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" aggregateEnd="DCE.7EA257A0-BED2-99ED-8CAA-810721A87409" partEnd="DCE.B3B9F308-A8F9-5D2D-06DB-15EC4E62445D"><UML:Association.end>
+<UML:AssociationEnd xmi.id="DCE.7EA257A0-BED2-99ED-8CAA-810721A87409" visibility="private" type="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" association="DCE.09F80550-84A8-F8FC-DBA6-233C82FA502B"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.5204B133-4C8D-C3AF-67D9-F6655F027F4B"/></UML:TypedElement.multiplicity></UML:AssociationEnd>
+<UML:NavigableEnd xmi.id="DCE.B3B9F308-A8F9-5D2D-06DB-15EC4E62445D" visibility="private" type="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" association="DCE.09F80550-84A8-F8FC-DBA6-233C82FA502B" name="_instancia" isStatic="true"><UML:Attribute.default><UML:Expression xmi.id="DCE.3ACA7B1F-30A9-1B4A-57D9-E35364024731"><UML:Expression.body>null</UML:Expression.body></UML:Expression></UML:Attribute.default><UML:Element.presentation>
+
+</UML:Element.presentation><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.2BA78A39-B0FE-3464-1BC0-097171E0C152"/></UML:TypedElement.multiplicity></UML:NavigableEnd></UML:Association.end><UML:Element.presentation>
+
+
+
+</UML:Element.presentation></UML:Aggregation>
+
+<UML:Aggregation xmi.id="DCE.576A4E70-1F67-68A1-9C69-67725DB3B718" isComposite="true" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" aggregateEnd="DCE.3994EA70-3F53-7864-49D1-AEB6C5C12DC3" partEnd="DCE.33EF7C53-FC2F-097F-15A4-F1D63F76F7AD"><UML:Association.end>
+<UML:AssociationEnd xmi.id="DCE.3994EA70-3F53-7864-49D1-AEB6C5C12DC3" visibility="private" type="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" association="DCE.576A4E70-1F67-68A1-9C69-67725DB3B718"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.3990E7E5-03C8-12FE-2C21-C98096C568CE"/></UML:TypedElement.multiplicity></UML:AssociationEnd>
+<UML:AssociationEnd xmi.id="DCE.33EF7C53-FC2F-097F-15A4-F1D63F76F7AD" visibility="private" type="DCE.3F713F5E-CA14-B2C6-C78C-225BD8DA1052" association="DCE.576A4E70-1F67-68A1-9C69-67725DB3B718"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.4B20D0EB-C43D-9DA5-F2B2-C6ECAF8D60A1"/></UML:TypedElement.multiplicity></UML:AssociationEnd></UML:Association.end><UML:Element.presentation>
+</UML:Element.presentation></UML:Aggregation>
+<UML:Aggregation xmi.id="DCE.8AE36FFD-5BFD-A02B-A6F0-BA4CCDEBBB69" owner="DCE.3FFBCA12-588D-FC66-389C-B8A9A13ADC11" aggregateEnd="DCE.A0D73873-1044-A816-CB69-0EEA545C4A6B" partEnd="DCE.77F82063-1A83-CC00-9150-7214C40C82E8"><UML:Association.end>
+<UML:AssociationEnd xmi.id="DCE.A0D73873-1044-A816-CB69-0EEA545C4A6B" visibility="private" type="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6" association="DCE.8AE36FFD-5BFD-A02B-A6F0-BA4CCDEBBB69"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.5173BB80-D598-F0D5-306E-A94CFB58D955"/></UML:TypedElement.multiplicity></UML:AssociationEnd>
+<UML:AssociationEnd xmi.id="DCE.77F82063-1A83-CC00-9150-7214C40C82E8" visibility="private" type="DCE.2DB49E98-F620-D216-4743-C716C644AD09" association="DCE.8AE36FFD-5BFD-A02B-A6F0-BA4CCDEBBB69"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.1DDD8BAB-1127-AC03-1CA3-AF89B19B1824"/></UML:TypedElement.multiplicity></UML:AssociationEnd></UML:Association.end><UML:Element.presentation>
+</UML:Element.presentation></UML:Aggregation></UML:Element.ownedElement></UML:Package><UML:Dependency xmi.id="DCE.CD581569-D315-3C51-1383-7174EBBF6F7C" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061" client="DCE.BAC1D8CF-1317-D1AA-8469-0EE6CB428853" supplier="DCE.5F5A0066-66B0-A82B-3C9E-08F02A44BB24"><UML:Element.presentation>
 </UML:Element.presentation></UML:Dependency>
 
 
@@ -414,13 +608,16 @@
 
 </UML:Element.presentation></UML:Message></UML:Interaction.message></UML:Interaction>
 <UML:Interaction xmi.id="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="DS_establecerConfiguracion" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE"><UML:Element.ownedElement>
-<UML:Lifeline xmi.id="DCE.8DEBFC69-57A8-B04B-6004-BDBD4608E46F" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="GUIPanelConfiguracionCliente" represents="DCE.885F9382-E635-7B51-09AB-2B6C4C749634" events="DCE.71CEA0EC-E289-EE4C-86F5-9A94A01CB443"><UML:Element.presentation>
+<UML:Lifeline xmi.id="DCE.8DEBFC69-57A8-B04B-6004-BDBD4608E46F" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="GUIPanelConfiguracionCliente" represents="DCE.885F9382-E635-7B51-09AB-2B6C4C749634" events="DCE.71CEA0EC-E289-EE4C-86F5-9A94A01CB443 DCE.8947C742-CB42-2E84-9067-45A1B145DB8E"><UML:Element.presentation>
+
 
 </UML:Element.presentation></UML:Lifeline>
 <UML:Lifeline xmi.id="DCE.8C5C9B34-67BD-CE7A-4C2A-4390FD73B1C2" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="ConfigurarClienteManejador" events="DCE.6C3362D1-D44E-CF22-4426-2B501000F869 DCE.C96EE8C7-A8A6-33AC-5B3A-3D529DCA8F45 DCE.3CF5DE69-D8BF-6E72-EC19-4365757F3757 DCE.05877F8D-62B1-C2FE-2CB7-0BD3F0049445 DCE.4EEE54DF-8807-2F08-9DCF-90FFC5793FA9 DCE.A727FA52-8F6D-C2FF-A209-A7C54DAFDD0C DCE.4BE5C615-8FC8-90C9-F9C6-101DECCD172A DCE.F42DEB1D-AB47-E71C-C6DE-594A9B061A1F DCE.7A2913A6-E931-491E-EECD-16C6D2948F27"><UML:Element.presentation>
 
+
 </UML:Element.presentation></UML:Lifeline>
 <UML:Lifeline xmi.id="DCE.2C878499-0F91-8832-7A29-BD562D5F68CC" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="GestorRed" events="DCE.B455896A-491D-3A27-ABFB-68458C427346 DCE.07734EF2-81B7-E62E-2CCF-5B0935F0E29D DCE.2AB118F4-1969-AEEE-A38E-352DBF8860AC DCE.D71303DE-86D1-B168-FE95-4974D455AC33 DCE.50151F41-E5C1-A9F7-4147-0B50F28C4FE0 DCE.D97ABBEA-0BBF-CB84-4B92-FECE1493754C DCE.43FA957D-406C-1ADD-312F-95E91D928EAD DCE.5405F408-87AC-7EB4-1AFC-41B761A7E2F2 DCE.C7326259-91EB-331C-4E42-4F114313AAAA DCE.48E49327-5B84-248E-8365-2B9C4C3EFFEE DCE.3E85F25F-53C9-1134-B7C0-584D5BCAD434 DCE.1DB803A9-EBCC-490D-2C62-39AC5D274AE2 DCE.6609C7FD-4BAB-B220-1C0A-68EECFA8817D DCE.7052703D-077D-B399-DE68-3614FA49E8E2 DCE.5D56AF53-BCE2-A956-5B84-D29A859D00F3 DCE.2C9AA2CF-124D-CD6A-79E7-8E2F0E6DC12F"><UML:Element.presentation>
+
 
 </UML:Element.presentation></UML:Lifeline>
 <UML:AtomicFragment xmi.id="DCE.51EE82C9-96FE-A42A-575F-40A6D6E7C9EC" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"><UML:AtomicFragment.implicitGate>
@@ -435,7 +632,8 @@
 <UML:UninterpretedAction xmi.id="DCE.E855D7F6-52D8-F2C2-B36E-81782A7CF14E" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
 <UML:ActionOccurrence xmi.id="DCE.BFA1C7C0-C4E0-D21C-135B-3C5132012D5B" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" action="DCE.E855D7F6-52D8-F2C2-B36E-81782A7CF14E" finish="DCE.6C3362D1-D44E-CF22-4426-2B501000F869"/>
 
-<UML:Lifeline xmi.id="DCE.0D86DCBD-0669-1288-8A88-E16679246DE3" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="ControlConfiguracionCliente" events="DCE.7572926E-2373-6CEE-1D6C-C587CE32BAF3 DCE.5FCB7C8A-00D9-93F4-60E0-2922DEEBB773 DCE.72FFF55B-33B3-9B94-33FF-FCD1F3B0D479 DCE.B3948447-60BB-BAAA-F2E1-FDA639223DA0 DCE.EE58C680-B732-2BEE-05EE-1E98F13A2546 DCE.DD340CC6-FD59-AB08-8D45-30EDD4265B71 DCE.D0B93660-85F8-3EE8-BB88-CF1DA7AD4908 DCE.D8104C39-E886-58A3-224A-C4C3FCAD2F35 DCE.80B31106-4136-09A1-3CDE-B962FF61E637 DCE.5F6AEF7E-C046-39F0-AF69-B7C1AC777485 DCE.0EA42C11-611A-5D20-A0DD-467B7FBF3F8D DCE.57731313-7A53-1D71-A4D5-0CEFC539A2D4 DCE.DDACED0A-446A-77DB-2BBC-76985CFB8E82 DCE.D6724BC8-B05B-75AA-0892-D7326F82ECD5 DCE.AB46D360-9532-778B-36F9-936CD5D81D5D DCE.4329403F-833A-FC1F-6422-9C6F9A7D1A33 DCE.2735102B-D9E2-1CE2-E06F-9611E970C863 DCE.80134E5E-3780-0EDE-9B90-08FBAEFB2D1D DCE.BD980121-08B9-8188-F14B-D8E6EB05121E DCE.060C4D10-C408-8531-D259-1C8C8FA61AF6 DCE.6CC3923E-CDD2-A3F9-209D-B9D9C634A29E DCE.0262E09F-02BD-6DE0-2809-3B794657E621 DCE.2AA1BFA2-0088-DBD6-C01E-D77FFF473B75 DCE.9D000783-5F34-8B75-60B2-D5F17163FEAD DCE.3D51C3AD-0426-B586-4ECD-6B18DCB6804B DCE.B5C16A4C-331F-9519-7ABF-4BBC4650E07C DCE.53407CD0-9D27-9308-C577-382CC6D7AA9E DCE.68BC1BD6-D2BC-35B4-9768-62E4BF0FD33B DCE.32A13F53-CC55-A27E-0485-29869EE8C318 DCE.42358601-586F-5C45-7EF2-C4F8872F0C0D"><UML:Element.presentation>
+<UML:Lifeline xmi.id="DCE.0D86DCBD-0669-1288-8A88-E16679246DE3" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="ControlConfiguracionCliente" events="DCE.7572926E-2373-6CEE-1D6C-C587CE32BAF3 DCE.5FCB7C8A-00D9-93F4-60E0-2922DEEBB773 DCE.72FFF55B-33B3-9B94-33FF-FCD1F3B0D479 DCE.B3948447-60BB-BAAA-F2E1-FDA639223DA0 DCE.EE58C680-B732-2BEE-05EE-1E98F13A2546 DCE.DD340CC6-FD59-AB08-8D45-30EDD4265B71 DCE.D0B93660-85F8-3EE8-BB88-CF1DA7AD4908 DCE.D8104C39-E886-58A3-224A-C4C3FCAD2F35 DCE.80B31106-4136-09A1-3CDE-B962FF61E637 DCE.5F6AEF7E-C046-39F0-AF69-B7C1AC777485 DCE.0EA42C11-611A-5D20-A0DD-467B7FBF3F8D DCE.57731313-7A53-1D71-A4D5-0CEFC539A2D4 DCE.DDACED0A-446A-77DB-2BBC-76985CFB8E82 DCE.D6724BC8-B05B-75AA-0892-D7326F82ECD5 DCE.AB46D360-9532-778B-36F9-936CD5D81D5D DCE.4329403F-833A-FC1F-6422-9C6F9A7D1A33 DCE.2735102B-D9E2-1CE2-E06F-9611E970C863 DCE.80134E5E-3780-0EDE-9B90-08FBAEFB2D1D DCE.BD980121-08B9-8188-F14B-D8E6EB05121E DCE.060C4D10-C408-8531-D259-1C8C8FA61AF6 DCE.6CC3923E-CDD2-A3F9-209D-B9D9C634A29E DCE.0262E09F-02BD-6DE0-2809-3B794657E621 DCE.2AA1BFA2-0088-DBD6-C01E-D77FFF473B75 DCE.9D000783-5F34-8B75-60B2-D5F17163FEAD DCE.3D51C3AD-0426-B586-4ECD-6B18DCB6804B DCE.B5C16A4C-331F-9519-7ABF-4BBC4650E07C DCE.53407CD0-9D27-9308-C577-382CC6D7AA9E DCE.68BC1BD6-D2BC-35B4-9768-62E4BF0FD33B DCE.32A13F53-CC55-A27E-0485-29869EE8C318 DCE.42358601-586F-5C45-7EF2-C4F8872F0C0D DCE.F79E960B-38AA-EF88-6D39-AC2FF290C5F6"><UML:Element.presentation>
+
 
 </UML:Element.presentation></UML:Lifeline>
 
@@ -447,6 +645,7 @@
 
 
 <UML:Lifeline xmi.id="DCE.BBDCEEAD-127E-1D5B-D2F8-D2EBCC0EDAD2" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="FicheroPropiedades" events="DCE.085EB210-960A-5D6A-3168-680784221561 DCE.C625DF3B-228E-86EC-1A3B-6FEB80746664 DCE.30566CB5-17FD-84D0-74CE-856ABCBDF7EB DCE.1DEA775D-76EC-A9DA-4457-A982B1D9C802 DCE.85867EEE-D8D2-7703-9498-CFF19AB19F58 DCE.09CC6747-A15F-CFE0-2DAB-BCAE34E09B9B DCE.0F20461A-E019-2BCA-F576-59EE5B25E248 DCE.12FDC01D-7CA6-521D-9876-0A2F299C9F20 DCE.C68F8731-1751-7AF4-7FA2-5A870476C46D DCE.95572173-A9EC-EBC6-4F07-ADBCF8DDA8BB DCE.AC77B3D5-4F0C-4CB1-5E8E-1FF29AEE50B9 DCE.A91C80B9-D750-571F-43E4-E0F19B1C91E0 DCE.F6EEA41C-8C2C-D7A2-D664-B9990BABC4F4 DCE.FF359BA7-C9FB-D697-482D-C9341B9BF44F DCE.E03C791E-B801-F581-73FF-598AAC80694A"><UML:Element.presentation>
+
 
 </UML:Element.presentation></UML:Lifeline>
 
@@ -595,6 +794,7 @@
 
 <UML:Lifeline xmi.id="DCE.DF3B76E1-4493-BB77-3494-0D0A7B89A6C0" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" name="GestorCompartidos" events="DCE.8EAAD9EF-A850-9124-4FA4-9DAAB1347B17 DCE.C388B54D-7DC1-D4BB-9543-59672EA02A52 DCE.8F2AD12A-D1E5-47FB-EA75-27C2D3AF40FA DCE.D654ACE3-979B-5417-8C13-97744366E3BA DCE.513B6766-86B0-A4C6-3ECD-B51C2067C1C7 DCE.F27B35C8-2E81-56E7-4AA3-4EF11256A4AA DCE.F3F533E6-32FC-2DF6-B643-5407B501A111"><UML:Element.presentation>
 
+
 </UML:Element.presentation></UML:Lifeline>
 
 
@@ -693,6 +893,7 @@
 
 
 <UML:Comment xmi.id="DCE.A65E95B9-E93B-BBCA-2123-79550F29C91F" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"><UML:Element.presentation>
+
 
 </UML:Element.presentation>
 <UML:Comment.body>CU ConfigurarCliente: establecerConfiguracion</UML:Comment.body></UML:Comment>
@@ -823,6 +1024,14 @@
 
 <UML:UninterpretedAction xmi.id="DCE.5CF21587-8FC1-965A-7FFD-679129536A8E" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
 <UML:ActionOccurrence xmi.id="DCE.8C48C12A-22CB-A65D-50CE-7E7A0894E9EE" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" action="DCE.5CF21587-8FC1-965A-7FFD-679129536A8E" finish="DCE.F3F533E6-32FC-2DF6-B643-5407B501A111"/>
+
+
+
+<UML:UninterpretedAction xmi.id="DCE.AF244CA1-6F4F-4391-7A50-3AE21E87AF22" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
+
+
+<UML:UninterpretedAction xmi.id="DCE.F21B5674-321F-95C0-91D5-F438B1014504" owner="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
+
 </UML:Element.ownedElement><UML:InteractionFragment.gateConnector>
 <UML:InterGateConnector xmi.id="DCE.E408C7FE-D718-7E3B-E606-EF637F3C7CE3" fromGate="DCE.09324F6F-F14D-9955-A408-26431C1718CD" toGate="DCE.D1A2C479-8FAD-4CBF-A036-80036DAF363E" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
 <UML:InterGateConnector xmi.id="DCE.C211AE24-ED14-24A1-F2E5-9F0314E6A6BD" fromGate="DCE.B570D4B5-C45D-6B14-2DE7-A3FDE1A1ECDA" toGate="DCE.E86B3B03-CBC0-EBF5-F160-883767E798A3" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
@@ -862,7 +1071,10 @@
 <UML:InterGateConnector xmi.id="DCE.A4EB67B1-A35D-A629-F486-19F310E6D785" fromGate="DCE.F83A4B61-18F2-2609-DF33-95E2C0A57626" toGate="DCE.CC895E3F-69F4-CD8D-11D0-B9594D184A99" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
 <UML:InterGateConnector xmi.id="DCE.22CC9ACA-B692-E78F-8F5E-A410E26C6516" fromGate="DCE.0B8F65D7-E42B-C368-B322-1E6BECD15E2C" toGate="DCE.6812EED5-9302-0C5A-376E-A3297FF8A0FA" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
 <UML:InterGateConnector xmi.id="DCE.9340D535-357F-C1A7-503B-8342814658FD" fromGate="DCE.B5857DD7-9145-C2CB-06E2-7DF6B6CB3365" toGate="DCE.1D9EA9E5-8CD3-AC1F-0AC9-83D4AC6AF1C0" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
-<UML:InterGateConnector xmi.id="DCE.6879A9CC-6B07-86F4-6254-1C5CB11F0184" fromGate="DCE.B48EFBEE-AC3D-0436-EA2D-EE6DCE7E993A" toGate="DCE.0B3EF75E-B1D4-C40F-2611-24FF8DB14FAE" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/></UML:InteractionFragment.gateConnector><UML:Interaction.message><UML:Message xmi.id="DCE.F3FF8418-AC5C-88A5-5A96-BE87DA058213" sendEvent="DCE.71CEA0EC-E289-EE4C-86F5-9A94A01CB443" receiveEvent="DCE.6C3362D1-D44E-CF22-4426-2B501000F869" initiatingAction="DCE.CFFDE4DD-F4CB-70FF-E180-AEE9D018D722" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="asynchronous" name="eventoCambiarConfiguracion"><UML:Element.presentation>
+<UML:InterGateConnector xmi.id="DCE.6879A9CC-6B07-86F4-6254-1C5CB11F0184" fromGate="DCE.B48EFBEE-AC3D-0436-EA2D-EE6DCE7E993A" toGate="DCE.0B3EF75E-B1D4-C40F-2611-24FF8DB14FAE" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/>
+<UML:InterGateConnector xmi.id="DCE.64378352-E32C-A407-C21D-5F6BBE95D14B" fromGate="DCE.C2FF09F0-5FDC-BBD5-B874-3B0CB8648941" toGate="DCE.F9587F27-F4F5-9D91-834C-5B0D49E49191" fragment="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7"/></UML:InteractionFragment.gateConnector><UML:Interaction.message><UML:Message xmi.id="DCE.F3FF8418-AC5C-88A5-5A96-BE87DA058213" sendEvent="DCE.71CEA0EC-E289-EE4C-86F5-9A94A01CB443" receiveEvent="DCE.6C3362D1-D44E-CF22-4426-2B501000F869" initiatingAction="DCE.CFFDE4DD-F4CB-70FF-E180-AEE9D018D722" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="asynchronous" name="eventoCambiarConfiguracion"><UML:Element.presentation>
+
+
 
 
 
@@ -870,7 +1082,11 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.B6BF6917-0150-4DFC-D8A7-1193FB1BB1F9" sendEvent="DCE.5F6AEF7E-C046-39F0-AF69-B7C1AC777485" receiveEvent="DCE.0F20461A-E019-2BCA-F576-59EE5B25E248" initiatingAction="DCE.4810EEE3-57CD-0100-56DE-5EC3C5E87D73" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="synchronous" name="establecerPropiedad(clave,valor)"><UML:Element.presentation>
+
+
 
 
 
@@ -878,9 +1094,14 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.9EF860E2-1A29-FE38-3A3C-C7C9B1C7CD25" sendEvent="DCE.AC77B3D5-4F0C-4CB1-5E8E-1FF29AEE50B9" receiveEvent="DCE.A91C80B9-D750-571F-43E4-E0F19B1C91E0" initiatingAction="DCE.3CCE313F-C5A9-317D-141E-C8C6B9969B72" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.BC731281-5B36-2FB4-A9C2-B49AB3B6C78A"><UML:Element.presentation>
 
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.912E43BA-6573-F3EA-9141-BD6C485CF4EB" sendEvent="DCE.12FDC01D-7CA6-521D-9876-0A2F299C9F20" receiveEvent="DCE.0EA42C11-611A-5D20-A0DD-467B7FBF3F8D" initiatingAction="DCE.BDD098A9-4CF8-B725-EBEF-EE8D2716BC3E" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.B6BF6917-0150-4DFC-D8A7-1193FB1BB1F9" name="ok"><UML:Element.presentation>
+
+
 
 
 
@@ -888,7 +1109,11 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.447E4CA8-ECFC-2650-8E15-5CF0CF54BE8D" sendEvent="DCE.80134E5E-3780-0EDE-9B90-08FBAEFB2D1D" receiveEvent="DCE.D71303DE-86D1-B168-FE95-4974D455AC33" initiatingAction="DCE.F173A25D-00F5-D70F-A806-01627BD80171" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="synchronous" name="actualizar(this)"><UML:Element.presentation>
+
+
 
 
 
@@ -896,10 +1121,17 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.28A401C6-3765-AE7D-C653-1330A161496F" sendEvent="DCE.6609C7FD-4BAB-B220-1C0A-68EECFA8817D" receiveEvent="DCE.7052703D-077D-B399-DE68-3614FA49E8E2" initiatingAction="DCE.67FFE932-231A-E4AD-7814-771A3A623FC6" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="synchronous" name="actualizarEstado()"><UML:Element.presentation>
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.AFAE65B7-760D-159F-A906-1DD0B03F851F" sendEvent="DCE.5D56AF53-BCE2-A956-5B84-D29A859D00F3" receiveEvent="DCE.2C9AA2CF-124D-CD6A-79E7-8E2F0E6DC12F" initiatingAction="DCE.BFF862B2-6617-AE0B-933F-F24EC7CCA78D" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.28A401C6-3765-AE7D-C653-1330A161496F"><UML:Element.presentation>
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.580ACC7C-6DF7-DF86-197D-4D6BFB3516F6" sendEvent="DCE.9D000783-5F34-8B75-60B2-D5F17163FEAD" receiveEvent="DCE.FF359BA7-C9FB-D697-482D-C9341B9BF44F" initiatingAction="DCE.6986FC81-FBE1-C597-B45C-257F153728E0" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="asynchronous" name="obtenerConjuntoPropiedades()"><UML:Element.presentation>
+
+
 
 
 
@@ -907,7 +1139,11 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.6AC72C31-C479-C227-2C04-944D71CD5CA0" sendEvent="DCE.8F2AD12A-D1E5-47FB-EA75-27C2D3AF40FA" receiveEvent="DCE.6CC3923E-CDD2-A3F9-209D-B9D9C634A29E" initiatingAction="DCE.CD7C0910-90FB-EE1F-BA2C-4D534280751B" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.9F5AE595-2D08-0DF5-9860-669B31B92B85" name="obtenerConfiguracion()"><UML:Element.presentation>
+
+
 
 
 
@@ -915,19 +1151,91 @@
 
 
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.A48DC120-8D49-FED0-DF3A-57687A8D2370" sendEvent="DCE.D6724BC8-B05B-75AA-0892-D7326F82ECD5" receiveEvent="DCE.AB46D360-9532-778B-36F9-936CD5D81D5D" initiatingAction="DCE.2C10DD6F-35E2-355D-C113-890DFA7B6CEE" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.D40E22D3-3EE2-6BB5-4CCB-72358335084C"><UML:Element.presentation>
+
 
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.FED722DE-C808-7BA0-1E7F-F06DACA95C45" sendEvent="DCE.D654ACE3-979B-5417-8C13-97744366E3BA" receiveEvent="DCE.513B6766-86B0-A4C6-3ECD-B51C2067C1C7" initiatingAction="DCE.820BB560-DB86-1B77-1088-081FCBD16A2D" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="synchronous" name="actualizarEstado()"><UML:Element.presentation>
 
+
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.DB296915-775F-908D-CE06-41987BB3F1F5" sendEvent="DCE.F27B35C8-2E81-56E7-4AA3-4EF11256A4AA" receiveEvent="DCE.F3F533E6-32FC-2DF6-B643-5407B501A111" initiatingAction="DCE.E5E541EB-628B-22FE-5FC0-DB6F1954A9B6" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.FED722DE-C808-7BA0-1E7F-F06DACA95C45"><UML:Element.presentation>
+
 </UML:Element.presentation></UML:Message><UML:Message xmi.id="DCE.6923A14D-AB0B-6431-2FED-A1CEDF22ADFE" sendEvent="DCE.80B31106-4136-09A1-3CDE-B962FF61E637" receiveEvent="DCE.05877F8D-62B1-C2FE-2CB7-0BD3F0049445" initiatingAction="DCE.F8F21136-BE09-93D7-80E9-27D2073BA637" interaction="DCE.FA69CE4B-F706-44DB-5A05-FCFE9BD40CB7" kind="result" sendingMessage="DCE.DEEB3F05-C148-E17F-4D04-677B9F60E1D9" name="ok"><UML:Element.presentation>
+
+
 
 
 
 </UML:Element.presentation></UML:Message></UML:Interaction.message></UML:Interaction>
 <UML:Class xmi.id="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6" name="JPanel" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE"><UML:Element.ownedElement>
 <UML:Operation xmi.id="DCE.5CEFC715-AD5F-34C8-89B8-01631C4A9956" name="JPanel" isConstructor="true" owner="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6"/>
-<UML:Part xmi.id="DCE.885F9382-E635-7B51-09AB-2B6C4C749634" visibility="private" name="Unnamed" type="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6" owner="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6"/></UML:Element.ownedElement></UML:Class></UML:Element.ownedElement></UML:Package>
+<UML:Part xmi.id="DCE.885F9382-E635-7B51-09AB-2B6C4C749634" visibility="private" name="Unnamed" type="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6" owner="DCE.533B9467-225E-2807-E70A-0DCC589FA1D6"/></UML:Element.ownedElement></UML:Class>
+<UML:Comment xmi.id="DCE.94D2565F-9FBC-0289-5B4C-A99901CAE4EB" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE"><UML:Element.presentation>
+</UML:Element.presentation>
+<UML:Comment.body>Diagrama de clases del CUS_Configurar_Cliente</UML:Comment.body></UML:Comment>
+<UML:Comment xmi.id="DCE.654C279B-D037-1AE3-AE3B-D5D520319B88" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" annotatedElement="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.presentation>
+
+
+</UML:Element.presentation>
+<UML:Comment.body>Implementa los patrones Singleton y Observador</UML:Comment.body></UML:Comment>
+<UML:Class xmi.id="DCE.E229FD5D-9241-D2FB-C36A-4DC9E0DEFC2D" name="GestorCompartidos" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" clientDependency="DCE.B12AC7FD-B6FE-0FD9-DA78-EA4D61D6C158 DCE.88D6BE32-F521-0B4A-5149-B0E5E2322228"><UML:Element.presentation>
+</UML:Element.presentation><UML:Element.ownedElement>
+<UML:Operation xmi.id="DCE.073B165F-2BEE-097F-A408-790F25926AE6" name="GestorCompartidos" isConstructor="true" owner="DCE.E229FD5D-9241-D2FB-C36A-4DC9E0DEFC2D"/>
+<UML:Operation xmi.id="DCE.E50BFF9B-F2C1-D2A0-8B38-16CC614F3DA0" name="actualizar" isQuery="false" isAbstract="false" redefinedElement="DCE.1F357532-C3A9-A78D-86CC-A82C5C4AF181" owner="DCE.E229FD5D-9241-D2FB-C36A-4DC9E0DEFC2D"><UML:Element.ownedElement>
+<UML:Parameter xmi.id="DCE.1EE3952F-4C27-1120-74E9-70F87A286CEA" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" direction="result" owner="DCE.E50BFF9B-F2C1-D2A0-8B38-16CC614F3DA0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.8BDBEC8F-3E3E-F3EF-D538-5D44E5B9A757"/></UML:TypedElement.multiplicity></UML:Parameter>
+<UML:Parameter xmi.id="DCE.12333101-A160-6BE6-2DF5-8A55D7F7AAD5" type="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" name="suj" direction="in" owner="DCE.E50BFF9B-F2C1-D2A0-8B38-16CC614F3DA0"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.D2EF6815-685C-D609-DD80-998D9A21EA09" isOrdered="true"/></UML:TypedElement.multiplicity></UML:Parameter>
+<UML:TaggedValue xmi.id="DCE.FE270392-D3E8-5F8A-EE4E-8CAD824FD494" owner="DCE.E50BFF9B-F2C1-D2A0-8B38-16CC614F3DA0" name="documentation">
+<UML:TaggedValue.dataValue> 
+ @param suj : objeto que ha sufrido un cambio de estado del que depende el 
+ observador. Pasando como parámetro al sujeto se permite que el mismo objeto observador 
+ observe a varios sujetos.
+ </UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement></UML:Operation></UML:Element.ownedElement></UML:Class>
+<UML:Class xmi.id="DCE.91BFEDEC-7006-4127-05BF-A79513BF656C" name="GestorRed" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" clientDependency="DCE.B921B8B1-91B5-BFD2-A487-8AAB519B1913 DCE.2403FE29-C8A5-6149-FD69-AA04536E2D95"><UML:Element.presentation>
+</UML:Element.presentation><UML:Element.ownedElement>
+<UML:Operation xmi.id="DCE.23C70BE2-0906-E06F-3948-013E6875FA72" name="GestorRed" isConstructor="true" owner="DCE.91BFEDEC-7006-4127-05BF-A79513BF656C"/>
+<UML:Operation xmi.id="DCE.001FC6FB-002D-145F-2DFF-85938B3E10A4" name="actualizar" isQuery="false" isAbstract="false" redefinedElement="DCE.1F357532-C3A9-A78D-86CC-A82C5C4AF181" owner="DCE.91BFEDEC-7006-4127-05BF-A79513BF656C"><UML:Element.ownedElement>
+<UML:Parameter xmi.id="DCE.AAC8B1A7-7C70-E45A-0979-CB72D88DD737" type="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" direction="result" owner="DCE.001FC6FB-002D-145F-2DFF-85938B3E10A4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.0095C556-E122-CADF-A207-7901332331B2"/></UML:TypedElement.multiplicity></UML:Parameter>
+<UML:Parameter xmi.id="DCE.FE7650A4-E3A4-E95F-D3FB-371743832FC0" type="DCE.B04BC54D-F952-568E-99B9-2678D893D0AA" name="suj" direction="in" owner="DCE.001FC6FB-002D-145F-2DFF-85938B3E10A4"><UML:TypedElement.multiplicity>
+<UML:Multiplicity xmi.id="DCE.211584E6-9C1D-0040-F50B-CD52223D93D4" isOrdered="true"/></UML:TypedElement.multiplicity></UML:Parameter>
+<UML:TaggedValue xmi.id="DCE.B98B6781-CE75-4510-1F56-1F9E5DA33417" owner="DCE.001FC6FB-002D-145F-2DFF-85938B3E10A4" name="documentation">
+<UML:TaggedValue.dataValue> 
+ @param suj : objeto que ha sufrido un cambio de estado del que depende el 
+ observador. Pasando como parámetro al sujeto se permite que el mismo objeto observador 
+ observe a varios sujetos.
+ </UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement></UML:Operation></UML:Element.ownedElement></UML:Class>
+
+<UML:Implementation xmi.id="DCE.B921B8B1-91B5-BFD2-A487-8AAB519B1913" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" client="DCE.91BFEDEC-7006-4127-05BF-A79513BF656C" supplier="DCE.2DB49E98-F620-D216-4743-C716C644AD09"><UML:Element.presentation>
+</UML:Element.presentation></UML:Implementation>
+<UML:Implementation xmi.id="DCE.B12AC7FD-B6FE-0FD9-DA78-EA4D61D6C158" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" client="DCE.E229FD5D-9241-D2FB-C36A-4DC9E0DEFC2D" supplier="DCE.2DB49E98-F620-D216-4743-C716C644AD09"><UML:Element.presentation>
+</UML:Element.presentation></UML:Implementation>
+<UML:Usage xmi.id="DCE.88D6BE32-F521-0B4A-5149-B0E5E2322228" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" client="DCE.E229FD5D-9241-D2FB-C36A-4DC9E0DEFC2D" supplier="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.presentation>
+
+</UML:Element.presentation></UML:Usage>
+<UML:Usage xmi.id="DCE.2403FE29-C8A5-6149-FD69-AA04536E2D95" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" client="DCE.91BFEDEC-7006-4127-05BF-A79513BF656C" supplier="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.presentation>
+
+</UML:Element.presentation></UML:Usage>
+<UML:Comment xmi.id="DCE.161D12D5-2FE4-951C-3839-3E2A69325E81" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" annotatedElement="DCE.6F3E315C-62C6-482D-4B42-FFD8A05C84A6"><UML:Element.presentation>
+
+
+</UML:Element.presentation>
+<UML:Comment.body>    public void notificarObservadores() {
+        Iterator&lt;Observador&gt; iterador = listaObservadores.iterator();
+        while (iterador.hasNext()){
+            iterador.next().actualizar (this);
+        }
+    }</UML:Comment.body></UML:Comment>
+<UML:Comment xmi.id="DCE.D074465C-6B8E-0761-C067-50C28DA1220E" owner="DCE.69666B15-B578-411A-94BE-DAB3C34515CE" annotatedElement="DCE.2DB49E98-F620-D216-4743-C716C644AD09"><UML:Element.presentation>
+
+
+
+
+</UML:Element.presentation>
+<UML:Comment.body>Un objeto Observador puede observar a varios "Sujetos"</UML:Comment.body></UML:Comment></UML:Element.ownedElement></UML:Package>
 <UML:Package xmi.id="DCE.07F06A06-EC2B-405E-798E-3C33E2584576" name="GestorDeEstadisticas" owner="DCE.F58A6F6B-5A14-97CC-50BF-CB6C19983371"><UML:Element.presentation>
 </UML:Element.presentation></UML:Package>
 
@@ -1552,8 +1860,20 @@
 <UML:Package xmi.id="DCE.A1894A66-3BA6-707B-42B4-EE67D28AA0B1" name="Diseño" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/>
 <UML:DataType xmi.id="DCE.922CB52B-2FB4-0227-085D-42BAB0050170" name="void" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/>
 
-</UML:Element.ownedElement><UML:Package.packageImport>
+
+
+<UML:DataType xmi.id="DCE.60D71E10-497A-7D5D-63D9-668B0E0FFC2B" name="Observador" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:Element.presentation>
+
+</UML:Element.presentation></UML:DataType>
+<UML:DataType xmi.id="DCE.1945D65A-1C7C-5587-F196-3381E3C45954" name="String" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:Element.presentation>
+</UML:Element.presentation></UML:DataType>
+<UML:DataType xmi.id="DCE.3720DF59-0B08-795B-C1BD-90ED4E5AFDB1" name="ControlConfiguracionClienteException" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"/>
+<UML:Package xmi.id="DCE.DC60C7CE-8490-1E33-A5A4-C7BA43B51EED" name="java" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:Element.ownedElement>
+<UML:Package xmi.id="DCE.D1DC5A3F-0796-6091-B67A-27C63C145C49" name="util" owner="DCE.DC60C7CE-8490-1E33-A5A4-C7BA43B51EED"><UML:Element.ownedElement>
+<UML:DataType xmi.id="DCE.7416ADDE-1C1A-EE35-8963-063B0B054A54" name="Properties" owner="DCE.D1DC5A3F-0796-6091-B67A-27C63C145C49"/></UML:Element.ownedElement></UML:Package></UML:Element.ownedElement></UML:Package>
+<UML:Interface xmi.id="DCE.0268D665-711F-FF76-50E1-93023A3F87F8" name="Sujeto" owner="DCE.C17F89F3-FB74-D358-D0B6-120872781061" appliedStereotype="__uri_.\eGorilla.etup#//*[@xmi.id=&quot;DCE.1C895C52-9248-8B38-DA41-866E2D5E030A&quot;]" supplierDependency="DCE.B4C749D6-75EF-FE61-3FA3-D6D46BDDAEE3"/></UML:Element.ownedElement><UML:Package.packageImport>
 <UML:PackageImport xmi.id="DCE.493D23F3-FDF6-E23E-C325-0B11FCE44F95" importingPackage="DCE.C17F89F3-FB74-D358-D0B6-120872781061"><UML:PackageImport.importedPackage>
-<UML:Profile xmi.id="DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9" name="Unnamed" isCloned="true" href=".\eGorilla.etup#//*[@xmi.id=&apos;DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9&apos;]" isDirty="false"/></UML:PackageImport.importedPackage><UML:Element.ownedElement>
+<UML:Profile xmi.id="DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9" name="Unnamed" isCloned="true" href=".\eGorilla.etup#//*[@xmi.id=&apos;DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9&apos;]" isDirty="true"><UML:Element.ownedElement>
+<UML:Stereotype xmi.id="DCE.1C895C52-9248-8B38-DA41-866E2D5E030A" name="interface" owner="__uri_.\eGorilla.etup#//*[@xmi.id=&apos;DCE.3A56D0E1-D3BA-4E7A-2C7B-C32D1B921CD9&apos;]"/></UML:Element.ownedElement></UML:Profile></UML:PackageImport.importedPackage><UML:Element.ownedElement>
 <UML:TaggedValue xmi.id="DCE.CBABD540-737C-3D67-C286-96E8A1F391F5" owner="DCE.493D23F3-FDF6-E23E-C325-0B11FCE44F95" name="autoCreated">
 <UML:TaggedValue.dataValue>true</UML:TaggedValue.dataValue></UML:TaggedValue></UML:Element.ownedElement></UML:PackageImport></UML:Package.packageImport></UML:Project></XMI.content> </XMI>
