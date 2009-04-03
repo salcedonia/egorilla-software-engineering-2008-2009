@@ -85,7 +85,5 @@ public class testTCP {
             error = "hay error";
         } 
         assertNull(error);  
-    }
-    
-
+    }   
 }
