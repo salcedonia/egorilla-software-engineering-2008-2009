@@ -1,5 +1,6 @@
 package gestorDeFicheros;
 
+import mensajes.serverclient.ListaArchivos;
 import java.io.*;
 import datos.*;
 

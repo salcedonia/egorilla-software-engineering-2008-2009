@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import mensajes.Mensaje;
 import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
@@ -35,7 +36,6 @@ public class GestorEgorilla extends Thread{
     private GestorDescargas _gestorDescargas;
     private GestorDeRed<Mensaje> _gestorDeRed;
     
-    private GestorSubidas _gestorSubidas;
     
     private GestorClientes _gestorClientes;
     
@@ -46,7 +46,6 @@ public class GestorEgorilla extends Thread{
     public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDescargas = gd;
-        _gestorSubidas = new GestorSubidas(this);
         _gestorDeRed = gr; 
         _gestorClientes = new GestorClientes();
     }
@@ -58,13 +57,26 @@ public class GestorEgorilla extends Thread{
      * 
      * @return si la conexion ha sido satisfactoria
      */
-    public boolean conectaServidor(){
-        // realiza la conexion por pasos.
-        // para ello envia los datos al servidor y espera respuesta
+    public void conectaServidor(String ipServidor, int puertoServidor){
+        // realiza la conexion.
+        // para ello envia los datos al servidor
+        DatosCliente misDatos = new DatosCliente();
         
+        // TODO: estos datos salen de algún sitio, del gestor de config??
+        misDatos.setNombreUsuario("mi nombre");
+        misDatos.setPuertoEscucha(4000);
         
+       _serverPort = puertoServidor;
+       _serverIP = ipServidor;
+        misDatos.setDestino(_serverIP, _serverPort);
+        
+        // envia mis datos
+        this.addMensajeParaEnviar(misDatos);
+    }
+    
+    void conectado() {
         _conectado = true;
-        return _conectado;
+        // MOLARIA AKI UN OBSERVADOR Y DECIRSELO A TO DIOS???
     }
     
     /**
@@ -73,34 +85,10 @@ public class GestorEgorilla extends Thread{
      *
      */
     public void comienzaP2P(){
-        // TODO: 6969 fijado a capon
-     //  _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(6969);
+        
         _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas));
-       
         _gestorDeRed.comienzaEscucha();
-    //   this.start();
     }
-
-//    /**
-//     * se da la orden de comenzar una descarga.
-//     * esto dispara la colsulta de peers al servidor y 
-//     * despues comenzar�n las negociaciones con estos
-//     * @param a archivo a descargar
-//     */
-//    public void nuevaDescarga(Archivo a){
-//        // se realiza la peticion de descarga al servidor
-//        
-//        Mensaje  msj = new PeticionDescarga(a._hash);
-//        msj.setDestino(_serverIP, _serverPort);
-//        
-//        // si hemos conectado antes...
-//        // lo envia al servidor.
-//        if (!_conectado){
-//            // TODO: notificar error
-//        }
-//        else
-//            this.addMensajeParaEnviar(msj);      
-//    } 
     
     /**
      * se realiza una consulta, el m�todo es asincrono, as� que no espera respuesta
@@ -121,7 +109,6 @@ public class GestorEgorilla extends Thread{
         }
         else
             this.addMensajeParaEnviar(msj);
-        
     }
    
     /**
@@ -136,53 +123,33 @@ public class GestorEgorilla extends Thread{
     public void nuevaSubida(Archivo a, String ip, int puerto,ArrayList<Fragmento> fragmentos){
         //TODO:
     }
-            
-    public void nuevaDescarga(Archivo a, DatosCliente[] peers){
-        // tomo nota de estos clientes. 
-        
+           
+    /**
+     * se da la orden de comenzar una descarga.
+     * esto dispara la colsulta de peers al servidor y 
+     * despues comenzar�n las negociaciones con estos
+     * @param a archivo a descargar
+     * @param peers otros clientes con los que negociaremos
+     */
+    public void nuevaDescarga(Archivo a, DatosCliente[] peers) {
+
         // se les envia HolaQuiero a cada uno de ellos
         for (DatosCliente cliente : peers) {
             HolaQuiero hola = new HolaQuiero(a);
             hola.setDestino(cliente.getIP(), cliente.getPuertoEscucha());
             addMensajeParaEnviar(hola);
-            //_colaSalida.add(hola);
+        //_colaSalida.add(hola);
         }
-    }
-    
-    /**
-     * se encola un mensaje para darle salida.
-     * los mensajes se encolan primero para poder controlar el flujo.
-     * TODO mensaje de salida DEBE pasar por aqui
-     * @param msj
-     */
-    public synchronized void addMensajeParaEnviar(Mensaje msj){
-        _colaSalida.add(msj);
-        if (!this.isAlive())
-            this.start();
-    }
-    
-    public void run(){
-        
-            try {
-                // por cada mensaje al que se le deba dar salida, se le da.
-                while (!_colaSalida.isEmpty()){
-                    Mensaje msj =_colaSalida.poll();       
-                    _gestorDeRed.envia(msj, msj.destino(), msj.puerto());
-                }
-                //this.wait();
-            }   catch (NetError ex) {
-                // TODO: gestor de errores. hay no se ha podido hablar con quien dices
-                    Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
-            }
     }
 
     /**
      * tras la respuesta del servidor, se comienza la descarga de un fichero desde 
      * los clientes indicados
+     * 
      * @param a fichero a descargar
      * @param lista lista de clientes que lo contienen
      */
-    void DescargaFichero(Archivo a, DatosCliente[] lista) {
+    public void DescargaFichero(Archivo a, DatosCliente[] lista) {
         
         for (DatosCliente cliente : lista) {
             _gestorClientes.addClienteDescarga(cliente.getIP(), a);
@@ -206,4 +173,59 @@ public class GestorEgorilla extends Thread{
             this.addMensajeParaEnviar(q);
         }
     }
+  
+    /**
+     * envia al SERVIDOR la lista de archivos compatidos por este cliente.
+     * este metodo se invoca durante la conexión, pero puede ser invocado
+     * por ejemplo cuando termine la descarga de un fichero o se comparta algo
+     * nuevo para actualizar la BBDD del servidor.
+     */
+    void enviaListaArchivos() {
+        // TODO: aqui enviamos la lista de archivos compartidos que se sube
+        // esto incluye tanto compartidos como a medias.
+        
+        ListaArchivos l = new ListaArchivos();
+        l.setDestino(_serverIP, _serverPort);
+        
+        // es un vector, por lo que hay que añadir los elementos en el consturctor
+        // en un addall o algo
+        
+        // y se envia
+        if (!_conectado){
+            // TODO: notificar error
+        }
+        else
+            this.addMensajeParaEnviar(l);
+    }
+    
+    /**
+     * se encola un mensaje para darle salida.
+     * los mensajes se encolan primero para poder controlar el flujo.
+     * TODO mensaje de salida DEBE pasar por aqui
+     * 
+     * @param msj
+     */
+    public synchronized void addMensajeParaEnviar(Mensaje msj){
+        _colaSalida.add(msj);
+        if (!this.isAlive())
+            this.start();
+    }
+    
+    @Override
+    public void run(){
+            try {
+                // por cada mensaje al que se le deba dar salida, se le da.
+                while (!_colaSalida.isEmpty()){
+                    Mensaje msj =_colaSalida.poll();       
+                    _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                }
+                //TODO: añadiendo una espera aqui se retrasa la salida  reduce el 
+                // trafico this.wait();
+            }   catch (NetError ex) {
+                // TODO: gestor de errores. hay no se ha podido hablar con quien dices
+                    Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+
 }

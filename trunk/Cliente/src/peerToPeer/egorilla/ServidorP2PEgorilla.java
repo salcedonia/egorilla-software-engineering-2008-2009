@@ -83,6 +83,14 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // Apunto para servir m�s adelante.
                 Dame pkg = (Dame) msj;
               
+                // TODO: en este punto debemos hacer algo que evalue los fragmentos
+                // que se están enviando, cuales quiero y a quien se los pido
+                // ya que puedo haber pedido este fichero a varios peers.
+                
+                
+                
+                // indico al gestor de subidas que vot a subir determinados fragmentos 
+                // de un fichero a un peer identificado por ip.
                 _gestor.nuevaSubida(new Archivo(pkg.nombre, pkg.hash), ip, port, pkg.fragmentos);
                 
                 // YA SE CONTESTARA CON TOMA, no aki
@@ -173,7 +181,14 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 _gestor.DescargaFichero(a, respDes.getLista());
                 
                 break;
+            case Bienvenido:
+                _gestor.conectado();
+                _gestor.enviaListaArchivos();
         }
+    }
+
+    public void perdidaDeConexion(String ip) {
+       // TODO: se ha perdido la conexión con este tipo
     }
 
 }
