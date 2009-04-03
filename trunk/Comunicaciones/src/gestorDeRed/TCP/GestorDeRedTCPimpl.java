@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author pitidecaner
+ * @author Luis Ayuso
  */
 public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 

@@ -26,5 +26,8 @@ public enum TipoMensaje {
     RespuestaPeticionDescarga,
     DatosCliente,
     Bienvenido,
+    ListaDeArchivos,
+    
+    // offTopic
     keepAlive
 }
