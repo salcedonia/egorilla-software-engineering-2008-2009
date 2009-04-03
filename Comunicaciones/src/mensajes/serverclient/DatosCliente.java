@@ -90,10 +90,10 @@ public class DatosCliente implements Serializable, Mensaje{
         _destino = destino;
         _puerto  = puerto;
     }
-    public String destino() {
+    public String ipDestino() {
         return _destino;
     }
-    public int puerto() {
+    public int puertoDestino() {
         return _puerto;
     }
 }

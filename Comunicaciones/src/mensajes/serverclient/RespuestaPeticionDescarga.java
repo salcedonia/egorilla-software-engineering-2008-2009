@@ -72,10 +72,10 @@ public class RespuestaPeticionDescarga implements Mensaje, Serializable{
         _destino = destino;
         _puerto  = puerto;
     }
-    public String destino() {
+    public String ipDestino() {
         return _destino;
     }
-    public int puerto() {
+    public int puertoDestino() {
         return _puerto;
     }
 }

@@ -38,11 +38,11 @@ public class Bienvenido implements Mensaje{
        _puerto  = puerto;
     }
 
-    public String destino() {
+    public String ipDestino() {
         return _destino;
     }
 
-    public int puerto() {
+    public int puertoDestino() {
         return _puerto;
     }
 
