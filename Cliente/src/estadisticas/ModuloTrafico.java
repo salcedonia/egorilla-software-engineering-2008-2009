@@ -45,10 +45,11 @@ public abstract class ModuloTrafico {
         }
         if (listaVelocidadSesion.isEmpty()) {
         }
+        
         if (listaVelocidadSesion.size() > tiempoMaximo - count) {
             int overflow = listaVelocidadSesion.size() + count - tiempoMaximo;
-            for (int i = 0; i < overflow; i++) {
-                listaVelocidadSesion.pop();
+            for (int i = 0; i < overflow; i++) {        
+               listaVelocidadSesion.remove(0);
             }
         }
         //Apartir de "intervalo", donde viene los bytes llegados calculamos la velocidad media para esa posicion
