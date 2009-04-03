@@ -2,7 +2,7 @@ package main;
 
 import gestorDeConfiguracion.ControlConfiguracion;
 import gestorDeConfiguracion.ControlConfiguracionServidorException;
-import tareas.HiloServidor;
+import servidor.tareas.HiloServidor;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +29,7 @@ public class Main {
            
             config.leeConfig("Configuracion.properties");
             int puerto=config.getPuerto();
-            servidor = new HiloServidor(puerto);
+      //      servidor = new HiloServidor(puerto);
         } 
         catch (IOException ex) {
         
@@ -40,21 +40,21 @@ public class Main {
         
         System.out.println("Escuchando por puerto 6969");
         
-
-        //  Escuchamos conexiones 
-        while (_loop){
-            
-            try {
-                
-                // Escuchamos conexiones
-                servidor.escuchar();
-                
-            } 
-            catch (IOException ex) {
-                
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, 
-                    null, ex);
-            }
-        }
+//
+//        //  Escuchamos conexiones 
+//        while (_loop){
+//            
+//            try {
+//                
+//                // Escuchamos conexiones
+//             //   servidor.escuchar();
+//                
+//            } 
+//            catch (IOException ex) {
+//                
+//                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, 
+//                    null, ex);
+//            }
+//        }
     }
 }
