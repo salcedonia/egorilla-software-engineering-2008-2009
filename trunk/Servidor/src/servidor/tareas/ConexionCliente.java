@@ -66,8 +66,10 @@ public class ConexionCliente extends Thread {
             // TODO: sacar esta info de algún sitio
             //b.numeroDeArchivos
             
+            b.setDestino(_datosCliente.getIP(), _datosCliente.getPuertoEscucha());
+            
             try {
-                _red.envia(new Bienvenido(), _datosCliente.getIP(), _datosCliente.getPuertoEscucha());
+                _red.envia(b, _datosCliente.getIP(), _datosCliente.getPuertoEscucha());
             } catch (NetError ex) {
                 Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
