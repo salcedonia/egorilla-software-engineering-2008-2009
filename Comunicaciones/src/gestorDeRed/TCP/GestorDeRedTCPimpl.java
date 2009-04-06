@@ -51,6 +51,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     }
     /**
      * envía un paquete de tipo E a la dirección especificada
+     * 
      * @param var el paquete a enviar
      * @param host el nombre de host o ip
      * @param port el puerto
@@ -64,6 +65,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
 
         } catch (IOException ex) {
+            System.err.println("error al conectar con " + host  + ":" + port);
              throw new NetError("error al conectar con " + host  + ":" + port);
         }
     }
@@ -104,6 +106,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     @Override
     public void run() {
         try {
+            
             _sock = new ServerSocket(_puerto);
 
             // TODO: hacer que esto no sea para siempre, poder pararlo de alguna forma
