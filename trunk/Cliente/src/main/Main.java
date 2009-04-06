@@ -4,7 +4,6 @@ import gestorDeConfiguracion.ControlConfiguracionCliente;
 import control.*;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gui.GUIConsola;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,24 +21,19 @@ public class Main {
      */
     public static void main(String[] args) throws ControlConfiguracionClienteException{
 
-        String cad = null;
         
         ControlConfiguracionCliente oCtrlConfigCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties");
         int iPuerto = Integer.parseInt(oCtrlConfigCliente.obtenerPropiedad("Puerto"));
-        ServidorFicheros fs = new ServidorFicheros(iPuerto);
-
-//        ServidorFicheros fs = new ServidorFicheros(4000);
-        fs.start();
 
 //        String nombreDirectorio = "compartidos";
-        ControlAplicacion.compartidos(oCtrlConfigCliente.obtenerPropiedad("Dir_Compartidos"));
+       
+        ControlAplicacion control = new  ControlAplicacion(iPuerto, oCtrlConfigCliente.obtenerPropiedad("Dir_Compartidos"));
         
         // Mostramos la interfaz de consola
         try {
-
-            new GUIConsola(cad);
+            new GUIConsola(control).mostrarMenu();
             
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

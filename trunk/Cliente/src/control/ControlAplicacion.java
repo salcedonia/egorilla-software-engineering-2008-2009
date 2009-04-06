@@ -5,14 +5,11 @@ import gestorDeFicheros.GestorCompartidos;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mensajes.Mensaje;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import mensajes.serverclient.RespuestaPeticionConsulta;
-import mensajes.serverclient.RespuestaPeticionDescarga;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ServidorP2PEgorilla;
@@ -27,45 +24,37 @@ public class ControlAplicacion {
 
     // ATRIBUTOS
     private static boolean _conectado = false;
-    private static GestorCompartidos _gestorCompartidos = null;
-    private static DatosCliente _datosCliente;
     private static PeticionConsulta _peticionConsulta;
-    private static PeticionDescarga _peticionDescarga;
 
+    private static GestorDeRed<Mensaje> _red;
+    private static GestorDescargas      _descargas;
+    private static GestorEgorilla       _egorilla;
     
-    private static GestorDeRed<Mensaje> _red = new GestorDeRedTCPimpl<Mensaje>(4545);
-    private static GestorDescargas      _descargas = new GestorDescargas();
-    private static GestorEgorilla       _egorilla = new GestorEgorilla(_descargas, _red);
     
+    public ControlAplicacion(int puerto, String compartidos){
+        _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
+        this.compartidos(compartidos);
+      _descargas = new GestorDescargas();
+      _egorilla = new GestorEgorilla(_descargas, _red);
+    }   
     
-    /**
-     * 
-     */
-    public ControlAplicacion() {
-    }
-
     /**
      * Configura el gestor de archivos compartidos del cliente a partir del 
      * nombre del directorio que el usuario del Cliente eGorilla comparte.
      * 
      * @param nombreDirectorio
      */
-    public static void compartidos(String nombreDirectorio) {
-        try {
-            _gestorCompartidos = new GestorCompartidos(new File(nombreDirectorio));
-        } catch (IOException ex) {
-            // hacer algo, como poner un directorio por defecto (no)
-            // tal vez lo detecte dentro como no directorio o comprobar path dentro.
-        }
+    private void compartidos(String nombreDirectorio) {
+        // TODO: inicializa el gestor de compartidos o lo que sea
     }
-
+    
     /**
      * Indica si estamos conectados a un servidor o no.
      * 
      * @return Verdadero si estamos conectados a un servidor y falso en caso
      * contrario.
      */
-    public static boolean conectado() {
+    public boolean conectado() {
         return _conectado;
     }
 
@@ -74,29 +63,25 @@ public class ControlAplicacion {
      *
      * @throws java.io.IOException
      */
-    public static void conectar(String IP, int puerto) throws IOException {
+    public void conectar(String IP, int puerto) throws Exception {
         
-        _datosCliente = new DatosCliente();
-        _datosCliente.setNombreUsuario("dePruebas");
-        _datosCliente.setPuertoEscucha(4545);
-        System.out.println("Envio nombre-user <" + _datosCliente.getNombreUsuario() + "> y su port-Listen <" + _datosCliente.getPuertoEscucha() + ">");
-        _egorilla.addMensajeParaEnviar(_datosCliente);
-
-//        // Mandamos la _lista de archivos asociada al cliente
-//        System.out.println("Se mando info de <" + _gestorCompartidos.getArchivosCompartidos().size() + "> archivos compartidos");
-//        _conexionPeer.enviarObjeto(_gestorCompartidos.getArchivosCompartidos());
-
-        // ademas, debemos activar el p2p
+        // primero, debemos activar el p2p
         _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
         _red.comienzaEscucha();
         
-        _conectado = true;
+        // dormimos 1 segundo el hilo para que pueda abrirse el socket y no haya
+        // problemas con las pruebas en local
+        Thread.sleep(1000);
+        
+        _egorilla.conectaServidor(IP, puerto);
+  
+        _conectado = true;  
     }
 
     /**
      * Cierra la conexion con el servidor.
      */
-    public static void close() {
+    public void close() {
    
         
         
@@ -113,7 +98,7 @@ public class ControlAplicacion {
      *
      * @param cad nombre de fichero buscado
      */
-    public static void consultar(String cad) {
+    public void consultar(String cad) {
         
         RespuestaPeticionConsulta respuestaConsulta = null;
         _peticionConsulta = new PeticionConsulta(cad);
@@ -127,7 +112,7 @@ public class ControlAplicacion {
      *
      * @param hash El identificador unico de este fichero.
      */
-    public static void bajar(String nmb,String hash) {
+    public void bajar(String nmb,String hash) {
         _egorilla.nuevaDescarga(new Archivo(nmb, hash));
     }
 }

@@ -7,6 +7,8 @@ package peerToPeer.egorilla;
 
 import datos.Archivo;
 import datos.Fragmento;
+import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
@@ -57,14 +59,19 @@ public class GestorEgorilla extends Thread{
      * 
      * @return si la conexion ha sido satisfactoria
      */
-    public void conectaServidor(String ipServidor, int puertoServidor){
+    public void conectaServidor(String ipServidor, int puertoServidor) throws ControlConfiguracionClienteException{
         // realiza la conexion.
         // para ello envia los datos al servidor
         DatosCliente misDatos = new DatosCliente();
         
-        // TODO: estos datos salen de algún sitio, del gestor de config??
-        misDatos.setNombreUsuario("mi nombre");
-        misDatos.setPuertoEscucha(4000);
+        // los datos se leen directamente del fichero de configuración
+        ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstanciaDefecto();
+        
+        int puerto = Integer.parseInt(config.obtenerPropiedad("Puerto"));
+        String nmb = config.obtenerPropiedad("NmbUsuario");
+        
+        misDatos.setNombreUsuario(nmb); 
+        misDatos.setPuertoEscucha(puerto);
         
        _serverPort = puertoServidor;
        _serverIP = ipServidor;
