@@ -9,7 +9,11 @@ import datos.Archivo;
 import datos.Fragmento;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Stack;
+import java.util.Vector;
+import mensajes.serverclient.DatosCliente;
 import peerToPeer.EstadoTemporal;
+import peerToPeer.egorilla.GestorEgorilla;
 
 
 /**
@@ -18,67 +22,62 @@ import peerToPeer.EstadoTemporal;
  */
 public class GestorDescargas {
 
-    private Hashtable<String,EstadoTemporal> _temporales;
-
+    
+    private Vector<String> _ficherosSinInformación;
+    private Hashtable<String,Vector<DatosCliente>> _ficherosConInformación;
+    
     public GestorDescargas() {
-        _temporales = new Hashtable<String, EstadoTemporal>();
+       _ficherosSinInformación = new Vector<String>();
+       _ficherosConInformación = new Hashtable<String, Vector<DatosCliente>>();
     }
     
-    public void altaFichero(Archivo a){
-        EstadoTemporal e = new EstadoTemporal(a);
-        _temporales.put(a.getHash(), e);
-    }
-
-    public ArrayList<Fragmento> getFragmentos(String hash) {
-    
-        // si lo tengo entre los temporales, lo busco ahi, si no lo busco en 
-        // otro sitio
-        
-        return _temporales.get(hash).getFragmentos();       
+    public void nuevaDescargaPendiente(Archivo a){
+        _ficherosSinInformación.add(a.getHash());
     }
    
-    /**
-     * llega un fragmento, se comprueba el orden y se almacena
-     * 
-     * @param f descripcion del fragmento
-     * @param chunk el fragmento en si
-     */
-    public void llegaFragmento(Fragmento f, Byte[] chunk){
+/**
+ *  rellena la información para realizar la descarga de un fichero, además se 
+ * verifica que el fichero estubiese pendiente de descarga, ya que puede ser un
+ * mensaje erroneo.
+ * 
+ * @param hash
+ * @param propietarios
+ * @return
+ */
+    public boolean completaInformacion (String hash, DatosCliente[] propietarios){
         
-        // esta este archivo entre los buscados?
-        if (!_temporales.containsKey(f.hash))
-            return;
-        
-        // esta este fragmento entre los que no tenemos?
-        
-        boolean encontrado = false;
-        for (Fragmento frag : _temporales.get(f.hash).getFragmentos()) {
-            encontrado = encontrado || frag.equals(f);
+        // puede ser que ya tengamos info de este archivo, miraremos en el
+        // array de archivos que ya la tienen
+        if (!_ficherosSinInformación.contains(hash)){
+            
+            if(_ficherosConInformación.containsKey(hash)){
+                for (int i = 0; i < propietarios.length; i++) {
+                    _ficherosConInformación.get(hash).add(propietarios[i]);
+                 }
+                return true;
+            }
+            return false;
         }
-        if (encontrado)return;
         
-        // actualiza lista fragmentos
-        _temporales.get(f.hash).getFragmentos().add(f);
+        // si la información esta vacia, seguimos sin info.
+        if (propietarios.length == 0)
+            return  true;
         
-        // envia a gestor de disco
-        // TODO: interacctuar gestor disco
+        _ficherosSinInformación.remove(hash);
+        
+        Vector<DatosCliente> datos = new Vector<DatosCliente>();
+        for (int i = 0; i < propietarios.length; i++) 
+            datos.add(propietarios[i]);
+            
+        _ficherosConInformación.put(hash, datos);
+        return true;
     }
-
+    
     /**
-     * puede alguien preguntarme por este fichero?
-     * si lo tengo en compartidos o en descargas pendientes, entonces
-     * puedo servirle partes
-     * 
-     * @param hash identificaci�n del fichero
-     * @return si lo tengo o no entre los mios
+     * se da de baja a un propietario en todas las
+     * descargas pendientes que tengamos.
      */
-    public boolean puedoBajar(String hash) {
-        // tengo este fichero entre los pendientes o completos??
-        if (_temporales.containsKey(hash))// lo tengo en pendientes
-            return true;
-        
-        // probar dnd lo puedo tener
-        
-        return false;
+    public void eliminaPropietario(String ip){
+       // TODO: para cada entrada, quita a este cliente
     }
 }

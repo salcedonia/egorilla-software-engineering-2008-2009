@@ -62,6 +62,8 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
      */
     public void recibeMensaje(Mensaje msj, String ip, int port) {
         switch (msj.getTipoMensaje()){
+     
+       //------------------ Mensajes del peer to peer  -------------------------
             case Altoo:
                 
                 // elimino toda ocurrencia del peer en mis listas
@@ -110,21 +112,12 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // si tengo el fichero
                 // TODO: hay que buscar entre las descargas pendientes y los ficheros
                 // completos
-                if (_descargas.puedoBajar(quiero.hash)){
-                
-                // recupero fragmentos
-                resp.fragmentos =  _descargas.getFragmentos(quiero.hash);
+              
                 
                 // apunto direccion del peer e interes
                                
                 // CONTESTA: tengo
                 _gestor.addMensajeParaEnviar(resp);
-                }
-                else{
-                    // no lo tengo, envio una estructura vacia
-                    resp.fragmentos = new ArrayList<Fragmento>();
-                }
-                break;
                 
                 
             case Tengo:
@@ -167,10 +160,12 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 f.offset = paquete.offset;
                 f.tama   = paquete.chunk.length;
                 
-                // envio fragmeto a gestor de descargas
-                _descargas.llegaFragmento(f, paquete.chunk);
+                //TODO:  envio fragmeto a gestor de descargas o lo que sea
+               
                 
                 break;
+                
+   //-------------------------   Comunicaciones con el servidor ----------------             
                 
             case RespuestaPeticionDescarga:
                 
@@ -181,7 +176,17 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 _gestor.DescargaFichero(a, respDes.getLista());
                 
                 break;
+                
+            case RespuestaPeticionConsulta:
+                
+                //TODO:  notifica el resutado de la busqueda
+                // patron observador?? iria bien
+                
+                break;
+                
             case Bienvenido:
+                
+                // esto indica que estamos conectados
                 _gestor.conectado();
                 _gestor.enviaListaArchivos();
         }

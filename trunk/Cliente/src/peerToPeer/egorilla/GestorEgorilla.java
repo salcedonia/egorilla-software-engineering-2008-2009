@@ -128,18 +128,17 @@ public class GestorEgorilla extends Thread{
      * se da la orden de comenzar una descarga.
      * esto dispara la colsulta de peers al servidor y 
      * despues comenzar�n las negociaciones con estos
+     * 
      * @param a archivo a descargar
-     * @param peers otros clientes con los que negociaremos
      */
-    public void nuevaDescarga(Archivo a, DatosCliente[] peers) {
-
-        // se les envia HolaQuiero a cada uno de ellos
-        for (DatosCliente cliente : peers) {
-            HolaQuiero hola = new HolaQuiero(a);
-            hola.setDestino(cliente.getIP(), cliente.getPuertoEscucha());
-            addMensajeParaEnviar(hola);
-        //_colaSalida.add(hola);
-        }
+    public void nuevaDescarga(Archivo a) {
+        _gestorDescargas.nuevaDescargaPendiente(a);
+        
+        // realizamos una consulta al servidor.
+        // necesitamos 
+        PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
+        
+        
     }
 
     /**
@@ -154,8 +153,8 @@ public class GestorEgorilla extends Thread{
         for (DatosCliente cliente : lista) {
             _gestorClientes.addClienteDescarga(cliente.getIP(), a);
         }
-        _gestorDescargas.altaFichero(a);
-        
+        _gestorDescargas.completaInformacion(a._hash, lista);
+                
         // antes de nada, debo mirar si estoy entre los propietarios del
         // fichero, no quiero hablar conmigo mismo
         Vector<DatosCliente> sinMi = new Vector<DatosCliente>();
