@@ -83,6 +83,13 @@ public class ControlConfiguracionCliente implements Sujeto{
         }
         return _instancia;
     }
+    
+    // TODO: esto lo ha hecho ayuso para continuar a espera de que se implante esto definitivamente
+    public static  ControlConfiguracionCliente obtenerInstanciaDefecto() throws ControlConfiguracionClienteException{
+        if (_instancia == null)
+             throw new ControlConfiguracionClienteException("no hay config inicializada");
+        return _instancia;
+    }
 
     /**
      * Busca el valor de una propiedad en el archivo de propiedades actual y lo devuelve.

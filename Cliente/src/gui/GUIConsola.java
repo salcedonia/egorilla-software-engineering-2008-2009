@@ -2,6 +2,7 @@ package gui;
 
 import control.ControlAplicacion;
 import datos.Archivo;
+import gestorDeConfiguracion.ControlConfiguracionCliente;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import mensajes.serverclient.RespuestaPeticionDescarga;
@@ -16,24 +17,26 @@ import java.io.InputStreamReader;
  */
 public class GUIConsola {
 
+    private ControlAplicacion _control;
+    
     /**
      * Creacion del flujo para leer datos.
      */
-    public static InputStreamReader isr = new InputStreamReader(System.in); 
+    public  InputStreamReader isr = new InputStreamReader(System.in); 
     
     /**
      * Creacion del filtro para optimizar la lectura de datos.
      */
-    public static BufferedReader br = new BufferedReader(isr);
+    public  BufferedReader br = new BufferedReader(isr);
 
     /**
      * 
      * @param cad
      * @throws java.io.IOException
      */
-    public GUIConsola(String cad) throws IOException{
+    public GUIConsola(ControlAplicacion  control) throws IOException{
     
-        mostrarMenu(cad);
+        _control = control;
     }
     
     /**
@@ -42,8 +45,10 @@ public class GUIConsola {
      * @throws java.io.IOException
      * @throws java.lang.NumberFormatException
      */
-    private static void mostrarMenu(String cad) throws IOException, NumberFormatException {
+    public  void mostrarMenu() throws Exception {
 
+        String cad;
+        
         char op;
         do {
             op = menu();
@@ -55,19 +60,30 @@ public class GUIConsola {
                     System.out.print("\n\tIntroduce puerto del servidor: ");
                     String sPuerto = br.readLine();
                     int puerto = Integer.parseInt(sPuerto);
-                    ControlAplicacion.conectar(sIP, puerto);
-                    System.out.println("\nConectado.");
+                    _control.conectar(sIP, puerto);
+                    System.out.println("\nConectando....");
                     break;
+                    
                 case '2':
+                      String ServerHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
+                      int    puertoS    = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
+                    
+                      System.out.print("\nConectando a ");
+                      System.out.print(ServerHost +":"+ puertoS);
+                      _control.conectar(ServerHost, puertoS);     
+                   break;
+                   
+                case '3':
                     System.out.println("\nDesconectando...");
-                    ControlAplicacion.close();
+                    _control.close();
                     System.out.println("\nDesconectado.");
                     break;
-                case '3':
+                    
+                case '4':
                     System.out.print("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
                     cad = br.readLine();
                     //creo q hay que quitar el retorno de carro
-                    ControlAplicacion.consultar(cad);
+                    _control.consultar(cad);
                     // TODO: feedback es una comunicación asincrona
                     
 //                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
@@ -78,13 +94,13 @@ public class GUIConsola {
 //                        System.out.print("\nSin resultados.\n");
 //                    }
                     break;
-                case '4':
+                case '5':
                     System.out.print("\nMD5 del fichero a descargar: ");
                     cad = br.readLine();       
              
                     
                     // TODO: coms asincronas, no hahy feedback
-                    ControlAplicacion.bajar("nombre",cad);
+                    _control.bajar("nombre",cad);
                     
 //                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
 //                    if (respuestaDescarga.getLista().length > 0) {
@@ -109,14 +125,15 @@ public class GUIConsola {
      * @return
      * @throws IOException
      */
-    public static char menu() throws IOException {
+    public char menu() throws IOException {
         char op;
 
         System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
         System.out.print("\t1. Conectar.\n");
-        System.out.print("\t2. Desconectar.\n");
-        System.out.print("\t3. Buscar.          \n");
-        System.out.print("\t4. Descargar.          \n");
+        System.out.print("\t2. Conectar servidor por defecto.\n");
+        System.out.print("\t3. Desconectar.\n");
+        System.out.print("\t4. Buscar.          \n");
+        System.out.print("\t5. Descargar.          \n");
         System.out.print("\t0. Salir.\n");
         System.out.print("\n\tOpcion: ");
 
@@ -133,7 +150,7 @@ public class GUIConsola {
      * 
      * @param archivo
      */
-    public static void insertarBusquedas(Archivo[] archivo) {
+    public void insertarBusquedas(Archivo[] archivo) {
 
         System.out.println("Nombre   " + "Tamano   " + "Disponibilidad   " + "Fuentes   " + "Tipo   " + "Identificador de archivo");
         for (int i = 0; i < archivo.length; i++) {

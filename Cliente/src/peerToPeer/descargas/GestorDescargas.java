@@ -6,14 +6,9 @@
 package peerToPeer.descargas;
 
 import datos.Archivo;
-import datos.Fragmento;
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Stack;
 import java.util.Vector;
 import mensajes.serverclient.DatosCliente;
-import peerToPeer.EstadoTemporal;
-import peerToPeer.egorilla.GestorEgorilla;
 
 
 /**
