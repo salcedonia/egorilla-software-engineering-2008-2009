@@ -1,7 +1,6 @@
 package servidor.tareas;
 
 import datos.*;
-import gestorDeRed.ConexionPeer;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.io.IOException;

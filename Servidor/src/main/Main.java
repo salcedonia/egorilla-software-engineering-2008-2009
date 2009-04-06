@@ -2,7 +2,6 @@ package main;
 
 import gestorDeConfiguracion.ControlConfiguracion;
 import gestorDeConfiguracion.ControlConfiguracionServidorException;
-import servidor.tareas.HiloServidor;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +21,6 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, ControlConfiguracionServidorException {
         
-        HiloServidor servidor;
         ControlConfiguracion config= new ControlConfiguracion();
         try {        
             // Creamos el servidor
