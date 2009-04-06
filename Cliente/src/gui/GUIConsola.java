@@ -67,26 +67,32 @@ public class GUIConsola {
                     System.out.print("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
                     cad = br.readLine();
                     //creo q hay que quitar el retorno de carro
-                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
-                    if (respuestaConsulta.getLista().length > 0) {
-                        System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
-                        insertarBusquedas(respuestaConsulta.getLista());
-                    } else {
-                        System.out.print("\nSin resultados.\n");
-                    }
+                    ControlAplicacion.consultar(cad);
+                    // TODO: feedback es una comunicación asincrona
+                    
+//                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
+//                    if (respuestaConsulta.getLista().length > 0) {
+//                        System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
+//                        insertarBusquedas(respuestaConsulta.getLista());
+//                    } else {
+//                        System.out.print("\nSin resultados.\n");
+//                    }
                     break;
                 case '4':
                     System.out.print("\nMD5 del fichero a descargar: ");
                     cad = br.readLine();       
              
-                    // TODO: buscar el nmb de este fichero.
-                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
-                    if (respuestaDescarga.getLista().length > 0) {
-                        System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
-                        insertarDescargas(respuestaDescarga.getLista());
-                    } else {
-                        System.out.print("\nNo existe el fichero.\n");
-                    }
+                    
+                    // TODO: coms asincronas, no hahy feedback
+                    ControlAplicacion.bajar("nombre",cad);
+                    
+//                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
+//                    if (respuestaDescarga.getLista().length > 0) {
+//                        System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
+//                        insertarDescargas(respuestaDescarga.getLista());
+//                    } else {
+//                        System.out.print("\nNo existe el fichero.\n");
+//                    }
                     break;
                 case '0':
                     System.out.print("\n\t\t\t\t\t\t\t\t\tBye!\n");

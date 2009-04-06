@@ -1,12 +1,10 @@
 package control;
 
 import datos.Archivo;
-import gestorDeRed.ConexionPeer;
 import gestorDeFicheros.GestorCompartidos;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import java.io.*;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
@@ -18,7 +16,6 @@ import mensajes.serverclient.RespuestaPeticionDescarga;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ServidorP2PEgorilla;
-import tareas.DescargaArchivo;
 
 /**
  * Un control rudimentario para la aplicacion. Responde a las llamadas de 
@@ -29,7 +26,6 @@ import tareas.DescargaArchivo;
 public class ControlAplicacion {
 
     // ATRIBUTOS
-    private static ConexionPeer _conexionPeer;
     private static boolean _conectado = false;
     private static GestorCompartidos _gestorCompartidos = null;
     private static DatosCliente _datosCliente;
@@ -80,18 +76,15 @@ public class ControlAplicacion {
      */
     public static void conectar(String IP, int puerto) throws IOException {
         
-        Socket conexion = new Socket(IP, puerto);
-        _conexionPeer = new ConexionPeer(conexion);
-
         _datosCliente = new DatosCliente();
         _datosCliente.setNombreUsuario("dePruebas");
         _datosCliente.setPuertoEscucha(4545);
         System.out.println("Envio nombre-user <" + _datosCliente.getNombreUsuario() + "> y su port-Listen <" + _datosCliente.getPuertoEscucha() + ">");
-        _conexionPeer.enviarObjeto(_datosCliente);
+        _egorilla.addMensajeParaEnviar(_datosCliente);
 
-        // Mandamos la _lista de archivos asociada al cliente
-        System.out.println("Se mando info de <" + _gestorCompartidos.getArchivosCompartidos().size() + "> archivos compartidos");
-        _conexionPeer.enviarObjeto(_gestorCompartidos.getArchivosCompartidos());
+//        // Mandamos la _lista de archivos asociada al cliente
+//        System.out.println("Se mando info de <" + _gestorCompartidos.getArchivosCompartidos().size() + "> archivos compartidos");
+//        _conexionPeer.enviarObjeto(_gestorCompartidos.getArchivosCompartidos());
 
         // ademas, debemos activar el p2p
         _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
@@ -104,12 +97,8 @@ public class ControlAplicacion {
      * Cierra la conexion con el servidor.
      */
     public static void close() {
+   
         
-        try {
-            _conexionPeer.cerrarComunicacion();
-        } catch (IOException ex) {
-            // nothing
-        }
         
         // tambien acabamos con el p2p
         _red.terminaEscucha();
@@ -124,21 +113,13 @@ public class ControlAplicacion {
      *
      * @param cad nombre de fichero buscado
      */
-    public static RespuestaPeticionConsulta consultar(String cad) {
+    public static void consultar(String cad) {
         
         RespuestaPeticionConsulta respuestaConsulta = null;
         _peticionConsulta = new PeticionConsulta(cad);
 
-        try {
-            _conexionPeer.enviarObjeto(_peticionConsulta);
-            respuestaConsulta = (RespuestaPeticionConsulta) _conexionPeer.recibirObjeto();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return respuestaConsulta;
+        _egorilla.addMensajeParaEnviar(_peticionConsulta);
+
     }
 
     /**
@@ -146,29 +127,7 @@ public class ControlAplicacion {
      *
      * @param hash El identificador unico de este fichero.
      */
-    /*CAMBIADO DEL VOID A ...*/
-    public static RespuestaPeticionDescarga bajar(String nmb,String hash) {
-
-        _peticionDescarga = new PeticionDescarga(nmb, hash);
-        RespuestaPeticionDescarga respuestaDescarga = null;
-        try {
-            _conexionPeer.enviarObjeto(_peticionDescarga);
-            respuestaDescarga = (RespuestaPeticionDescarga) _conexionPeer.recibirObjeto();
-
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ControlAplicacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (respuestaDescarga != null) {
-           
-            Archivo a = new Archivo(respuestaDescarga.nombre,respuestaDescarga.hash);
-            
-            _egorilla.nuevaDescarga(a,respuestaDescarga.getLista());
-                       
-            //DescargaArchivo d = new DescargaArchivo(respuestaDescarga, hash);
-            //d.start();
-        }
-        return respuestaDescarga;
+    public static void bajar(String nmb,String hash) {
+        _egorilla.nuevaDescarga(new Archivo(nmb, hash));
     }
 }
