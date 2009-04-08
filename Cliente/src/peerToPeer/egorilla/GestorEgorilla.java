@@ -19,6 +19,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
+import mensajes.p2p.Altoo;
 import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
@@ -44,12 +45,14 @@ public class GestorEgorilla extends Thread{
     private boolean _conectado;
     private String  _serverIP;
     private int  _serverPort;
+    private boolean _doP2P;
     
     public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDescargas = gd;
         _gestorDeRed = gr; 
         _gestorClientes = new GestorClientes();
+        _doP2P = false;
     }
     
     /**
@@ -79,23 +82,53 @@ public class GestorEgorilla extends Thread{
         
         // envia mis datos
         this.addMensajeParaEnviar(misDatos);
+        
+        this.comienzaP2P();
     }
     
+    /** 
+     * notifica que esta conectado a partir de este momento
+     */
     void conectado() {
         _conectado = true;
-        // MOLARIA AKI UN OBSERVADOR Y DECIRSELO A TO DIOS???
+        //TODO: MOLARIA AKI UN OBSERVADOR Y DECIRSELO A TO DIOS???
     }
+    
+    /**
+     *desconecta y termina con el p2p
+     */
+   public void desconectar(){
+        // TODO: termina esto
+        
+        // envia alto a todos los peers con descargas pendientes a los que 
+        // estemos subiendo fragmentos
+        
+        
+       // envía altoo al servidor.
+        Altoo alto =  new Altoo();
+        alto.setDestino(_serverIP, _serverPort);
+        this.addMensajeParaEnviar(alto);
+        this._conectado = false;
+        
+        // finaliza el p2p.
+        this._doP2P = false;
+    }
+    
     
     /**
      * pone el p2p en modo escucha, de forma que se atiende a otros
      * clientes
      *
      */
-    public void comienzaP2P(){
+    private void comienzaP2P(){
         
         _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas));
         _gestorDeRed.comienzaEscucha();
+        _doP2P = true;
+        this.start();
     }
+    
+    
     
     /**
      * se realiza una consulta, el m�todo es asincrono, as� que no espera respuesta
@@ -213,20 +246,34 @@ public class GestorEgorilla extends Thread{
      */
     public synchronized void addMensajeParaEnviar(Mensaje msj){
         _colaSalida.add(msj);
-        if (!this.isAlive())
-            this.start();
+//        if (!this.isAlive())
+//            this.start();
+        this.notify();
     }
     
     @Override
-    public void run(){
+    public synchronized void run(){
             try {
-                // por cada mensaje al que se le deba dar salida, se le da.
-                while (!_colaSalida.isEmpty()){
-                    Mensaje msj =_colaSalida.poll();       
-                    _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                while (_doP2P){
+                
+                    // por cada mensaje al que se le deba dar salida, se le da.
+                    while (!_colaSalida.isEmpty()) {
+                        Mensaje msj = _colaSalida.poll();
+                        _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                    }
+                try {
+
+                    this.wait();
+
+                    //TODO: añadiendo una espera aqui se retrasa la salida  reduce el
+                    // trafico this.wait();
+                } catch (InterruptedException ex) {
+                   // continua
                 }
-                //TODO: añadiendo una espera aqui se retrasa la salida  reduce el 
+
+                 //TODO: añadiendo una espera aqui se retrasa la salida  reduce el 
                 // trafico this.wait();
+                }
             }   catch (NetError ex) {
                 // TODO: gestor de errores. hay no se ha podido hablar con quien dices
                     Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);

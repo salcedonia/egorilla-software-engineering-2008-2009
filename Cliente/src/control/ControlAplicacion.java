@@ -64,14 +64,14 @@ public class ControlAplicacion {
      * @throws java.io.IOException
      */
     public void conectar(String IP, int puerto) throws Exception {
-        
-        // primero, debemos activar el p2p
-        _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
-        _red.comienzaEscucha();
-        
-        // dormimos 1 segundo el hilo para que pueda abrirse el socket y no haya
-        // problemas con las pruebas en local
-        Thread.sleep(1000);
+////        
+////        // primero, debemos activar el p2p
+////        _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
+////        _red.comienzaEscucha();
+//        
+//        // dormimos 1 segundo el hilo para que pueda abrirse el socket y no haya
+//        // problemas con las pruebas en local
+//        Thread.sleep(1000);
         
         _egorilla.conectaServidor(IP, puerto);
   
@@ -83,7 +83,7 @@ public class ControlAplicacion {
      */
     public void close() {
    
-        
+        _egorilla.desconectar();
         
         // tambien acabamos con el p2p
         _red.terminaEscucha();
@@ -100,11 +100,7 @@ public class ControlAplicacion {
      */
     public void consultar(String cad) {
         
-        RespuestaPeticionConsulta respuestaConsulta = null;
-        _peticionConsulta = new PeticionConsulta(cad);
-
-        _egorilla.addMensajeParaEnviar(_peticionConsulta);
-
+       _egorilla.nuevaConsulta(cad);
     }
 
     /**
