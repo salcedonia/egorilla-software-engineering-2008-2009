@@ -15,7 +15,7 @@ import mensajes.TipoMensaje;
  * 
  * @author Luis Ayuso
  */
-public class Bienvenido implements Mensaje{
+public class Bienvenido implements Serializable, Mensaje{
 
     private String _destino;
     private int _puerto;
