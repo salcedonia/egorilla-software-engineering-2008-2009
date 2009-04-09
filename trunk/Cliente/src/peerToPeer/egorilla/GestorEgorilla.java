@@ -30,7 +30,7 @@ import peerToPeer.descargas.GestorDescargas;
 
 /**
  *
- * @author Luis Ayuso
+ * @author Luis Ayuso, José Miguel Guerrero
  */
 public class GestorEgorilla extends Thread{
     
@@ -46,12 +46,15 @@ public class GestorEgorilla extends Thread{
     private String  _serverIP;
     private int  _serverPort;
     private boolean _doP2P;
-    
+
+    private ArrayList<ObservadorGestorEgorilla> _listaObservadores;
+
     public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDescargas = gd;
         _gestorDeRed = gr; 
         _gestorClientes = new GestorClientes();
+        _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
         _doP2P = false;
     }
     
@@ -280,5 +283,15 @@ public class GestorEgorilla extends Thread{
             }
     }
 
+    //--------- metodos de la lista de observadores
+
+    public void agregarObservador(ObservadorGestorEgorilla obs){
+        _listaObservadores.add(obs);
+    }
+
+    public void eliminarObservador(ObservadorGestorEgorilla obs){
+        int indice=_listaObservadores.indexOf(obs);
+        _listaObservadores.remove(indice);
+    }
 
 }
