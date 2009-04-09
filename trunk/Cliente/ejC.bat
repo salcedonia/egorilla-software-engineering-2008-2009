@@ -1,1 +1,1 @@
-java -cp build clienteegorilla.ClienteTest
+java -cp build main.Main

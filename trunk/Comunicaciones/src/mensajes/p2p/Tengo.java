@@ -6,7 +6,7 @@
 package mensajes.p2p;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.*;
 import mensajes.TipoMensaje;
 import mensajes.Mensaje;
 import datos.Fragmento;
@@ -24,7 +24,7 @@ public class Tengo implements Mensaje, Serializable{
     public String nombre;
     public String hash;
     
-    public ArrayList<Fragmento> fragmentos;
+    public Vector<Fragmento> fragmentos;
     
     private String _destino;
     private int    _puerto;

@@ -28,6 +28,9 @@ import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
 import peerToPeer.descargas.GestorDescargas;
 
+import peerToPeer.egorilla.*;
+
+
 /**
  *
  * @author Luis Ayuso, José Miguel Guerrero
@@ -37,6 +40,9 @@ public class GestorEgorilla extends Thread{
     private Queue<Mensaje> _colaSalida;
    
     private GestorDescargas _gestorDescargas;
+
+    private GestorSubidas _gestorSubidas;
+
     private GestorDeRed<Mensaje> _gestorDeRed;
     
     
@@ -163,8 +169,10 @@ public class GestorEgorilla extends Thread{
      * @param puerto
      * @param fragmentos
      */
-    public void nuevaSubida(Archivo a, String ip, int puerto,ArrayList<Fragmento> fragmentos){
+    public void nuevaSubida(Archivo a, String ip, int puerto, Vector<Fragmento> fragmentos){
         //TODO:
+        //Para que recibe nuevaSubida la clase Archivo si ya tiene los fragmentos?
+        _gestorSubidas.comenzarSubida( ip, puerto, fragmentos );
     }
            
     /**
