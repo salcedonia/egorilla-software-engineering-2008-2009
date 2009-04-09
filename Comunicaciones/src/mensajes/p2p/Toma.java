@@ -15,28 +15,58 @@ import mensajes.TipoMensaje;
  */
 public class Toma implements Mensaje, Serializable{
 
-    public TipoMensaje getTipoMensaje() {
-        return TipoMensaje.Toma;
-    }
-    
-    public String nombre;
-    public String hash;
-    
-    public long offset;
-    public Byte[] chunk;
-    
-    
-    private String _destino;
-    private int    _puerto;
-    
-    public void setDestino(String destino, int puerto) {
-        _destino = destino;
-        _puerto  = puerto;
-    }
-    public String ipDestino() {
-        return _destino;
-    }
-    public int puertoDestino() {
-        return _puerto;
-    }
+  private String _nombre;
+  
+  private String _hash;
+  
+  private long _offset;
+  
+  private Byte[] _parte;
+  
+  private String _destino;
+  
+  private int _puerto;
+
+
+  public Toma( String nombre, String hash, long offset, Byte[] parte, String destino, int puerto ){
+    _nombre = nombre;
+    _hash = hash;
+    _offset = offset;
+    _parte = parte;
+    _destino = destino;
+    _puerto = puerto;
+  }
+  
+  public TipoMensaje getTipoMensaje(){
+    return TipoMensaje.Toma;
+  }
+  
+  public void setDestino(String destino, int puerto) {
+    _destino = destino;
+    _puerto  = puerto;
+  }
+
+  public String getNombre(){
+    return _nombre;
+  }
+
+  public String getHash(){
+    return _hash;
+  }
+
+  public long getOffset(){
+    return _offset;
+  }
+
+  public Byte[] getParte(){
+    return _parte;
+  }
+  
+  public String ipDestino() {
+    return _destino;
+  }
+  
+  public int puertoDestino() {
+    return _puerto;
+  }
 }

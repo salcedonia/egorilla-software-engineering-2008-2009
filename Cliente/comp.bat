@@ -1,1 +1,1 @@
-javac -cp src src/clienteegorilla/ClienteTest.java -d build
+javac -cp src;../Comunicaciones/src src/Main/Main.java -d build

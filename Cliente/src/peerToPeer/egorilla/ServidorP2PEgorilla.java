@@ -83,7 +83,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
             case Dame:
                 
                 // Apunto para servir m�s adelante.
-                Dame pkg = (Dame) msj;
+                Dame msjDame = (Dame) msj;
               
                 // TODO: en este punto debemos hacer algo que evalue los fragmentos
                 // que se están enviando, cuales quiero y a quien se los pido
@@ -93,7 +93,8 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 // indico al gestor de subidas que vot a subir determinados fragmentos 
                 // de un fichero a un peer identificado por ip.
-                _gestor.nuevaSubida(new Archivo(pkg.nombre, pkg.hash), ip, port, pkg.fragmentos);
+                Archivo archivo = new Archivo( msjDame.getNombre(), msjDame.getHash() );
+                _gestor.nuevaSubida( archivo, ip, port, msjDame.getFragmentos() );
                 
                 // YA SE CONTESTARA CON TOMA, no aki
                 
@@ -126,10 +127,10 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // por ahora todos! 
                 
                 Tengo reciv = (Tengo) msj;
-                Dame respuesta =  new Dame();
                 
+                /*Dame respuesta =  new Dame();                
                 respuesta.hash = reciv.hash;
-                respuesta.nombre = reciv.nombre;
+                respuesta.nombre = reciv.nombre;*/
                 
                 // si el Tengo viene vacio, se acaba aqui la ejecución
                 if((reciv.fragmentos == null)||(reciv.fragmentos.isEmpty()))
@@ -137,7 +138,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 // comprobar al menos que no estemos hablando un conjunto vacio
                 // en ese caso es que el peer no tiene el archivo que buscamos
-                respuesta.fragmentos = reciv.fragmentos;
+                Dame respuesta =  new Dame( reciv.hash, reciv.nombre, reciv.fragmentos );
                 
                 // CONTESTA dame
                 _gestor.addMensajeParaEnviar(respuesta);
@@ -154,11 +155,12 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 Toma paquete = (Toma)msj;
                                 
-                Fragmento f = new Fragmento();
-                f.hash   = paquete.hash;
+                Fragmento f = new Fragmento( paquete.getNombre(), paquete.getHash(),
+                    paquete.getParte().length, paquete.getOffset() );
+                /*f.hash   = paquete.hash;
                 f.nombre = paquete.nombre;
                 f.offset = paquete.offset;
-                f.tama   = paquete.chunk.length;
+                f.tama   = paquete.chunk.length;*/
                 
                 //TODO:  envio fragmeto a gestor de descargas o lo que sea
                

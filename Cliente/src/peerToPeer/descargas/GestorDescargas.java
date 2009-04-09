@@ -18,20 +18,20 @@ import mensajes.serverclient.DatosCliente;
 public class GestorDescargas {
 
     
-    private Vector<String> _ficherosSinInformación;
-    private Hashtable<String,Vector<DatosCliente>> _ficherosConInformación;
+    private Vector<String> _ficherosSinInformacion;
+    private Hashtable<String,Vector<DatosCliente>> _ficherosConInformacion;
     
     public GestorDescargas() {
-       _ficherosSinInformación = new Vector<String>();
-       _ficherosConInformación = new Hashtable<String, Vector<DatosCliente>>();
+       _ficherosSinInformacion = new Vector<String>();
+       _ficherosConInformacion = new Hashtable<String, Vector<DatosCliente>>();
     }
     
     public void nuevaDescargaPendiente(Archivo a){
-        _ficherosSinInformación.add(a.getHash());
+        _ficherosSinInformacion.add(a.getHash());
     }
    
 /**
- *  rellena la información para realizar la descarga de un fichero, además se 
+ *  rellena la informacion para realizar la descarga de un fichero, además se 
  * verifica que el fichero estubiese pendiente de descarga, ya que puede ser un
  * mensaje erroneo.
  * 
@@ -43,28 +43,28 @@ public class GestorDescargas {
         
         // puede ser que ya tengamos info de este archivo, miraremos en el
         // array de archivos que ya la tienen
-        if (!_ficherosSinInformación.contains(hash)){
+        if (!_ficherosSinInformacion.contains(hash)){
             
-            if(_ficherosConInformación.containsKey(hash)){
+            if(_ficherosConInformacion.containsKey(hash)){
                 for (int i = 0; i < propietarios.length; i++) {
-                    _ficherosConInformación.get(hash).add(propietarios[i]);
+                    _ficherosConInformacion.get(hash).add(propietarios[i]);
                  }
                 return true;
             }
             return false;
         }
         
-        // si la información esta vacia, seguimos sin info.
+        // si la informacion esta vacia, seguimos sin info.
         if (propietarios.length == 0)
             return  true;
         
-        _ficherosSinInformación.remove(hash);
+        _ficherosSinInformacion.remove(hash);
         
         Vector<DatosCliente> datos = new Vector<DatosCliente>();
         for (int i = 0; i < propietarios.length; i++) 
             datos.add(propietarios[i]);
             
-        _ficherosConInformación.put(hash, datos);
+        _ficherosConInformacion.put(hash, datos);
         return true;
     }
     
