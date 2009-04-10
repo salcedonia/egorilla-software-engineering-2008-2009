@@ -57,6 +57,10 @@ public class testTCP {
             public void recibeMensaje(String msj, String ip, int port) {
                 assertEquals("Probando send", msj);
             }
+
+            public void perdidaDeConexion(String ip) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
         }); 
         
          System.out.println("Prueba envio fallido"); 
