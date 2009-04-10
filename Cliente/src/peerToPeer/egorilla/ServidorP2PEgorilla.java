@@ -8,14 +8,12 @@ package peerToPeer.egorilla;
 import datos.Archivo;
 import datos.Fragmento;
 import gestorDeRed.Receptor;
-import java.util.ArrayList;
+import java.util.*;
 import mensajes.Mensaje;
-import mensajes.p2p.Dame;
-import mensajes.p2p.HolaQuiero;
-import mensajes.p2p.Tengo;
-import mensajes.p2p.Toma;
+import mensajes.p2p.*;
 import mensajes.serverclient.RespuestaPeticionDescarga;
 import peerToPeer.descargas.GestorDescargas;
+import gestorDeFicheros.*;
 
 /**
  *
@@ -34,6 +32,11 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
 
     private GestorEgorilla _gestor;
     private GestorDescargas _descargas;
+
+    //private GestorDisco _gestorDisco; pasado al GestorEgorilla
+
+    //Se puede quitar y usamos solo el get del Disco
+    private Fragmentador _fragmentador;
     
     /**
      * constructor bï¿½sico:
@@ -45,9 +48,13 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
      * @param gE gestor eGorilla
      * @param gD bestor de descargas
      */
-    public ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD) {
+    public ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD, GestorDisco gestorDisco ) {
        _gestor = gE;
        _descargas = gD;
+       //Tal vez no sea el mejor sitio para iniciar el gestorDisco, mejor antes para que se pueda
+       //ver los temporales y compartidos sin tener q instanciar el servidor.
+       //_gestorDisco = new GestorDisco();
+       _fragmentador = gestorDisco.getFragmentador();
     }
 
     /**
@@ -103,17 +110,21 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
             case HolaQuiero:
                 
-                HolaQuiero quiero = (HolaQuiero) msj;
-                     
-                Tengo resp = new Tengo();
-                resp.hash = quiero.hash;
-                resp.nombre = quiero.nombre;  //TODO: deberia poner el nombre que tengo yo para este fichero
-                    
-                
+                HolaQuiero quiero = (HolaQuiero) msj;     
                 // si tengo el fichero
                 // TODO: hay que buscar entre las descargas pendientes y los ficheros
                 // completos
-              
+
+                //Se supone que llega aqui xq el servidor le ha dicho que yo tengo el fichero, aun asi
+                //cuando se va a pregutar que fragmentos tengo de ese fichero (xq no se sabe en que estado
+                //le tengo) ya se hace, luego se comprueba en función de la salida queFragmentosTienes
+                Vector<Fragmento> listaFragmentos;
+                listaFragmentos = _fragmentador.queFragmentosTienes( quiero.getHash() );
+
+                Tengo resp = new Tengo( quiero.getNombre(), quiero.getHash(), listaFragmentos, 
+                    quiero.ipDestino(), quiero.puertoDestino() );
+                /*resp.hash = quiero.hash;
+                resp.nombre = quiero.nombre;*/  //TODO: deberia poner el nombre que tengo yo para este fichero
                 
                 // apunto direccion del peer e interes
                                
@@ -133,12 +144,12 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 respuesta.nombre = reciv.nombre;*/
                 
                 // si el Tengo viene vacio, se acaba aqui la ejecuciÃ³n
-                if((reciv.fragmentos == null)||(reciv.fragmentos.isEmpty()))
+                if((reciv.getFragmentos() == null)||(reciv.getFragmentos().isEmpty()))
                     return;
                 
                 // comprobar al menos que no estemos hablando un conjunto vacio
                 // en ese caso es que el peer no tiene el archivo que buscamos
-                Dame respuesta =  new Dame( reciv.hash, reciv.nombre, reciv.fragmentos );
+                Dame respuesta =  new Dame( reciv.getHash(), reciv.getNombre(), reciv.getFragmentos() );
                 
                 // CONTESTA dame
                 _gestor.addMensajeParaEnviar(respuesta);

@@ -17,17 +17,39 @@ import datos.Fragmento;
  */
 public class Tengo implements Mensaje, Serializable{
 
-    public TipoMensaje getTipoMensaje() {
-       return TipoMensaje.Tengo;
-    }
-
-    public String nombre;
-    public String hash;
+  private String _nombre;
+  
+  private String _hash;
     
-    public Vector<Fragmento> fragmentos;
+    public Vector<Fragmento> _fragmentos;
     
     private String _destino;
     private int    _puerto;
+
+   
+    public Tengo( String nombre, String hash, Vector<Fragmento> fragmentos, String destino, int puerto ){
+    _nombre = nombre;
+    _hash = hash;
+    _fragmentos = fragmentos;
+    _destino = destino;
+    _puerto = puerto;
+  }
+
+  public String getNombre(){
+    return _nombre;
+  }
+
+  public String getHash(){
+    return _hash;
+  }
+
+  public Vector<Fragmento> getFragmentos(){
+    return _fragmentos;
+  }
+  
+  public TipoMensaje getTipoMensaje() {
+       return TipoMensaje.Tengo;
+    }
     
     public void setDestino(String destino, int puerto) {
         _destino = destino;
