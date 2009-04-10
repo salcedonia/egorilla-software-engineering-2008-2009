@@ -41,11 +41,16 @@ public class ProcesarPeticionBusqueda extends Thread{
         
         // construlle una respuesta
         RespuestaPeticionConsulta resp = new RespuestaPeticionConsulta(lista);
-        
+        resp.setDestino(_cliente.getIP(),_cliente.getPuertoEscucha());
+                
+        System.out.println("\n llega peticion de busqueda <"+
+                            _peticion.getCadenaBusqueda()+"> desde" +
+                            _cliente.getIP());
+        System.out.println("se responde con " + lista.length + " matches");
         
         // la envia
         try {
-            _red.envia(resp, _cliente.getIP(), _cliente.puertoDestino());
+            _red.envia(resp, _cliente.getIP(), _cliente.getPuertoEscucha());
         } catch (NetError ex) {
             Logger.getLogger(ProcesarPeticionBusqueda.class.getName()).log(Level.SEVERE, null, ex);
         }
