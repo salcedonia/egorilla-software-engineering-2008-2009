@@ -39,7 +39,7 @@ public class Main {
             // Creamos el servidor
            
             config.leeConfig("Configuracion.properties");
-            puerto=config.getPuerto();
+            puerto=ControlConfiguracion.getPuerto();
    
             // crea la red, y la pone a escuchar
             GestorDeRed<Mensaje> red = new GestorDeRedTCPimpl<Mensaje>(puerto); 

@@ -6,7 +6,6 @@
 package servidor.tareas;
 
 import datos.ArchivoClientes;
-import datos.ListadoClientes;
 import gestorDeRed.GestorDeRed;
 import mensajes.Mensaje;
 import mensajes.serverclient.DatosCliente;

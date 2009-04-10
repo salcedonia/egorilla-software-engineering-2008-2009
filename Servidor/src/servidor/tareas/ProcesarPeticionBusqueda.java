@@ -42,6 +42,7 @@ public class ProcesarPeticionBusqueda extends Thread{
         // construlle una respuesta
         RespuestaPeticionConsulta resp = new RespuestaPeticionConsulta(lista);
         
+        
         // la envia
         try {
             _red.envia(resp, _cliente.getIP(), _cliente.puertoDestino());

@@ -13,16 +13,15 @@ import mensajes.Mensaje;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
-import mensajes.serverclient.PeticionDescarga;
 import servidor.tareas.ConexionCliente;
 import servidor.tareas.ProcesaListaDeFicheros;
 import servidor.tareas.ProcesarPeticionBusqueda;
-import servidor.tareas.ProcesarPeticionDescarga;
 
 /**
  *
- * 
- * 
+ * Esta clase es la que implementa todas las actividades del servidor, como 
+ * es un servidor que realiza las acciones por petición, solo se desarrollan 
+ * estas a consecuencia de una llamada
  * 
  * @author Luis Ayuso
  */

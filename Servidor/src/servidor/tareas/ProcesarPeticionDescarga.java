@@ -1,7 +1,6 @@
 package servidor.tareas;
 
 import gestorDeRed.NetError;
-import java.io.IOException;
 import datos.*;
 import gestorDeRed.GestorDeRed;
 import java.util.logging.Level;
