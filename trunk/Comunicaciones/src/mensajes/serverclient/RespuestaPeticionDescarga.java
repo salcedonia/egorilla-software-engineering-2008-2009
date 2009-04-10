@@ -9,7 +9,6 @@ package mensajes.serverclient;
 import java.io.Serializable;
 import mensajes.Mensaje;
 import mensajes.TipoMensaje;
-import mensajes.serverclient.DatosCliente;
 
 /*****************************************************************************/
 /**

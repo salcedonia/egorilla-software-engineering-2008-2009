@@ -21,16 +21,22 @@ public class RespuestaPeticionConsulta implements Mensaje,Serializable{
 
     // ATRIBUTOS
     private Archivo[] _lista;
+    private String _consulta;
 
 /*****************************************************************************/
     /**
      * Constructor de la clase QueryAnswer.
      * 
+     * @param consulta la consulta a la que responde
      * @param lista Lista de archivos asociada.
      */
-    public RespuestaPeticionConsulta(Archivo[] lista) {
-        
+    public RespuestaPeticionConsulta(String consulta, Archivo[] lista) {
+        _consulta =consulta;
        _lista = lista;
+    }
+
+    public String getConsulta() {
+        return _consulta; 
     }
 
 /*****************************************************************************/

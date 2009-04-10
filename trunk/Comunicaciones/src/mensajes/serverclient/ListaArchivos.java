@@ -6,6 +6,7 @@ import java.util.Vector;
 import mensajes.Mensaje;
 import mensajes.TipoMensaje;
 
+
 /**
  * Clase de Lista de archivos que proporciona todos los métodos necesarios para
  * el tratamiento de éste tipo de objetos.
