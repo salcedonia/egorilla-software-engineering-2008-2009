@@ -17,6 +17,7 @@ import mensajes.TipoMensaje;
  * 
  * @author pitidecaner
  * @author Salcedonia
+ * 
  */
 public class RespuestaPeticionDescarga implements Mensaje, Serializable{
     
