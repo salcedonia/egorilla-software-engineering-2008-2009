@@ -172,4 +172,8 @@ public class Archivo implements Serializable {
         
         return _hash.equals(a.getHash());
     }
+    
+    public String toString (){
+        return _nombre + "\t" + _hash + "\n" + this._tamano + "\t" +_tipo.name(); 
+    }
 }
