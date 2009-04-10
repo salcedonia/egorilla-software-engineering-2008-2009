@@ -30,6 +30,8 @@ import peerToPeer.descargas.GestorDescargas;
 
 import peerToPeer.egorilla.*;
 
+import gestorDeFicheros.*;
+
 
 /**
  *
@@ -45,6 +47,7 @@ public class GestorEgorilla extends Thread{
 
     private GestorDeRed<Mensaje> _gestorDeRed;
     
+    private GestorDisco _gestorDisco;
     
     private GestorClientes _gestorClientes;
     
@@ -62,6 +65,11 @@ public class GestorEgorilla extends Thread{
         _gestorClientes = new GestorClientes();
         _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
         _doP2P = false;
+
+        //En donde se instancia gestorSubidas? No lo veo
+        _gestorDisco = new GestorDisco();
+        _gestorSubidas = new GestorSubidas( this, _gestorDisco );
+        
     }
     
     /**
@@ -131,7 +139,7 @@ public class GestorEgorilla extends Thread{
      */
     private void comienzaP2P(){
         
-        _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas));
+        _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas, _gestorDisco));
         _gestorDeRed.comienzaEscucha();
         _doP2P = true;
         this.start();

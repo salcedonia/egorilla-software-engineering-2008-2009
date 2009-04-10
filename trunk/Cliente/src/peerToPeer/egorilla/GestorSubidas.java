@@ -8,6 +8,7 @@ package peerToPeer.egorilla;
 
 import datos.Fragmento;
 import java.util.*;
+import gestorDeFicheros.*;
 import mensajes.p2p.*;
 
 /**
@@ -20,13 +21,18 @@ public class GestorSubidas extends Thread{
     private Hashtable<String, Integer> _direcctorio;*/
   //Unificado en una sola tabla, destino es un par de IP-Puerto, (una IP puede tener varios puertos)
   private Hashtable<UsuarioDestino, Vector<Fragmento>> _paraEnviar;
+
+  //private GestorDisco _gestorDisco;
+  private Fragmentador _fragmentador;
+
+  private GestorEgorilla _gestor;
+
     
-    private GestorEgorilla _gestor;
-    
-    public GestorSubidas(GestorEgorilla gestor) {
+    public GestorSubidas(GestorEgorilla gestor, GestorDisco gestorDisco) {
         /*_paraEnviar = new Hashtable<String, Fragmento>();
         _direcctorio = new Hashtable<String, Integer>();*/
       _paraEnviar = new Hashtable<UsuarioDestino, Vector<Fragmento>>();
+      _fragmentador = gestorDisco.getFragmentador();
     }
     
     /**
@@ -38,20 +44,33 @@ public class GestorSubidas extends Thread{
     public void comenzarSubida(String ip, int puerto, Vector<Fragmento> fragmentos){
       
       boolean esta = false;
-      UsuarioDestino usuarioDestino = new UsuarioDestino( ip, puerto );
+      Vector<Fragmento> fragmentosAux = null;
+      UsuarioDestino usuarioDestino = new UsuarioDestino( ip, puerto ), usuarioAux;
 
       //TODO: para optimizar recorro la tabla para que en caso de que este, no tener que buscar donde
       //y poder asi insertar los fragmentos en caso de existir
-      
-      if( esta == true ){
-            // ya esta la ip
-                // se comprueba que va al mismo puerto (dos egorillas en misma IP, dif port)
-                // aqui no se si debería comprobarse si los fragmentos que se añaden ya estan
-                // si estan y le añado puede tener duplicados (tal esto no vaya a ocurrir),
-                // ¿se sabe cuando un cacho ha llegado bien? Cuando llega bien entonces si le quito
-                // de aqui. Todo esto me plantea la duda de que se hace cuando se recibe un fragmento-byte
-                // que ya tenemos, se descarta (si se descarta, donde), se cuela o que.
+      Iterator it = _paraEnviar.entrySet().iterator();
+      while ( it.hasNext() ){
+        Map.Entry e = (Map.Entry)it.next();
+        usuarioAux = (UsuarioDestino) e.getKey();
+        //fragmentosAux = (Vector<Fragmento>) e.getValue();
+        if( usuarioDestino.compareTo( usuarioAux ) == 0 ){
+          //recupero la referencia de los fragmentos que ya tiene asociados
+          fragmentosAux = (Vector<Fragmento>) e.getValue();
+          esta = true;
+        }
+      }
 
+      //esta = estaDestinoEnEnviar( usuarioDestino );
+      
+      // ya esta la ip-puerto
+      if( esta == true ){
+        // aqui no se si debería comprobarse si los fragmentos que se añaden ya estan
+        // si estan y le añado puede tener duplicados (tal esto no vaya a ocurrir),
+        // ¿se sabe cuando un cacho ha llegado bien? Cuando llega bien entonces si le quito
+        fragmentosAux.addAll( fragmentos );
+        // de aqui. Todo esto me plantea la duda de que se hace cuando se recibe un fragmento-byte
+        // que ya tenemos, se descarta (si se descarta, donde), se cuela o que.      
 
       //sino esta la IP-puerto pues se añade a la tabla el nuevo destino y sus fragmentos
       }else{
@@ -90,11 +109,11 @@ public class GestorSubidas extends Thread{
             //Idea: simplemente mirar que hash tiene el fragmento y con eso ya discernir
             //Es decir, que el fragmentador busco el solito a que lista pertenece
             // ir al gestor, recoger el chunk          
-            bytesFragmento = fragmentadorCompletos.dameBytesDelFragmento( fragmentoSeleccionado );
+            bytesFragmento = _fragmentador.dameBytesDelFragmento( fragmentoSeleccionado );
             // crear paquete Toma
             // igual pasarle al constructor algo tipo String[] getInfoFragmento
             mensajeToma = new Toma( fragmentoSeleccionado.getNombre(), fragmentoSeleccionado.getHash(), 
-            fragmentoSeleccionado.getOffset(), bytesFragmento, destinoActual.IP, destinoActual.puerto );
+            fragmentoSeleccionado.getOffset(), bytesFragmento, destinoActual.getIP(), destinoActual.getPuerto() );
             _gestor.addMensajeParaEnviar( mensajeToma );
           }else{
             //Como ya no tienes fragmentos para enviar a este usuario, lo quitamos de la tabla
@@ -106,8 +125,8 @@ public class GestorSubidas extends Thread{
 }
 
 class UsuarioDestino implements Comparable<UsuarioDestino>{
-  public String IP;
-  public int puerto;
+  private String IP;
+  private int puerto;
 
   public UsuarioDestino(String IP, int puerto){
     this.IP = IP;
@@ -122,7 +141,16 @@ class UsuarioDestino implements Comparable<UsuarioDestino>{
 
   }
 
+  public String getIP(){
+    return IP;
+  }
+
+  public int getPuerto(){
+    return puerto;
+  }
+
   public int compareTo(UsuarioDestino usuarioDestino) {
+    // se comprueba que va al mismo puerto (dos egorillas en misma IP, dif port)
     if( IP.compareTo( usuarioDestino.IP ) == 0 ){
       if( puerto == usuarioDestino.puerto ){
         //IP y puerto igual, pues 0

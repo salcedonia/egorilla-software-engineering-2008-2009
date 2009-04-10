@@ -16,20 +16,31 @@ import datos.Archivo;
  */
 public class HolaQuiero implements Mensaje, Serializable{
 
+  private String _nombre;
+  
+  private String _hash;
+    
+  private String _destino;
+  
+  private int    _puerto;
+
+
+    public HolaQuiero(Archivo a) {
+        _nombre = a.getNombre();
+        _hash = a.getHash();
+    }
+
+    public String getNombre(){
+    return _nombre;
+  }
+
+  public String getHash(){
+    return _hash;
+  }
+
     public TipoMensaje getTipoMensaje() {
        return TipoMensaje.HolaQuiero;
     }
-
-    public HolaQuiero(Archivo a) {
-        nombre = a.getNombre();
-        hash = a.getHash();
-    }
-    
-    public String nombre;
-    public String hash;
-    
-    private String _destino;
-    private int    _puerto;
     
     public void setDestino(String destino, int puerto) {
         _destino = destino;

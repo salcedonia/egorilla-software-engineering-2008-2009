@@ -10,6 +10,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import mensajes.serverclient.DatosCliente;
 
+import gestorDeFicheros.*;
+
 
 /**
  *
@@ -20,10 +22,24 @@ public class GestorDescargas {
     
     private Vector<String> _ficherosSinInformacion;
     private Hashtable<String,Vector<DatosCliente>> _ficherosConInformacion;
+
+    private GestorDisco _gestorDisco;
+
+    //Guarda los byte[] a disco
+    private Ensamblador _ensamblador;
     
+    //Creo que no se necesita el fragmentador en este caso
+    //private Fragmentador _fragmentador;
+
     public GestorDescargas() {
        _ficherosSinInformacion = new Vector<String>();
        _ficherosConInformacion = new Hashtable<String, Vector<DatosCliente>>();
+    
+       /*_gestorDisco = new GestorDisco();*/
+       _ensamblador = _gestorDisco.getEnsamblador();
+       //Que le ha pasado a GestorDescarga, donde llegan los Fragmentos-Byte[]
+       //para poder guardarlos en disco?
+       //if( guardarFragmentoEnArchivo( fragmento, partes ) == true ) guay else verqhacer
     }
     
     public void nuevaDescargaPendiente(Archivo a){
