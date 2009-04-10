@@ -21,6 +21,7 @@ public class ListadoClientes {
     Hashtable<String,Integer> _puertos;
     Hashtable<String,DatosCliente> _datosClientes;
 
+    
     public ListadoClientes() {
         _listaIPs = new Stack<String>();
         _puertos  = new Hashtable<String, Integer>();

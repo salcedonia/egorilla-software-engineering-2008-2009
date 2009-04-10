@@ -1,10 +1,7 @@
 package gestorDeConfiguracion;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Properties;
 
 /**
  * La clase ControlConfiguracion es el almacén de la configuración persistente del servidor.
