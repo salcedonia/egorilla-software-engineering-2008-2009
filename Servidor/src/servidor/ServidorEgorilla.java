@@ -13,9 +13,11 @@ import mensajes.Mensaje;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
+import mensajes.serverclient.PeticionDescarga;
 import servidor.tareas.ConexionCliente;
 import servidor.tareas.ProcesaListaDeFicheros;
 import servidor.tareas.ProcesarPeticionBusqueda;
+import servidor.tareas.ProcesarPeticionDescarga;
 
 /**
  *
@@ -68,15 +70,16 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 bus.start();
                 // devuelve respuestaConsulta, pero dentro del hilo
                 break;
-            case RespuestaPeticionDescarga:
+            case PeticionDescarga:
                 // si no conocemos al peer se dumpea el mensaje
                 if (!_clientes.estaDeAlta(ip))
                     break;
                 
-//                ProcesarPeticionDescarga des = new ProcesarPeticionDescarga(_archivoClientes,
-//                                                         (PeticionDescarga) msj, 
-//                                                         _red);
-//                des.start();
+                ProcesarPeticionDescarga des = new ProcesarPeticionDescarga(_red,
+                                                         _archivoClientes,
+                                                         _clientes.getDatosCliente(ip),
+                                                         (PeticionDescarga) msj);
+                des.start();
                 break;
                 
             case ListaDeArchivos:

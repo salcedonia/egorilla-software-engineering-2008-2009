@@ -40,7 +40,7 @@ public class ProcesarPeticionBusqueda extends Thread{
         Archivo[] lista = _archivos.buscar(  _peticion.getCadenaBusqueda());
         
         // construlle una respuesta
-        RespuestaPeticionConsulta resp = new RespuestaPeticionConsulta(lista);
+        RespuestaPeticionConsulta resp = new RespuestaPeticionConsulta( _peticion.getCadenaBusqueda(),lista);
         resp.setDestino(_cliente.getIP(),_cliente.getPuertoEscucha());
                 
         System.out.println("\n llega peticion de busqueda <"+
