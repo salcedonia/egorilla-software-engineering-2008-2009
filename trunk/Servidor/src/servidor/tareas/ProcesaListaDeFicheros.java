@@ -5,6 +5,7 @@
 
 package servidor.tareas;
 
+import datos.Archivo;
 import datos.ArchivoClientes;
 import gestorDeRed.GestorDeRed;
 import mensajes.Mensaje;
@@ -45,5 +46,11 @@ public class ProcesaListaDeFicheros extends Thread {
         
         _listaficheros.actualizarDesdeListaCliente(_datosCliente, _archivosEnviados);
         
+        System.out.println("\nLista de archivos recibida de " + _datosCliente.getIP());   
+        System.out.println("===================================================");
+        for (Archivo a : _archivosEnviados) {
+            System.out.println(a);
+        }
+        System.out.println();       
     }
 }
