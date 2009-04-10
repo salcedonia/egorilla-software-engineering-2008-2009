@@ -17,7 +17,7 @@ public class ArchivoClientes {
 
     // ATRIBUTOS
     // <MD5, lista de propietarios>
-    private HashMap<String, ArrayList<DatosCliente>> _relacion;
+    private Hashtable<String, ArrayList<DatosCliente>> _relacion;
     private int _numeroClientes;
     private Vector<Archivo> _archivos;
     
@@ -26,7 +26,7 @@ public class ArchivoClientes {
      * Constructor de la clase ListaArchivos.
      */
     public ArchivoClientes() {
-        _relacion = new HashMap<String, ArrayList<DatosCliente>>();
+        _relacion = new Hashtable<String, ArrayList<DatosCliente>>();
         _archivos = new Vector<Archivo>();
     }
 
@@ -241,9 +241,14 @@ public class ArchivoClientes {
      */
     public DatosCliente[] getPropietarios(String hash) {
         
-        if (_relacion.containsKey(hash))
-        
-           return (DatosCliente[]) _relacion.get(hash).toArray();
+        if (_relacion.containsKey(hash)){
+            ArrayList<DatosCliente> a = _relacion.get(hash);
+            DatosCliente[] l = new DatosCliente[_numeroClientes];
+            for (int i = 0; i < a.size(); i++) 
+                l[i] = a.get(i);
+                
+            return l;
+        }
         else
             return null;
     }
