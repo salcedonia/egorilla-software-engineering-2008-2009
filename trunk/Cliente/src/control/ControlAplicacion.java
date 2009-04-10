@@ -39,6 +39,7 @@ public class ControlAplicacion implements ObservadorGestorEgorilla {
       GestorDisco disco = new GestorDisco();  
       _descargas = new GestorDescargas(disco);
       _egorilla = new GestorEgorilla(_descargas, _red);
+          _egorilla.agregarObservador(this);
     }
 
     public void regristraGUI(GUIConsola gui) {
@@ -71,9 +72,10 @@ public class ControlAplicacion implements ObservadorGestorEgorilla {
      * @throws java.io.IOException
      */
     public void conectar(String IP, int puerto) throws Exception {
-        _egorilla.agregarObservador(this);
-        _egorilla.conectaServidor(IP, puerto);
-        _conectado = true;  
+        if (!_conectado)
+            _egorilla.conectaServidor(IP, puerto);
+        else
+            _gui.mostrarMensaje("ya estas conectado a " + _egorilla.getServerIP() + "\n");
     }
 
     /**
@@ -125,6 +127,16 @@ public class ControlAplicacion implements ObservadorGestorEgorilla {
 
     public void resultadosBusqueda(String cad,  Archivo[] lista) {
         
+         // notifica a la gui:
+        _gui.mostrarMensaje ("\nresultados de la busqueda: " + cad);
+        _gui.mostrarMensaje ("================================================");
+        
+        if (lista.length > 0){
+        for (Archivo archivo : lista) {
+            _gui.mostrarMensaje(archivo.toString());
+        }}
+        else
+            _gui.mostrarMensaje("no hubo resultados! \n");   
     }
 
     public void finDescarga() {

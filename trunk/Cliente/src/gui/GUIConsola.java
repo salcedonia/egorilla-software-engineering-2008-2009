@@ -46,7 +46,7 @@ public class GUIConsola {
      * @param string
      */
     public synchronized  void mostrarMensaje(String string) {
-       System.out.println("\n" + string);
+       System.out.println(string);
     }
     
     /**
