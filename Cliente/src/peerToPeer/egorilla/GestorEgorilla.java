@@ -227,9 +227,11 @@ public class GestorEgorilla extends Thread{
     public void nuevaDescarga(Archivo a) {
         _gestorDescargas.nuevaDescargaPendiente(a);
         
-        // realizamos una consulta al servidor.
-        // necesitamos 
+        // realizamos una consulta al servidor para saber los propietarios.
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
+        
+        peticion.setDestino(_serverIP, _serverPort);
+        this.addMensajeParaEnviar(peticion);
     }
 
     /**
@@ -244,24 +246,11 @@ public class GestorEgorilla extends Thread{
         for (DatosCliente cliente : lista) {
             _gestorClientes.addClienteDescarga(cliente.getIP(), a);
         }
-        _gestorDescargas.completaInformacion(a._hash, lista);
-                
-        // antes de nada, debo mirar si estoy entre los propietarios del
-        // fichero, no quiero hablar conmigo mismo
-        Vector<DatosCliente> sinMi = new Vector<DatosCliente>();
-        for (DatosCliente cliente : lista) {
-            // si no soy yo lo agrego 
-            sinMi.add(cliente);
-        }
         
-        // ahora se envia el HolaQuiero a todos los clientes que lo tienen
-        for (Iterator<DatosCliente> it = sinMi.iterator(); it.hasNext();) {
-            DatosCliente cliente = it.next();
+        // TODO: de alguna forma completo esta información preguntando a los clientes
+        
+        _gestorDescargas.completaInformacion(a._hash, lista);
          
-            HolaQuiero q = new HolaQuiero(a);
-            q.setDestino(cliente.getIP(),cliente.getPuertoEscucha());
-            this.addMensajeParaEnviar(q);
-        }
     }
   
     /**
