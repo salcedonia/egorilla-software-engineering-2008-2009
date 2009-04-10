@@ -174,6 +174,6 @@ public class Archivo implements Serializable {
     }
     
     public String toString (){
-        return _nombre + "\t" + _hash + "\n" + this._tamano + "\t" +_tipo.name(); 
+        return _nombre + "\t" + _hash + "\t" + this._tamano + "\t" +_tipo.name(); 
     }
 }
