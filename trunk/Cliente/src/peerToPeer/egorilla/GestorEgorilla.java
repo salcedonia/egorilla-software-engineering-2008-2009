@@ -28,9 +28,9 @@ import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
 import peerToPeer.descargas.GestorDescargas;
 
-import peerToPeer.egorilla.*;
 
 import gestorDeFicheros.*;
+import mensajes.serverclient.RespuestaPeticionConsulta;
 
 
 /**
@@ -102,13 +102,31 @@ public class GestorEgorilla extends Thread{
         
         this.comienzaP2P();
     }
-    
+
+    /**
+     * devuleve la ip del servidor al que estamos conectados
+     * @return ip del servidor al que se conecta
+     */
+    public String getServerIP() {
+     return _serverIP;
+    }
+
+    /**
+     * devuleve la ip del servidor al que estamos conectados
+     * @return ip del servidor al que se conecta
+     */
+    public int getServerPort() {
+        return _serverPort;
+    }
+     
     /** 
      * notifica que esta conectado a partir de este momento
      */
     void conectado() {
         _conectado = true;
-        //TODO: MOLARIA AKI UN OBSERVADOR Y DECIRSELO A TO DIOS???
+        for (ObservadorGestorEgorilla obs : _listaObservadores) {
+            obs.conexionCompleta(_serverIP, _serverPort);
+        }
     }
     
     /**
@@ -130,7 +148,8 @@ public class GestorEgorilla extends Thread{
         // finaliza el p2p.
         this._doP2P = false;
     }
-    
+
+
     
     /**
      * pone el p2p en modo escucha, de forma que se atiende a otros
@@ -167,6 +186,21 @@ public class GestorEgorilla extends Thread{
         else
             this.addMensajeParaEnviar(msj);
     }
+    
+    /**
+     * notifica la llegada de una consulta a los observadores
+     * @param respuesta
+     */
+    void resultadoBusqueda(RespuestaPeticionConsulta respuesta) {
+        String cad = respuesta.getConsulta();
+        Archivo[] lista = respuesta.getLista();
+        
+        for (ObservadorGestorEgorilla obs : _listaObservadores) {
+            obs.resultadosBusqueda(cad, lista);
+        }
+    }
+    
+          
    
     /**
      * Se indica que este fichero se transmitira a este peer. 
@@ -196,8 +230,6 @@ public class GestorEgorilla extends Thread{
         // realizamos una consulta al servidor.
         // necesitamos 
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
-        
-        
     }
 
     /**
@@ -239,14 +271,13 @@ public class GestorEgorilla extends Thread{
      * nuevo para actualizar la BBDD del servidor.
      */
     void enviaListaArchivos() {
-        // TODO: aqui enviamos la lista de archivos compartidos que se sube
+        // aqui enviamos la lista de archivos compartidos que se sube
         // esto incluye tanto compartidos como a medias.
-        
-        ListaArchivos l = new ListaArchivos();
-        l.setDestino(_serverIP, _serverPort);
         
         // es un vector, por lo que hay que añadir los elementos en el consturctor
         // en un addall o algo
+        ListaArchivos l = _gestorDisco.getListaArchivosTodos();
+        l.setDestino(_serverIP, _serverPort);
         
         // y se envia
         if (!_conectado){
@@ -271,40 +302,47 @@ public class GestorEgorilla extends Thread{
     }
     
     @Override
-    public synchronized void run(){
-            try {
-                while (_doP2P){
-                
-                    // por cada mensaje al que se le deba dar salida, se le da.
-                    while (!_colaSalida.isEmpty()) {
-                        Mensaje msj = _colaSalida.poll();
-                        _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
-                    }
+    public synchronized void run() {
+        try {
+            while (_doP2P) {
+
+                // por cada mensaje al que se le deba dar salida, se le da.
+                while (!_colaSalida.isEmpty()) {
+                    Mensaje msj = _colaSalida.poll();
+                    _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                }
                 try {
 
                     this.wait();
 
-                    //TODO: añadiendo una espera aqui se retrasa la salida  reduce el
-                    // trafico this.wait();
-                } catch (InterruptedException ex) {
-                   // continua
-                }
-
-                 //TODO: añadiendo una espera aqui se retrasa la salida  reduce el 
+                //TODO: añadiendo una espera aqui se retrasa la salida  reduce el
                 // trafico this.wait();
+                } catch (InterruptedException ex) {
+                    // continua
                 }
-            }   catch (NetError ex) {
-                // TODO: gestor de errores. hay no se ha podido hablar con quien dices
-                    Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } catch (NetError ex) {
+            // TODO: gestor de errores. hay no se ha podido hablar con quien dices
+            Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    //-------------------------------------------------
     //--------- metodos de la lista de observadores
-
+    //-------------------------------------------------
+    
+    /**
+     * añade un observador que sera notificado con los eventos del modulo
+     * @param obs el observador
+     */
     public void agregarObservador(ObservadorGestorEgorilla obs){
         _listaObservadores.add(obs);
     }
 
+    /**
+     * elimina un observador 
+     * @param obs el observador a eliminar
+     */
     public void eliminarObservador(ObservadorGestorEgorilla obs){
         int indice=_listaObservadores.indexOf(obs);
         _listaObservadores.remove(indice);

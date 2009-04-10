@@ -1,42 +1,49 @@
 package control;
 
 import datos.Archivo;
-import gestorDeFicheros.GestorCompartidos;
+import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
+import gui.GUIConsola;
 import java.io.*;
 import mensajes.Mensaje;
-import mensajes.serverclient.DatosCliente;
-import mensajes.serverclient.PeticionConsulta;
-import mensajes.serverclient.PeticionDescarga;
-import mensajes.serverclient.RespuestaPeticionConsulta;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
-import peerToPeer.egorilla.ServidorP2PEgorilla;
+import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
  * Un control rudimentario para la aplicacion. Responde a las llamadas de 
  * la interfaz de forma imperativa.
  * 
+ * implementa la interfacee observador gestor egorilla para estar al tanto de
+ * los eventos
+ * 
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
  */
-public class ControlAplicacion {
+public class ControlAplicacion implements ObservadorGestorEgorilla {
 
     // ATRIBUTOS
     private static boolean _conectado = false;
-    private static PeticionConsulta _peticionConsulta;
-
-    private static GestorDeRed<Mensaje> _red;
-    private static GestorDescargas      _descargas;
-    private static GestorEgorilla       _egorilla;
+    
+    private  GestorDeRed<Mensaje> _red;
+    private  GestorDescargas      _descargas;
+    private  GestorEgorilla       _egorilla;
+    
+    private  GUIConsola _gui;
     
     
     public ControlAplicacion(int puerto, String compartidos){
         _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
         this.compartidos(compartidos);
-      _descargas = new GestorDescargas();
+        
+      GestorDisco disco = new GestorDisco();  
+      _descargas = new GestorDescargas(disco);
       _egorilla = new GestorEgorilla(_descargas, _red);
-    }   
+    }
+
+    public void regristraGUI(GUIConsola gui) {
+      _gui = gui;
+    }
     
     /**
      * Configura el gestor de archivos compartidos del cliente a partir del 
@@ -64,17 +71,8 @@ public class ControlAplicacion {
      * @throws java.io.IOException
      */
     public void conectar(String IP, int puerto) throws Exception {
-////        
-////        // primero, debemos activar el p2p
-////        _red.registraReceptor(new ServidorP2PEgorilla(_egorilla,_descargas));
-////        _red.comienzaEscucha();
-//        
-//        // dormimos 1 segundo el hilo para que pueda abrirse el socket y no haya
-//        // problemas con las pruebas en local
-//        Thread.sleep(1000);
-        
+        _egorilla.agregarObservador(this);
         _egorilla.conectaServidor(IP, puerto);
-  
         _conectado = true;  
     }
 
@@ -110,5 +108,30 @@ public class ControlAplicacion {
      */
     public void bajar(String nmb,String hash) {
         _egorilla.nuevaDescarga(new Archivo(nmb, hash));
+    }
+
+    
+   //--------------------------------------------------------------------------
+   //           INTERFACE OBSERVADOREGORILLA
+   //--------------------------------------------------------------------------
+    
+    public void conexionCompleta(String ip, int port) {
+        this._conectado = true;
+        
+        // notifica a la gui:
+        _gui.mostrarMensaje ("Conexión satisfactoria con Servidor "+
+                             ip+ ":" +port  +"\n");
+    }
+
+    public void resultadosBusqueda(String cad,  Archivo[] lista) {
+        
+    }
+
+    public void finDescarga() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void perdidaConexion() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

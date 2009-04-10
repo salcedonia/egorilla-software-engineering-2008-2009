@@ -31,10 +31,12 @@ public class GestorDescargas {
     //Creo que no se necesita el fragmentador en este caso
     //private Fragmentador _fragmentador;
 
-    public GestorDescargas() {
+    public GestorDescargas(GestorDisco disco) {
        _ficherosSinInformacion = new Vector<String>();
        _ficherosConInformacion = new Hashtable<String, Vector<DatosCliente>>();
-    
+       
+       _gestorDisco = disco;
+               
        /*_gestorDisco = new GestorDisco();*/
        _ensamblador = _gestorDisco.getEnsamblador();
        //Que le ha pasado a GestorDescarga, donde llegan los Fragmentos-Byte[]
