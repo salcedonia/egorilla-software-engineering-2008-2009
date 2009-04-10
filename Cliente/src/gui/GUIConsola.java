@@ -37,6 +37,16 @@ public class GUIConsola {
     public GUIConsola(ControlAplicacion  control) throws IOException{
     
         _control = control;
+        _control.regristraGUI(this);
+    }
+
+    /**
+     * pinta este mensaje por pantalla
+     * 
+     * @param string
+     */
+    public synchronized  void mostrarMensaje(String string) {
+       System.out.println("\n" + string);
     }
     
     /**
@@ -127,22 +137,23 @@ public class GUIConsola {
      */
     public char menu() throws IOException {
         char op;
+        String aux;
+        do {
+            System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
+            System.out.print("\t1. Conectar.\n");
+            System.out.print("\t2. Conectar servidor por defecto.\n");
+            System.out.print("\t3. Desconectar.\n");
+            System.out.print("\t4. Buscar.          \n");
+            System.out.print("\t5. Descargar.          \n");
+            System.out.print("\t0. Salir.\n");
+            System.out.print("\n\tOpcion: ");
 
-        System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
-        System.out.print("\t1. Conectar.\n");
-        System.out.print("\t2. Conectar servidor por defecto.\n");
-        System.out.print("\t3. Desconectar.\n");
-        System.out.print("\t4. Buscar.          \n");
-        System.out.print("\t5. Descargar.          \n");
-        System.out.print("\t0. Salir.\n");
-        System.out.print("\n\tOpcion: ");
+            aux = br.readLine();
 
-        //String texto1=br.readLine();
-        //int num1=Integer.parseInt(texto1);
-        String aux = br.readLine();
+        } while (aux.length() == 0);
+        
         op = aux.charAt(0);
-        //op = (char)br.read();
-        //br.skip(1); xa saltar el retorno de carro
+
         return op;
     }
         

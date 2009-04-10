@@ -14,6 +14,7 @@ import mensajes.p2p.*;
 import mensajes.serverclient.RespuestaPeticionDescarga;
 import peerToPeer.descargas.GestorDescargas;
 import gestorDeFicheros.*;
+import mensajes.serverclient.RespuestaPeticionConsulta;
 
 /**
  *
@@ -117,7 +118,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
 
                 //Se supone que llega aqui xq el servidor le ha dicho que yo tengo el fichero, aun asi
                 //cuando se va a pregutar que fragmentos tengo de ese fichero (xq no se sabe en que estado
-                //le tengo) ya se hace, luego se comprueba en función de la salida queFragmentosTienes
+                //le tengo) ya se hace, luego se comprueba quieroen funciï¿½n de la salida queFragmentosTienes
                 Vector<Fragmento> listaFragmentos;
                 listaFragmentos = _fragmentador.queFragmentosTienes( quiero.getHash() );
 
@@ -192,8 +193,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
             case RespuestaPeticionConsulta:
                 
-                //TODO:  notifica el resutado de la busqueda
-                // patron observador?? iria bien
+                _gestor.resultadoBusqueda((RespuestaPeticionConsulta)msj);
                 
                 break;
                 

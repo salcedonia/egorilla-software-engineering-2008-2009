@@ -10,6 +10,8 @@
 
 package peerToPeer.egorilla;
 
+import datos.Archivo;
+
 /**
  * Observador utilizado para la notificacion de eventos al GestorEgorilla
  * 
@@ -17,9 +19,9 @@ package peerToPeer.egorilla;
  */
 public interface ObservadorGestorEgorilla {
     //para notificar que la conexion ha sido completada
-    public void conexionCompleta();
+    public void conexionCompleta(String ip, int port);
     //para notificar que se han recibido los resultados de la busqueda
-    public void resultadosBusqueda();
+    public void resultadosBusqueda(String cad,  Archivo[] lista);
     //para notificar que la descarga ha sido completada
     public void finDescarga();
     //para notificar que la conexion se ha perdido
