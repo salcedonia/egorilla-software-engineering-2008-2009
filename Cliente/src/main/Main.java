@@ -3,9 +3,16 @@ package main;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import control.*;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
-import gui.GUIConsola;
+import gestorDeFicheros.GestorCompartidos;
+import gestorDeFicheros.GestorDisco;
+import gestorDeRed.GestorDeRed;
+import gestorDeRed.TCP.GestorDeRedTCPimpl;
+import gui.consola.GUIConsola;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mensajes.Mensaje;
+import peerToPeer.descargas.GestorDescargas;
+import peerToPeer.egorilla.GestorEgorilla;
 
 /**
  * Clase que implemeta un test de prueba del servidor.
@@ -13,26 +20,33 @@ import java.util.logging.Logger;
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
  */
 public class Main {
-    
+
     /**
      * Método main de la aplicacion Cliente eGorilla.
      * 
      * @param args Argumentos de la aplicación de la línea de comandos.
      */
-    public static void main(String[] args) throws ControlConfiguracionClienteException{
+    public static void main(String[] args) throws ControlConfiguracionClienteException {
 
-        
+
         ControlConfiguracionCliente oCtrlConfigCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties");
         int iPuerto = Integer.parseInt(oCtrlConfigCliente.obtenerPropiedad("Puerto"));
 
-//        String nombreDirectorio = "compartidos";
-       
-        ControlAplicacion control = new  ControlAplicacion(iPuerto, oCtrlConfigCliente.obtenerPropiedad("Dir_Compartidos"));
-        
+        GestorDeRed<Mensaje> gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(iPuerto);
+        GestorDisco gestorDeDisco = new GestorDisco();
+        GestorDescargas gestorDeDescargas = new GestorDescargas(gestorDeDisco);
+        GestorCompartidos gestorDeCompartidos = GestorCompartidos.getInstancia();
+        gestorDeCompartidos.setGestorDisco(gestorDeDisco);
+        GestorEgorilla gestorEGorilla = new GestorEgorilla(gestorDeDescargas, gestorDeRed);
+
+//      String nombreDirectorio = "compartidos";
+
+        ControlAplicacion controladorConsola = new ControlAplicacion(gestorDeRed, gestorDeDescargas, gestorEGorilla);
+
         // Mostramos la interfaz de consola
         try {
-            new GUIConsola(control).mostrarMenu();
-            
+            new GUIConsola(controladorConsola).mostrarMenu();
+
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
