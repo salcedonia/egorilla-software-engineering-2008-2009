@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * Gestiona las partes en las que se compone un archivo.
  *
- * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
+ * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo, Jose Miguel Guerrero
  */
 public class ParteDeArchivo implements Serializable {
     
@@ -95,13 +95,8 @@ public class ParteDeArchivo implements Serializable {
     public String getNombreFichero(String directorio, String hash) {
         String nombre = "";
         boolean encontrado = false;
-        GestorCompartidos compartidos = null;
-        try {
-            compartidos = new GestorCompartidos(new File(directorio));
-        } catch (Exception e) {
-        }
         
-        ListaArchivos lista = compartidos.getArchivosCompartidos();
+        ListaArchivos lista = GestorCompartidos.getInstancia().getArchivosCompartidos();
 
         for (int i = 0; i < lista.size() && encontrado == false; i++) {
             if (lista.get(i).getHash().compareTo(hash) == 0) {

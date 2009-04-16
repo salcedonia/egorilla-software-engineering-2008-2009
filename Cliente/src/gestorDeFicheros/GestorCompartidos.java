@@ -1,80 +1,67 @@
 package gestorDeFicheros;
 
 import mensajes.serverclient.ListaArchivos;
-import java.io.*;
 import datos.*;
+import java.util.Vector;
 
 /**
  * Clase que se encarga de gestionar todos los archivos compartidos del usuario.
- * Lee la estructura de directorios del directorio que el usuario comparte 
- * para tener una lista de los archivos del mismo. 
+ * Es un mediador para controlar los archivos compartidos y poder preguntar
+ * por los fragmentos de un determinado archivo, asi como pedir los byte[]
+ * de un fragmento.
  *
- * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
+ * @author Jose Miguel Guerrero
  */
 public class GestorCompartidos {
 
     // ATRIBUTOS
-    private ListaArchivos _lista;
-    private TipoArchivo _tipo;
+    private static GestorCompartidos _instancia=null;
 
-    /**
-     * 
-     * @param path
-     * @throws java.io.IOException
-     */
-    public GestorCompartidos(File path) throws IOException {
+    private Fragmentador _fragmentador=null;
 
-        _lista = new ListaArchivos();
+    private GestorDisco _gestorDisco=null;
 
-        if (!path.isDirectory()) {
-            throw new IOException("el path no es un directorio válido");
+    
+    //SINGLETON
+    public static GestorCompartidos getInstancia(){
+        if(_instancia==null){
+            _instancia=new GestorCompartidos();
         }
-        System.out.println("\nDirectorio de compartidos: ");
-        System.out.println(path.getAbsolutePath() + "\n");
-
-        File[] ficherosComp = path.listFiles();
-        for (File f : ficherosComp) {
-            if (!f.isDirectory()) {
-                _lista.add(procesarArchivoCompartido(f));
-            }
-        }
-
-        for (int i = 0; i < _lista.size(); i++) {
-            System.out.println(_lista.elementAt(i).getNombre());
-        }
-        System.out.println("\n<" + _lista.size() + "> ficheros compartidos.");
+        return _instancia;
     }
 
     /**
-     * 
-     * @param f
-     * @return
-     * @throws java.io.IOException
+     * Metodo para asignar el gestor de disco asociado al gestor.
+     * @param disco GestorDisco asociado al GestorCompartidos.
      */
-    public Archivo procesarArchivoCompartido(File f) throws IOException {
-
-        String nombre = null;
-
-        nombre = f.getName();
-        String[] extensiones = nombre.split("\\.");
-        //Cambiar de sitio este crear, ineficiente-static-no_poo
-        TipoArchivo.iniciarTiposArchivo();
-        if (extensiones.length != 0) {
-            _tipo = TipoArchivo.devuelveTipo(extensiones[extensiones.length - 1].toLowerCase());
-        } else {
-            _tipo = TipoArchivo.OTRO;        //Nombre-Hash-Tamano-Tipo
-        //tengo que cerrar f?
-        //f.close();
-        }
-        return new Archivo(nombre, MD5Sum.getFileMD5Sum(f), f.length(), _tipo);
+    public void setGestorDisco(GestorDisco disco){
+        _gestorDisco=disco;
+        _fragmentador=disco.getFragmentador();
     }
 
     /**
-     * recupera la lista de archivos para ser enviada al servidor.
-     *
-     * @return la lista de archivos en la carpeta compartidos
+     * Metodo para la peticion de la lista de archivos compartidos.
+     * @return ListaArchivos - lista de los archivos compartidos.
      */
     public ListaArchivos getArchivosCompartidos() {
-        return _lista;
+        return _gestorDisco.getListaArchivosTodos();
+    }
+
+    /**
+     * Metodo para consultar fragmentos de un determinado archivo.
+     * @param hash - Codigo hash del fichero.
+     * @return Vector<Fragmento> del fichero indicado en el hash.
+     */
+    public Vector<Fragmento> queFragmentosTienes( String hash ){
+        return _fragmentador.queFragmentosTienes(hash);
+    }
+
+    /**
+     * Metodo para pedir un fragmento de un determinado archivo.
+     * @param frag Fragmento deseado
+     * @return Byte[] correspondiente a la informacion enviada del fragmento.
+     */
+    public Byte[] dameBytesDelFragmento( Fragmento frag ){
+        return _fragmentador.dameBytesDelFragmento(frag);
     }
 }

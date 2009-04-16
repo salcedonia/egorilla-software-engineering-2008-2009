@@ -63,8 +63,8 @@ public class Fragmentador {
 
   /**
    * Crea un fragmentador del tipo especificado sobre cada uno de los ficheros del 
-   * directorio especificado. Esto es útil cuando por ejemplo queremos tener fragmentados
-   * todos los ficheros de un directorio. Además, puede servir para separar la fragmentación
+   * directorio especificado. Esto es ï¿½til cuando por ejemplo queremos tener fragmentados
+   * todos los ficheros de un directorio. Ademï¿½s, puede servir para separar la fragmentaciï¿½n
    * de los archivos finalizados (sin part.met/.dat.met) de los archivos temporales 
    * (con part.met/.dat.met).
    * @param directorio directorio de ficheros a fragmentar.
@@ -78,28 +78,29 @@ public class Fragmentador {
       if( tipoFragmentador == INCOMPLETO ){
         this.directorioIncompletos = directorio;
       }
-   Habría que comprobar que el tipo indicado es posible
+   Habrï¿½a que comprobar que el tipo indicado es posible
   }*/
 
   /**
    * Crea un fragmentador sobre cada uno de los ficheros del directorio especificado. Esto es 
-   * útil cuando por ejemplo queremos tener fragmentados todos los ficheros de un directorio. 
-   * Además, puede servir para separar la fragmentación de los archivos finalizados (sin 
+   * ï¿½til cuando por ejemplo queremos tener fragmentados todos los ficheros de un directorio. 
+   * Ademï¿½s, puede servir para separar la fragmentaciï¿½n de los archivos finalizados (sin 
    * part.met/.dat.met) de los archivos temporales (con part.met/.dat.met).
    * @param directorioDescargas directorio de ficheros a fragmentar.
-   */
+   */
+
   /*public Fragmentador(String directorioDescargas){
     _directorio = directorioDescargas;
   }*/
   //Tal vez seria mejor crear un fragmentador para los temporales diferentes de los completos,
-  //ya que de los completos siempre sepodrán servidor las partes solicitadas, en cambio para
+  //ya que de los completos siempre sepodrï¿½n servidor las partes solicitadas, en cambio para
   //un archivo temporal solo se podran servir las que tengamos indicadas en el part.met (+rapid)
   //ademas de que sin el part.met no sabemos que partes de archivo tenemos realmente, por que el
-  //metodo de poner todo a 0 será siempre fiable.
+  //metodo de poner todo a 0 serï¿½ siempre fiable.
 
   /*Como esta completo tiene todos los fragmentos que forman el fichero*/
   /*Como el fragmento no tiene el array de bytes que lo forma tengo que devolver un par Fragmento-Byte's*/
-  /*A parte del indicar el hash debe indicarme que fragmentos del fichero quiere, lo hace a través de un Array de Fragmento?*/
+  /*A parte del indicar el hash debe indicarme que fragmentos del fichero quiere, lo hace a travï¿½s de un Array de Fragmento?*/
   /*public ArrayList<Byte[]> getBytesDeFragmentos(String hash, ArrayList<Fragmento> fragmentosSolicitados ){
     
     if( _tipoFragmentador == Fragmentador.COMPLETO ){
@@ -109,7 +110,7 @@ public class Fragmentador {
         Debo leer los .dat.met que tiene la info de que partes/Fragmento's tengo del fichero incompleto
       }else{
 	Mensaje o excepcion de que dicho tipo Fragmentador no es conocido/posible
-	Aunque esto no debería darse si lo controlamos en el constructor
+	Aunque esto no deberï¿½a darse si lo controlamos en el constructor
       }
     return null;
   }*/
@@ -179,7 +180,7 @@ public class Fragmentador {
       }else{
         System.out.println("Tipo desconocido");
 	Mensaje o excepcion de que dicho tipo Fragmentador no es conocido/posible
-	Aunque esto no debería darse si lo controlamos en el constructor
+	Aunque esto no deberï¿½a darse si lo controlamos en el constructor
       }
     return new ArrayList<Fragmento>();
   }*/

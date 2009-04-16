@@ -1,6 +1,7 @@
 package control;
 
 import datos.Archivo;
+import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
@@ -18,7 +19,7 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
  * implementa la interfacee observador gestor egorilla para estar al tanto de
  * los eventos
  * 
- * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo
+ * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo, Jose Miguel Guerrero
  */
 public class ControlAplicacion implements ObservadorGestorEgorilla {
 
@@ -38,6 +39,8 @@ public class ControlAplicacion implements ObservadorGestorEgorilla {
         
       GestorDisco disco = new GestorDisco();  
       _descargas = new GestorDescargas(disco);
+      GestorCompartidos _compartidos=GestorCompartidos.getInstancia();
+      _compartidos.setGestorDisco(disco);
       _egorilla = new GestorEgorilla(_descargas, _red);
           _egorilla.agregarObservador(this);
     }
