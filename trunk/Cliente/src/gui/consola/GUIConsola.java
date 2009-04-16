@@ -1,34 +1,38 @@
-package gui;
+package gui.consola;
 
 import control.ControlAplicacion;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import mensajes.serverclient.DatosCliente;
-import mensajes.serverclient.RespuestaPeticionConsulta;
-import mensajes.serverclient.RespuestaPeticionDescarga;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
+import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
  * Interfaz en modo consola de la aplicacion Cliente eGorilla.
  * 
  * @author Ivan Munsuri, Javier Salcedo
  */
-public class GUIConsola {
+public class GUIConsola implements ObservadorGestorEgorilla{
 
     private ControlAplicacion _control;
-    
+    private static final Logger log = Logger.getLogger(GUIConsola.class.getName());
     /**
      * Creacion del flujo para leer datos.
      */
     public  InputStreamReader isr = new InputStreamReader(System.in); 
-    
     /**
      * Creacion del filtro para optimizar la lectura de datos.
      */
     public  BufferedReader br = new BufferedReader(isr);
 
+    /**
+     * Indica si está conectado a un servidor o no.
+     */
+    private static boolean _conectado = false;
+    
     /**
      * 
      * @param cad
@@ -37,7 +41,6 @@ public class GUIConsola {
     public GUIConsola(ControlAplicacion  control) throws IOException{
     
         _control = control;
-        _control.regristraGUI(this);
     }
 
     /**
@@ -70,7 +73,12 @@ public class GUIConsola {
                     System.out.print("\n\tIntroduce puerto del servidor: ");
                     String sPuerto = br.readLine();
                     int puerto = Integer.parseInt(sPuerto);
-                    _control.conectar(sIP, puerto);
+                    
+                    if (!_conectado)
+                        _control.peticionConexionAServidor(sIP, puerto);
+                    else
+                        mostrarMensaje("ya estas conectado a " + sIP + "\n");
+
                     System.out.println("\nConectando....");
                     break;
                     
@@ -80,12 +88,14 @@ public class GUIConsola {
                     
                       System.out.print("\nConectando a ");
                       System.out.print(ServerHost +":"+ puertoS);
-                      _control.conectar(ServerHost, puertoS);     
+                      _control.peticionConexionAServidor(ServerHost, puertoS);     
                    break;
                    
                 case '3':
                     System.out.println("\nDesconectando...");
-                    _control.close();
+                    _control.peticionDeDesconexionDeServidor();
+                    _conectado = false;
+                    
                     System.out.println("\nDesconectado.");
                     break;
                     
@@ -161,7 +171,7 @@ public class GUIConsola {
      * 
      * @param archivo
      */
-    public void insertarBusquedas(Archivo[] archivo) {
+    public void mostrarBusquedas(Archivo[] archivo) {
 
         System.out.println("Nombre   " + "Tamano   " + "Disponibilidad   " + "Fuentes   " + "Tipo   " + "Identificador de archivo");
         for (int i = 0; i < archivo.length; i++) {
@@ -197,5 +207,50 @@ public class GUIConsola {
             System.out.println("Resultados anadidos; "+i);
         }
 
+    }
+
+    /**
+     * Indica si estamos conectados a un servidor o no.
+     * 
+     * @return Verdadero si estamos conectados a un servidor y falso en caso
+     * contrario.
+     */
+    public boolean conectado() {
+        return _conectado;
+    }
+    
+   //--------------------------------------------------------------------------
+   //           INTERFACE OBSERVADOREGORILLA
+   //--------------------------------------------------------------------------
+    
+    public void conexionCompleta(String ip, int port) {
+        
+        _conectado = true;
+        
+        // notifica a la gui:
+        mostrarMensaje ("Conexión satisfactoria con Servidor "+
+                             ip+ ":" +port  +"\n");
+    }
+
+    public void resultadosBusqueda(String cad,  Archivo[] lista) {
+        
+         // notifica a la gui:
+        mostrarMensaje ("\nresultados de la busqueda: " + cad);
+        mostrarMensaje ("================================================");
+        
+        if (lista.length > 0){
+        for (Archivo archivo : lista) {
+            mostrarMensaje(archivo.toString());
+        }}
+        else
+            mostrarMensaje("no hubo resultados! \n");   
+    }
+
+    public void finDescarga() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void perdidaConexion() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
