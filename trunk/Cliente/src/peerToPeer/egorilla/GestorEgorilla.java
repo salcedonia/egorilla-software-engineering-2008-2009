@@ -265,7 +265,7 @@ public class GestorEgorilla extends Thread{
         
         // es un vector, por lo que hay que añadir los elementos en el consturctor
         // en un addall o algo
-        ListaArchivos l = _gestorDisco.getListaArchivosTodos();
+        ListaArchivos l = GestorCompartidos.getInstancia().getArchivosCompartidos();
         l.setDestino(_serverIP, _serverPort);
         
         // y se envia

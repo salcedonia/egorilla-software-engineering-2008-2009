@@ -37,7 +37,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
     //private GestorDisco _gestorDisco; pasado al GestorEgorilla
 
     //Se puede quitar y usamos solo el get del Disco
-    private Fragmentador _fragmentador;
+    //private Fragmentador _fragmentador;
     
     /**
      * constructor b�sico:
@@ -55,7 +55,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
        //Tal vez no sea el mejor sitio para iniciar el gestorDisco, mejor antes para que se pueda
        //ver los temporales y compartidos sin tener q instanciar el servidor.
        //_gestorDisco = new GestorDisco();
-       _fragmentador = gestorDisco.getFragmentador();
+       //_fragmentador = gestorDisco.getFragmentador();
     }
 
     /**
@@ -120,7 +120,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 //cuando se va a pregutar que fragmentos tengo de ese fichero (xq no se sabe en que estado
                 //le tengo) ya se hace, luego se comprueba quieroen funci�n de la salida queFragmentosTienes
                 Vector<Fragmento> listaFragmentos;
-                listaFragmentos = _fragmentador.queFragmentosTienes( quiero.getHash() );
+                listaFragmentos = GestorCompartidos.getInstancia().queFragmentosTienes( quiero.getHash() );
 
                 Tengo resp = new Tengo( quiero.getNombre(), quiero.getHash(), listaFragmentos, 
                     quiero.ipDestino(), quiero.puertoDestino() );
