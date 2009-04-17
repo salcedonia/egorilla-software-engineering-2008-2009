@@ -1,6 +1,6 @@
 package gui.consola;
 
-import control.ControlAplicacion;
+import control.ControladorConsola;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import mensajes.serverclient.DatosCliente;
@@ -15,32 +15,38 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
  * 
  * @author Ivan Munsuri, Javier Salcedo
  */
-public class GUIConsola implements ObservadorGestorEgorilla{
+public class GUIConsola implements ObservadorGestorEgorilla {
 
-    private ControlAplicacion _control;
-    private static final Logger log = Logger.getLogger(GUIConsola.class.getName());
+    /**
+     * Log para recopilar la información en un fichero de log.
+     */
+    private static final Logger _log = Logger.getLogger(GUIConsola.class.getName());
+    /**
+     * Controlador de la aplicación en modo consola.
+     */
+    private ControladorConsola _controlador;
     /**
      * Creacion del flujo para leer datos.
      */
-    public  InputStreamReader isr = new InputStreamReader(System.in); 
+    public InputStreamReader _inputStreamReader = new InputStreamReader(System.in);
     /**
      * Creacion del filtro para optimizar la lectura de datos.
      */
-    public  BufferedReader br = new BufferedReader(isr);
-
+    public BufferedReader _bufferedReader = new BufferedReader(_inputStreamReader);
     /**
      * Indica si está conectado a un servidor o no.
      */
     private static boolean _conectado = false;
-    
+
     /**
+     * Constructor de la clase GUIConsola.
      * 
-     * @param cad
+     * @param controlador Controlador de la aplicación en modo consola.
      * @throws java.io.IOException
      */
-    public GUIConsola(ControlAplicacion  control) throws IOException{
-    
-        _control = control;
+    public GUIConsola(ControladorConsola controlador) throws IOException {
+
+        _controlador = controlador;
     }
 
     /**
@@ -48,20 +54,19 @@ public class GUIConsola implements ObservadorGestorEgorilla{
      * 
      * @param string
      */
-    public synchronized  void mostrarMensaje(String string) {
-       System.out.println(string);
+    public synchronized void mostrarMensaje(String string) {
+        System.out.println(string);
     }
-    
+
     /**
+     * Muestra el menú de la aplicación en modo consola.
      * 
-     * @param cad
-     * @throws java.io.IOException
-     * @throws java.lang.NumberFormatException
+     * @throws java.io.IOException Se lanza cuando se produce algún error de IO.
      */
-    public  void mostrarMenu() throws Exception {
+    public void mostrarMenu() throws Exception {
 
         String cad;
-        
+
         char op;
         do {
             op = menu();
@@ -69,43 +74,43 @@ public class GUIConsola implements ObservadorGestorEgorilla{
                 case '1':
                     System.out.println("\nConectando...");
                     System.out.print("\n\tIntroduce IP del servidor: ");
-                    String sIP = br.readLine();
+                    String sIP = _bufferedReader.readLine();
                     System.out.print("\n\tIntroduce puerto del servidor: ");
-                    String sPuerto = br.readLine();
+                    String sPuerto = _bufferedReader.readLine();
                     int puerto = Integer.parseInt(sPuerto);
-                    
-                    if (!_conectado)
-                        _control.peticionConexionAServidor(sIP, puerto);
-                    else
-                        mostrarMensaje("ya estas conectado a " + sIP + "\n");
 
+                    if (!_conectado) {
+                        _controlador.peticionConexionAServidor(sIP, puerto);
+                    } else {
+                        mostrarMensaje("ya estas conectado a " + sIP + "\n");
+                    }
                     System.out.println("\nConectando....");
                     break;
-                    
+
                 case '2':
-                      String ServerHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
-                      int    puertoS    = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
-                    
-                      System.out.print("\nConectando a ");
-                      System.out.print(ServerHost +":"+ puertoS);
-                      _control.peticionConexionAServidor(ServerHost, puertoS);     
-                   break;
-                   
+                    String ServerHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
+                    int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
+
+                    System.out.print("\nConectando a ");
+                    System.out.print(ServerHost + ":" + puertoS);
+                    _controlador.peticionConexionAServidor(ServerHost, puertoS);
+                    break;
+
                 case '3':
                     System.out.println("\nDesconectando...");
-                    _control.peticionDeDesconexionDeServidor();
+                    _controlador.peticionDeDesconexionDeServidor();
                     _conectado = false;
-                    
+
                     System.out.println("\nDesconectado.");
                     break;
-                    
+
                 case '4':
                     System.out.print("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
-                    cad = br.readLine();
+                    cad = _bufferedReader.readLine();
                     //creo q hay que quitar el retorno de carro
-                    _control.consultar(cad);
+                    _controlador.consultar(cad);
                     // TODO: feedback es una comunicación asincrona
-                    
+
 //                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
 //                    if (respuestaConsulta.getLista().length > 0) {
 //                        System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
@@ -116,12 +121,12 @@ public class GUIConsola implements ObservadorGestorEgorilla{
                     break;
                 case '5':
                     System.out.print("\nMD5 del fichero a descargar: ");
-                    cad = br.readLine();       
-             
-                    
+                    cad = _bufferedReader.readLine();
+
+
                     // TODO: coms asincronas, no hahy feedback
-                    _control.bajar("nombre",cad);
-                    
+                    _controlador.bajar("nombre", cad);
+
 //                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
 //                    if (respuestaDescarga.getLista().length > 0) {
 //                        System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
@@ -139,7 +144,7 @@ public class GUIConsola implements ObservadorGestorEgorilla{
             }
         } while (op != '0');
     }
-     
+
     /**
      * 
      * @return
@@ -158,18 +163,20 @@ public class GUIConsola implements ObservadorGestorEgorilla{
             System.out.print("\t0. Salir.\n");
             System.out.print("\n\tOpcion: ");
 
-            aux = br.readLine();
+            aux = _bufferedReader.readLine();
 
         } while (aux.length() == 0);
-        
+
         op = aux.charAt(0);
 
         return op;
     }
-        
+
     /**
+     * Muestra el resultado de una búsqueda.
      * 
-     * @param archivo
+     * @param archivo Array de archivos correspondientes al resultado de la 
+     * búsqueda.
      */
     public void mostrarBusquedas(Archivo[] archivo) {
 
@@ -187,7 +194,7 @@ public class GUIConsola implements ObservadorGestorEgorilla{
             System.out.print("   ");
             System.out.print(archivo[i]._hash);
             System.out.println("");
-            System.out.println("Resultados anadidos; "+i);
+            System.out.println("Resultados anadidos; " + i);
         }
 
     }
@@ -204,7 +211,7 @@ public class GUIConsola implements ObservadorGestorEgorilla{
             System.out.print("   ");
             System.out.print(datos[i].getIP());
             System.out.println("");
-            System.out.println("Resultados anadidos; "+i);
+            System.out.println("Resultados anadidos; " + i);
         }
 
     }
@@ -218,32 +225,32 @@ public class GUIConsola implements ObservadorGestorEgorilla{
     public boolean conectado() {
         return _conectado;
     }
-    
-   //--------------------------------------------------------------------------
-   //           INTERFACE OBSERVADOREGORILLA
-   //--------------------------------------------------------------------------
-    
+
+    //--------------------------------------------------------------------------
+    //           INTERFACE OBSERVADOREGORILLA
+    //--------------------------------------------------------------------------
     public void conexionCompleta(String ip, int port) {
-        
+
         _conectado = true;
-        
+
         // notifica a la gui:
-        mostrarMensaje ("Conexión satisfactoria con Servidor "+
-                             ip+ ":" +port  +"\n");
+        mostrarMensaje("Conexión satisfactoria con Servidor " +
+                ip + ":" + port + "\n");
     }
 
-    public void resultadosBusqueda(String cad,  Archivo[] lista) {
-        
-         // notifica a la gui:
-        mostrarMensaje ("\nresultados de la busqueda: " + cad);
-        mostrarMensaje ("================================================");
-        
-        if (lista.length > 0){
-        for (Archivo archivo : lista) {
-            mostrarMensaje(archivo.toString());
-        }}
-        else
-            mostrarMensaje("no hubo resultados! \n");   
+    public void resultadosBusqueda(String cad, Archivo[] lista) {
+
+        // notifica a la gui:
+        mostrarMensaje("\nresultados de la busqueda: " + cad);
+        mostrarMensaje("================================================");
+
+        if (lista.length > 0) {
+            for (Archivo archivo : lista) {
+                mostrarMensaje(archivo.toString());
+            }
+        } else {
+            mostrarMensaje("no hubo resultados! \n");
+        }
     }
 
     public void finDescarga() {

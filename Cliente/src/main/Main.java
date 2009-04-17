@@ -8,6 +8,7 @@ import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import gui.consola.GUIConsola;
+import gui.grafica.GUIGrafica;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
@@ -41,11 +42,13 @@ public class Main {
 
 //      String nombreDirectorio = "compartidos";
 
-        ControlAplicacion controladorConsola = new ControlAplicacion(gestorDeRed, gestorDeDescargas, gestorEGorilla);
+        //ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorDeDescargas, gestorEGorilla);
+        ControladorGrafica controladorGrafica = new ControladorGrafica(gestorDeRed, gestorDeDescargas, gestorEGorilla);
 
         // Mostramos la interfaz de consola
         try {
-            new GUIConsola(controladorConsola).mostrarMenu();
+            //new GUIConsola(controladorConsola).mostrarMenu();
+            new GUIGrafica(controladorGrafica);
 
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);

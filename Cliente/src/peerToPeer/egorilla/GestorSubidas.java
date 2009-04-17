@@ -65,14 +65,14 @@ public class GestorSubidas extends Thread{
       
       // ya esta la ip-puerto
       if( esta == true ){
-        // aqui no se si debería comprobarse si los fragmentos que se añaden ya estan
-        // si estan y le añado puede tener duplicados (tal esto no vaya a ocurrir),
-        // ¿se sabe cuando un cacho ha llegado bien? Cuando llega bien entonces si le quito
+        // aqui no se si deberia comprobarse si los fragmentos que se aniaden ya estan
+        // si estan y le aniado puede tener duplicados (tal esto no vaya a ocurrir),
+        // se sabe cuando un cacho ha llegado bien? Cuando llega bien entonces si le quito
         fragmentosAux.addAll( fragmentos );
         // de aqui. Todo esto me plantea la duda de que se hace cuando se recibe un fragmento-byte
         // que ya tenemos, se descarta (si se descarta, donde), se cuela o que.      
 
-      //sino esta la IP-puerto pues se añade a la tabla el nuevo destino y sus fragmentos
+      //sino esta la IP-puerto pues se aniade a la tabla el nuevo destino y sus fragmentos
       }else{
         _paraEnviar.put( usuarioDestino, fragmentos );
       }
@@ -95,7 +95,7 @@ public class GestorSubidas extends Thread{
       //compruebo xsi acaso no esta vacia, igual es redundante, segun como funcione realmente
       while( _paraEnviar.isEmpty() == false ){
         Iterator it = _paraEnviar.entrySet().iterator();
-        //Recorro la tabla para ir enviando lo que se pide, ¿puede dar problemas de sincronismo?
+        //Recorro la tabla para ir enviando lo que se pide, puede dar problemas de sincronismo?
         //Tal vez esto ya valga como el isEmpty
         while ( it.hasNext() ){
           Map.Entry e = (Map.Entry)it.next();
