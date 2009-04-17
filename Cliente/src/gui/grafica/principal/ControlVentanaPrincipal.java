@@ -1,6 +1,5 @@
 package gui.grafica.principal;
 
-import control.ControlAplicacion;
 
 //************************************************************************************//
 /**
