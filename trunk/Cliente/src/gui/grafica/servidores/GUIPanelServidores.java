@@ -1,6 +1,5 @@
 package gui.grafica.servidores;
 
-import control.ControlAplicacion;
 import javax.swing.*;
 import java.awt.*;
 
