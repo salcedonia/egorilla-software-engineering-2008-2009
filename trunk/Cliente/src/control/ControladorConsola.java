@@ -2,21 +2,18 @@ package control;
 
 import datos.Archivo;
 import gestorDeRed.GestorDeRed;
-import java.io.*;
 import mensajes.Mensaje;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
- * Un control rudimentario para la aplicacion. Responde a las llamadas de 
- * la interfaz de forma imperativa.
- * 
- * implementa la interfacee observador gestor egorilla para estar al tanto de
- * los eventos
+ * Controlador de la aplicación en modo consola. 
+ * Se encarga de recibir los eventos producidos en la interfaz y se los 
+ * notifica a la lógica de la aplicación para que ésta actúe en consecuencia.
  * 
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo, Jose Miguel Guerrero
  */
-public class ControlAplicacion {
+public class ControladorConsola {
 
     /**
      * Gestor de red de la aplicación.
@@ -38,7 +35,7 @@ public class ControlAplicacion {
      * @param gestorDeDescargas Gestor de descargas.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControlAplicacion(GestorDeRed<Mensaje> gestorDeRed, GestorDescargas gestorDeDescargas, GestorEgorilla gestorEgorilla) {
+    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorDescargas gestorDeDescargas, GestorEgorilla gestorEgorilla) {
         
         _gestorDeRed = gestorDeRed;
         _gestorDeDescargas = gestorDeDescargas;
