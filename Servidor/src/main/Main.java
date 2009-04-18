@@ -7,9 +7,9 @@ import gestorDeConfiguracion.ControlConfiguracionServidorException;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mensajes.Mensaje;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import servidor.ServidorEgorilla;
 
 /**
@@ -29,7 +29,8 @@ public class Main {
         
         ControlConfiguracion config= new ControlConfiguracion();
         int puerto;
-        
+        PropertyConfigurator.configure("log4j.properties");
+        Logger log =  Logger.getLogger(Main.class);
         ServidorEgorilla egorilla;
                
         ArchivoClientes archivosYclientes = new ArchivoClientes();
@@ -52,8 +53,7 @@ public class Main {
         } 
         catch (IOException ex) {
         
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, 
-                ex);
+            log.error("Puerto ocupado");
             return;
         }
         
