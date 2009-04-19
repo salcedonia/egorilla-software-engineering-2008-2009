@@ -1,6 +1,6 @@
 package gestorDeFicheros;
 
-import mensajes.serverclient.ListaArchivos;
+
 import datos.*;
 import java.util.Vector;
 

@@ -1,5 +1,10 @@
 package gui.grafica.servidores;
 
+import control.ControladorGrafica;
+import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,7 +41,11 @@ public class GUIPanelServidores extends JPanel {
     
     // CONTROL
     @SuppressWarnings("unused")
-	private ControlPanelServidores _controlPanelServidores;
+    private ControladorGrafica _controlador;
+    private String _serverHost;
+    private Integer _sPuerto;
+    
+    
     
 //	************************************************************************************//
 	/** 
@@ -44,7 +53,7 @@ public class GUIPanelServidores extends JPanel {
 	 */
 	public GUIPanelServidores() {
     
-		_controlPanelServidores = new ControlPanelServidores(this);
+		
 		iniciarComponentes();
     }
 
@@ -240,20 +249,32 @@ public class GUIPanelServidores extends JPanel {
     }
 
     private void iniciarPanelServidor() {
-        
-        Object[] servidor=new Object[7];
-        servidor[0]=servidor[0]="Servidor Egorilla";
-        servidor[1]="127.0.0.1";
-        servidor[2]="Servidor propio aplicacion Egorilla";
-        servidor[3]="";
-        servidor[4]="";
-        servidor[5]="";
-        servidor[6]="";        
-        _dtm.addRow(servidor);
+        try {
+            _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
+            _serverHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
+            String nombreServidor = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("NombreServidor");
+            String descripcion = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("Descripcion");
+            
+            Object[] servidor = new Object[7];
+            servidor[0] = servidor[0] = nombreServidor;
+            servidor[1] = _serverHost;
+            servidor[2] = descripcion;
+            servidor[3] = "";
+            servidor[4] = "";
+            servidor[5] = "";
+            servidor[6] = "";
+            _dtm.addRow(servidor);
+        } catch (ControlConfiguracionClienteException ex) {
+            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     private void pulsacionBotonConectarServidor(ActionEvent evt) {
-                throw new UnsupportedOperationException("Not yet implemented");
+        try {
+            _controlador.peticionConexionAServidor(_serverHost, _sPuerto);
+        } catch (Exception ex) {
+            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
+        }
             }
     
     private void pulsacionBotonAñadirServidor(ActionEvent evt) {
@@ -261,58 +282,15 @@ public class GUIPanelServidores extends JPanel {
 		// Llamamos al control del panel
                 Object[] parametros=new Object[2];
                 parametros[0]=_txtPuerto.getText().trim();
-                parametros[1]=_txtDireccionIP.getText().trim();
-		_controlPanelServidores.accionPanelServidores(AccionPanelServidores.AÑADIR_SERVIDOR,parametros);	
+                parametros[1]=_txtDireccionIP.getText().trim();			
 	}
     
-//	************************************************************************************//
-    /**
-     * Distingue entre los distintos eventos de actualización.
-     *  
-	 * @param evento Evento producido.
-	 * @param parametros Parametros asociados al evento.
-     */
-    public void tratarEventos(EventoPanelServidores evento, Object parametros) {
-        
-        switch(evento){
-            
-            case MOSTRAR_SERVIDOR_PUERTO_IP_EN_PANEL:
-                mostrarServidor();
-                break;
-            case MOSTRAR_SERVIDOR_ACTUALIZACION_VIA_URL_EN_PANEL:
-                break;
-            case MOSTRAR_ERROR_SERVIDOR_NO_ENCONTRADO:
-                mostrarErrorServidorNoEncontrado();
-                break;
-        }
-		
-	}
 
-    private void mostrarErrorServidorNoEncontrado() {
-      
-        JOptionPane.showMessageDialog(null,
-		        "¡No se ha encontrado el servidor!",
-		        "Busqueda de servidor sin resultados",
-		        JOptionPane.WARNING_MESSAGE);
-    }
+ 
 
-    private void mostrarServidor() {
-      
-        //Prueba,comprobar k existe servidor y mostrar en el panel
-        
-        Object[] servidor=new Object[7];
-        servidor[0]="Servidor Egorilla";
-        servidor[1]="192.1.1.1";
-        servidor[2]="Servidor propio aplicacion Egorilla";
-        servidor[3]="";
-        servidor[4]="";
-        servidor[5]="";
-        servidor[6]="";        
-                _dtm.addRow(servidor);
-                
-      // _tablaContenido =new JTable;
-        
-    }
+    
+
+ 
     
     
 }
