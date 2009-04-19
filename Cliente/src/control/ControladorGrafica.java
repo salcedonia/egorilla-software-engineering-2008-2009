@@ -41,4 +41,16 @@ public class ControladorGrafica {
         _gestorDeDescargas = gestorDeDescargas;
         _gestorDeEgorilla = gestorEgorilla;
     }
+    
+    public void peticionConexionAServidor(String IP, int puerto) throws Exception {
+
+        _gestorDeEgorilla.conectaServidor(IP, puerto);
+    }
+    public void peticionDeDesconexionDeServidor() {
+
+        _gestorDeEgorilla.desconectar();
+
+        // tambien acabamos con el p2p
+        _gestorDeRed.terminaEscucha();
+    }
 }

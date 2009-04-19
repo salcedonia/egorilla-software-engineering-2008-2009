@@ -30,7 +30,7 @@ public class GUIPanelConfiguracion extends JPanel{
     
     // CONTROL
     @SuppressWarnings("unused")
-	private ControlPanelConfiguracion _controlPanelConfiguracion;
+	
 
 //	************************************************************************************//
 	/**
@@ -38,7 +38,7 @@ public class GUIPanelConfiguracion extends JPanel{
      */
 	public GUIPanelConfiguracion() {
     	
-        _controlPanelConfiguracion = new ControlPanelConfiguracion(this);
+        
 		iniciarComponentes();
     }
 
@@ -145,7 +145,5 @@ public class GUIPanelConfiguracion extends JPanel{
 	 * @param evento Evento producido.
 	 * @param parametros Parametros asociados al evento.
      */
-    public void tratarEventos(EventoPanelConfiguracion evento, Object object) {
-		
-	}
+   
 }

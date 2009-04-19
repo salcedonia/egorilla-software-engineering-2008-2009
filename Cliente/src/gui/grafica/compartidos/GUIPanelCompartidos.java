@@ -28,7 +28,7 @@ public class GUIPanelCompartidos extends JPanel {
     
     // CONTROL
     @SuppressWarnings("unused")
-	private ControlPanelCompartidos _controlPanelCompartidos;
+	
 	
 //	************************************************************************************//
 	/** 
@@ -36,7 +36,7 @@ public class GUIPanelCompartidos extends JPanel {
 	 */
     public GUIPanelCompartidos() {
     	
-    	_controlPanelCompartidos = new ControlPanelCompartidos(this);
+  
     	
         iniciarComponentes();
     }
@@ -116,7 +116,5 @@ public class GUIPanelCompartidos extends JPanel {
 	 * @param evento Evento producido sobre el panel de compartidos.
 	 * @param params Parametros asociados a ese evento.
 	 */
-	public void tratarEvento(EventoPanelCompartidos evento, Object params) {
-		
-	}
+	
 }

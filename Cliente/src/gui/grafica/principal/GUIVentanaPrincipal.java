@@ -1,6 +1,7 @@
 package gui.grafica.principal;
 
 import control.ControladorGrafica;
+import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
 import gui.grafica.configuracion.GUIPanelConfiguracion;
@@ -15,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 //************************************************************************************//
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  * Clase que gestiona la ventana principal de la aplicación.
  * 
@@ -43,7 +46,6 @@ public class GUIVentanaPrincipal extends JFrame {
     private JToolBar _botonera;
     private JPanel _panelPrincipal;
     // CONTROL
-    private ControlVentanaPrincipal _controlVentanaPrincipal;
     private ControladorGrafica _controlador;
     // IMAGENES
     private ImageIcon _iconoVentana = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/icono.png"));
@@ -63,7 +65,7 @@ public class GUIVentanaPrincipal extends JFrame {
      */
     public GUIVentanaPrincipal(ControladorGrafica controlador) {
 
-        _controlVentanaPrincipal = new ControlVentanaPrincipal(this);
+        
         _controlador = controlador;
         iniciarComponentes();
         setExtendedState(MAXIMIZED_BOTH);
@@ -455,13 +457,22 @@ public class GUIVentanaPrincipal extends JFrame {
      */
     private void pulsacionBotonConectar(MouseEvent evt) {
 
+        try {
         // Si el botón conectar tiene el texto Conectar
         if (_btnConectar.getText().equals("Conectar")) // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
         {
-            _controlVentanaPrincipal.tratarAccion(AccionVentanaPrincipal.CONECTAR_SERVIDOR, null);
+            int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
+            String serverHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
+            _controlador.peticionConexionAServidor(serverHost, sPuerto);
+            tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_CONECTADO, null);
         } else // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
         {
-            _controlVentanaPrincipal.tratarAccion(AccionVentanaPrincipal.DESCONECTAR_SERVIDOR, null);
+            _controlador.peticionDeDesconexionDeServidor();
+            tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_DESCONECTADO, null);
+        }
+        } catch (Exception ex) {
+            tratarEvento(EventoVentanaPrincipal.MOSTRAR_MENSAJE_ERROR, "Error al intentar conectarse con el servidor");
+            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

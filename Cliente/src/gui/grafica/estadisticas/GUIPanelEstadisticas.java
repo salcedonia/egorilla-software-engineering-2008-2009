@@ -40,7 +40,7 @@ public class GUIPanelEstadisticas extends JPanel {
     
     // CONTROL
     @SuppressWarnings("unused")
-	private ControlPanelEstadisticas _controlPanelEstadisticas;
+	
     
 //	************************************************************************************//
 	/**
@@ -48,7 +48,7 @@ public class GUIPanelEstadisticas extends JPanel {
 	 */
 	public GUIPanelEstadisticas() {
 		
-		_controlPanelEstadisticas = new ControlPanelEstadisticas(this);
+		
 		inciarComponentes();
     }
 	
@@ -363,7 +363,5 @@ public class GUIPanelEstadisticas extends JPanel {
 	 * @param evento Evento producido sobre el panel de estadísticas.
 	 * @param params Parametros asociados a ese evento.
 	 */
-	public void tratarEvento(EventoPanelEstadisticas evento, Object params) {
-		
-	}
+	
 }
