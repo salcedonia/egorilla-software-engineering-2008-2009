@@ -4,6 +4,9 @@
  */
 package estadisticas;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.logging.Logger;
@@ -21,17 +24,21 @@ class AdministradorDescarga extends ModuloTrafico {
     private static final Logger log = Logger.getLogger(AdministradorDescarga.class.getName());
 
     
-    AdministradorDescarga() {
-        cargaDatosGlobales();
+    AdministradorDescarga(DataInputStream fichero) throws IOException {
+        if (fichero != null) {
+            cargaDatosGlobales(fichero);
+        } else {
+            incioGlobal();
+        }
         inicioSesion();
     }
     
-    private void cargaDatosGlobales() {
+    private void cargaDatosGlobales(DataInputStream fichero) throws IOException {
         //TODO cargar los datos de fichero.
-        velocidadGlobal = 0;
-        ficherosGlobal = 0;
-        datosGlobal = 0.0;
-        pesoGlobal = 0;
+        velocidadGlobal = fichero.readDouble();
+        ficherosGlobal = fichero.readInt();
+        datosGlobal = fichero.readDouble();
+        pesoGlobal = fichero.readInt();
 
     }
 
@@ -66,12 +73,16 @@ class AdministradorDescarga extends ModuloTrafico {
         //TODO para que sirve esto?
     }
 
-    public void cerrar() {
+    public void cerrar(DataOutputStream file) throws IOException {
         //TODO: Volcar datos de sesion en globales.
         datosGlobal += datosSesion;
         ficherosGlobal += ficherosSesion;
         velocidadGlobal = ((velocidadGlobal * pesoGlobal) + (velocidadSesion * pesoSesion)) / (pesoSesion + pesoGlobal);
         pesoGlobal += pesoSesion;
+        file.writeDouble(velocidadGlobal);
+        file.write(ficherosGlobal);
+        file.writeDouble(datosGlobal);
+        file.write(pesoGlobal);
     }
 
 

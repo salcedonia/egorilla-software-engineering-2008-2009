@@ -2,10 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package estadisticas;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p>Gestor de estadisticas: Es el encargado de almacenar y ordenar la canatidad de
@@ -36,56 +46,100 @@ import java.util.List;
  *   los recursos y hacemos persistente los datos,
  * @author Qiang
  */
-public class  GestorEstadisticas  implements ObservadorDatos {
-    
-     
+public class GestorEstadisticas implements ObservadorDatos {
+
     protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;
     AdministradorSubida subida;
-    protected  GestorEstadisticas() {
-        descarga = new AdministradorDescarga();
-        subida = new AdministradorSubida();
+    protected final static String PATH = "temp/statistics";
+    private static Logger log = Logger.getLogger(GestorEstadisticas.class.getName());
+
+    protected GestorEstadisticas() {
+        DataInputStream fichero = null;
+        try {
+            File fila = new File(PATH);
+            log.info(fila.getAbsolutePath());
+            if (fila.exists()) {
+                InputStream stream = new FileInputStream(fila);
+                fichero = new DataInputStream(stream);
+            }
+            descarga = new AdministradorDescarga(fichero);
+            subida = new AdministradorSubida(fichero);
+
+        } catch (FileNotFoundException ex) {
+            log.log(Level.SEVERE, "Error al abrir el fichero de estadisticas", ex);
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Error al cargar los datos de estadisticas", ex);
+        } finally {
+            try {
+                if (fichero != null)
+                    fichero.close();
+            } catch (IOException ex) {
+                log.log(Level.SEVERE, "Error al cerrar los datos de estadisticas", ex);
+            }
+        }
     }
+
     /**
      *  Devuelve la instacia del Gestor de estadiscticas activo.
      * @return Gestor de estadisticas.
      */
     static public GestorEstadisticas getInstacia() {
         if (intancia == null) {
-           intancia = new GestorEstadisticas();
+            intancia = new GestorEstadisticas();
         }
         return intancia;
     }
+
     /**
      * Inicia el gestor de estadisticas para poder comenzar a almacenar los
      * datos sobre las estadisticas.
      */
-    void inicioSesion(){
+    void inicioSesion() {
         descarga.inicioSesion();
         subida.inicioSesion();
     }
+
     /**
      * Pone a cero los datos guardados de la sesion y los datos globales.
      */
-    void reiniciarTodo(){
+    void reiniciarTodo() {
         descarga.reniciarSesion();
         subida.inicioSesion();
-    
+
     }
+
     /**
      * Pone a cero los datos guardados de la sesion.
      */
-    void reniciarSesion(){
+    void reniciarSesion() {
     }
+
     /**
      * Cierra el sistema gestor de estadisticas. Debe ser llamado al eliminar
      * el objeto.
      */
-    void cerrar(){
-        descarga.cerrar();
-        subida.cerrar();
+    void cerrar() {
+        OutputStream stream = null;
+        try {
+            DataOutputStream fichero;
+            stream = new FileOutputStream(PATH);
+            fichero = new DataOutputStream(stream);
+            descarga.cerrar(fichero);
+            subida.cerrar(fichero);
+
+        } catch (FileNotFoundException ex) {
+            log.log(Level.SEVERE, "Error al abrir el fichero de estadisticas", ex);
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Error al escribir los datos de estadisticas", ex);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                log.log(Level.SEVERE, "Error al cerrar el fichero de estadisticas", ex);
+            }
+        }
     }
-    
 
     /**
      * Lista de velocidades medias recibidos durante la sesion.
@@ -94,7 +148,7 @@ public class  GestorEstadisticas  implements ObservadorDatos {
     List<Double> getListaVelocidadMediaSubidaSesion() {
         return subida.getListaVelocidadMediaSesion();
     }
-    
+
     /**
      * Lista de velocidades medias recibidos durante la sesion.
      * @return
@@ -102,20 +156,23 @@ public class  GestorEstadisticas  implements ObservadorDatos {
     List<Double> getListaVelocidadMediaBajadaSesion() {
         return descarga.getListaVelocidadMediaSesion();
     }
+
     /**
      * Numero de ficheros descargados en el global de las estadisticas.
      * @return
      */
-    int  getFicherosDescargadosGlobal(){
+    int getFicherosDescargadosGlobal() {
         return descarga.getFicherosDescargadosGlobal();
     }
+
     /**
      * Numero de ficheros descargados durante la sesion.
      * @return
      */
-    int  getFicherosDescargadosSesion(){
+    int getFicherosDescargadosSesion() {
         return descarga.getFicherosDescargadosSesion();
     }
+
     /**
      * Velocidad de descarga actual.
      * @return
@@ -123,7 +180,7 @@ public class  GestorEstadisticas  implements ObservadorDatos {
     double getVelocidadActualDescarga() {
         return descarga.getVelocidadActual();
     }
-    
+
     /**
      * Velocidad de subida actual.
      * @return
@@ -131,26 +188,27 @@ public class  GestorEstadisticas  implements ObservadorDatos {
     double getVelocidadActualSubida() {
         return subida.getVelocidadActual();
     }
-            
+
     /**
      * Numero total de bytes descargados durante la sesion.
      * @return
      */
-    double getTotalDatosDescargaSesion(){
+    double getTotalDatosDescargaSesion() {
         return descarga.getTotalDatosSesion();
     }
-    
+
     double getTotalDatosDescargaGlobal() {
         return descarga.getTotalDatosGlobal();
     }
+
     /**
      * Numero total de bytes subidos durante la sesion.
      * @return
      */
-    double getTotalDatosSubidaSesion(){
+    double getTotalDatosSubidaSesion() {
         return subida.getTotalDatosSesion();
     }
-    
+
     double getTotalDatosSubidaGlobal() {
         return subida.getTotalDatosGlobal();
     }

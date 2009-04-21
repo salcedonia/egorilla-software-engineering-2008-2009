@@ -71,7 +71,7 @@ public class Main {
         } catch (UnknownOptionException ex) {
             
         }catch(Exception ex) {
-            log.info("Paso esto");
+            log.info("Error no indentificado", ex);
         }
 }
 
