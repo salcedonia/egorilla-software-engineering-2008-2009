@@ -2,6 +2,7 @@ package control;
 
 import datos.Archivo;
 import gestorDeRed.GestorDeRed;
+import gui.consola.GUIConsola;
 import mensajes.Mensaje;
 import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
@@ -28,8 +29,13 @@ public class ControladorConsola {
      */
     private GestorEgorilla _gestorDeEgorilla;
 
+    /** Vista asociada a este controlador. Mediante esta referencia el controlador
+     * puede comunicarse con la Vista.
+     */
+    public GUIConsola _guiConsola;
+    
     /**
-     * Constructor de la clase ControlAplicacion.
+     * Constructor de la clase.
      * 
      * @param gestorDeRed Gestor de red.
      * @param gestorDeDescargas Gestor de descargas.
@@ -58,20 +64,26 @@ public class ControladorConsola {
      * @throws java.io.IOException
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
-
-        _gestorDeEgorilla.conectaServidor(IP, puerto);
+        _guiConsola.mostrarMensaje("\nConectando....");
+        if ( !_gestorDeEgorilla.estaConectadoAServidor() ) {
+            _gestorDeEgorilla.conectaServidor(IP, puerto);
+            _guiConsola.mostrarMensaje("\nConectado....");
+        } else {
+            _guiConsola.mostrarMensaje("Ya estas conectado a " + IP + "\n");
+        }
     }
 
     /**
      * Cierra la conexion con el servidor.
      */
-    public void peticionDeDesconexionDeServidor() {
-
+    public void peticionDesconexionDeServidor() {
+        _guiConsola.mostrarMensaje("\nDesconectando...");
         _gestorDeEgorilla.desconectar();
 
         // tambien acabamos con el p2p
         _gestorDeRed.terminaEscucha();
-    }
+        _guiConsola.mostrarMensaje("\nDesconectado.");
+}
 
     /**
      * Pregunta al servidor por algun fichero con algunos datos proporcionados por
@@ -81,17 +93,17 @@ public class ControladorConsola {
      *
      * @param cad nombre de fichero buscado
      */
-    public void consultar(String cad) {
+    public void peticionBuscarFichero(String cad) {
 
         _gestorDeEgorilla.nuevaConsulta(cad);
     }
 
     /**
-     * Da la orden para proceder a bajar un fichero.
+     * Da la orden para proceder a peticionDescargarFichero un fichero.
      *
      * @param hash El identificador unico de este fichero.
      */
-    public void bajar(String nmb, String hash) {
+    public void peticionDescargarFichero(String nmb, String hash) {
         
         _gestorDeEgorilla.nuevaDescarga(new Archivo(nmb, hash));
     }
