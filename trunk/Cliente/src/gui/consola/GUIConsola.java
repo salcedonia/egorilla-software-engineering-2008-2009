@@ -13,7 +13,7 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
 /**
  * Interfaz en modo consola de la aplicacion Cliente eGorilla.
  * 
- * @author Ivan Munsuri, Javier Salcedo
+ * @author Ivan Munsuri, Javier Salcedo, Javier Sánchez
  */
 public class GUIConsola implements ObservadorGestorEgorilla {
 
@@ -44,10 +44,18 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param controlador Controlador de la aplicación en modo consola.
      * @throws java.io.IOException
      */
-    public GUIConsola(ControladorConsola controlador) throws IOException {
+    public GUIConsola(ControladorConsola controlador) throws IOException, Exception {
 
+        //Asocio la Vista (el objeto GUIConsola) con su controlador.
         _controlador = controlador;
+        //Asocio al Controlador con su Vista.
+        controlador._guiConsola = this;
+        
+        //Arranca el menú de consola de la aplicación.
+        mostrarMenu();
     }
+    
+    
 
     /**
      * pinta este mensaje por pantalla
@@ -55,63 +63,54 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param string
      */
     public synchronized void mostrarMensaje(String string) {
-        System.out.println(string);
+        System.out.print(string);
     }
 
     /**
-     * Muestra el menú de la aplicación en modo consola.
+     * Muestra el menú de la aplicación en modo consola e invoca a los métodos 
+     * correspondientes del ControladorConsola en función de la opción elegida
+     * por el usuario.
      * 
      * @throws java.io.IOException Se lanza cuando se produce algún error de IO.
      */
     public void mostrarMenu() throws Exception {
-
         String cad;
-
         char op;
         do {
             op = menu();
             switch (op) {
                 case '1':
-                    System.out.println("\nConectando...");
-                    System.out.print("\n\tIntroduce IP del servidor: ");
+                    mostrarMensaje("\n\tIntroduce IP del servidor: ");
                     String sIP = _bufferedReader.readLine();
-                    System.out.print("\n\tIntroduce puerto del servidor: ");
+                    mostrarMensaje("\n\tIntroduce puerto del servidor: ");
                     String sPuerto = _bufferedReader.readLine();
                     int puerto = Integer.parseInt(sPuerto);
-
-                    if (!_conectado) {
-                        _controlador.peticionConexionAServidor(sIP, puerto);
-                    } else {
-                        mostrarMensaje("ya estas conectado a " + sIP + "\n");
-                    }
-                    System.out.println("\nConectando....");
+                    //Invoco el método correspondiente del controlador.
+                    _controlador.peticionConexionAServidor(sIP, puerto);
                     break;
 
                 case '2':
                     String ServerHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
                     int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
 
-                    System.out.print("\nConectando a ");
-                    System.out.print(ServerHost + ":" + puertoS);
+                    mostrarMensaje("\nConectando a ");
+                    mostrarMensaje(ServerHost + ":" + puertoS);
                     _controlador.peticionConexionAServidor(ServerHost, puertoS);
                     break;
 
                 case '3':
-                    System.out.println("\nDesconectando...");
-                    _controlador.peticionDeDesconexionDeServidor();
-                    _conectado = false;
-
-                    System.out.println("\nDesconectado.");
+                    //Invoco el método correspondiente del controlador.
+                    _controlador.peticionDesconexionDeServidor();
                     break;
 
                 case '4':
-                    System.out.print("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
+                    mostrarMensaje("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
                     cad = _bufferedReader.readLine();
                     //creo q hay que quitar el retorno de carro
-                    _controlador.consultar(cad);
+                    _controlador.peticionBuscarFichero(cad);
                     // TODO: feedback es una comunicación asincrona
 
-//                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.consultar(cad);
+//                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.peticionBuscarFichero(cad);
 //                    if (respuestaConsulta.getLista().length > 0) {
 //                        System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
 //                        insertarBusquedas(respuestaConsulta.getLista());
@@ -120,14 +119,14 @@ public class GUIConsola implements ObservadorGestorEgorilla {
 //                    }
                     break;
                 case '5':
-                    System.out.print("\nMD5 del fichero a descargar: ");
+                    mostrarMensaje("\nMD5 del fichero a descargar: ");
                     cad = _bufferedReader.readLine();
 
 
                     // TODO: coms asincronas, no hahy feedback
-                    _controlador.bajar("nombre", cad);
+                    _controlador.peticionDescargarFichero("nombre", cad);
 
-//                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.bajar("nombre",cad);
+//                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.peticionDescargarFichero("nombre",cad);
 //                    if (respuestaDescarga.getLista().length > 0) {
 //                        System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
 //                        insertarDescargas(respuestaDescarga.getLista());
@@ -136,18 +135,18 @@ public class GUIConsola implements ObservadorGestorEgorilla {
 //                    }
                     break;
                 case '0':
-                    System.out.print("\n\t\t\t\t\t\t\t\t\tBye!\n");
+                    mostrarMensaje("\n\t\t\t\t\t\t\t\t\tBye!\n");
                     System.exit(-1);
                     break;
                 default:
-                    System.out.print("ERROR, opcion no valida\n");
+                    mostrarMensaje("ERROR, opcion no valida\n");
             }
         } while (op != '0');
     }
 
     /**
-     * 
-     * @return
+     * Pinta el menú de consola y devuelve la opción elegida por el usuario.
+     * @return Opción tecleada por el usuario.
      * @throws IOException
      */
     public char menu() throws IOException {

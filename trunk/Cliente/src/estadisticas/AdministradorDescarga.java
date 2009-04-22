@@ -24,7 +24,7 @@ class AdministradorDescarga extends ModuloTrafico {
     private static final Logger log = Logger.getLogger(AdministradorDescarga.class.getName());
 
     
-    AdministradorDescarga(DataInputStream fichero) throws IOException {
+    protected AdministradorDescarga(DataInputStream fichero) throws IOException {
         if (fichero != null) {
             cargaDatosGlobales(fichero);
         } else {

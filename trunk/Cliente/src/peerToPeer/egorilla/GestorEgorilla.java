@@ -69,6 +69,8 @@ public class GestorEgorilla extends Thread{
         //En donde se instancia gestorSubidas? No lo veo
         _gestorDisco = new GestorDisco();
         _gestorSubidas = new GestorSubidas( this, _gestorDisco );
+        //inicializo la variable
+        _conectado = false;
         
     }
     
@@ -101,6 +103,9 @@ public class GestorEgorilla extends Thread{
         this.addMensajeParaEnviar(misDatos);
         
         this.comienzaP2P();
+        
+        //Faltaba inicializar esta vble
+        _conectado = true;
     }
 
     /**
@@ -149,7 +154,13 @@ public class GestorEgorilla extends Thread{
         this._doP2P = false;
     }
 
-
+    /**
+     * Devuelve el estado de la conexion (el valor de la variable conectado)
+     * @return estado de la conexion.
+     */
+    public boolean estaConectadoAServidor(){
+        return this._conectado;
+    }
     
     /**
      * pone el p2p en modo escucha, de forma que se atiende a otros

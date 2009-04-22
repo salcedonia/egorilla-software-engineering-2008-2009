@@ -3,6 +3,7 @@ package gestorDeFicheros;
 
 import datos.*;
 import java.util.Vector;
+import mensajes.serverclient.ListaArchivos;
 
 /**
  * Clase que se encarga de gestionar todos los archivos compartidos del usuario.
