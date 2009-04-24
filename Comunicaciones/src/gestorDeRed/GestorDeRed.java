@@ -48,4 +48,22 @@ public interface GestorDeRed<E>{
      * @param r el receptor debe implementar esta interface.
      */
     public void registraReceptor(Receptor<E> r);
+
+    /**
+     * indica que mantendremos una conexion con este host, si se pierde la comunicación
+     * se propagará un error al los receptores
+     *
+     * @param host el host al que mantener vigilado
+     * @param puerto el puerto por el que escucha
+     */
+    public void addConexion(String host, int puerto);
+
+    /**
+     * elimina la conexion con determinado host, de forma que si ya no necesitamos
+     * saber de él se elimina
+     *
+     * @param host el host que no deseamos saber si esta online
+     */
+    public void eliminaConexion(String host);
+    
 }
