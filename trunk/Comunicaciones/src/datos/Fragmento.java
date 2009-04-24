@@ -17,20 +17,20 @@ public class Fragmento {
     /**
      * nombre del fichero al que pertence
      */
-    public String _nombre;
+    private String _nombre;
     /**
      * hash que lo identifica
      */
-    public String _hash;
+    private String _hash;
     
     /**
      * tama�o del fragmento
      */
-    public long _tama;
+    private long _tama;
     /**
      * byte inical del fragmento
      */
-    public long _offset;
+    private long _offset;
     
 
     public Fragmento(){
@@ -60,18 +60,18 @@ public class Fragmento {
   }
     
     @Override
-    public boolean equals(Object o) {
-        
-      //**Quito el instanceof, Gonazalo lo puso en la lista negra***
-        /*if ( f instanceof Fragmento){
-            Fragmento b = (Fragmento) f;
-            return (offset == b.offset) && (tama == b.tama);
-        }
-        else
-            return false;*/
+    public boolean equals(Object o) {        
       try{
+
         Fragmento f = (Fragmento) o;
-        return ( _offset == f.getOffset()) && (_tama == f.getTama());
+
+        boolean offset = _offset == f.getOffset(), 
+                tama = _tama == f.getTama(), 
+                hash = _hash.compareTo( f.getHash() ) == 0,
+                nombre = _nombre.compareTo( f.getNombre() ) == 0;
+
+        return offset && tama && hash && nombre;
+
       }catch( Exception e ){
         //Si salta la excepcion en el casting es que no era una instacia de.        
         //e.printStackTrace();
