@@ -64,6 +64,7 @@ public class ListadoClientes {
         if(_listaIPs.contains(ip)){
             _listaIPs.remove(ip);
             _puertos.remove(ip);
+            _datosClientes.remove(ip);
         }
     }
     
