@@ -252,4 +252,24 @@ public class ArchivoClientes {
         else
             return null;
     }
+
+    /**
+     * eliminar propietario
+     *
+     * @param ip la ip que ya no esta online
+     */
+    public void eliminaPropietario(DatosCliente datos){
+        ArrayList<Archivo> tmp = new ArrayList<Archivo>();
+
+        for (Archivo archivo : _archivos) {
+            _relacion.get(archivo).remove(datos);
+            if (_relacion.get(archivo).size() == 0){
+                //nos hemos quedado sin propietarios para el archivo, lo borramos
+                tmp.add(archivo);
+            }
+        }
+        for (Archivo archivo : tmp) {
+            _archivos.remove(archivo);
+        }
+    }
 }

@@ -55,6 +55,10 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 //realiza la conexion del cliente
                 ConexionCliente con = new ConexionCliente(_red,_clientes,datos);
                 con.start();
+
+                // como es una conexion mantendremos comprobacion del medio
+                _red.addConexion(ip, port);
+
                 // devuelve bienvenido, pero dentro del hilo
                 break;
             case PeticionConsulta:
@@ -91,7 +95,14 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                                                                       _clientes.getDatosCliente(ip),
                                                                       (ListaArchivos) msj);
                                                                       
-                p.start();   
+                p.start();
+            case Altoo:
+
+                // dejaremos de atender a este cliente
+                _red.eliminaConexion(ip);
+
+                // lo eliminaremos de todos los lugares dnd aparezca
+
             default:
                 // obvia el mensaje
                 break;
@@ -99,6 +110,10 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
     }
 
     public void perdidaDeConexion(String ip) {
-      // TODO: dar de baja a este peer
+        if (_clientes.estaDeAlta(ip)){
+            DatosCliente d =_clientes.getDatosCliente(ip);
+            _clientes.eliminaCliente(ip);
+            _archivoClientes.eliminaPropietario(d);
+        }
     }
 }
