@@ -175,7 +175,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 f.tama   = paquete.chunk.length;*/
                 
                 //TODO:  envio fragmeto a gestor de descargas o lo que sea
-                _descargas.llegaFragmento( f, paquete.getParte() );
+               
                 
                 break;
                 
