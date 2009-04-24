@@ -26,9 +26,12 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     private Vector<Receptor<E>> _receptores;
     private ServerSocket _sock;
 
+    private GestorConexiones _conexiones;
+
     public GestorDeRedTCPimpl(int port) {
         _puerto = port;
         _receptores = new Stack<Receptor<E>>();
+        _conexiones  = new GestorConexiones(this);
     }
 
     /**
@@ -45,7 +48,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
 
         } catch (IOException ex) {
-            throw new NetError("error al conectar con " + destino.getHostAddress() + ":" + puerto);
+            generaErrorConexion(destino.getHostAddress());
         }
     }
 
@@ -71,8 +74,8 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             }
             s.close();
         } catch (IOException ex) {
-            System.err.println("error al conectar con " + host + ":" + port);
-            throw new NetError("error al conectar con " + host + ":" + port);
+            
+            this.generaErrorConexion(host);
         }
     }
 
@@ -150,5 +153,26 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+
+    /**
+     * comunica a los oyentes la iposibilidad de hablar con determinado host
+     *
+     * @param host la ip del destino perdido
+     */
+    public void generaErrorConexion (String host){
+        for (Receptor<E> receptor : _receptores) {
+                receptor.perdidaDeConexion(host);
+            }
+    }
+
+
+   public void addConexion(String host, int puerto){
+        _conexiones.addConexion(host, puerto);
+    }
+
+    public void eliminaConexion(String host){
+        _conexiones.addConexion(host, _puerto);
     }
 }
