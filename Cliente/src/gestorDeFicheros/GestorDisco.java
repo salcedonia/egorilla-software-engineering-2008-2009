@@ -1,7 +1,7 @@
 package gestorDeFicheros;
 
-import mensajes.serverclient.*;
 import java.io.*;
+import mensajes.serverclient.*;
 import datos.*;
 
 /**
@@ -41,8 +41,8 @@ public class GestorDisco {
    */
   public GestorDisco() /*throws IOException*/ {
     
-    _fragmentador = new Fragmentador( _directorioCompletos, _directorioTemporales );
-    _ensamblador = new Ensamblador( _directorioCompletos, _directorioTemporales );
+    _fragmentador = new Fragmentador( this, _directorioCompletos, _directorioTemporales );
+    _ensamblador = new Ensamblador( this, _directorioCompletos, _directorioTemporales );
 
     _listaTodos = new ListaArchivos();
     _listaTemporales = new ListaArchivos();
@@ -65,20 +65,20 @@ public class GestorDisco {
     System.out.println( fDirectorioCompletos.getAbsolutePath() + "\n");
     
     //Debo filtrar los ficheros y leer solo los .part.met
-    File[] ficherosTemporales = fDirectorioTemporales.listFiles();
+    File[] ficherosTemporales = fDirectorioTemporales.listFiles( new PartMetFileFilter() );
     //si el length() es 0 digo que el dir esta vacio
     if( ficherosTemporales.length > 0 ){
-      System.out.println( "Procesando archivos de indices..." );
+      System.out.println( "Procesando archivos de indices...<" );
       //TODO No se si hacerlo aqui o llamar al ensamblador para que haga
       //la lista.
       //recorrerListaArchivos( _listaTemporales );
     }else{
-      System.out.println( "Directorio de temporales vacio." );
+      System.out.println( "Directorio de temporales vacio.\n" );
     }
 
     File[] ficherosCompletos = fDirectorioCompletos.listFiles();
 
-    if( ficherosTemporales.length > 0 ){
+    if( ficherosCompletos.length > 0 ){
       System.out.println( "Procesando archivos completos..." );
       for( File f : ficherosCompletos){
         if( f.isFile() == true ) {
@@ -87,7 +87,7 @@ public class GestorDisco {
       }
       recorrerListaArchivos( _listaCompletos );
     }else{
-      System.out.println( "Directorio de compartidos vacio." );
+      System.out.println( "Directorio de compartidos vacio.\n" );
     }
 
     //Creo una nueva lista con todos los ficheros actuales
@@ -119,6 +119,18 @@ public class GestorDisco {
     return _listaTodos;
   }
 
+  public void setListaArchivosTemporales( ListaArchivos listaTemporales ){
+    _listaTemporales = listaTemporales;
+  }
+
+  public void setListaArchivosCompletos( ListaArchivos listaCompletos){
+    _listaCompletos = listaCompletos;
+  }
+
+  public void setListaArchivosTodos( ListaArchivos listaTodos ){
+    _listaTodos = listaTodos;
+  }
+
   public Fragmentador getFragmentador(){
     return _fragmentador;
   }
@@ -143,7 +155,9 @@ public class GestorDisco {
 
   public void recorrerListaArchivos( ListaArchivos lista ){
     for( int i = 0;  i < lista.size();  i++) {
-      System.out.println( lista.elementAt(i).getNombre() );
+      //System.out.println( lista.elementAt(i).getNombre() );
+      System.out.print( lista.elementAt(i).getNombre() );
+      System.out.println( " - "+lista.elementAt(i).getHash() );
     }
     System.out.println("\n<" + lista.size() + "> ficheros.");
   }
@@ -172,3 +186,15 @@ public class GestorDisco {
         return new Archivo(nombre, MD5Sum.getFileMD5Sum(f), f.length(), _tipo);
     }
 }
+
+class PartMetFileFilter implements FileFilter {
+    public boolean accept(File f) {
+      return f.getName().toLowerCase().endsWith(".part.met");
+        //return f.isDirectory() || f.getName().toLowerCase().endsWith(".part.met");
+    }
+    
+    public String getDescription() {
+        return ".part.met files";
+    }
+}
+
