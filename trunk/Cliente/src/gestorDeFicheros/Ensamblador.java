@@ -1,5 +1,6 @@
 package gestorDeFicheros;
 
+import mensajes.serverclient.*;
 import datos.*;
 import java.io.*;
 import java.util.*;
@@ -18,7 +19,18 @@ public class Ensamblador {
 
   private String _directorioCompletos;
 
-  public Ensamblador( String directorioCompletos, String directorioTemporales){
+
+  public boolean nuevoArchivoTemporal( Archivo archivoNuevo ){
+    //Si el hash ya existe no le vuelvo a crear
+    //Como es un archivo nuevo, temporal, debo crear un nuevo archivo de indices para este archivo
+    return true;
+  }
+
+  //****Se debe actualizar las listas cada vez que se pone a bajar un nuevo archivo o cuando se
+  //coloca un archivo nuevo a compartir y se "pincha en recargar"
+
+
+  public Ensamblador(  GestorDisco gestorDisco, String directorioCompletos, String directorioTemporales){
     _directorioCompletos = directorioCompletos;
     _directorioTemporales = directorioTemporales;
   }
@@ -114,13 +126,8 @@ public class Ensamblador {
     }
     bufferedOutput.close();
     coment Comprobar q coinciden los MD5
-  }*/
-
+  }*/  
   
-  public boolean nuevoArchivoTemporal( Archivo archivoNuevo ){
-    //Como es un archivo nuevo, temporal, debo crear un nuevo archivo de indices para este archivo
-    return true;
-  }
 
   public boolean guardarFragmentosEnArchivo(String hash, ArrayList <Fragmento> fragmentosArchivoSolicitado, 
       ArrayList <Byte[]> bytesArchivoSolicitado){
