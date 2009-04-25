@@ -161,7 +161,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      *
      * @param host la ip del destino perdido
      */
-    public void generaErrorConexion (String host){
+    public synchronized  void generaErrorConexion (String host){
         for (Receptor<E> receptor : _receptores) {
                 receptor.perdidaDeConexion(host);
             }
