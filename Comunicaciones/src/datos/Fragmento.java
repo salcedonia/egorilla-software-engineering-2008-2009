@@ -58,8 +58,13 @@ public class Fragmento {
   public long getTama(){
     return _tama;
   }
-    
-    @Override
+
+  @Override
+  public String toString(){
+    return "Nombre:"+getNombre()+" Hash:"+getHash()+" Offset:"+getOffset()+" Tama:"+getTama();
+  }
+  
+  @Override
     public boolean equals(Object o) {        
       try{
 
