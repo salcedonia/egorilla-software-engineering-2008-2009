@@ -9,9 +9,8 @@ import java.util.Properties;
  */
 public interface ObservadorControlConfiguracionCliente {
     /**
-     * 
      * @param obj El objeto ControlConfiguracionCliente se pasa siempre por si 
-     * es necesario acceder a él para tratar el cambio.
+     * es necesario acceder a él para recuperar más información para tratar el cambio.
      * @param propiedades: propiedades que han cambiado (clave/valor nuevo).
      */    
     public void cambioEnPropiedades (ControlConfiguracionCliente obj, Properties propiedades);

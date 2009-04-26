@@ -22,6 +22,7 @@ public class ControlConfiguracionCliente{
     private FicheroPropiedades _oFicheroPropsPpal;
     private FicheroPropiedades _oFicheroPropsPorDefecto;
 
+    //Estructura de datos para almacenar los observadores sobre este objeto.
     private ArrayList <ObservadorControlConfiguracionCliente> _listaObservadores = 
             new ArrayList <ObservadorControlConfiguracionCliente>();
     

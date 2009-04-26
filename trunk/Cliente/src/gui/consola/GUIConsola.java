@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
+import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
@@ -92,9 +93,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                 case '2':
                     String ServerHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
                     int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
-
-                    mostrarMensaje("\nConectando a ");
-                    mostrarMensaje(ServerHost + ":" + puertoS);
+                    //Invoco el método correspondiente del controlador.
                     _controlador.peticionConexionAServidor(ServerHost, puertoS);
                     break;
 
@@ -104,7 +103,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                     break;
 
                 case '4':
-                    mostrarMensaje("\nNombre a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
+                    mostrarMensaje("\nNombre del fichero a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
                     cad = _bufferedReader.readLine();
                     //creo q hay que quitar el retorno de carro
                     _controlador.peticionBuscarFichero(cad);
@@ -228,14 +227,14 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     //--------------------------------------------------------------------------
     //           INTERFACE OBSERVADOREGORILLA
     //--------------------------------------------------------------------------
-    public void conexionCompleta(String ip, int port) {
-
-        _conectado = true;
-
-        // notifica a la gui:
-        mostrarMensaje("Conexión satisfactoria con Servidor " +
-                ip + ":" + port + "\n");
-    }
+//    public void conexionCompletada(String ip, int port) {
+//
+//        _conectado = true;
+//
+//        // notifica a la gui:
+//        mostrarMensaje("Conexión satisfactoria con Servidor " +
+//                ip + ":" + port + "\n");
+//    }
 
     public void resultadosBusqueda(String cad, Archivo[] lista) {
 
@@ -252,11 +251,23 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         }
     }
 
-    public void finDescarga() {
+    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
+        this.mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
+    }
+
+    public void desconexionCompletada(GestorEgorilla obj) {
+        this.mostrarMensaje("\nDesconectado.");
+    }
+
+    public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void perdidaConexion() {
+    public void finDescarga(GestorEgorilla obj) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void perdidaConexion(GestorEgorilla obj) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
