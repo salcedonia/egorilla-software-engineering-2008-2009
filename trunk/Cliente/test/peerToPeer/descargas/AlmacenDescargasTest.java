@@ -59,11 +59,12 @@ public class AlmacenDescargasTest {
         _archivo1 = new Archivo("peli","12345");
         _archivo2 = new Archivo("documento","67890");
         _archivo3 = new Archivo("imagen","54321");
-        _archivo4 = new Archivo("plantilla","02468");
+        _archivo4 = new Archivo("plantilla","12345");
         _almacen.nuevaDescarga(_archivo1);
         _almacen.nuevaDescarga(_archivo2);
         _almacen.nuevaDescarga(_archivo3);
         _almacen.nuevaDescarga(_archivo4);
+        _almacen.eliminaDescarga(_archivo2);
     }
 
     @After
@@ -77,7 +78,7 @@ public class AlmacenDescargasTest {
     public void testNuevaDescarga() {
         System.out.println("nuevaDescarga");
         int tam = _almacen.getListaDescargas().size();
-        assertEquals( 4, tam);
+        assertEquals( 2, tam);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
@@ -118,26 +119,14 @@ public class AlmacenDescargasTest {
         assertEquals("12345",hash);
         des = _almacen.dameSiguiente();
         hash = des.getArchivo().getHash();
-        assertEquals("67890",hash);
-        des = _almacen.dameSiguiente();
-        hash = des.getArchivo().getHash();
         assertEquals("54321",hash);
          //Compruebo que da bien la vuelta
-        des = _almacen.dameSiguiente();
-        hash = des.getArchivo().getHash();
-        assertEquals("02468",hash);
         des = _almacen.dameSiguiente();
         hash = des.getArchivo().getHash();
         assertEquals("12345",hash);
         des = _almacen.dameSiguiente();
         hash = des.getArchivo().getHash();
-        assertEquals("67890",hash);
-        des = _almacen.dameSiguiente();
-        hash = des.getArchivo().getHash();
         assertEquals("54321",hash);
-        des = _almacen.dameSiguiente();
-        hash = des.getArchivo().getHash();
-        assertEquals("02468",hash);
        
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
