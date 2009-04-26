@@ -14,46 +14,46 @@ import java.util.Properties;
  */
 public class FicheroPropiedades {
 
-    //Nombre del fichero que almacena las propiedades manejadas.
-    private String sNombreFicheroProp;
-    //Estructura en memoria que almacena las propiedades leidas del fichero.
-    private Properties propiedades;
+    //Nombre del fichero que almacena las _propiedades manejadas.
+    private String _sNombreFicheroProp;
+    //Estructura en memoria que almacena las _propiedades leidas del fichero.
+    private Properties _propiedades;
 
     /**
-     * Se inicializa el objeto con el nombre del fichero de propiedades especificado. 
-     * Además se intenta leer dicho fichero y cargar las propiedades que contiene dentro del objeto (en la variable propiedades)
+     * Se inicializa el objeto con el nombre del fichero de _propiedades especificado. 
+     * Además se intenta leer dicho fichero y cargar las _propiedades que contiene dentro del objeto (en la variable _propiedades)
      */
     public FicheroPropiedades(String sNomFicheroProps) throws ControlConfiguracionClienteException {
-        this.sNombreFicheroProp = sNomFicheroProps;
-        this.propiedades = new Properties();
+        this._sNombreFicheroProp = sNomFicheroProps;
+        this._propiedades = new Properties();
         cargarFicheroPropiedades();
     }
 
     /**
-     * Carga en el objeto (en la variable properties asociada) todas las propiedades existentes en el fichero de properties.
-     * Las propiedades que se leen del fichero SE AÑADEN Y SOBREESCRIBEN las que ya existían en el properties (caso de que hubiera
+     * Carga en el objeto (en la variable properties asociada) todas las _propiedades existentes en el fichero de properties.
+     * Las _propiedades que se leen del fichero SE AÑADEN Y SOBREESCRIBEN las que ya existían en el properties (caso de que hubiera
      * alguna antes)
      */
     protected void cargarFicheroPropiedades() throws ControlConfiguracionClienteException {
         try {
-            FileInputStream fichero = new FileInputStream(this.sNombreFicheroProp);
-            this.propiedades.load(fichero);
+            FileInputStream fichero = new FileInputStream(this._sNombreFicheroProp);
+            this._propiedades.load(fichero);
             fichero.close();
         } catch (IOException ioe) {
-            throw new ControlConfiguracionClienteException("No se ha podido cargar el fichero" + this.sNombreFicheroProp, ioe);
+            throw new ControlConfiguracionClienteException("No se ha podido cargar el fichero" + this._sNombreFicheroProp, ioe);
         }
     }
 
     /**
-     * Vuelca las propiedades en memoria (en el objeto properties asociado) al fichero asociado (en disco).
+     * Vuelca las _propiedades en memoria (en el objeto properties asociado) al fichero asociado (en disco).
      */
     protected void grabarFicheroPropiedades() throws ControlConfiguracionClienteException {
         try {
-            FileOutputStream fichero = new FileOutputStream(this.sNombreFicheroProp);
-            this.propiedades.store(fichero, "");
+            FileOutputStream fichero = new FileOutputStream(this._sNombreFicheroProp);
+            this._propiedades.store(fichero, "");
             fichero.close();
         } catch (IOException ioe) {
-            throw new ControlConfiguracionClienteException("No se ha podido grabar en el fichero" + this.sNombreFicheroProp, ioe);
+            throw new ControlConfiguracionClienteException("No se ha podido grabar en el fichero" + this._sNombreFicheroProp, ioe);
         }
     }
 
@@ -61,14 +61,14 @@ public class FicheroPropiedades {
      * Busca el valor de una propiedad (en memoria, en el objeto properties asociado) y lo devuelve.
      */
     public String obtenerPropiedad(String sClave) {
-        return this.propiedades.getProperty(sClave);
+        return this._propiedades.getProperty(sClave);
     }
 
     /**
-     * Devuelve un nuevo objeto Properties con una copia de las propiedades actuales.
+     * Devuelve un nuevo objeto Properties con una copia de las _propiedades actuales.
      */
     public Properties obtenerConjuntoPropiedades() {
-        return new Properties (this.propiedades);
+        return new Properties (this._propiedades);
     }
     
     /**
@@ -79,21 +79,21 @@ public class FicheroPropiedades {
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     public void establecerPropiedad(String sClave, String sValor) throws ControlConfiguracionClienteException {
-        this.propiedades.setProperty(sClave, sValor);
+        this._propiedades.setProperty(sClave, sValor);
         grabarFicheroPropiedades();
     }
 
     /**
-     * Establece los valores para el conjunto de propiedades recibido como parámetro (no tienen porqué estar
+     * Establece los valores para el conjunto de _propiedades recibido como parámetro (no tienen porqué estar
      * todas), y lo actualiza en memoria (objeto properties asociado) y en el disco (fichero asociado).
-     * @param propiedades: objeto Properties que contiene claves y sus valores.
+     * @param _propiedades: objeto Properties que contiene claves y sus valores.
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     public void establecerConjuntoPropiedades(Properties propiedades) throws ControlConfiguracionClienteException {
         for (Enumeration e = propiedades.propertyNames(); e.hasMoreElements() ; ) {
             // Obtenemos el objeto
             Object obj = e.nextElement();
-            this.propiedades.setProperty(obj.toString(), propiedades.getProperty(obj.toString()));
+            this._propiedades.setProperty(obj.toString(), propiedades.getProperty(obj.toString()));
         }          
         grabarFicheroPropiedades();
     }
@@ -104,10 +104,10 @@ public class FicheroPropiedades {
     */
     public String toString() {
         String sCadena = "";
-        for (Enumeration e = this.propiedades.propertyNames(); e.hasMoreElements() ; ) {
+        for (Enumeration e = this._propiedades.propertyNames(); e.hasMoreElements() ; ) {
             // Obtenemos el objeto
             Object obj = e.nextElement();
-            sCadena += obj.toString() + ": " + this.propiedades.getProperty(obj.toString()) + "\n";
+            sCadena += obj.toString() + ": " + this._propiedades.getProperty(obj.toString()) + "\n";
         }  
         return sCadena;
     }
