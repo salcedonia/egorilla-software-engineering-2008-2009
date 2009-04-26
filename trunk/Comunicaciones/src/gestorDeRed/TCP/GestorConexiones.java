@@ -40,22 +40,31 @@ public class GestorConexiones extends Thread{
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
+        long t = 120 ;//* 1000; // el tiempo a esperar para el siguiente envio
         try {
             while (true) {
-                long t = 120 * 1000; // el tiempo a esperar para el siguiente envio
+
+                if (_listaHosts.size() ==0)
+                    wait();
+
+                Thread.sleep(t);
+                
+                ArrayList<String> tmp = new ArrayList<String>();
 
                 for (String host : _listaHosts) {
                     if (!testConn(host,_puertos.get(host))){
-                        _red.generaErrorConexion(host);
-                        _listaHosts.remove(host);
-                        _puertos.remove(host);
-                        if (_listaHosts.size() == 0)
-                            this.interrupt();
+                        tmp.add(host);
                     }
                 }
 
-                Thread.sleep(t);
+                // elimina los que no han funcionado
+                for (String host : tmp) {
+                    _red.generaErrorConexion(host);
+                    _listaHosts.remove(host);
+
+                    _puertos.remove(host);
+                }
             }
         } catch (InterruptedException ex) {
         }
@@ -77,14 +86,14 @@ public class GestorConexiones extends Thread{
         this.interrupt();
     }
 
-    public void addConexion(String host, int puerto){
+    public synchronized  void addConexion(String host, int puerto){
         _listaHosts.add(host);
         _puertos.put(host, puerto);
         if (_listaHosts.size() == 1)
-            this.start();
+            this.notify();
     }
 
-    public void eliminaConexion(String host){
+    public synchronized void eliminaConexion(String host){
         _listaHosts.remove(host);
         _puertos.remove(host);
         if (_listaHosts.size() == 0)
