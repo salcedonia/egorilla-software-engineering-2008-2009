@@ -5,6 +5,7 @@
 
 package datos;
 
+import java.io.*;
 /**
  * 
  * representa la informaci�n que define un fragmento de un
@@ -12,7 +13,7 @@ package datos;
  *
  * @author Luis Ayuso
  */
-public class Fragmento {
+public class Fragmento implements Serializable{
 
     /**
      * nombre del fichero al que pertence
