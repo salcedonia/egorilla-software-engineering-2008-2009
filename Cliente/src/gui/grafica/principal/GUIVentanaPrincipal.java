@@ -461,8 +461,8 @@ public class GUIVentanaPrincipal extends JFrame {
         // Si el botón conectar tiene el texto Conectar
         if (_btnConectar.getText().equals("Conectar")) // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
         {
-            int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
-            String serverHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
+            int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
+            String serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
             _controlador.peticionConexionAServidor(serverHost, sPuerto);
             tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_CONECTADO, null);
         } else // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
