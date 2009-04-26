@@ -7,6 +7,8 @@ import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
+import gestorDeSucesos.ControlDeSucesos;
+import gestorDeSucesos.Sucesos;
 import gui.consola.GUIConsola;
 import gui.grafica.GUIGrafica;
 import jargs.gnu.CmdLineParser;
@@ -36,7 +38,6 @@ public class Main {
         //TODO Configurar los logs.
  	PropertyConfigurator.configure("log4j.properties");
         Logger log =  Logger.getLogger(Main.class);
-        log.info("Muchas cosas mas");
         try {
 
             parser.parse(args);
@@ -56,7 +57,7 @@ public class Main {
             GestorCompartidos gestorDeCompartidos = GestorCompartidos.getInstancia();
             gestorDeCompartidos.setGestorDisco(gestorDeDisco);
             GestorEgorilla gestorEGorilla = new GestorEgorilla(gestorDeDescargas, gestorDeRed);
-
+            ControlDeSucesos sucesos = ControlDeSucesos.dameInstancia();
 
             if (modo.equalsIgnoreCase("consola")) {
                 ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorDeDescargas, gestorEGorilla);

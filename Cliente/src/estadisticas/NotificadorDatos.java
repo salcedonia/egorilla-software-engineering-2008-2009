@@ -29,8 +29,8 @@ package estadisticas;
  */
 public interface NotificadorDatos {
 
-    void addSubidaDatos(long longitud);
-    void addDescargaDatos(long longitud);
+    void addSubidaDatos(double longitud);
+    void addDescargaDatos(double longitud);
     void addFichero();
     void addObservador(ObservadorDatos observador);
  }
