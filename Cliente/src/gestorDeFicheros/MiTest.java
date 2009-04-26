@@ -100,6 +100,31 @@ public class MiTest {
     fragmentosActualesComJar = fragmentador.queFragmentosTienes( 
         "538b5b9d439778e2527a3e163a1e623b" );
     System.out.println( "cantidadFragmentosActualesConJar "+fragmentosActualesComJar.size() );
+    for( int i = 0;  i < fragmentosActualesComJar.size();  i++ ){
+      System.out.println( fragmentosActualesComJar.get( i ).toString() );
+    }
+
+    String nombreFilePeli= "ComoPencarJunio.avi";
+    File filePeli = new File( nombreFilePeli );
+    String hashPeli = MD5Sum.getFileMD5Sum( filePeli );
+    Archivo archivoPeli = new Archivo( filePeli.getName(), hashPeli, filePeli.length(), 
+        TipoArchivo.VIDEO);
+    System.out.println( archivoPeli.toString() );
+    ensamblador.nuevoArchivoTemporal( archivoPeli );
+    try{
+    RandomAccessFile punteroFicheroRead = new RandomAccessFile( filePeli, "r" );
+    byte[] bytesFragmentoA = new byte[ 512 ], bytesFragmentoB = new byte[ 512 ],
+        bytesFragmentoC = new byte[ 469 ];
+    punteroFicheroRead.seek( 512 );
+    punteroFicheroRead.read( bytesFragmentoB ); //leo los 512
+    punteroFicheroRead.seek( 0 );
+    punteroFicheroRead.read( bytesFragmentoA ); //leo los 512
+    punteroFicheroRead.seek( 1024 );
+    punteroFicheroRead.read( bytesFragmentoA ); //leo los 469
+    punteroFicheroRead.close();
+    }catch(Exception e){}
+
+    //Obtener fragmentos de un archivo temporal
 
     //probar a guardar uno al que solo le falta un fragmento y qse complete bien
     

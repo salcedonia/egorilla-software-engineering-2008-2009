@@ -16,6 +16,10 @@ public class Ensamblador extends ManejarListaArchivos {
   //gestor de disco.
   
   //Hacer properties
+  private String extesionIndices = ".part.met";
+
+  private String extesionFicheroTemporal = ".tmp";
+
   private int tamanioBytesFragmento = 512;
 
   private String _directorioTemporales;
@@ -104,11 +108,11 @@ public class Ensamblador extends ManejarListaArchivos {
         System.out.println( "Asi que creo el fichero temporal y el indice" );
         //El archivo no se encuentra, es nuevo! Lo creo en los temporales
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
-            + ".part.met" );
+            + extesionIndices );
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
         crearFicheroIndices( fichero );
         //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
-        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +".tmp" );   
+        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );   
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
         
         //Y si todo ha ido bien actualizo las listas
@@ -224,7 +228,7 @@ public class Ensamblador extends ManejarListaArchivos {
       //Guardo la parte donde toque
       try{
       File fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
-          ".tmp" );
+          extesionFicheroTemporal );
       RandomAccessFile punteroFichero = new RandomAccessFile( fichero, "rw" );
       /*FileOutputStream archivo = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( archivo );*/   
@@ -247,7 +251,7 @@ public class Ensamblador extends ManejarListaArchivos {
 
       //Actualizo el fichero de indices
       fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
-            + ".part.met" );
+            + extesionIndices );
       Indices indices = leeFicheroIndices( fichero );
       indices.add( fragmento );
       guardarFicheroIndices( fichero, indices );
