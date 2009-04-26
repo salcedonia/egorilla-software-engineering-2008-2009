@@ -15,7 +15,7 @@ public class MD5Sum {
     
     // CONSTANTES
     //public static long SCOUR_MD5_BYTE_LIMIT = 10000;
-    public static int SCOUR_MD5_BYTE_LIMIT = (300 * 1024);
+    public final static int SCOUR_MD5_BYTE_LIMIT = (300 * 1024);
     
     // ATRIBUTOS
     private static MessageDigest _md = null;
