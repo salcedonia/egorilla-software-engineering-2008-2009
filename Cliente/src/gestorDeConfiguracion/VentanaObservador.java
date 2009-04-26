@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -22,10 +23,10 @@ import javax.swing.JTextField;
 
 /**
  * Ventanita (de prueba) que se comporta como observadora de la clase ControlConfiguracionCliente
- * Implementa la interfaz ObservadorGestorDeConfiguracion
+ * Implementa la interfaz ObservadorControlConfiguracionCliente
  * @author F. Javier Sanchez Pardo
  */
-public class VentanaObservador extends JFrame implements ObservadorGestorDeConfiguracion,ActionListener{
+public class VentanaObservador extends JFrame implements ObservadorControlConfiguracionCliente,ActionListener{
     //Variable estática para numerar las instancias.
     protected static int _contador = 0;
 
@@ -74,8 +75,8 @@ public class VentanaObservador extends JFrame implements ObservadorGestorDeConfi
         setResizable(false);
     }
 
-    public void actualizar(Sujeto suj) {
-        if (suj == this.oCtrlConfigCli){
+    public void actualizar(ControlConfiguracionCliente obj) {
+        if (obj == this.oCtrlConfigCli){
             //Actualizo el campo con el valor cambiado
             txtField.setText(oCtrlConfigCli.obtenerPropiedad("Num_descargas_sim"));
         }
@@ -102,6 +103,10 @@ public class VentanaObservador extends JFrame implements ObservadorGestorDeConfi
                 Logger.getLogger(VentanaObservador.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
