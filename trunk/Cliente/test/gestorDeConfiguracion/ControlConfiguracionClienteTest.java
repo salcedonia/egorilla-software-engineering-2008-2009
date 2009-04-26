@@ -37,15 +37,15 @@ public class ControlConfiguracionClienteTest {
     public void testObtenerPropiedadxDefecto() {
         //Leo valores de propiedades por defecto
         System.out.println("\nValores de Propiedades por defecto");
-        System.out.println ("Puerto: "+ oControlConfiguracion.obtenerPropiedadxDefecto("Puerto"));
-        System.out.println ("Lim_subida: " + oControlConfiguracion.obtenerPropiedadxDefecto("Lim_subida"));
-        System.out.println ("Lim_bajada: " + oControlConfiguracion.obtenerPropiedadxDefecto("Lim_bajada"));
-        System.out.println ("Num_descargas_sim: " + oControlConfiguracion.obtenerPropiedadxDefecto("Num_descargas_sim"));
+        System.out.println ("Puerto: "+ oControlConfiguracion.obtenerPropiedadPorDefecto("Puerto"));
+        System.out.println ("Lim_subida: " + oControlConfiguracion.obtenerPropiedadPorDefecto("Lim_subida"));
+        System.out.println ("Lim_bajada: " + oControlConfiguracion.obtenerPropiedadPorDefecto("Lim_bajada"));
+        System.out.println ("Num_descargas_sim: " + oControlConfiguracion.obtenerPropiedadPorDefecto("Num_descargas_sim"));
     }
 
     @Test
     public void testEstablecerConfiguracion() throws ControlConfiguracionClienteException {
-        Properties propiedades = oControlConfiguracion.obtenerConfiguracionxDefecto();
+        Properties propiedades = oControlConfiguracion.obtenerConfiguracionPorDefecto();
         oControlConfiguracion.establecerConfiguracion(propiedades);
         //Leo valores de propiedades
         System.out.println("Valores de Propiedades");

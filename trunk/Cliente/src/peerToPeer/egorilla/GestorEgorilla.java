@@ -87,7 +87,7 @@ public class GestorEgorilla extends Thread{
         DatosCliente misDatos = new DatosCliente();
         
         // los datos se leen directamente del fichero de configuración
-        ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstanciaDefecto();
+        ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstancia();
         
         int puerto = Integer.parseInt(config.obtenerPropiedad("Puerto"));
         String nmb = config.obtenerPropiedad("NmbUsuario");
@@ -336,7 +336,10 @@ public class GestorEgorilla extends Thread{
      * @param obs el observador
      */
     public void agregarObservador(ObservadorGestorEgorilla obs){
-        _listaObservadores.add(obs);
+        int iIndice=_listaObservadores.indexOf(obs);
+        //Aniado el observador solo si no esta en la estructura de observadores
+        if ( iIndice == -1 )
+            _listaObservadores.add(obs);
     }
 
     /**

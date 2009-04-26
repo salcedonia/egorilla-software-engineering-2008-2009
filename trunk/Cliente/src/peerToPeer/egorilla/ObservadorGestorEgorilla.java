@@ -3,11 +3,6 @@
  * This project and code is uncer GPL license
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package peerToPeer.egorilla;
 
 import datos.Archivo;

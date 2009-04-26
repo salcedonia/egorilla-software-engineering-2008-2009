@@ -88,9 +88,9 @@ public class GestorEstadisticasTest {
 
 
     private class DummyDescarga extends AdministradorDescarga{
-        public DummyDescarga(){
-            super();
-        }
+//        public DummyDescarga(){
+//            //super();
+//        }
         public void setTiempoMaximo(int valor){
             tiempoMaximo = valor;
         }

@@ -90,8 +90,8 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                     break;
 
                 case '2':
-                    String ServerHost = ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("IpServidor");
-                    int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstanciaDefecto().obtenerPropiedad("PuertoServidor"));
+                    String ServerHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
+                    int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
 
                     mostrarMensaje("\nConectando a ");
                     mostrarMensaje(ServerHost + ":" + puertoS);
