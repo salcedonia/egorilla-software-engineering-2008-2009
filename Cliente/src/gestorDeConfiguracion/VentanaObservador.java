@@ -22,10 +22,10 @@ import javax.swing.JTextField;
 
 /**
  * Ventanita (de prueba) que se comporta como observadora de la clase ControlConfiguracionCliente
- * Implementa la interfaz Observador
+ * Implementa la interfaz ObservadorGestorDeConfiguracion
  * @author F. Javier Sanchez Pardo
  */
-public class VentanaObservador extends JFrame implements Observador,ActionListener{
+public class VentanaObservador extends JFrame implements ObservadorGestorDeConfiguracion,ActionListener{
     //Variable estática para numerar las instancias.
     protected static int _contador = 0;
 

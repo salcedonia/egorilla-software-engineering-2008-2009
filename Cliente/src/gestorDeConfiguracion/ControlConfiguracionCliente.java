@@ -22,24 +22,24 @@ public class ControlConfiguracionCliente implements Sujeto{
     private FicheroPropiedades oFicheroPropsPpal;
     private FicheroPropiedades oFicheroPropsxDefecto;
 
-    private ArrayList <Observador> listaObservadores = new ArrayList <Observador>();
+    private ArrayList <ObservadorGestorDeConfiguracion> listaObservadores = new ArrayList <ObservadorGestorDeConfiguracion>();
     
     //
     //Implementacion de los metodos de la interfaz Sujeto
     //
     /**
      * Anade un objeto observador a la estructura de observadores
-     * @param obs: objeto que implementa la interfaz Observador
+     * @param obs: objeto que implementa la interfaz ObservadorGestorDeConfiguracion
      */
-    public void anadirObservador(Observador obs) {
+    public void anadirObservador(ObservadorGestorDeConfiguracion obs) {
         listaObservadores.add(obs);
     }
     
     /**
      * Quita un objeto observador de la estructura de observadores.
-     * @param obs: objeto que implementa la interfaz Observador
+     * @param obs: objeto que implementa la interfaz ObservadorGestorDeConfiguracion
      */
-    public void quitarObservador(Observador obs) {
+    public void quitarObservador(ObservadorGestorDeConfiguracion obs) {
         listaObservadores.remove(obs);
     }
 
@@ -48,7 +48,7 @@ public class ControlConfiguracionCliente implements Sujeto{
      * configuracion del cliente ha cambiado.
      */
     public void notificarObservadores() {
-        Iterator<Observador> iterador = listaObservadores.iterator();
+        Iterator<ObservadorGestorDeConfiguracion> iterador = listaObservadores.iterator();
         while (iterador.hasNext()){
             iterador.next().actualizar (this);
         }
