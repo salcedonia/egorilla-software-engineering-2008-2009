@@ -65,9 +65,15 @@ public class GestorDisco {
     File[] ficherosTemporales = fDirectorioTemporales.listFiles( new PartMetFileFilter() );
     //si el length() es 0 digo que el dir esta vacio
     if( ficherosTemporales.length > 0 ){
-      System.out.println( "Procesando archivos de indices...<" );
+      System.out.println( "Procesando archivos de indices..." );
       //TODO No se si hacerlo aqui o llamar al ensamblador para que haga
       //la lista.
+      //Debo recorrer los archivos de indices y no los archivos temporales
+      for( File f : ficherosTemporales){
+        if( f.isFile() == true ) { //Creo que no hace falta esta comprobación
+          //TODO: _listaTemporales.add( procesarArchivosIndices( f ) );
+        }//Sino es fichero no le aniado
+      }
       recorrerListaArchivos( _listaTemporales );
     }else{
       System.out.println( "Directorio de temporales vacio.\n" );

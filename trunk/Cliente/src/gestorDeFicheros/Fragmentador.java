@@ -18,6 +18,11 @@ public class Fragmentador extends ManejarListaArchivos {
   //Este podria volver a leer los datos de las properties o que le pasa los valores el 
   //gestor de disco.
   //Hacer properties
+
+  private String extesionIndices = ".part.met";
+
+  private String extesionFicheroTemporal = ".tmp";
+
   private int tamanioBytesFragmento = 512;
 
   private String _directorioTemporales;
@@ -108,7 +113,7 @@ public class Fragmentador extends ManejarListaArchivos {
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + ".part.met" );
+            + extesionIndices );
         Indices indices = leeFicheroIndices( fichero );
         
         //Miro si el fragmento está en ese array
@@ -223,7 +228,7 @@ public class Fragmentador extends ManejarListaArchivos {
         System.out.println("Si esta en los temporales - Abro fichero indices");
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + ".part.met" );
+            + extesionIndices );
         Indices indices = leeFicheroIndices( fichero );
         listaFragmento = indices.getIndices();
       }
@@ -276,7 +281,7 @@ public class Fragmentador extends ManejarListaArchivos {
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + ".part.met" );
+            + extesionIndices );
         Indices indices = leeFicheroIndices( fichero );
         listaFragmento = indices.getIndices();
       }
