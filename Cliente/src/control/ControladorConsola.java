@@ -13,6 +13,7 @@ import peerToPeer.egorilla.GestorEgorilla;
  * notifica a la lógica de la aplicación para que ésta actúe en consecuencia.
  * 
  * @author Luis Ayuso, Ivan Munsuri, Javier Salcedo, Jose Miguel Guerrero
+ * Modificado por Javier Sánchez.
  */
 public class ControladorConsola {
 
@@ -64,12 +65,11 @@ public class ControladorConsola {
      * @throws java.io.IOException
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
-        _guiConsola.mostrarMensaje("\nConectando....");
+        _guiConsola.mostrarMensaje("\nConectando a servidor....");
         if ( !_gestorDeEgorilla.estaConectadoAServidor() ) {
             _gestorDeEgorilla.conectaServidor(IP, puerto);
-            _guiConsola.mostrarMensaje("\nConectado....");
         } else {
-            _guiConsola.mostrarMensaje("Ya estas conectado a " + IP + "\n");
+            _guiConsola.mostrarMensaje("Ya estas conectado a un servidor.\n");
         }
     }
 
@@ -77,12 +77,11 @@ public class ControladorConsola {
      * Cierra la conexion con el servidor.
      */
     public void peticionDesconexionDeServidor() {
-        _guiConsola.mostrarMensaje("\nDesconectando...");
+        _guiConsola.mostrarMensaje("\nDesconectando del servidor...");
         _gestorDeEgorilla.desconectar();
 
         // tambien acabamos con el p2p
         _gestorDeRed.terminaEscucha();
-        _guiConsola.mostrarMensaje("\nDesconectado.");
 }
 
     /**
@@ -94,7 +93,7 @@ public class ControladorConsola {
      * @param cad nombre de fichero buscado
      */
     public void peticionBuscarFichero(String cad) {
-
+        
         _gestorDeEgorilla.nuevaConsulta(cad);
     }
 

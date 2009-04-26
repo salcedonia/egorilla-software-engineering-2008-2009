@@ -12,7 +12,6 @@ import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
@@ -20,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
 import mensajes.p2p.Altoo;
-import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
@@ -30,12 +28,14 @@ import peerToPeer.descargas.GestorDescargas;
 
 
 import gestorDeFicheros.*;
+import java.util.Iterator;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 
 
 /**
  *
  * @author Luis Ayuso, José Miguel Guerrero
+ * @author Modificado por Javier Sánchez
  */
 public class GestorEgorilla extends Thread{
     
@@ -56,6 +56,8 @@ public class GestorEgorilla extends Thread{
     private int  _serverPort;
     private boolean _doP2P;
 
+    
+    //Estructura de datos para almacenar los observadores sobre este objeto.
     private ArrayList<ObservadorGestorEgorilla> _listaObservadores;
 
     public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
@@ -71,7 +73,6 @@ public class GestorEgorilla extends Thread{
         _gestorSubidas = new GestorSubidas( this, _gestorDisco );
         //inicializo la variable
         _conectado = false;
-        
     }
     
     /**
@@ -106,6 +107,9 @@ public class GestorEgorilla extends Thread{
         
         //Faltaba inicializar esta vble
         _conectado = true;
+        
+        //Notificar el evento a los observadores
+        this.notificarConexionCompletada(ipServidor, puertoServidor);
     }
 
     /**
@@ -130,7 +134,7 @@ public class GestorEgorilla extends Thread{
     void conectado() {
         _conectado = true;
         for (ObservadorGestorEgorilla obs : _listaObservadores) {
-            obs.conexionCompleta(_serverIP, _serverPort);
+            obs.conexionCompletada(this,_serverIP, _serverPort);
         }
     }
     
@@ -152,6 +156,9 @@ public class GestorEgorilla extends Thread{
         
         // finaliza el p2p.
         this._doP2P = false;
+
+        //Notificar el evento a los observadores
+        this.notificarDesconexionCompletada();
     }
 
     /**
@@ -207,7 +214,7 @@ public class GestorEgorilla extends Thread{
         Archivo[] lista = respuesta.getLista();
         
         for (ObservadorGestorEgorilla obs : _listaObservadores) {
-            obs.resultadosBusqueda(cad, lista);
+            obs.resultadosBusqueda(this,cad, lista);
         }
     }
     
@@ -327,8 +334,9 @@ public class GestorEgorilla extends Thread{
         }
     }
 
+    //
     //-------------------------------------------------
-    //--------- metodos de la lista de observadores
+    //Implementacion de los metodos equivalentes a los de la interfaz "Observable"
     //-------------------------------------------------
     
     /**
@@ -351,4 +359,25 @@ public class GestorEgorilla extends Thread{
         _listaObservadores.remove(indice);
     }
 
+    /**
+     * Recorre todos los Observadores registrados para notificarles el que se ha producido
+     * un cambio en el objeto GestorEgorilla: Conexion completada
+     */
+    public void notificarConexionCompletada(String ip, int port) {
+        Iterator<ObservadorGestorEgorilla> iterador = _listaObservadores.iterator();
+        while (iterador.hasNext()){
+            iterador.next().conexionCompletada(this, ip, port);
+        }
+    }
+
+    /**
+     * Recorre todos los Observadores registrados para notificarles el que se ha producido
+     * un cambio en el objeto GestorEgorilla: Desconexion completada
+     */
+    public void notificarDesconexionCompletada() {
+        Iterator<ObservadorGestorEgorilla> iterador = _listaObservadores.iterator();
+        while (iterador.hasNext()){
+            iterador.next().desconexionCompletada(this);
+        }
+    }
 }
