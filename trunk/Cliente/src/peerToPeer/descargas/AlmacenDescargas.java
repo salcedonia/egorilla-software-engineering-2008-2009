@@ -6,6 +6,8 @@
 package peerToPeer.descargas;
 
 import datos.Archivo;
+import datos.Fragmento;
+import gestorDeFicheros.GestorCompartidos;
 import java.util.ArrayList;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
@@ -179,11 +181,20 @@ public class AlmacenDescargas {
     
     public void actualizaFragmentosEnsamblador (Archivo arch, Toma msj){
         
-        Descarga des = this.buscaDescarga(arch);
-        if (des != null) {
-            //TODO: Al parecer finalmente se hablará con el gestorCompartidos (es un singelton)
+        //TODO: Al parecer finalmente se hablará con el gestorCompartidos (es un singelton)
             /* Tengo que crear el fragmento con los datos del archivo, de la siguiente manera:
              * El offset lo saco del mensaje */
+        
+        Descarga des = this.buscaDescarga(arch);
+        GestorCompartidos gestComp = GestorCompartidos.getInstancia();
+        /* Monto el fragmento del archivo arch para que el disco pueda recibirlo.
+         * Por lo que he visto en el gestorDeFicheros, al construir un nuevo fragmento,
+         * el campo tamaño corresponde al tamaño del archivo al que este fragmento pertenece.
+         * CONFIRMAR ESTE PUNTO, A VER SI NO VA A SER ASÍ */
+        Fragmento frag = new Fragmento (arch.getNombre(),arch.getHash(),arch.getSize(),msj.getOffset());
+        if (des != null) {
+            /*Ahora aquí le pasaría el fragmento al gestor de compartidos, pero creo que
+             * el método todavía no está hecho */ 
         }
         
     }
