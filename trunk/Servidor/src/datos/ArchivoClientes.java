@@ -78,14 +78,12 @@ public class ArchivoClientes {
      * @param listaArchivos la lista de archivos de este cliente.
      */
     public void actualizarDesdeListaCliente(DatosCliente cliente,
-            ListaArchivos listaArchivos) {
+                                            ListaArchivos listaArchivos) {
 
         //Cada vez que se actualiza es por que se ha conectado un cliente, aunque mal hecho
         //se debe mirar antes si el cliente tiene o no archivos compartidos.
         //Los archivos en descarga se pueden/deben considerar compartidos
         incrementoNumeroClientes();
-
-        //No me gusta esto aqui, pero no se ha tenido en cuenta el caso
 
         //Si es el primer cliente, es decir, servidor sin ficheros...
         if (getNumeroArchivos() == 0) {
@@ -95,37 +93,20 @@ public class ArchivoClientes {
                 anadirArchivo(listaArchivos.get(i), cliente);
             }
         } else { //Sino...
-            boolean encontrado = false;
-
-            Archivo archivoServ = null;
-
-            //Iterator it = _relacion.entrySet().iterator();
 
             for (int i = 0; i < listaArchivos.size(); i++) {
 
-                Iterator it = _relacion.entrySet().iterator();
-                //flag encontrado ya que si le encuentro el primero en la lista
-                //no pierdo tiempo buscando en el resto xq no va a estar repe
-                for (int j = 0; j < getNumeroArchivos() && encontrado == false;
-                        j++) {
-                    //while ( it.hasNext() ){
-                    Map.Entry e = (Map.Entry) it.next();
-                    archivoServ = (Archivo) e.getKey();
-                    //}
-                    //encontrado = listaArchivos.get(i).comparaArchivo( get(j) );
-                    //encontrado = _relacion.containsKey( listaArchivos.get(i) );
-                    encontrado = comparaHashArchivo(listaArchivos.get(i), archivoServ);
+                if (_relacion.containsKey(listaArchivos.get(i)._hash)){
+                    // ya lo tenemos, actualizamos su lista
+
+                    _relacion.get (listaArchivos.get(i)._hash).add(cliente);
                 }
-                if (encontrado == false) {
-                    System.out.println("No encontrado en el servidor");
-                    anadirArchivo(listaArchivos.get(i), cliente);
-                //_relacion.add( new Cliente_Archivo(listaArchivos.get(i).getHash() ,listaArchivos.get(i).getNombre(), conexion) );
-                } else {
-                    System.out.println("Encontrado en el servidor");
-                    anadirCliente(archivoServ, cliente);
-                    //Hago las relaciones para el encontrado
-                    //Lo pongo a false para seguir buscando
-                    encontrado = false;
+                else{
+                    // es nuevo, nueva entrada
+                    ArrayList<DatosCliente> lista = new ArrayList<DatosCliente>();
+                    lista.add(cliente);
+
+                    _relacion.put(listaArchivos.get(i)._hash, lista);
                 }
             }
         }
@@ -243,7 +224,7 @@ public class ArchivoClientes {
         
         if (_relacion.containsKey(hash)){
             ArrayList<DatosCliente> a = _relacion.get(hash);
-            DatosCliente[] l = new DatosCliente[_numeroClientes];
+            DatosCliente[] l = new DatosCliente[a.size()];
             for (int i = 0; i < a.size(); i++) 
                 l[i] = a.get(i);
                 
@@ -259,13 +240,19 @@ public class ArchivoClientes {
      * @param ip la ip que ya no esta online
      */
     public void eliminaPropietario(DatosCliente datos){
+        _numeroClientes --;
+
         ArrayList<Archivo> tmp = new ArrayList<Archivo>();
+        ArrayList<DatosCliente> eso;
 
         for (Archivo archivo : _archivos) {
-            _relacion.get(archivo).remove(datos);
-            if (_relacion.get(archivo).size() == 0){
-                //nos hemos quedado sin propietarios para el archivo, lo borramos
-                tmp.add(archivo);
+            eso = _relacion.get(archivo);
+            if (eso != null) {
+                eso.remove(datos);
+                if (_relacion.get(archivo).size() == 0) {
+                    //nos hemos quedado sin propietarios para el archivo, lo borramos
+                    tmp.add(archivo);
+                }
             }
         }
         for (Archivo archivo : tmp) {

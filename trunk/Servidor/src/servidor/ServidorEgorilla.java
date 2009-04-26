@@ -72,6 +72,7 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                                                          _clientes.getDatosCliente(ip),
                                                          (PeticionConsulta) msj);
                 bus.start();
+
                 // devuelve respuestaConsulta, pero dentro del hilo
                 break;
             case PeticionDescarga:
@@ -111,6 +112,10 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
 
     public void perdidaDeConexion(String ip) {
         if (_clientes.estaDeAlta(ip)){
+
+               //TODO: logger
+            System.out.print("perdida conexion con " + ip);
+            
             DatosCliente d =_clientes.getDatosCliente(ip);
             _clientes.eliminaCliente(ip);
             _archivoClientes.eliminaPropietario(d);

@@ -45,7 +45,8 @@ public class ProcesaListaDeFicheros extends Thread {
     public void run(){
         
         _listaficheros.actualizarDesdeListaCliente(_datosCliente, _archivosEnviados);
-        
+
+           //TODO: logger
         System.out.println("\nLista de archivos recibida de " + _datosCliente.getIP());   
         System.out.println("===================================================");
         for (Archivo a : _archivosEnviados) {

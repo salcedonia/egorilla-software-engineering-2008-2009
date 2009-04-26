@@ -66,11 +66,16 @@ public class ConexionCliente extends Thread {
             //b.numeroDeArchivos
             
             b.setDestino(_datosCliente.getIP(), _datosCliente.getPuertoEscucha());
-            
+
+             //TODO: logger
+             System.out.println("conectando " + _datosCliente.getIP());
+
             try {
                 _red.envia(b, _datosCliente.getIP(), _datosCliente.getPuertoEscucha());
             } catch (NetError ex) {
-                Logger.getLogger(ConexionCliente.class.getName()).log(Level.SEVERE, null, ex);
+               _red.eliminaConexion( _datosCliente.getIP());
+               //TODO: logger
+                System.out.println("error de comunicacion con " + _datosCliente.getIP());
             }
         }      
     }
