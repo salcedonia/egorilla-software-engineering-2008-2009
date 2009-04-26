@@ -59,7 +59,8 @@ public class ProcesarPeticionDescarga extends Thread {
                                                             lista );
         
         resp.setDestino(_cliente.getIP(), _cliente.getPuertoEscucha());
-        
+
+           //TODO: logger
         System.out.println("\n llega peticion de descarga <"+
                             _peticion.getHash()+"> desde" +
                             _cliente.getIP());
