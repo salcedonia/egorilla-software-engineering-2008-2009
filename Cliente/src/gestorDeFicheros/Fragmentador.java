@@ -13,7 +13,7 @@ import java.util.*;
  * por una variable es mas rapido que buscar en que lista esta el fichero.*/
 
 /*Hacer de properties la extension de los archivos de indices*/
-public class Fragmentador {
+public class Fragmentador extends ManejarListaArchivos {
 
   //Este podria volver a leer los datos de las properties o que le pasa los valores el 
   //gestor de disco.
@@ -46,6 +46,7 @@ public class Fragmentador {
     //Obtengo sus referencias, para poder tener las listas actualizarlas
     _listaCompletos = gestorDisco.getListaArchivosCompletos();
     _listaTemporales = gestorDisco.getListaArchivosTemporales();
+    _listaTodos = gestorDisco.getListaArchivosTodos();
   }
 
   private Indices leeFicheroIndices( File fichero ){
@@ -55,6 +56,7 @@ public class Fragmentador {
     FileInputStream ficheroIndices = new FileInputStream( fichero );
     byte[] bytes = new byte[ (int)fichero.length() ];        
     int byteIndicesLeidos = ficheroIndices.read( bytes );
+    ficheroIndices.close();
     //para el ensamblador q es el q guarda, seria mejor guardar los bytes adicionales, es
     //decir, guadar los ultimos fragmentos añadidos, aunque me parece q sera mas facil, xo
     //ineficiente, recuperar el array de fragmentos anterior, añadir los fragmentos, y
@@ -75,7 +77,8 @@ public class Fragmentador {
     Byte[] oBytesFragmento = new Byte[ bytes.length ];
 
     for( int i = 0;  i < bytes.length;  i++ ){
-      oBytesFragmento[ i ] = new Byte( bytes[ i ] );
+      //oBytesFragmento[ i ] = new Byte( bytes[ i ] );
+      oBytesFragmento[ i ] = Byte.valueOf( bytes[ i ] );
     }
 
     return oBytesFragmento;
@@ -114,9 +117,16 @@ public class Fragmentador {
           try{
           punteroFichero = new RandomAccessFile( fichero, "r" );
           off = (int)fragmento.getOffset();
-          len = (int)(fragmento.getTama() - fragmento.getOffset() );
+          int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
+          if( tamanioBytesFragmentoAux < tamanioBytesFragmento )
+            len = tamanioBytesFragmentoAux;
+          else
+            len = tamanioBytesFragmento;
           bytesFragmento = new byte[ len ];
-          bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
+          //System.out.println("offset "+off +" len "+len+" point "+punteroFichero.getFilePointer() );
+          punteroFichero.seek( off );
+          //bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
+          bytesLeidos = punteroFichero.read( bytesFragmento );
           oBytesFragmento = primitivoAObjeto( bytesFragmento );
           punteroFichero.close();
           }catch( Exception e ){
@@ -142,9 +152,17 @@ public class Fragmentador {
       fichero = new File( _directorioCompletos+"//"+ archivoRequerido.getNombre() );
       punteroFichero = new RandomAccessFile( fichero, "r" );
       off = (int)fragmento.getOffset();
-      len = (int)(fragmento.getTama() - fragmento.getOffset() );
+      int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
+      if( tamanioBytesFragmentoAux < tamanioBytesFragmento )
+        len = tamanioBytesFragmentoAux;
+      else
+        len = tamanioBytesFragmento;
       bytesFragmento = new byte[ len ];
-      bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
+      //System.out.println("offset "+off +" len "+len+" point "+punteroFichero.getFilePointer() );
+      punteroFichero.seek( off );
+      //bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
+      bytesLeidos = punteroFichero.read( bytesFragmento );
+      //System.out.println("point "+punteroFichero.getFilePointer() );
       oBytesFragmento = primitivoAObjeto( bytesFragmento );
       punteroFichero.close();
       }catch( Exception e ){
@@ -162,32 +180,8 @@ public class Fragmentador {
     return oBytesFragmento;
   }
 
-  private Archivo buscarArchivoEnLista( ListaArchivos listaArchivos, String hash){
-    boolean encontrado = false;
-    Archivo encontradoArchivo = null;
-    
-    for( int i = 0;  i < listaArchivos.size() && encontrado == false;  i++ ){
-      encontradoArchivo = listaArchivos.get( i );
-      if( comparaHash( encontradoArchivo.getHash(), hash ) == true )
-        encontrado = true;
-    }
-    if( encontrado == false ){
-      //Sino lo ha encontrado devuelvo un nulo
-      encontradoArchivo = null;
-    }//Sino no tengo que cambiar nada
- 
-    return encontradoArchivo;
-  }
 
-  private boolean comparaHash( String hashA, String hashB){
-    if( hashA.compareTo( hashB ) == 0 )
-      return true;
-    else
-      return false;
-  }
-
-
-  public int cantidadFragmentosArchivo( String hash ){
+ public int cantidadFragmentosArchivo( String hash ){
     //Busco en las listas el archivo y llamo a la otra
     //int cantidadFragmentosArchivo( Archivo archivo )
     return 0;
@@ -210,6 +204,60 @@ public class Fragmentador {
   }
 
   public Vector<Fragmento> queFragmentosTienes( String hash ){
+    //Lo primero que hago es bucar en hash en la lista de temporales y de completos
+    Archivo archivoRequerido;
+    Vector<Fragmento> listaFragmento = null;
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estará)    
+    //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
+    //buscar en las listas
+    archivoRequerido = buscarArchivoEnLista( _listaCompletos, hash );
+    if( archivoRequerido == null ){
+      //Debo buscarlo en los temporales
+      //No esta en los completos, asi que miramos en los incompletos
+      System.out.println("No esta en los completos");
+      archivoRequerido = buscarArchivoEnLista( _listaTemporales, hash );
+      if( archivoRequerido == null ){
+        System.out.println("No esta en los temporales tampoco - ERROR");
+        //El fichero no EXISTE - devuelvo un null - ERROR
+      }else{
+        System.out.println("Si esta en los temporales - Abro fichero indices");
+        //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
+        File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
+            + ".part.met" );
+        Indices indices = leeFicheroIndices( fichero );
+        listaFragmento = indices.getIndices();
+      }
+    }else{
+      System.out.println("Si esta en los completos");
+      //Tengo todo los fragmentos, asi que los digo todos!
+      //Esto igual seria mejor: serializarlo y guardado - No va a cambiar asi no tengo que 
+      //recarcular ni volver a crear todos los objetos o guardarlo en mem.
+      //Puedo calcular la cantidad de partes si los bytes del mismo sin fijos
+      //Si es variable mejor con un while
+      listaFragmento = new Vector<Fragmento>();
+      Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
+          archivoRequerido.getHash(), archivoRequerido.getSize(), 0 ); //0 por ser el primero
+      listaFragmento.add( fragmento );
+      for( int i = 1;  fragmento.getOffset()+tamanioBytesFragmento < fragmento.getTama();  i++ ){
+        fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
+            archivoRequerido.getSize(), i*tamanioBytesFragmento );
+        listaFragmento.add( fragmento );
+      }
+      //Esto último sobra, simplemente que el ultimo fragmento tiene
+      //un tamaño de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
+      /*if( fragmento.getOffset() < fragmento.getTama() ){
+        long diferencia = fragmento.getTama() - fragmento.getOffset();
+        long offsetDiff = fragmento.getOffset()+diferencia;
+        fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
+            archivoRequerido.getSize(), offsetDiff );
+        listaFragmento.add( fragmento );
+      }*/
+    }
+    return listaFragmento;
+  }
+
+  
+  public Vector<Fragmento> queFragmentosFaltan( String hash ){
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;

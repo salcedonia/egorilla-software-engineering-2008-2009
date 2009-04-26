@@ -39,10 +39,7 @@ public class GestorDisco {
    * @param path
    * @throws java.io.IOException
    */
-  public GestorDisco() /*throws IOException*/ {
-    
-    _fragmentador = new Fragmentador( this, _directorioCompletos, _directorioTemporales );
-    _ensamblador = new Ensamblador( this, _directorioCompletos, _directorioTemporales );
+  public GestorDisco() /*throws IOException*/ {  
 
     _listaTodos = new ListaArchivos();
     _listaTemporales = new ListaArchivos();
@@ -71,7 +68,7 @@ public class GestorDisco {
       System.out.println( "Procesando archivos de indices...<" );
       //TODO No se si hacerlo aqui o llamar al ensamblador para que haga
       //la lista.
-      //recorrerListaArchivos( _listaTemporales );
+      recorrerListaArchivos( _listaTemporales );
     }else{
       System.out.println( "Directorio de temporales vacio.\n" );
     }
@@ -94,6 +91,9 @@ public class GestorDisco {
     _listaTodos = unirListas( _listaTemporales, _listaCompletos );
     //Cuando haya varios directorio por cada una se hara la union , usando un for
     //incluso, como son atributos de clase no hace falta pasarlos como parametros
+    
+    _fragmentador = new Fragmentador( this, _directorioCompletos, _directorioTemporales );
+    _ensamblador = new Ensamblador( this, _directorioCompletos, _directorioTemporales );
   }
 
 
@@ -154,12 +154,19 @@ public class GestorDisco {
   }
 
   public void recorrerListaArchivos( ListaArchivos lista ){
+    if( lista == null ){
+      System.out.println("Lista nula. 0 ficheros.");
+    }else{
     for( int i = 0;  i < lista.size();  i++) {
       //System.out.println( lista.elementAt(i).getNombre() );
-      System.out.print( lista.elementAt(i).getNombre() );
-      System.out.println( " - "+lista.elementAt(i).getHash() );
+
+      //System.out.print( lista.elementAt(i).getNombre() );
+      //System.out.println( " - "+lista.elementAt(i).getHash() );
+      
+      System.out.println( lista.elementAt(i).toString() );
     }
     System.out.println("\n<" + lista.size() + "> ficheros.");
+    }
   }
 
     /**
@@ -197,4 +204,3 @@ class PartMetFileFilter implements FileFilter {
         return ".part.met files";
     }
 }
-
