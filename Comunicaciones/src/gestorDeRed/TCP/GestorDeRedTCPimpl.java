@@ -32,6 +32,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         _puerto = port;
         _receptores = new Stack<Receptor<E>>();
         _conexiones  = new GestorConexiones(this);
+        _conexiones.start();
     }
 
     /**

@@ -75,10 +75,10 @@ public class GestorDeRedDummyImpl<E> implements GestorDeRed<E>{
     }
 
     public void addConexion(String host, int puerto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       
     }
 
     public void eliminaConexion(String host) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       
     }
 }
