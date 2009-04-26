@@ -1,16 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package gestorDeConfiguracion;
 
 /**
- * Interfaz general de un observador siguiendo el patron Observador
- * (el objeto observado lo denomino "el Sujeto").
+ * Interfaz de los observadores sobre el GestorDeConfiguracion
  * @author F. Javier Sanchez Pardo
  */
-public interface Observador {
+public interface ObservadorGestorDeConfiguracion {
     /**
      * 
      * @param suj : objeto que ha sufrido un cambio de estado del que depende el 
