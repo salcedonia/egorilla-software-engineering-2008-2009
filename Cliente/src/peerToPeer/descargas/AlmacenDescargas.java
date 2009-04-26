@@ -9,6 +9,7 @@ import datos.Archivo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
+import mensajes.p2p.Toma;
 import mensajes.serverclient.DatosCliente;
 
 /**
@@ -79,8 +80,29 @@ public class AlmacenDescargas {
      */
     public void nuevaDescarga (Archivo arch){
         
-        Descarga des = new Descarga(arch);
-        _listaDescargas.add(des);
+        Descarga des = this.buscaDescarga(arch);
+        /*Sólo la añade a la lista si no existe ya la descarga para ese archivo
+         * identificado por su hash */
+        if (des == null){
+            des = new Descarga(arch);
+            _listaDescargas.add(des);
+        }
+        
+        
+    }
+    
+    /**
+     * Método que elimina una descarga de la lista (resultado del mensaje Altoo)
+     * Usa la función privada buscaDescarga para buscar la descarga
+     * @param arch de tipo Archivo para buscar la descarga a eliminar
+     */
+    
+    public void eliminaDescarga (Archivo arch){
+        
+        Descarga des = this.buscaDescarga(arch);
+        if (des != null){
+            _listaDescargas.remove(des);
+        }
         
     }
     
@@ -98,7 +120,7 @@ public class AlmacenDescargas {
         Descarga respuesta = null;
         while (iterador.hasNext() && !enc){
             Descarga des = iterador.next();
-            enc = des.getArchivo().getHash().equals(arch.getHash());//buscamos por hash
+            enc = des.getArchivo().comparaArchivo(arch);//buscamos por hash
             if (enc){
                 respuesta = des;
             }
@@ -135,6 +157,33 @@ public class AlmacenDescargas {
         Descarga des = this.buscaDescarga(arch);
         if (des != null) {
             des.actualizaQuienTieneQue(msj);
+        }
+        
+    }
+    
+    /**
+     * Método que va actualizando (eliminando) fragmentos en la descarga correspondiente
+     * del archivo arch conforme le van llegando nuevos mensajes Toma
+     * @param arch Archivo de la descarga
+     * @param msj Toma, que proporciona un nuevo fragmento (y será uno menos pendiente para la descarga)
+     */
+    
+    public void actualizaFragmentosPendientes (Archivo arch, Toma msj){
+        
+         Descarga des = this.buscaDescarga(arch);
+         if (des != null){
+             //des.eliminaFragmentos(msj);
+         }
+        
+    }
+    
+    public void actualizaFragmentosEnsamblador (Archivo arch, Toma msj){
+        
+        Descarga des = this.buscaDescarga(arch);
+        if (des != null) {
+            //TODO: Al parecer finalmente se hablará con el gestorCompartidos (es un singelton)
+            /* Tengo que crear el fragmento con los datos del archivo, de la siguiente manera:
+             * El offset lo saco del mensaje */
         }
         
     }
