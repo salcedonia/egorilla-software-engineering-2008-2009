@@ -233,6 +233,7 @@ public class Ensamblador extends ManejarListaArchivos {
     boolean guardado = false;
     Archivo archivoExistencia;
     int off, len = 0;
+    File fichero = null;
     String hashFragmento = fragmento.getHash();
 
     //Tengo qcomprobar cuando completo un archivo, para moverlo a completos
@@ -241,10 +242,11 @@ public class Ensamblador extends ManejarListaArchivos {
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
       System.out.println( "No esta en la lista, posiblemente fragmento corrupto" );
+      //guardado = false;
     }else{
       //Guardo la parte donde toque
       try{
-      File fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
+      fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
           extesionFicheroTemporal );
       RandomAccessFile punteroFichero = new RandomAccessFile( fichero, "rw" );
       /*FileOutputStream archivo = new FileOutputStream( fichero );
@@ -259,12 +261,16 @@ public class Ensamblador extends ManejarListaArchivos {
         len = tamanioBytesFragmento;
       byte[] bytes = objetoAPrimitivo( byteArchivo );
       punteroFichero.seek( off );
-      punteroFichero.write( bytes );
+      punteroFichero.write( bytes );      
       //bufferedOutput.write( bytes, off, len );
       //bufferedOutput.close();
       //creo que tambien hace falta cerrar el otro
       //archivo.close();
       punteroFichero.close();
+      }catch( Exception e ){
+        e.printStackTrace();
+        return false;
+      }
 
       //Actualizo el fichero de indices
       File ficheroIndices = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
@@ -279,172 +285,80 @@ public class Ensamblador extends ManejarListaArchivos {
         includirArchivoEnLista( indices.getArchivo(), _listaCompletos );
 
         File ficheroCompleto = new File( _directorioCompletos+"//"+
-            fichero.getName().split( extesionFicheroTemporal ) );
-        //mover( fichero, ficheroCompleto );
+            indices.getArchivo().getNombre() );
+        mover( fichero, ficheroCompleto );
+        
+        if( borrarFicheroIndices( ficheroIndices ) == false )
+          System.out.println( "Problemas al borrar el archivo de indices" );      
+
         /*_gestorDisco.recorrerListaArchivos( _listaTemporales );
         _gestorDisco.recorrerListaArchivos( _listaCompletos );*/
         //Y no la incluyo en listaTodos yaq tiene que estar
         //Tendre que eliminar el archivo de indices o algo asi
+        guardado = true;
       }
-
-      }catch( Exception e ){
-        e.printStackTrace();
-      }
+      
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
     }
-    return true;
+    return guardado;
+  }
+
+  private boolean borrarFicheroIndices( File fichero ){
+    //En principio lo borro directamente
+    return fichero.delete();
   }
 
   public boolean mover(File source, File destination) {
-        if( !destination.exists() ) {
-                // intentamos con renameTo
-                boolean result = source.renameTo(destination);
-                if( !result ) {
-                        // intentamos copiar
-                        /*result = true;
-                        result &= copiar(source, destination);
-                        result &= source.delete();*/
-                } return( result );
-        } else {
-                // Si el fichero destination existe, cancelamos...
-                return(false);
-        } 
-  }
-  
-
-  //Realmente el ensamblador solo se crea sobre los archivos temporales, no tiene sentido sobre
-  //los archivos completos, ya que no necesitan ensamblar mas partes de ellos
-
-  /**
-   * @param directorioCompartidos
-   * @param hashFichero
-   * @throws java.io.IOException
-   */
-  //public Ensamblador( String directorioCompartidos, String hashFichero ) throws IOException {
-    /* Este lee _partes de un fichero existente, dirCompartidos
-     * Hacer q recupere el nombre de la lista de archivos compartidos del cliente */
-
-    //Esta ruta tiene obtenerse de un properties o del que gestione estas cosas
-    //El nombre del fichero ha de ser el nombre con el que iniciamos la descarga del fichero
-    /*File fComp = new File(directorioCompartidos + "\\" + getNombreFichero(directorioCompartidos, hashFichero) );
-    FileInputStream fileInput = new FileInputStream( fComp );
-    BufferedInputStream bufferedInput = new BufferedInputStream( fileInput );
-
-    byte[] array = new byte[ 512 ];
-    Byte[] parte;
-    
-    _partes = new ArrayList<Byte[]>();
-    
-    System.out.println("Ruta <" + fComp.getAbsolutePath() + ">");
-    
-    int leidos = bufferedInput.read( array );
-    int totalLeidos = 0;
-    while( leidos > 0 ){
-      parte = new Byte[ leidos ];
-      for( int i = 0;  i < leidos;  i++){
-        parte[i] = new Byte( array[ i ] );
+    if( !destination.exists() ) {
+      // intentamos con renameTo
+      boolean result = source.renameTo(destination);
+      if( result == false ) {
+        System.out.println("No se ha podido mover el temporal, copiando...");
+        // intentamos copiar
+        result = true;
+        result &= copiar(source, destination);
+        result &= source.delete();
       }
-      _partes.add( parte );
-      totalLeidos += leidos;
-      leidos = bufferedInput.read( array );
-    }
-    
-    bufferedInput.close();
-    System.out.println("Bytes totales <" + totalLeidos + ">");
-    System.out.println("El fichero tiene <" + _partes.size() + "> parte/es");*/
-  //}
-
-  /*public String getNombreFichero( String directorio, String hash ){
-      String nombre = "";
-      boolean encontrado = false;
-      GestorCompartidos compartidos = null;
-      try{
-      compartidos = new GestorCompartidos( new File( directorio ) );
-      }catch(Exception e){}
-      ListaArchivos lista = compartidos.getArchivosCompartidos();
-      
-      for( int i = 0;  i < lista.size() && encontrado == false;  i++ ){
-        if( lista.get( i ).getHash().compareTo( hash ) == 0 ){
-          encontrado = true;
-          nombre = lista.get( i ).getNombre(); 
-        }
-      }
-
-      return nombre;
-    }*/
-
-  /**
-   * @param partesDescargadas
-   * @throws java.io.IOException
-   */
-  /*public void setPartes( ArrayList<Byte[]> partesDescargadas ) throws IOException {
-    
-    Byte[] parte;
-    File fDes = new File(_directorio + "\\" + _nombreFichero);
-    FileOutputStream fileOutput = new FileOutputStream( fDes );
-    BufferedOutputStream bufferedOutput = new BufferedOutputStream( fileOutput );
-    
-    System.out.println("Ruta <" + fDes.getAbsolutePath() + ">");
-    
-    for( int i = 0;  i < partesDescargadas.size();  i++){
-      com bufferedOutput.write( partesDescargadas.get( i ) );
-      parte = partesDescargadas.get(i);
-      com System.out.println("Cacho numero <"+ i +"> - parte "+parte+ "- bytes del parte <"+parte.length+">");
-
-      for( int j = 0;  j < parte.length;  j++){
-        com System.out.println("Byte numero <"+ j+ ">");
-        bufferedOutput.write( parte[ j ].byteValue() );
-      }
-    }
-    bufferedOutput.close();
-    coment Comprobar q coinciden los MD5
-  }*/  
-  
-
-  public boolean guardarFragmentosEnArchivo(String hash, ArrayList <Fragmento> fragmentosArchivoSolicitado, 
-      ArrayList <Byte[]> bytesArchivoSolicitado){
-    //Debo comprobar primero que el hash original le tengo el archivo de indices (part.met)
-    //Debo comprobar que hay el mismo numero de fragmentos que el de trozos de bytes
-    //Y en caso de coincidir, antes de grabar dichos bytes tengo que hacer el MD5 de esos Byte[] y ver que coincide con el
-    //que lleva el Fragmento
-    return false;
+      return result;
+    } else {
+      // Si el fichero destination existe, cancelamos...
+      return false;
+    } 
   }
 
-    public boolean guardarFragmentosEnArchivo(String hash, ArrayList <Fragmento> fragmentosArchivoSolicitado, 
-        Byte[] byteArchivoSolicitado){
-    //Debo comprobar primero que el hash original le tengo el archivo de indices (part.met)
-    //Debo comprobar que hay el mismo numero de fragmentos que el de trozos de bytes
-    //Y en caso de coincidir, antes de grabar dichos bytes tengo que hacer el MD5 de esos Byte[] y ver que coincide con el
-    //que lleva el Fragmento
-    return false;
-    }
-
-    /*public boolean guardarFragmentoEnArchivo(Fragmento fragmentoArchivoSolicitado, Byte[] byteArchivoSolicitado) throws FileNotFoundException{*/
-      //Debe comprobar si esta completo, hash original con el hash una vez grabado cada bytes del Fragmento
-      //Entonces movera el archivo a incoming
-      /*Byte[] parte;
-      File fDes = new File(directorioIncompletos + "//" + fragmentoArchivoSolicitado.getNombre());
-      FileOutputStream fileOutput = new FileOutputStream( fDes );
-      BufferedOutputStream bufferedOutput = new BufferedOutputStream( fileOutput );
-    
-      System.out.println("Ruta <" + fDes.getAbsolutePath() + ">");*/
-
-      //Esto ya no vale, ahora hay que buscar el lugar del los bytes mediante el offset del fragmento
-      
-      /*for( int i = 0;  i < partesDescargadas.size();  i++){
-        com bufferedOutput.write( partesDescargadas.get( i ) );
-        parte = partesDescargadas.get(i);
-        com System.out.println("Cacho numero <"+ i +"> - parte "+parte+ "- bytes del parte <"+parte.length+">");
-        
-        for( int j = 0;  j < parte.length;  j++){
-          com System.out.println("Byte numero <"+ j+ ">");
-          bufferedOutput.write( parte[ j ].byteValue() );
-        }
+  public static boolean copiar( File source, File destination ){
+    boolean resultado = false;
+    // declaración del flujo
+    FileInputStream sourceFile = null;
+    FileOutputStream destinationFile = null;
+    try {
+      // creamos fichero
+      if( destination.createNewFile() == true ){
+      // abrimos flujo
+      sourceFile = new FileInputStream(source);
+      destinationFile = new FileOutputStream(destination);
+      // lectura por segmentos de 0.5Mb
+      //byte buffer[]=new byte[512*1024];
+      byte buffer[]=new byte[9000];
+      int nbLectura;
+      while( (nbLectura = sourceFile.read(buffer)) != -1 ) {
+        destinationFile.write(buffer, 0, nbLectura);
+      } 
+      // copia correcta
+      resultado = true;
       }
-      
-      bufferedOutput.close();*/
-      //coment Comprobar q coinciden los MD5
-      /*return true;
-    }*/
+    } catch( FileNotFoundException f ) {
+    } catch( IOException e ) {
+    } finally {
+      // pase lo que pase, cerramos flujo
+      try {
+        sourceFile.close();
+      } catch(Exception e) { }
+      try {
+        destinationFile.close();
+      } catch(Exception e) { }
+    } 
+    return resultado;
+  }
 }
 
