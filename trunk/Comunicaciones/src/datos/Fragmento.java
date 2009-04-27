@@ -66,7 +66,7 @@ public class Fragmento implements Serializable{
   }
   
   @Override
-    public boolean equals(Object o) {        
+    public boolean equals(Object o) {
       try{
 
         Fragmento f = (Fragmento) o;
@@ -81,8 +81,10 @@ public class Fragmento implements Serializable{
       }catch( Exception e ){
         //Si salta la excepcion en el casting es que no era una instacia de.        
         //e.printStackTrace();
-      }finally{
         return false;
-      }
+      }/*finally{
+        System.out.println("No era un fragmento, error, false");
+        return false;
+      }*/
     }
 }
