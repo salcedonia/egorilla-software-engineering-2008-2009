@@ -17,7 +17,7 @@ import mensajes.serverclient.DatosCliente;
 /**
  * Esta clase implementa el almacén de descargas que contiene todas las descargas
  * que un cliente está efectuando
- * @author Iñaki Goffard
+ * @author Iñaki Goffard, José Miguel Guerrero
  */
 public class AlmacenDescargas {
     
@@ -154,8 +154,8 @@ public class AlmacenDescargas {
      * @param msj Tengo, que es una mensaje que informa de los fragmentos que tiene el cliente
      */
     
-    public void actualizaDescarga (Archivo arch, Tengo msj){
-        
+    public void actualizaDescarga (Tengo msj){
+        Archivo arch=new Archivo(msj.getNombre(),msj.getHash());
         Descarga des = this.buscaDescarga(arch);
         if (des != null) {
             des.actualizaQuienTieneQue(msj);
@@ -218,7 +218,12 @@ public class AlmacenDescargas {
         return _listaDescargas.get(_posListaDescargas);
        
     }
-    
+
+    public boolean fragmentoDescargado(Fragmento frag){
+        Archivo arch=new Archivo(frag.getNombre(),frag.getHash());
+        Descarga desc=buscaDescarga(arch);
+        return desc.fragmentoDescargado(frag);
+    }
     
 
 }

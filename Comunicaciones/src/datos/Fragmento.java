@@ -8,7 +8,7 @@ package datos;
 import java.io.*;
 /**
  * 
- * representa la informaci�n que define un fragmento de un
+ * representa la información que define un fragmento de un
  * fichero.
  *
  * @author Luis Ayuso
@@ -25,7 +25,7 @@ public class Fragmento implements Serializable{
     private String _hash;
     
     /**
-     * tama�o del fragmento
+     * tamaño del fragmento
      */
     private long _tama;
     /**

@@ -14,7 +14,6 @@ import gestorDeRed.NetError;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mensajes.Mensaje;
@@ -24,12 +23,13 @@ import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
-import peerToPeer.descargas.GestorDescargas;
 
 
 import gestorDeFicheros.*;
 import java.util.Iterator;
+import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
+import peerToPeer.descargas.AlmacenDescargas;
 
 
 /**
@@ -41,15 +41,17 @@ public class GestorEgorilla extends Thread{
     
     private Queue<Mensaje> _colaSalida;
    
-    private GestorDescargas _gestorDescargas;
+    //private GestorDescargas _gestorDescargas;
 
-    private GestorSubidas _gestorSubidas;
+//    private GestorSubidas _gestorSubidas;
 
     private GestorDeRed<Mensaje> _gestorDeRed;
     
     private GestorDisco _gestorDisco;
     
     private GestorClientes _gestorClientes;
+
+    private AlmacenDescargas _almacenDescargas;
     
     private boolean _conectado;
     private String  _serverIP;
@@ -60,9 +62,8 @@ public class GestorEgorilla extends Thread{
     //Estructura de datos para almacenar los observadores sobre este objeto.
     private ArrayList<ObservadorGestorEgorilla> _listaObservadores;
 
-    public GestorEgorilla(GestorDescargas gd, GestorDeRed<Mensaje> gr) {
+    public GestorEgorilla(GestorDeRed<Mensaje> gr) {
         _colaSalida = new LinkedList<Mensaje>();
-        _gestorDescargas = gd;
         _gestorDeRed = gr; 
         _gestorClientes = new GestorClientes();
         _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
@@ -70,9 +71,11 @@ public class GestorEgorilla extends Thread{
 
         //En donde se instancia gestorSubidas? No lo veo
         _gestorDisco = new GestorDisco();
-        _gestorSubidas = new GestorSubidas( this, _gestorDisco );
+     //   _gestorSubidas = new GestorSubidas( this, _gestorDisco );
         //inicializo la variable
         _conectado = false;
+
+        _almacenDescargas=new AlmacenDescargas();
     }
     
     /**
@@ -176,7 +179,7 @@ public class GestorEgorilla extends Thread{
      */
     private void comienzaP2P(){
         
-        _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this, _gestorDescargas, _gestorDisco));
+        _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this));
         _gestorDeRed.comienzaEscucha();
         _doP2P = true;
         this.start();
@@ -229,12 +232,12 @@ public class GestorEgorilla extends Thread{
      * @param puerto
      * @param fragmentos
      */
-    public void nuevaSubida(Archivo a, String ip, int puerto, Vector<Fragmento> fragmentos){
+  /*  public void nuevaSubida(Archivo a, String ip, int puerto, Vector<Fragmento> fragmentos){
         //TODO:
         //Para que recibe nuevaSubida la clase Archivo si ya tiene los fragmentos?
         _gestorSubidas.comenzarSubida( ip, puerto, fragmentos );
     }
-           
+    */
     /**
      * se da la orden de comenzar una descarga.
      * esto dispara la colsulta de peers al servidor y 
@@ -243,8 +246,8 @@ public class GestorEgorilla extends Thread{
      * @param a archivo a descargar
      */
     public void nuevaDescarga(Archivo a) {
-        _gestorDescargas.nuevaDescargaPendiente(a);
         
+        _almacenDescargas.nuevaDescarga(a);
         // realizamos una consulta al servidor para saber los propietarios.
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
         
@@ -260,7 +263,7 @@ public class GestorEgorilla extends Thread{
      * @param lista lista de clientes que lo contienen
      */
     public void DescargaFichero(Archivo a, DatosCliente[] lista) {
-        
+        /*
         for (DatosCliente cliente : lista) {
             _gestorClientes.addClienteDescarga(cliente.getIP(), a);
         }
@@ -268,7 +271,8 @@ public class GestorEgorilla extends Thread{
         // TODO: de alguna forma completo esta información preguntando a los clientes
         
         _gestorDescargas.completaInformacion(a._hash, lista);
-         
+        */
+        _almacenDescargas.respuestaPeticionDescarga(a, lista);
     }
   
     /**
@@ -307,6 +311,22 @@ public class GestorEgorilla extends Thread{
 //            this.start();
         this.notify();
     }
+
+    public void actualizaDescarga(Tengo msj){
+        _almacenDescargas.actualizaDescarga(msj);
+    }
+
+    public void fragmentoDescargado(Fragmento f, Byte[] datos){
+        //indicamos primero al gestor de disco que se ha descargado un fragmento
+        if(!_gestorDisco.getEnsamblador().guardarFragmentoEnArchivo(f, datos)){
+            //TODO LANZAR ERROR
+        }
+        //informamos al almacen del fragmento descargado
+        if(!_almacenDescargas.fragmentoDescargado(f)){
+            //TODO LANZAR ERROR
+        }
+    }
+
     
     @Override
     public synchronized void run() {
