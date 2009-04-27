@@ -95,17 +95,15 @@ public class ArchivoClientes {
         } else { //Sino...
 
             for (int i = 0; i < listaArchivos.size(); i++) {
-
                 if (_relacion.containsKey(listaArchivos.get(i)._hash)){
                     // ya lo tenemos, actualizamos su lista
-
                     _relacion.get (listaArchivos.get(i)._hash).add(cliente);
                 }
                 else{
                     // es nuevo, nueva entrada
                     ArrayList<DatosCliente> lista = new ArrayList<DatosCliente>();
                     lista.add(cliente);
-
+                    _archivos.add(listaArchivos.get(i));
                     _relacion.put(listaArchivos.get(i)._hash, lista);
                 }
             }
@@ -131,7 +129,7 @@ public class ArchivoClientes {
      * @return
      */
     public int getNumeroArchivos() {
-        return _relacion.size();
+        return _archivos.size();
     }
 
     /**
@@ -231,7 +229,7 @@ public class ArchivoClientes {
             return l;
         }
         else
-            return null;
+            return new DatosCliente[0];
     }
 
     /**
@@ -246,10 +244,10 @@ public class ArchivoClientes {
         ArrayList<DatosCliente> eso;
 
         for (Archivo archivo : _archivos) {
-            eso = _relacion.get(archivo);
+            eso = _relacion.get(archivo._hash);
             if (eso != null) {
                 eso.remove(datos);
-                if (_relacion.get(archivo).size() == 0) {
+                if (eso.size() == 0) {
                     //nos hemos quedado sin propietarios para el archivo, lo borramos
                     tmp.add(archivo);
                 }
@@ -257,6 +255,7 @@ public class ArchivoClientes {
         }
         for (Archivo archivo : tmp) {
             _archivos.remove(archivo);
+            _relacion.remove(archivo.getHash());
         }
     }
 }
