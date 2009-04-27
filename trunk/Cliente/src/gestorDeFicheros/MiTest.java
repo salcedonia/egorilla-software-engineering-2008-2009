@@ -15,13 +15,16 @@ public class MiTest {
     Ensamblador ensamblador = gestorDisco.getEnsamblador();
 
     String hashBueno = "1fde78d1baadbfb3c2554f3651b40330";
-    Vector<Fragmento> fragmentosBueno;
+    Vector<Fragmento> fragmentosTengoBueno;
     //framentos de un fichero completo
-    fragmentosBueno = fragmentador.queFragmentosTienes( hashBueno );
-    System.out.println( "cantidadFragmentosBueno "+fragmentosBueno.size() );
-    for( int i = 0;  i < fragmentosBueno.size();  i++ ){
-      System.out.println( fragmentosBueno.get( i ).toString() );
-    }    
+    fragmentosTengoBueno = fragmentador.queFragmentosTienes( hashBueno );
+    System.out.println( "cantidadFragmentosTengoBueno "+fragmentosTengoBueno.size() );
+    for( int i = 0;  i < fragmentosTengoBueno.size();  i++ ){
+      System.out.println( fragmentosTengoBueno.get( i ).toString() );
+    }
+    Vector<Fragmento> fragmentosFaltanBueno = fragmentador.queFragmentosFaltan( hashBueno );
+    System.out.println( "cantidadFragmentosFaltanBueno "+fragmentosFaltanBueno.size() );
+    System.out.println();
 
     //framentos de un fichero que no existe
     String hashMalo = "1fde78d1baadbfb3c2554f3651b40331";
@@ -53,35 +56,35 @@ public class MiTest {
       //System.out.println( fragmentos.get( i ).toString() );
     }
 
-    System.out.println( "cantidadFragmentosBueno "+fragmentosBueno.size() );
-    Byte[] bytesFragmento3 = fragmentador.dameBytesDelFragmento( fragmentosBueno.get( 3 ) );
-    Byte[] bytesFragmento0 = fragmentador.dameBytesDelFragmento( fragmentosBueno.get( 0 ) );
-    Byte[] bytesFragmento11 = fragmentador.dameBytesDelFragmento( fragmentosBueno.get( 11 ) );
-    Byte[] bytesFragmento16 = fragmentador.dameBytesDelFragmento( fragmentosBueno.get( 16 ) );
-    Byte[] bytesFragmento6 = fragmentador.dameBytesDelFragmento( fragmentosBueno.get( 6 ) );
+    System.out.println( "cantidadFragmentosBueno "+fragmentosTengoBueno.size() );
+    Byte[] bytesFragmento3 = fragmentador.dameBytesDelFragmento( fragmentosTengoBueno.get( 3 ) );
+    Byte[] bytesFragmento0 = fragmentador.dameBytesDelFragmento( fragmentosTengoBueno.get( 0 ) );
+    Byte[] bytesFragmento11 = fragmentador.dameBytesDelFragmento( fragmentosTengoBueno.get( 11 ) );
+    Byte[] bytesFragmento16 = fragmentador.dameBytesDelFragmento( fragmentosTengoBueno.get( 16 ) );
+    Byte[] bytesFragmento6 = fragmentador.dameBytesDelFragmento( fragmentosTengoBueno.get( 6 ) );
     System.out.println( "bF2:"+bytesFragmento3.length+" bF0:"+bytesFragmento0.length+" bF11:"+
         bytesFragmento11.length+" bF16:"+ bytesFragmento16.length+" bF6:"+ bytesFragmento6.length);
     //Comprobar al menos que no salen null cuando deberían funcionar
     //Y que son lecturas de 512 menos, posiblemente, el ultimo fragmento del fichero
 
     //Pido los bytes de un fragmento con hash malo de NO existir
-    Fragmento fragmentoErroneoHash = new Fragmento( fragmentosBueno.get( 1 ).getNombre(), 
-        "1fde78d1baadbfb3c2554f3651b40331", fragmentosBueno.get( 1 ).getTama(), 
-        fragmentosBueno.get( 1 ).getOffset() );
+    Fragmento fragmentoErroneoHash = new Fragmento( fragmentosTengoBueno.get( 1 ).getNombre(), 
+        "1fde78d1baadbfb3c2554f3651b40331", fragmentosTengoBueno.get( 1 ).getTama(), 
+        fragmentosTengoBueno.get( 1 ).getOffset() );
     Byte[] bytesFragmentoErroneoHash = fragmentador.dameBytesDelFragmento( fragmentoErroneoHash );
     System.out.println( "bFErroneoHash:"+bytesFragmentoErroneoHash );
 
     //Pido los bytes de un fragmento con hash malo de existir en otro file
-    Fragmento fragmentoErroneoHash2 = new Fragmento( fragmentosBueno.get( 1 ).getNombre(), 
-        fragmentosBueno.get( 4 ).getHash(), fragmentosBueno.get( 1 ).getTama(), 
-        fragmentosBueno.get( 1 ).getOffset() );
+    Fragmento fragmentoErroneoHash2 = new Fragmento( fragmentosTengoBueno.get( 1 ).getNombre(), 
+        fragmentosTengoBueno.get( 4 ).getHash(), fragmentosTengoBueno.get( 1 ).getTama(), 
+        fragmentosTengoBueno.get( 1 ).getOffset() );
     Byte[] bytesFragmentoErroneoHash2 = fragmentador.dameBytesDelFragmento( fragmentoErroneoHash2 );
     System.out.println( "bFErroneoHash2:"+bytesFragmentoErroneoHash2 );
 
     //Pido los bytes de un fragmento con offset malo
-    Fragmento fragmentoErroneoOffset = new Fragmento( fragmentosBueno.get( 1 ).getNombre(), 
-        fragmentosBueno.get( 1 ).getHash(), fragmentosBueno.get( 1 ).getTama(), 
-        fragmentosBueno.get( 16 ).getOffset() );
+    Fragmento fragmentoErroneoOffset = new Fragmento( fragmentosTengoBueno.get( 1 ).getNombre(), 
+        fragmentosTengoBueno.get( 1 ).getHash(), fragmentosTengoBueno.get( 1 ).getTama(), 
+        fragmentosTengoBueno.get( 16 ).getOffset() );
     Byte[] bytesFragmentoErroneoOffset = fragmentador.dameBytesDelFragmento( fragmentoErroneoOffset );
     System.out.println( "bFErroneoOffset:"+bytesFragmentoErroneoOffset );
     //Hacer mas pruebas de este
@@ -104,6 +107,7 @@ public class MiTest {
       System.out.println( fragmentosActualesComJar.get( i ).toString() );
     }
 
+    //Simulo la ensamblacion de un archivo
     String nombreFilePeli= "ComoPencarJunio.avi";
     File filePeli = new File( nombreFilePeli );
     String hashPeli = MD5Sum.getFileMD5Sum( filePeli );
@@ -115,12 +119,68 @@ public class MiTest {
     RandomAccessFile punteroFicheroRead = new RandomAccessFile( filePeli, "r" );
     byte[] bytesFragmentoA = new byte[ 512 ], bytesFragmentoB = new byte[ 512 ],
         bytesFragmentoC = new byte[ 469 ];
-    punteroFicheroRead.seek( 512 );
-    punteroFicheroRead.read( bytesFragmentoB ); //leo los 512
+    punteroFicheroRead.seek( 1024 );
+    punteroFicheroRead.read( bytesFragmentoC ); //leo los 469
     punteroFicheroRead.seek( 0 );
     punteroFicheroRead.read( bytesFragmentoA ); //leo los 512
-    punteroFicheroRead.seek( 1024 );
-    punteroFicheroRead.read( bytesFragmentoA ); //leo los 469
+    punteroFicheroRead.seek( 512 );
+    punteroFicheroRead.read( bytesFragmentoB ); //leo los 512
+
+    Fragmento fragmentoA = new Fragmento( filePeli.getName(), hashPeli, filePeli.length(), 0 ), 
+              fragmentoB = new Fragmento( filePeli.getName(), hashPeli, filePeli.length(), 512 ),
+              fragmentoC = new Fragmento( filePeli.getName(), hashPeli, filePeli.length(), 1024 );
+
+    Vector<Fragmento> fragmentosPeli = fragmentador.queFragmentosTienes( hashPeli );
+    System.out.println( "cantidadFragmentosTengoActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+    fragmentosPeli = fragmentador.queFragmentosFaltan( hashPeli );
+    System.out.println( "cantidadFragmentosFaltanActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+
+
+    ensamblador.guardarFragmentoEnArchivo( fragmentoC, primitivoAObjeto( bytesFragmentoC ) );
+
+    fragmentosPeli = fragmentador.queFragmentosTienes( hashPeli );
+    System.out.println( "cantidadFragmentosTengoActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+    fragmentosPeli = fragmentador.queFragmentosFaltan( hashPeli );
+    System.out.println( "cantidadFragmentosFaltanActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+
+    ensamblador.guardarFragmentoEnArchivo( fragmentoA, primitivoAObjeto( bytesFragmentoA ) );
+
+    fragmentosPeli = fragmentador.queFragmentosTienes( hashPeli );
+    System.out.println( "cantidadFragmentosTengoActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+    fragmentosPeli = fragmentador.queFragmentosFaltan( hashPeli );
+    System.out.println( "cantidadFragmentosFaltanActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+
+    ensamblador.guardarFragmentoEnArchivo( fragmentoB, primitivoAObjeto( bytesFragmentoB ) );
+
+    fragmentosPeli = fragmentador.queFragmentosTienes( hashPeli );
+    System.out.println( "cantidadFragmentosTengoActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+    fragmentosPeli = fragmentador.queFragmentosFaltan( hashPeli );
+    System.out.println( "cantidadFragmentosFaltanActualesPeli "+fragmentosPeli.size() );
+    for( int i = 0;  i < fragmentosPeli.size();  i++ ){
+      System.out.println( fragmentosPeli.get( i ).toString() );
+    }
+    
     punteroFicheroRead.close();
     }catch(Exception e){}
 
@@ -131,5 +191,16 @@ public class MiTest {
     //probar otro que solo le falta un fragmento y q el utlimo fragmento este mal
     //(no coincidira el hash final)
 
+  }
+
+  private static Byte[] primitivoAObjeto( byte[] bytes ){
+    Byte[] oBytesFragmento = new Byte[ bytes.length ];
+
+    for( int i = 0;  i < bytes.length;  i++ ){
+      //oBytesFragmento[ i ] = new Byte( bytes[ i ] );
+      oBytesFragmento[ i ] = Byte.valueOf( bytes[ i ] );
+    }
+
+    return oBytesFragmento;
   }
 }

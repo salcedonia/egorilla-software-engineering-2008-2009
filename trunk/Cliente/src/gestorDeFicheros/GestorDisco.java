@@ -10,6 +10,7 @@ import datos.*;
  */
 public class GestorDisco {
 
+  
   //Sacar valores de properties
   //Puede ser un array de directorio temporales
   private String _directorioTemporales = "temp";
@@ -71,7 +72,7 @@ public class GestorDisco {
       //Debo recorrer los archivos de indices y no los archivos temporales
       for( File f : ficherosTemporales){
         if( f.isFile() == true ) { //Creo que no hace falta esta comprobación
-          //TODO: _listaTemporales.add( procesarArchivosIndices( f ) );
+          _listaTemporales.add( procesarArchivoIndices( f ) );
         }//Sino es fichero no le aniado
       }
       recorrerListaArchivos( _listaTemporales );
@@ -198,11 +199,43 @@ public class GestorDisco {
         }
         return new Archivo(nombre, MD5Sum.getFileMD5Sum(f), f.length(), _tipo);
     }
+
+    public Archivo procesarArchivoIndices(File f) /*throws IOException*/ {
+      Indices indices = leeFicheroIndices( f );
+      return indices.getArchivo();
+    }
+
+    private Indices leeFicheroIndices( File fichero ){
+    Indices indices = null;
+    try{
+    //Deserializo el Array de fragmentos de archivo de indices
+    FileInputStream ficheroIndices = new FileInputStream( fichero );
+    byte[] bytes = new byte[ (int)fichero.length() ];        
+    int byteIndicesLeidos = ficheroIndices.read( bytes );
+    ficheroIndices.close();
+    //para el ensamblador q es el q guarda, seria mejor guardar los bytes adicionales, es
+    //decir, guadar los ultimos fragmentos añadidos, aunque me parece q sera mas facil, xo
+    //ineficiente, recuperar el array de fragmentos anterior, añadir los fragmentos, y
+    //sobreescribir todo
+       
+    ByteArrayInputStream bs = new ByteArrayInputStream( bytes ); // bytes es el byte[]
+    ObjectInputStream is = new ObjectInputStream( bs );
+    indices = (Indices)is.readObject();
+    is.close();
+    }catch( Exception e ){
+      e.printStackTrace();
+      return indices;
+    }
+    return indices;
+  }
 }
 
 class PartMetFileFilter implements FileFilter {
+
+  private String extesionIndices = ".part.met";
+
     public boolean accept(File f) {
-      return f.getName().toLowerCase().endsWith(".part.met");
+      return f.getName().toLowerCase().endsWith( extesionIndices );
         //return f.isDirectory() || f.getName().toLowerCase().endsWith(".part.met");
     }
     
