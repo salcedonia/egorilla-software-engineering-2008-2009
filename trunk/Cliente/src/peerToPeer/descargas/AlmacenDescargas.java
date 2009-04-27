@@ -163,22 +163,18 @@ public class AlmacenDescargas {
         
     }
     
-    /**
-     * Método que va actualizando (eliminando) fragmentos en la descarga correspondiente
-     * del archivo arch conforme le van llegando nuevos mensajes Toma
-     * @param arch Archivo de la descarga
-     * @param msj Toma, que proporciona un nuevo fragmento (y será uno menos pendiente para la descarga)
-     */
     
-    public void actualizaFragmentosPendientes (Archivo arch, Toma msj){
+    
+    /*public void actualizaFragmentosPendientes (Archivo arch, Toma msj){
         
          Descarga des = this.buscaDescarga(arch);
          if (des != null){
              //des.eliminaFragmentos(msj);
          }
         
-    }
+    }*/
     
+    @Deprecated
     public void actualizaFragmentosEnsamblador (Archivo arch, Toma msj){
         
         //TODO: Al parecer finalmente se hablará con el gestorCompartidos (es un singelton)
@@ -218,11 +214,31 @@ public class AlmacenDescargas {
         return _listaDescargas.get(_posListaDescargas);
        
     }
+    
+    /**
+     * Método que va actualizando (eliminando) fragmentos en la descarga correspondiente
+     * del archivo arch conforme le van llegando nuevos mensajes Toma
+     * @param frag Fragmento a eliminar de la lista de pendientes
+     */
 
     public boolean fragmentoDescargado(Fragmento frag){
         Archivo arch=new Archivo(frag.getNombre(),frag.getHash());
         Descarga desc=buscaDescarga(arch);
-        return desc.fragmentoDescargado(frag);
+        boolean respuesta = false;
+        if (desc != null){
+            //Primero enviamos el fragmento a disco para que sea escrito
+            //En principio supongo que a través de la interfaz GestorCompartidos
+            GestorCompartidos gestComp = GestorCompartidos.getInstancia();
+            /* La siguiente función (fragmentoDescargado(frag) está por hacer, pero consistiría sólo
+             * en añadirla en la interfaz de GestorCompartidos, y que ésta a su vez
+             * llamara a la función dameBytesDelFragmento(frag) para así llamar a la
+             * función guardarFragmentoEnArchivo(frag,bytesFragmento) del Ensamblador
+             * y que así guarde frag en disco */
+            // TODO : gestComp.fragmentoDescargado(frag);
+            //Eliminamos el fragmento de la lista de pendientes de la descarga
+            respuesta = desc.fragmentoDescargado(frag);
+        }
+        return respuesta;
     }
     
 
