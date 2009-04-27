@@ -5,9 +5,13 @@
 
 package peerToPeer.descargas;
 
-import datos.Archivo;
 import datos.Fragmento;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Vector;
+import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
+import peerToPeer.descargas.Descarga.Cliente;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -16,78 +20,61 @@ import peerToPeer.egorilla.GestorEgorilla;
  */
 public class Descargador{
 
+        private final int MAX_PEDIDOS=5;
+        private final int MAX_INTENTOS=30;
         private Descarga _descargaActual=null;
         private GestorEgorilla _gestor=null;
+        private AlmacenDescargas _almacen=null;
+        private ArrayList<Integer>  _fragmentosPedidos=null;
 
-        public Descargador(GestorEgorilla gestor){
+        public Descargador(GestorEgorilla gestor, AlmacenDescargas almacen){
             _gestor=gestor;
+            _almacen=almacen;
+            _fragmentosPedidos=new ArrayList<Integer>();
         }
 
-        /**
-         * Comprueba si el fragmento "contenido" esta dentro completamente de "contiene"
-         *
-         * @param contiene Fragmento en el que comprobar si esta dentro.
-         * @param contenido Fragmento que queremos ver si esta contenido en "contiene"
-         * @return true si esta contenido completamente, false en otro caso.
-         */
-        public boolean fragmentoContenidoCompleto(Fragmento contiene,Fragmento contenido){
-            long inicioContiene=contiene.getOffset();
-            long finContiene=inicioContiene+contiene.getTama();
-
-            long inicioContenido=contenido.getOffset();
-            long finContenido=inicioContiene+contenido.getTama();
-
-            if((inicioContenido>=inicioContiene)&&(finContenido<=finContiene)){
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Comprueba si el fragmento "contenido" esta dentro, completo o parcial, de "contiene"
-         *
-         * @param contiene Fragmento en el que comprobar si esta dentro.
-         * @param contenido Fragmento que queremos ver si esta contenido en "contiene"
-         * @return Fragmento, que fragmento tiene "contiene" de "contenido".
-         */
-        public Fragmento fragmentoContenidoParcial(Fragmento contiene,Fragmento contenido){
-            Fragmento fragmento=null;
-            long inicioContiene=contiene.getOffset();
-            long finContiene=inicioContiene+contiene.getTama();
-
-            long inicioContenido=contenido.getOffset();
-            long finContenido=inicioContiene+contenido.getTama();
-
-            if((inicioContenido>=inicioContiene)||(finContenido<=finContiene)){
-                long tama;
-                long offset;
-                if(fragmentoContenidoCompleto(contiene,contenido)){
-                    return contenido;
-                }
-                if(inicioContenido>=inicioContiene){
-                    offset=inicioContenido;
-                    tama=finContiene;
-                }else{
-                    offset=inicioContiene;
-                    tama=finContenido;
-                }
-                Archivo arch=_descargaActual.getArchivo();
-                fragmento=new Fragmento(arch.getNombre(),arch.getHash(),tama,offset);
-                return fragmento;
-            }
-            return null;
-        }
 
 
         public void iniciar(){
-            //_descargaActual= Almacen.dameSiguiente();
+            _descargaActual=_almacen.dameSiguiente();
+
             if(_descargaActual.getEstado()==0){
                 HolaQuiero mensaje=new HolaQuiero(_descargaActual.getArchivo());
                 _gestor.addMensajeParaEnviar(mensaje);
                 _descargaActual.reiniciarEstado();
             }else{
-                // TODO buscar fragmentos para pedir, generar DAME y enviar
+                Vector<Fragmento> listado=_descargaActual.getListaFragmentosPendientes();
+                Random aleatorio=new Random();
+                while(_fragmentosPedidos.size()<MAX_PEDIDOS){
+                    int intentos=0;
+                    //obtengo uno de los fragmentos de forma aleatoria
+                    int fragmentoAPedir=((int)(aleatorio.nextDouble() * listado.size()));
+                    //mientras no haya pedido ese fragmento, la lista de pedidos sea
+                    //menor de tamaño que los que necesito (si fuera igual se supone que hemos
+                    //pedido el numero maximo de los que podemos) y no hayamos agotado los intentos de pedir
+                    while((_fragmentosPedidos.indexOf(fragmentoAPedir)!=-1)&&(listado.size()>_fragmentosPedidos.size())&&(intentos<MAX_INTENTOS)){
+                        //pedimos otro hasta el maximo de intentos
+                        fragmentoAPedir=((int)(aleatorio.nextDouble() * listado.size()));
+                        intentos++;
+                    }
+                    //si realmente no esta en la lista es que podemos pedirlo
+                    if(_fragmentosPedidos.indexOf(fragmentoAPedir)!=-1){
+                        //generamos los valores para el mensaje
+                        Fragmento frag=listado.get(fragmentoAPedir);
+                        String nombre=_descargaActual.getArchivo().getNombre();
+                        String hash=_descargaActual.getArchivo().getHash();
+                        Cliente cli=_descargaActual.dameClienteQueTiene(frag);
+                        //creamos el mensaje
+                        Dame mensajeDame=new Dame(nombre,hash,frag,cli.getIP(),cli.getPuerto());
+                        //lo añadimos para el envio
+                        _gestor.addMensajeParaEnviar(mensajeDame);
+                    }
+                }
+                _fragmentosPedidos=new ArrayList<Integer>();
                 _descargaActual.decrementarEstado();
             }
         }
+
+
+
 }

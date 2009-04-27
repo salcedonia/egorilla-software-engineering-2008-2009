@@ -12,7 +12,6 @@ import java.util.*;
 import mensajes.Mensaje;
 import mensajes.p2p.*;
 import mensajes.serverclient.RespuestaPeticionDescarga;
-import peerToPeer.descargas.GestorDescargas;
 import gestorDeFicheros.*;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 
@@ -27,12 +26,12 @@ import mensajes.serverclient.RespuestaPeticionConsulta;
  * en un hilo paralelo, para permitir la concurrencia, ahora mismo no
  * lo hace y esto sera una perdida de rendimiento
  * 
- * @author Luis Ayuso
+ * @author Luis Ayuso, José Miguel Guerrero
  */
 public class ServidorP2PEgorilla implements Receptor<Mensaje>{
 
     private GestorEgorilla _gestor;
-    private GestorDescargas _descargas;
+    //private GestorDescargas _descargas;
 
     //private GestorDisco _gestorDisco; pasado al GestorEgorilla
 
@@ -49,9 +48,9 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
      * @param gE gestor eGorilla
      * @param gD bestor de descargas
      */
-    public ServidorP2PEgorilla(GestorEgorilla gE, GestorDescargas gD, GestorDisco gestorDisco ) {
+    public ServidorP2PEgorilla(GestorEgorilla gE) {
        _gestor = gE;
-       _descargas = gD;
+       //_descargas = gD;
        //Tal vez no sea el mejor sitio para iniciar el gestorDisco, mejor antes para que se pueda
        //ver los temporales y compartidos sin tener q instanciar el servidor.
        //_gestorDisco = new GestorDisco();
@@ -90,7 +89,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
             case Dame:
                 
-                // Apunto para servir m�s adelante.
+                // Apunto para servir más adelante.
                 Dame msjDame = (Dame) msj;
               
                 // TODO: en este punto debemos hacer algo que evalue los fragmentos
@@ -101,11 +100,13 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 // indico al gestor de subidas que vot a subir determinados fragmentos 
                 // de un fichero a un peer identificado por ip.
-                Archivo archivo = new Archivo( msjDame.getNombre(), msjDame.getHash() );
-                _gestor.nuevaSubida( archivo, ip, port, msjDame.getFragmentos() );
+                //Archivo archivo = new Archivo( msjDame.getNombre(), msjDame.getHash() );
+                //_gestor.nuevaSubida( archivo, ip, port, msjDame.getFragmentos() );
                 
                 // YA SE CONTESTARA CON TOMA, no aki
-                
+                Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
+                Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),0,informacion,ip,port);
+                _gestor.addMensajeParaEnviar(mensajeToma);
                 break;
                 
                 
@@ -150,16 +151,16 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 // comprobar al menos que no estemos hablando un conjunto vacio
                 // en ese caso es que el peer no tiene el archivo que buscamos
-                Dame respuesta =  new Dame( reciv.getHash(), reciv.getNombre(), reciv.getFragmentos() );
+                //Dame respuesta =  new Dame( reciv.getHash(), reciv.getNombre(), reciv.getFragmentos() );
                 
                 // CONTESTA dame
-                _gestor.addMensajeParaEnviar(respuesta);
-                
+                //_gestor.addMensajeParaEnviar(respuesta);
+                _gestor.actualizaDescarga(reciv);
                 break;
                 
                 
             case Toma:
-                // este es el m�s importante, no es la negociacion, es el envio
+                // este es el más importante, no es la negociacion, es el envio
                 // de paquetes
                 
                 // conozco al peer??
@@ -169,6 +170,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                                 
                 Fragmento f = new Fragmento( paquete.getNombre(), paquete.getHash(),
                     paquete.getParte().length, paquete.getOffset() );
+                _gestor.fragmentoDescargado(f,paquete.getParte());
                 /*f.hash   = paquete.hash;
                 f.nombre = paquete.nombre;
                 f.offset = paquete.offset;

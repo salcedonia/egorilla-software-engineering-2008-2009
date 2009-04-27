@@ -4,7 +4,7 @@ import datos.Archivo;
 import gestorDeRed.GestorDeRed;
 import gui.consola.GUIConsola;
 import mensajes.Mensaje;
-import peerToPeer.descargas.GestorDescargas;
+//import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -24,7 +24,7 @@ public class ControladorConsola {
     /**
      * Gestor de descargas de la aplicación.
      */
-    private GestorDescargas _gestorDeDescargas;
+//    private GestorDescargas _gestorDeDescargas;
     /**
      * Gestor eGorilla.
      */
@@ -42,10 +42,10 @@ public class ControladorConsola {
      * @param gestorDeDescargas Gestor de descargas.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorDescargas gestorDeDescargas, GestorEgorilla gestorEgorilla) {
+    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla) {
         
         _gestorDeRed = gestorDeRed;
-        _gestorDeDescargas = gestorDeDescargas;
+        //_gestorDeDescargas = gestorDeDescargas;
         _gestorDeEgorilla = gestorEgorilla;
     }
 

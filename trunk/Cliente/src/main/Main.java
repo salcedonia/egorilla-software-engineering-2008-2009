@@ -17,7 +17,6 @@ import jargs.gnu.CmdLineParser.UnknownOptionException;
 import mensajes.Mensaje;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -53,17 +52,17 @@ public class Main {
 
             GestorDeRed<Mensaje> gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(iPuerto);
             GestorDisco gestorDeDisco = new GestorDisco();
-            GestorDescargas gestorDeDescargas = new GestorDescargas(gestorDeDisco);
+            //GestorDescargas gestorDeDescargas = new GestorDescargas(gestorDeDisco);
             GestorCompartidos gestorDeCompartidos = GestorCompartidos.getInstancia();
             gestorDeCompartidos.setGestorDisco(gestorDeDisco);
-            GestorEgorilla gestorEGorilla = new GestorEgorilla(gestorDeDescargas, gestorDeRed);
+            GestorEgorilla gestorEGorilla = new GestorEgorilla(gestorDeRed);
             ControlDeSucesos sucesos = ControlDeSucesos.dameInstancia();
 
             if (modo.equalsIgnoreCase("consola")) {
-                ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorDeDescargas, gestorEGorilla);
+                ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorEGorilla);
                 new GUIConsola(controladorConsola);
             } else if (modo.equalsIgnoreCase("grafico") || modo.equals("")) {
-                ControladorGrafica controladorGrafica = new ControladorGrafica(gestorDeRed, gestorDeDescargas, gestorEGorilla);
+                ControladorGrafica controladorGrafica = new ControladorGrafica(gestorDeRed, gestorEGorilla);
                 new GUIGrafica(controladorGrafica);
             } else {
                 throw new Exception("Parametro introducidos no valido");

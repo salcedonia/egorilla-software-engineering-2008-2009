@@ -65,4 +65,13 @@ public class GestorCompartidos {
     public Byte[] dameBytesDelFragmento( Fragmento frag ){
         return _fragmentador.dameBytesDelFragmento(frag);
     }
+    /**
+     * Metodo para consultar fragmentos pendientes de un determinado archivo.
+     * @param hash - Codigo hash del fichero.
+     * @return Vector<Fragmento> del fichero indicado en el hash.
+     */
+    public Vector<Fragmento> queFragmentosTienesPendientes( String hash ){
+        return _fragmentador.queFragmentosFaltan(hash);
+    }
+
 }

@@ -6,35 +6,34 @@
 package mensajes.p2p;
 
 import java.io.Serializable;
-import java.util.*;
 import mensajes.TipoMensaje;
 import mensajes.Mensaje;
 import datos.Fragmento;
 
 /**
  *
- * @author Luis Ayuso
+ * @author Luis Ayuso, José Miguel Guerrero
  */
 public class Dame implements Mensaje, Serializable{
     
     private String _nombre;
     private String _hash;    
-    private Vector<Fragmento> _fragmentos;    
+    private Fragmento _fragmento;    
     private String _destino;
     private int    _puerto;
 
-    public Dame( String nombre, String hash, Vector<Fragmento> fragmentos, String destino, int puerto ){
+    public Dame( String nombre, String hash, Fragmento fragmento, String destino, int puerto ){
     _nombre = nombre;
     _hash = hash;
-    _fragmentos = fragmentos;
+    _fragmento = fragmento;
     _destino = destino;
     _puerto = puerto;
   }
 
-  public Dame( String nombre, String hash, Vector<Fragmento> fragmentos ){
+  public Dame( String nombre, String hash, Fragmento fragmento ){
     _nombre = nombre;
     _hash = hash;
-    _fragmentos = fragmentos;
+    _fragmento = fragmento;
   }
 
   public String getNombre(){
@@ -45,8 +44,8 @@ public class Dame implements Mensaje, Serializable{
     return _hash;
   }
 
-  public Vector<Fragmento> getFragmentos(){
-    return _fragmentos;
+  public Fragmento getFragmento(){
+    return _fragmento;
   }
 
     public TipoMensaje getTipoMensaje() {

@@ -2,7 +2,7 @@ package control;
 
 import gestorDeRed.GestorDeRed;
 import mensajes.Mensaje;
-import peerToPeer.descargas.GestorDescargas;
+//import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -21,7 +21,7 @@ public class ControladorGrafica {
     /**
      * Gestor de descargas de la aplicación.
      */
-    private GestorDescargas _gestorDeDescargas;
+    //private GestorDescargas _gestorDeDescargas;
     /**
      * Gestor eGorilla.
      */
@@ -35,10 +35,10 @@ public class ControladorGrafica {
      * @param gestorDeDescargas Gestor de descargas de la aplicación.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorGrafica(GestorDeRed<Mensaje> gestorDeRed, GestorDescargas gestorDeDescargas, GestorEgorilla gestorEgorilla){
+    public ControladorGrafica(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla){
     
         _gestorDeRed = gestorDeRed;
-        _gestorDeDescargas = gestorDeDescargas;
+        //_gestorDeDescargas = gestorDeDescargas;
         _gestorDeEgorilla = gestorEgorilla;
     }
     
