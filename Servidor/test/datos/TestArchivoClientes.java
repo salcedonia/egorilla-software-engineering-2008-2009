@@ -117,6 +117,33 @@ public class TestArchivoClientes {
         assertEquals(1,ac.getPropietarios(a2._hash).length);
         assertEquals(1,ac.getPropietarios(a1._hash).length);
 
-    }
+        // busquedas de propieatarios erroneas
+        assertEquals(0,ac.getPropietarios("no exite").length);
 
+        // eliminamos un pavo
+        ac.eliminaPropietario(c1);
+        assertEquals(0,ac.buscar(a1._nombre).length);
+        assertEquals(1,ac.getPropietarios(b1._hash).length);
+        assertEquals(2,ac.getPropietarios(b3._hash).length);
+
+        // quedan 2 clientes dentro
+        assertEquals(2, ac.getNumeroClientes());
+        // quedan 5 ficheros dentro
+        assertEquals(5, ac.getNumeroArchivos());
+
+        //eliminamos todos
+        ac.eliminaPropietario(c2);
+        ac.eliminaPropietario(c3);
+
+        assertEquals(0,ac.buscar(a1._nombre).length);
+        assertEquals(0,ac.buscar(a2._nombre).length);
+        assertEquals(0,ac.buscar(a3._nombre).length);
+
+        assertEquals(0,ac.buscar(b1._nombre).length);
+        assertEquals(0,ac.buscar(b2._nombre).length);
+        assertEquals(0,ac.buscar(b3._nombre).length);
+
+        // propietarios con hash no existente
+        assertEquals(0, ac.getPropietarios("no exite").length);
+    }
 }
