@@ -226,15 +226,6 @@ public class AlmacenDescargas {
         Descarga desc=buscaDescarga(arch);
         boolean respuesta = false;
         if (desc != null){
-            //Primero enviamos el fragmento a disco para que sea escrito
-            //En principio supongo que a través de la interfaz GestorCompartidos
-            GestorCompartidos gestComp = GestorCompartidos.getInstancia();
-            /* La siguiente función (fragmentoDescargado(frag) está por hacer, pero consistiría sólo
-             * en añadirla en la interfaz de GestorCompartidos, y que ésta a su vez
-             * llamara a la función dameBytesDelFragmento(frag) para así llamar a la
-             * función guardarFragmentoEnArchivo(frag,bytesFragmento) del Ensamblador
-             * y que así guarde frag en disco */
-            // TODO : gestComp.fragmentoDescargado(frag);
             //Eliminamos el fragmento de la lista de pendientes de la descarga
             respuesta = desc.fragmentoDescargado(frag);
         }
