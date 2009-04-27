@@ -110,7 +110,7 @@ public class Ensamblador extends ManejarListaArchivos {
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
             + extesionIndices );
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
-        crearFicheroIndices( fichero );
+        crearFicheroIndices( fichero, archivoNuevo );
         //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );   
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
@@ -132,9 +132,24 @@ public class Ensamblador extends ManejarListaArchivos {
     return creado;
   }
 
+  public Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
+    Vector<Fragmento> listaFragmento = new Vector<Fragmento>();
+   
+    Fragmento fragmento = new Fragmento( archivo.getNombre(), 
+          archivo.getHash(), archivo.getSize(), 0 ); //0 por ser el primero
+      listaFragmento.add( fragmento );
+      for( int i = 1; fragmento.getOffset()+tamanioBytesFragmento < fragmento.getTama(); i++ ){
+        fragmento = new Fragmento( archivo.getNombre(),archivo.getHash(), 
+            archivo.getSize(), i*tamanioBytesFragmento );
+        listaFragmento.add( fragmento );
+      }
+      return listaFragmento;
+  }
 
-  private void crearFicheroIndices( File fichero ){
-    Indices indices = new Indices();
+  private void crearFicheroIndices( File fichero, Archivo archivo ){
+    Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
+      fragFaltan = fragmentosArchivoNuevo( archivo );
+    Indices indices = new Indices( archivo, fragTengo, fragFaltan );
     try{      
       ByteArrayOutputStream bs = new ByteArrayOutputStream();
       ObjectOutputStream os = new ObjectOutputStream( bs );
@@ -253,7 +268,7 @@ public class Ensamblador extends ManejarListaArchivos {
       fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
             + extesionIndices );
       Indices indices = leeFicheroIndices( fichero );
-      indices.add( fragmento );
+      indices.addTengo( fragmento );
       guardarFicheroIndices( fichero, indices );
 
       }catch( Exception e ){

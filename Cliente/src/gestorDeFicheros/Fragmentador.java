@@ -117,7 +117,7 @@ public class Fragmentador extends ManejarListaArchivos {
         Indices indices = leeFicheroIndices( fichero );
         
         //Miro si el fragmento está en ese array
-        if( indices.contains( fragmento ) == true ){
+        if( indices.containsTengo( fragmento ) == true ){
           //Si esta -> Obtengo los bytes del fragmento que me han pedido
           try{
           punteroFichero = new RandomAccessFile( fichero, "r" );
@@ -230,7 +230,7 @@ public class Fragmentador extends ManejarListaArchivos {
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + extesionIndices );
         Indices indices = leeFicheroIndices( fichero );
-        listaFragmento = indices.getIndices();
+        listaFragmento = indices.getIndicesTengo();
       }
     }else{
       System.out.println("Si esta en los completos");
@@ -239,6 +239,7 @@ public class Fragmentador extends ManejarListaArchivos {
       //recarcular ni volver a crear todos los objetos o guardarlo en mem.
       //Puedo calcular la cantidad de partes si los bytes del mismo sin fijos
       //Si es variable mejor con un while
+      //TODO: metodo ya creado por ahi
       listaFragmento = new Vector<Fragmento>();
       Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
           archivoRequerido.getHash(), archivoRequerido.getSize(), 0 ); //0 por ser el primero
@@ -278,12 +279,13 @@ public class Fragmentador extends ManejarListaArchivos {
       archivoRequerido = buscarArchivoEnLista( _listaTemporales, hash );
       if( archivoRequerido == null ){
         //El fichero no EXISTE - devuelvo un null - ERROR
+        System.out.println("No esta en los temporales tampoco - ERROR");
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + extesionIndices );
         Indices indices = leeFicheroIndices( fichero );
-        listaFragmento = indices.getIndices();
+        listaFragmento = indices.getIndicesFaltan();
       }
     }else{
       //Tengo todo los fragmentos, asi que los digo todos!
@@ -291,15 +293,15 @@ public class Fragmentador extends ManejarListaArchivos {
       //recarcular ni volver a crear todos los objetos o guardarlo en mem.
       //Puedo calcular la cantidad de partes si los bytes del mismo sin fijos
       //Si es variable mejor con un while
-      listaFragmento = new Vector<Fragmento>();
-      Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
-          archivoRequerido.getHash(), 0, archivoRequerido.getSize() ); //0 por ser el primero
+      listaFragmento = new Vector<Fragmento>();//le creo vacio xq no falta ninguno
+      /*Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
+          archivoRequerido.getHash(), 0, archivoRequerido.getSize() ); 0 por ser el primero
       listaFragmento.add( fragmento );
       for( int i = 0;  fragmento.getOffset() == fragmento.getTama();  i++ ){
         fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
             i*tamanioBytesFragmento, archivoRequerido.getSize() );
         listaFragmento.add( fragmento );
-      }
+      }*/
     }
     return listaFragmento;
   }
