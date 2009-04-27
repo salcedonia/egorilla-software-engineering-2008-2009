@@ -57,4 +57,36 @@ class ManejarListaArchivos {
     listaA.remove( archivo );
     listaB.add( archivo );
   }
+ 
+
+  public ListaArchivos unirListas( ListaArchivos listaA, ListaArchivos listaB ){
+    ListaArchivos listaNueva = new ListaArchivos();
+
+    for( int i = 0;  i < listaA.size();  i++ ){
+      listaNueva.add( listaA.get( i ) );
+    }
+
+    for( int i = 0;  i < listaB.size();  i++ ){
+      listaNueva.add( listaB.get( i ) );
+    }
+
+    return listaNueva;
+  }
+
+
+  public void recorrerListaArchivos( ListaArchivos lista ){
+    if( lista == null ){
+      System.out.println("Lista nula. 0 ficheros.");
+    }else{
+    for( int i = 0;  i < lista.size();  i++) {
+      //System.out.println( lista.elementAt(i).getNombre() );
+
+      //System.out.print( lista.elementAt(i).getNombre() );
+      //System.out.println( " - "+lista.elementAt(i).getHash() );
+      
+      System.out.println( lista.elementAt(i).toString() );
+    }
+    System.out.println("\n<" + lista.size() + "> ficheros.");
+    }
+  }
 }
