@@ -5,7 +5,14 @@
 
 package estadisticas;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,6 +56,7 @@ public class GestorEstadisticasTest {
         if (instancia1 == null)  {
             fail("Error al crear instacia, instancia nula");
         }
+        instancia1.cerrar();
         assertEquals(instancia1, instancia2);
     }
 
@@ -83,14 +91,15 @@ public class GestorEstadisticasTest {
         instance.llegadaFichero(25);
         instance.llegadaFichero(-5);
         int num = instance.getFicherosDescargadosSesion();
+        instance.cerrar();
         assertEquals(25, num);
     }
 
 
     private class DummyDescarga extends AdministradorDescarga{
-//        public DummyDescarga(){
-//            //super();
-//        }
+        public DummyDescarga(DataInputStream fichero) throws IOException{
+            super(fichero);
+        }
         public void setTiempoMaximo(int valor){
             tiempoMaximo = valor;
         }
@@ -122,7 +131,18 @@ public class GestorEstadisticasTest {
         
         double[] longitud = {250.0, 300.0, 350.0, 400};
         DummyGestorEstadisticas instance = new DummyGestorEstadisticas();
-        DummyDescarga descarga = new DummyDescarga();
+        DummyDescarga descarga = null;
+        DataInputStream fichero = null;
+        try {
+            File fich = new File(instance.PATH);
+            System.out.println("el path es");
+            System.out.println( fich.getAbsolutePath() + "\n");
+            InputStream stream = new FileInputStream(fich);
+            fichero = new DataInputStream(stream);
+            descarga = new DummyDescarga(fichero);
+        } catch (IOException ex) {
+            Logger.getLogger(GestorEstadisticasTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         descarga.setIntervalo(10);
         descarga.setTiempoMaximo(10);
         descarga.setVarianza(5);
@@ -137,6 +157,7 @@ public class GestorEstadisticasTest {
         double total = instance.getTotalDatosDescargaSesion();
         assertEquals(total, 1300.0);
         List<Double> valocidades = instance.getListaVelocidadMediaBajadaSesion();
+        instance.cerrar();
         System.out.println("Total de velocidad descargados: " +valocidades.toString() );
         System.out.println("Total de datos descargados: " +String.valueOf(total) );
         double actual = instance.getVelocidadActualDescarga();
