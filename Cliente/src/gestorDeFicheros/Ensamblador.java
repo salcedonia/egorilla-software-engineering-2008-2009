@@ -230,6 +230,7 @@ public class Ensamblador extends ManejarListaArchivos {
 
   //Este ya debe comprobar mediante el part.met si le llegan byte[]-fragmentos duplicados o con error, etc
   public boolean guardarFragmentoEnArchivo(Fragmento fragmento, Byte[] byteArchivo){
+    boolean guardado = false;
     Archivo archivoExistencia;
     int off, len = 0;
     String hashFragmento = fragmento.getHash();
@@ -239,6 +240,7 @@ public class Ensamblador extends ManejarListaArchivos {
     archivoExistencia = buscarArchivoEnLista( _listaTemporales, hashFragmento );
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
+      System.out.println( "No esta en la lista, posiblemente fragmento corrupto" );
     }else{
       //Guardo la parte donde toque
       try{
@@ -265,11 +267,25 @@ public class Ensamblador extends ManejarListaArchivos {
       punteroFichero.close();
 
       //Actualizo el fichero de indices
-      fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
+      File ficheroIndices = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
             + extesionIndices );
-      Indices indices = leeFicheroIndices( fichero );
+      Indices indices = leeFicheroIndices( ficheroIndices );
       indices.addTengo( fragmento );
-      guardarFicheroIndices( fichero, indices );
+      guardarFicheroIndices( ficheroIndices, indices );
+
+      if( indices.getIndicesFaltan().size() == 0 ){
+        System.out.println( "Acabo de completar el fichero, lo muevo a los completos" );
+        eliminarArchivoDeLista( indices.getArchivo(), _listaTemporales );
+        includirArchivoEnLista( indices.getArchivo(), _listaCompletos );
+
+        File ficheroCompleto = new File( _directorioCompletos+"//"+
+            fichero.getName().split( extesionFicheroTemporal ) );
+        //mover( fichero, ficheroCompleto );
+        /*_gestorDisco.recorrerListaArchivos( _listaTemporales );
+        _gestorDisco.recorrerListaArchivos( _listaCompletos );*/
+        //Y no la incluyo en listaTodos yaq tiene que estar
+        //Tendre que eliminar el archivo de indices o algo asi
+      }
 
       }catch( Exception e ){
         e.printStackTrace();
@@ -278,6 +294,23 @@ public class Ensamblador extends ManejarListaArchivos {
     }
     return true;
   }
+
+  public boolean mover(File source, File destination) {
+        if( !destination.exists() ) {
+                // intentamos con renameTo
+                boolean result = source.renameTo(destination);
+                if( !result ) {
+                        // intentamos copiar
+                        /*result = true;
+                        result &= copiar(source, destination);
+                        result &= source.delete();*/
+                } return( result );
+        } else {
+                // Si el fichero destination existe, cancelamos...
+                return(false);
+        } 
+  }
+  
 
   //Realmente el ensamblador solo se crea sobre los archivos temporales, no tiene sentido sobre
   //los archivos completos, ya que no necesitan ensamblar mas partes de ellos

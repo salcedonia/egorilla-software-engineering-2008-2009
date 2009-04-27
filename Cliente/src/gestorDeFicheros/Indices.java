@@ -39,7 +39,7 @@ public class Indices implements Serializable{
   }
 
   public void addTengo( Fragmento fragmento ){
-    _indicesTengo.add( fragmento ); //comprobar que se elimina bien
+    _indicesTengo.add( fragmento );
     removeFaltan( fragmento );
   }
 
@@ -65,7 +65,7 @@ public class Indices implements Serializable{
   }
 
   public void removeFaltan( Fragmento fragmento ){
-    //_indicesFaltan.remove( fragmento );
+    //_indicesFaltan.remove( fragmento ); probar!!!!!!
     
     Fragmento fragAux = null;
     boolean encontrado = false;

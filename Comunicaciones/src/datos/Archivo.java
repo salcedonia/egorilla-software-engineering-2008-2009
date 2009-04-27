@@ -172,6 +172,29 @@ public class Archivo implements Serializable {
         
         return _hash.equals(a.getHash());
     }
+
+    @Override
+    public boolean equals(Object o) {
+     //System.out.println("equals archivo");
+      try{
+
+        Archivo a = (Archivo) o;
+
+        boolean tipo = _tipo == a.getTipo(), 
+                tama = _tamano == a.getSize(), 
+                hash = _hash.compareTo( a.getHash() ) == 0,
+                nombre = _nombre.compareTo( a.getNombre() ) == 0;
+
+        return tipo && tama && hash && nombre;
+
+      }catch( Exception e ){
+        //Si salta la excepcion en el casting es que no era una instacia de.
+        return false;
+        //e.printStackTrace();
+      }/*finally{
+        
+      }*/
+    }
     
     public String toString (){
         return _nombre + "\t" + _hash + "\t" + this._tamano + "\t" +_tipo.name(); 
