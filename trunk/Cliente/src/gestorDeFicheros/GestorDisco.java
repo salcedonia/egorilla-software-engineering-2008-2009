@@ -35,6 +35,10 @@ public class GestorDisco {
 
   private Fragmentador _fragmentador;
 
+  private ManejarIndices _manejarIndices;
+
+  private ManejarListaArchivos _manejarListaArchivos;
+
   /**
    * 
    * @param path
@@ -45,6 +49,9 @@ public class GestorDisco {
     _listaTodos = new ListaArchivos();
     _listaTemporales = new ListaArchivos();
     _listaCompletos = new ListaArchivos();
+
+    _manejarIndices = new ManejarIndices();
+    _manejarListaArchivos = new ManejarListaArchivos();
 
     File fDirectorioTemporales = new File( _directorioTemporales ), 
          fDirectorioCompletos = new File( _directorioCompletos );
@@ -75,7 +82,7 @@ public class GestorDisco {
           _listaTemporales.add( procesarArchivoIndices( f ) );
         }//Sino es fichero no le aniado
       }
-      recorrerListaArchivos( _listaTemporales );
+      getManejarListaArchivos().recorrerListaArchivos( _listaTemporales );
     }else{
       System.out.println( "Directorio de temporales vacio.\n" );
     }
@@ -89,13 +96,13 @@ public class GestorDisco {
           _listaCompletos.add( procesarArchivoCompartido( f ) );
         }//Sino es fichero no le aniado
       }
-      recorrerListaArchivos( _listaCompletos );
+      getManejarListaArchivos().recorrerListaArchivos( _listaCompletos );
     }else{
       System.out.println( "Directorio de compartidos vacio.\n" );
     }
 
     //Creo una nueva lista con todos los ficheros actuales
-    _listaTodos = unirListas( _listaTemporales, _listaCompletos );
+    _listaTodos = getManejarListaArchivos().unirListas( _listaTemporales, _listaCompletos );
     //Cuando haya varios directorio por cada una se hara la union , usando un for
     //incluso, como son atributos de clase no hace falta pasarlos como parametros
     
@@ -146,43 +153,15 @@ public class GestorDisco {
     return _ensamblador;
   }
 
-  public ListaArchivos unirListas( ListaArchivos listaA, ListaArchivos listaB ){
-    ListaArchivos listaNueva = new ListaArchivos();
-
-    for( int i = 0;  i < listaA.size();  i++ ){
-      listaNueva.add( listaA.get( i ) );
-    }
-
-    for( int i = 0;  i < listaB.size();  i++ ){
-      listaNueva.add( listaB.get( i ) );
-    }
-
-    return listaNueva;
+  public ManejarIndices getManejarIndices(){
+    return _manejarIndices;
   }
 
-  public void recorrerListaArchivos( ListaArchivos lista ){
-    if( lista == null ){
-      System.out.println("Lista nula. 0 ficheros.");
-    }else{
-    for( int i = 0;  i < lista.size();  i++) {
-      //System.out.println( lista.elementAt(i).getNombre() );
-
-      //System.out.print( lista.elementAt(i).getNombre() );
-      //System.out.println( " - "+lista.elementAt(i).getHash() );
-      
-      System.out.println( lista.elementAt(i).toString() );
-    }
-    System.out.println("\n<" + lista.size() + "> ficheros.");
-    }
+  public ManejarListaArchivos getManejarListaArchivos(){
+    return _manejarListaArchivos;
   }
 
-    /**
-     * 
-     * @param f
-     * @return
-     * @throws java.io.IOException
-     */
-    public Archivo procesarArchivoCompartido(File f) /*throws IOException*/ {
+  public Archivo procesarArchivoCompartido(File f) /*throws IOException*/ {
 
         String nombre = null;
 
@@ -200,34 +179,12 @@ public class GestorDisco {
         return new Archivo(nombre, MD5Sum.getFileMD5Sum(f), f.length(), _tipo);
     }
 
-    public Archivo procesarArchivoIndices(File f) /*throws IOException*/ {
-      Indices indices = leeFicheroIndices( f );
+  
+  public Archivo procesarArchivoIndices(File f) /*throws IOException*/ {
+      Indices indices = getManejarIndices().leeFicheroIndices( f );
       return indices.getArchivo();
     }
 
-    private Indices leeFicheroIndices( File fichero ){
-    Indices indices = null;
-    try{
-    //Deserializo el Array de fragmentos de archivo de indices
-    FileInputStream ficheroIndices = new FileInputStream( fichero );
-    byte[] bytes = new byte[ (int)fichero.length() ];        
-    int byteIndicesLeidos = ficheroIndices.read( bytes );
-    ficheroIndices.close();
-    //para el ensamblador q es el q guarda, seria mejor guardar los bytes adicionales, es
-    //decir, guadar los ultimos fragmentos añadidos, aunque me parece q sera mas facil, xo
-    //ineficiente, recuperar el array de fragmentos anterior, añadir los fragmentos, y
-    //sobreescribir todo
-       
-    ByteArrayInputStream bs = new ByteArrayInputStream( bytes ); // bytes es el byte[]
-    ObjectInputStream is = new ObjectInputStream( bs );
-    indices = (Indices)is.readObject();
-    is.close();
-    }catch( Exception e ){
-      e.printStackTrace();
-      return indices;
-    }
-    return indices;
-  }
 }
 
 class PartMetFileFilter implements FileFilter {

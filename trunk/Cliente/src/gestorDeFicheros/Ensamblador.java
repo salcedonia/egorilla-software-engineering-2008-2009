@@ -10,7 +10,7 @@ import java.util.*;
  * indices de los temporales. Cuando se completo un archivo, lo manda al direc de completos
  *
  */
-public class Ensamblador extends ManejarListaArchivos {
+public class Ensamblador{
 
   //Este podria volver a leer los datos de las properties o que le pasa los valores el 
   //gestor de disco.
@@ -37,6 +37,11 @@ public class Ensamblador extends ManejarListaArchivos {
 
   private GestorDisco _gestorDisco;
 
+  private ManejarIndices _manejarIndices;
+
+  private ManejarListaArchivos _manejarListaArchivos;
+
+
 
   public Ensamblador( GestorDisco gestorDisco, String directorioCompletos, String directorioTemporales){
     _directorioCompletos = directorioCompletos;
@@ -47,6 +52,9 @@ public class Ensamblador extends ManejarListaArchivos {
     _listaCompletos = gestorDisco.getListaArchivosCompletos();
     _listaTemporales = gestorDisco.getListaArchivosTemporales();
     _listaTodos = gestorDisco.getListaArchivosTodos();
+
+    _manejarIndices = gestorDisco.getManejarIndices();
+    _manejarListaArchivos = gestorDisco.getManejarListaArchivos();
   }
 
   public void reservarEspacioFicheroNuevo( File fichero, long size ){
@@ -98,11 +106,11 @@ public class Ensamblador extends ManejarListaArchivos {
     //tambien en la de completos, para que no se baje un archivo que ya tiene dos veces
     //Tal vez sea interesante distinguir el que se intente crear un archivo q esta en los temp
     //o el que se intente crear cuando se encuentra en los completos.
-    archivoExistencia = buscarArchivoEnLista( _listaTemporales, hashFragmento );
+    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hashFragmento );
     if( archivoExistencia == null ){
       System.out.println( "No esta en la lista de temporales" );
       //Entonces miro tambien en los completos
-      archivoExistencia = buscarArchivoEnLista( _listaCompletos, hashFragmento );
+      archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hashFragmento );
       if( archivoExistencia == null ){
         System.out.println( "No esta en la lista de completos" );
         System.out.println( "Asi que creo el fichero temporal y el indice" );
@@ -110,15 +118,15 @@ public class Ensamblador extends ManejarListaArchivos {
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
             + extesionIndices );
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
-        crearFicheroIndices( fichero, archivoNuevo );
+        _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, fragmentosArchivoNuevo( archivoNuevo ) );
         //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );   
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
         
         //Y si todo ha ido bien actualizo las listas
         System.out.println( "Actualizo las listas de los archivos" );
-        includirArchivoEnLista( archivoNuevo, _listaTemporales );
-        includirArchivoEnLista( archivoNuevo, _listaTodos );
+        _manejarListaArchivos.includirArchivoEnLista( archivoNuevo, _listaTemporales );
+        _manejarListaArchivos.includirArchivoEnLista( archivoNuevo, _listaTodos );
         creado = true;
       }else{
         System.out.println( "Esta en los archivos completos, ya ha sido descargado" );
@@ -146,76 +154,7 @@ public class Ensamblador extends ManejarListaArchivos {
       return listaFragmento;
   }
 
-  private void crearFicheroIndices( File fichero, Archivo archivo ){
-    Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
-      fragFaltan = fragmentosArchivoNuevo( archivo );
-    Indices indices = new Indices( archivo, fragTengo, fragFaltan );
-    try{      
-      ByteArrayOutputStream bs = new ByteArrayOutputStream();
-      ObjectOutputStream os = new ObjectOutputStream( bs );
-      os.writeObject( indices );
-      os.close();
-      byte[] bytes = bs.toByteArray(); // devuelve byte[]
 
-      FileOutputStream ficheroIndices = new FileOutputStream( fichero );
-      BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      bufferedOutput.write( bytes, 0, bytes.length );
-      bufferedOutput.close();
-      //creo que tambien hace falta cerrar el otro
-      ficheroIndices.close();
-    }catch( Exception e ){
-      e.printStackTrace();
-    }
-  }
-
-  //Fusionar el crear y el guardar, argumento en crear y se unen
-  //Ademas, llevar estos a una clase del estilo TratarIndices
-
-  private void guardarFicheroIndices( File fichero, Indices indices ){
-    try{      
-      ByteArrayOutputStream bs = new ByteArrayOutputStream();
-      ObjectOutputStream os = new ObjectOutputStream( bs );
-      os.writeObject( indices );
-      os.close();
-      byte[] bytes = bs.toByteArray(); // devuelve byte[]
-
-      FileOutputStream ficheroIndices = new FileOutputStream( fichero );
-      BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      //Pese a existir ya el fichero, como voy añadiendo fragmentos, el file aumenta
-      //por lo q sobreescribo el fichero con mas bytes y no menos, ya que si fueran menos
-      //quedarian bytes malos en el file
-      bufferedOutput.write( bytes, 0, bytes.length );
-      bufferedOutput.close();
-      //creo que tambien hace falta cerrar el otro
-      ficheroIndices.close();
-    }catch( Exception e ){
-      e.printStackTrace();
-    }
-  }
-
-  private Indices leeFicheroIndices( File fichero ){
-    Indices indices = null;
-    try{
-    //Deserializo el Array de fragmentos de archivo de indices
-    FileInputStream ficheroIndices = new FileInputStream( fichero );
-    byte[] bytes = new byte[ (int)fichero.length() ];        
-    int byteIndicesLeidos = ficheroIndices.read( bytes );
-    ficheroIndices.close();
-    //para el ensamblador q es el q guarda, seria mejor guardar los bytes adicionales, es
-    //decir, guadar los ultimos fragmentos añadidos, aunque me parece q sera mas facil, xo
-    //ineficiente, recuperar el array de fragmentos anterior, añadir los fragmentos, y
-    //sobreescribir todo
-       
-    ByteArrayInputStream bs = new ByteArrayInputStream( bytes ); // bytes es el byte[]
-    ObjectInputStream is = new ObjectInputStream( bs );
-    indices = (Indices)is.readObject();
-    is.close();
-    }catch( Exception e ){
-      e.printStackTrace();
-      return indices;
-    }
-    return indices;
-  }
 
   private byte[] objetoAPrimitivo( Byte[] bytes ){
     byte[] pBytesFragmento = new byte[ bytes.length ];
@@ -238,7 +177,7 @@ public class Ensamblador extends ManejarListaArchivos {
 
     //Tengo qcomprobar cuando completo un archivo, para moverlo a completos
 
-    archivoExistencia = buscarArchivoEnLista( _listaTemporales, hashFragmento );
+    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hashFragmento );
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
       System.out.println( "No esta en la lista, posiblemente fragmento corrupto" );
@@ -275,20 +214,20 @@ public class Ensamblador extends ManejarListaArchivos {
       //Actualizo el fichero de indices
       File ficheroIndices = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
             + extesionIndices );
-      Indices indices = leeFicheroIndices( ficheroIndices );
+      Indices indices = _manejarIndices.leeFicheroIndices( ficheroIndices );
       indices.addTengo( fragmento );
-      guardarFicheroIndices( ficheroIndices, indices );
+      _manejarIndices.guardarFicheroIndices( ficheroIndices, indices );
 
       if( indices.getIndicesFaltan().size() == 0 ){
         System.out.println( "Acabo de completar el fichero, lo muevo a los completos" );
-        eliminarArchivoDeLista( indices.getArchivo(), _listaTemporales );
-        includirArchivoEnLista( indices.getArchivo(), _listaCompletos );
+        _manejarListaArchivos.eliminarArchivoDeLista( indices.getArchivo(), _listaTemporales );
+        _manejarListaArchivos.includirArchivoEnLista( indices.getArchivo(), _listaCompletos );
 
         File ficheroCompleto = new File( _directorioCompletos+"//"+
             indices.getArchivo().getNombre() );
         mover( fichero, ficheroCompleto );
         
-        if( borrarFicheroIndices( ficheroIndices ) == false )
+        if( _manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
           System.out.println( "Problemas al borrar el archivo de indices" );      
 
         /*_gestorDisco.recorrerListaArchivos( _listaTemporales );
@@ -301,11 +240,6 @@ public class Ensamblador extends ManejarListaArchivos {
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
     }
     return guardado;
-  }
-
-  private boolean borrarFicheroIndices( File fichero ){
-    //En principio lo borro directamente
-    return fichero.delete();
   }
 
   public boolean mover(File source, File destination) {
