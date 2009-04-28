@@ -30,6 +30,7 @@ import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import peerToPeer.descargas.AlmacenDescargas;
+import peerToPeer.descargas.Descargador;
 
 
 /**
@@ -52,6 +53,7 @@ public class GestorEgorilla extends Thread{
     private GestorClientes _gestorClientes;
 
     private AlmacenDescargas _almacenDescargas;
+    private Descargador _descargador;
     
     private boolean _conectado;
     private String  _serverIP;
@@ -76,7 +78,10 @@ public class GestorEgorilla extends Thread{
         _conectado = false;
 
         _almacenDescargas=new AlmacenDescargas();
-    }
+        
+        _descargador=new Descargador(this, _almacenDescargas);
+        _descargador.start();
+    } 
     
     /**
      * realiza la concexion con el servidor egorilla. 
@@ -221,23 +226,6 @@ public class GestorEgorilla extends Thread{
         }
     }
     
-          
-   
-    /**
-     * Se indica que este fichero se transmitira a este peer. 
-     * 
-     * 
-     * @param a
-     * @param ip
-     * @param puerto
-     * @param fragmentos
-     */
-  /*  public void nuevaSubida(Archivo a, String ip, int puerto, Vector<Fragmento> fragmentos){
-        //TODO:
-        //Para que recibe nuevaSubida la clase Archivo si ya tiene los fragmentos?
-        _gestorSubidas.comenzarSubida( ip, puerto, fragmentos );
-    }
-    */
     /**
      * se da la orden de comenzar una descarga.
      * esto dispara la colsulta de peers al servidor y 
@@ -263,15 +251,7 @@ public class GestorEgorilla extends Thread{
      * @param lista lista de clientes que lo contienen
      */
     public void DescargaFichero(Archivo a, DatosCliente[] lista) {
-        /*
-        for (DatosCliente cliente : lista) {
-            _gestorClientes.addClienteDescarga(cliente.getIP(), a);
-        }
-        
-        // TODO: de alguna forma completo esta información preguntando a los clientes
-        
-        _gestorDescargas.completaInformacion(a._hash, lista);
-        */
+      
         _almacenDescargas.respuestaPeticionDescarga(a, lista);
     }
   
