@@ -46,8 +46,7 @@ public class Descarga {
     }
 
     public void actualiza(){
-        _listaFragmentosPendientes=GestorCompartidos.getInstancia().queFragmentosTienes(_archivo.getHash());
-        //TODO generar Vector<Fragmento> con las partes que necesito
+        _listaFragmentosPendientes=GestorCompartidos.getInstancia().queFragmentosTienesPendientes(_archivo.getHash());
     }
 
     public void actualizaPropietarios(DatosCliente[] datos){

@@ -234,7 +234,7 @@ public class GestorEgorilla extends Thread{
      * @param a archivo a descargar
      */
     public void nuevaDescarga(Archivo a) {
-        
+        _gestorDisco.getEnsamblador().nuevoArchivoTemporal(a);
         _almacenDescargas.nuevaDescarga(a);
         // realizamos una consulta al servidor para saber los propietarios.
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
