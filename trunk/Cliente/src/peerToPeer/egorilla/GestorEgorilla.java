@@ -307,11 +307,6 @@ public class GestorEgorilla extends Thread{
      */
     public synchronized void addMensajeParaEnviar(Mensaje msj){
         _colaSalida.add(msj);
-        try {
-            this.wait(1000);
-        } catch (InterruptedException ex) {
-          // DoNothing
-        }
         
         this.notify();
     }

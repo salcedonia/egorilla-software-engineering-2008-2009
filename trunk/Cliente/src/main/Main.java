@@ -60,7 +60,11 @@ public class Main {
 
             if (modo.equalsIgnoreCase("consola")) {
                 ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorEGorilla);
-                new GUIConsola(controladorConsola);
+                
+                GUIConsola consola = new GUIConsola(controladorConsola);
+                gestorEGorilla.agregarObservador(consola);
+                consola.mostrarMenu();   
+                
             } else if (modo.equalsIgnoreCase("grafico") || modo.equals("")) {
                 ControladorGrafica controladorGrafica = new ControladorGrafica(gestorDeRed, gestorEGorilla);
                 new GUIGrafica(controladorGrafica);
@@ -74,5 +78,4 @@ public class Main {
             log.info("Error no indentificado", ex);
         }
 }
-
 }

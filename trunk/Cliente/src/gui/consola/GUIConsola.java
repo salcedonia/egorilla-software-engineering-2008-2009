@@ -51,9 +51,6 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         _controlador = controlador;
         //Asocio al Controlador con su Vista.
         controlador._guiConsola = this;
-        
-        //Arranca el menú de consola de la aplicación.
-        mostrarMenu();
     }
     
     
@@ -64,7 +61,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param string
      */
     public synchronized void mostrarMensaje(String string) {
-        System.out.print(string);
+        System.out.println(string);
     }
 
     /**
@@ -171,33 +168,6 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     }
 
     /**
-     * Muestra el resultado de una búsqueda.
-     * 
-     * @param archivo Array de archivos correspondientes al resultado de la 
-     * búsqueda.
-     */
-    public void mostrarBusquedas(Archivo[] archivo) {
-
-        System.out.println("Nombre   " + "Tamano   " + "Disponibilidad   " + "Fuentes   " + "Tipo   " + "Identificador de archivo");
-        for (int i = 0; i < archivo.length; i++) {
-            System.out.print(archivo[i]._nombre);
-            System.out.print("   ");
-            System.out.print(String.valueOf(archivo[i]._tamano));
-            System.out.print("   ");
-            System.out.print("---");
-            System.out.print("   ");
-            System.out.print("---");
-            System.out.print("   ");
-            System.out.print(archivo[i]._tipo.toString());
-            System.out.print("   ");
-            System.out.print(archivo[i]._hash);
-            System.out.println("");
-            System.out.println("Resultados anadidos; " + i);
-        }
-
-    }
-
-    /**
      * 
      * @param datos
      */
@@ -227,14 +197,6 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     //--------------------------------------------------------------------------
     //           INTERFACE OBSERVADOREGORILLA
     //--------------------------------------------------------------------------
-//    public void conexionCompletada(String ip, int port) {
-//
-//        _conectado = true;
-//
-//        // notifica a la gui:
-//        mostrarMensaje("Conexión satisfactoria con Servidor " +
-//                ip + ":" + port + "\n");
-//    }
 
     public void resultadosBusqueda(String cad, Archivo[] lista) {
 
@@ -260,7 +222,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     }
 
     public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.resultadosBusqueda(cad, lista);
     }
 
     public void finDescarga(GestorEgorilla obj) {
