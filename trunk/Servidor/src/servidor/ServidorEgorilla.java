@@ -57,7 +57,8 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 con.start();
 
                 // como es una conexion mantendremos comprobacion del medio
-                _red.addConexion(ip, port);
+                //TODO: mirate esto 
+            //    _red.addConexion(ip, port);
 
                 // devuelve bienvenido, pero dentro del hilo
                 break;
