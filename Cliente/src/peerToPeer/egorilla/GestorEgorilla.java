@@ -307,8 +307,12 @@ public class GestorEgorilla extends Thread{
      */
     public synchronized void addMensajeParaEnviar(Mensaje msj){
         _colaSalida.add(msj);
-//        if (!this.isAlive())
-//            this.start();
+        try {
+            this.wait(1000);
+        } catch (InterruptedException ex) {
+          // DoNothing
+        }
+        
         this.notify();
     }
 
@@ -342,8 +346,6 @@ public class GestorEgorilla extends Thread{
 
                     this.wait();
 
-                //TODO: añadiendo una espera aqui se retrasa la salida  reduce el
-                // trafico this.wait();
                 } catch (InterruptedException ex) {
                     // continua
                 }
