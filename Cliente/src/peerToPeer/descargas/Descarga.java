@@ -10,6 +10,7 @@ import datos.Fragmento;
 import gestorDeFicheros.GestorCompartidos;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 import java.util.Vector;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.DatosCliente;
@@ -21,16 +22,19 @@ import mensajes.serverclient.DatosCliente;
 public class Descarga {
     private final int TIMER=20;
     private Archivo _archivo=null;
-    private Vector<Fragmento> _listaFragmentosPendientes=null;
-    private ArrayList<DatosCliente> _propietarios=new ArrayList<DatosCliente>();
-    private ArrayList<Par> _listaQuienTieneQue=new ArrayList<Par>();
+    private Vector<Fragmento> _listaFragmentosPendientes;
+    private ArrayList<DatosCliente> _propietarios;
+    private ArrayList<Par> _listaQuienTieneQue;
     //estado 0 es que debe hacer HolaQuiero, cada 20 veces que pase por el Descargador se hara
-    private int _estado=TIMER;
+    private int _estado=0;
     private int _posicion=0;
     
     public Descarga(Archivo archivo){
         _archivo=archivo;
-        actualiza();
+     
+        _listaFragmentosPendientes = new Vector<Fragmento>();
+        _propietarios = new ArrayList<DatosCliente>();
+        _listaQuienTieneQue = new ArrayList<Par>();
     }
 
     public Archivo getArchivo(){
@@ -145,5 +149,8 @@ public class Descarga {
             return _listaFragmentosTiene;
         }
     }
-
+    
+    public ArrayList<DatosCliente> getListaPropietarios(){
+        return  _propietarios;
+    }
 }
