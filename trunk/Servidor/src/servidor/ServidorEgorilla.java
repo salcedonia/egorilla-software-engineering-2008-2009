@@ -58,7 +58,8 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
 
                 // como es una conexion mantendremos comprobacion del medio
                 //TODO: mirate esto 
-            //    _red.addConexion(ip, port);
+            
+                //_red.addConexion(ip, port);
 
                 // devuelve bienvenido, pero dentro del hilo
                 break;
@@ -98,13 +99,16 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                                                                       (ListaArchivos) msj);
                                                                       
                 p.start();
+                break;
+                
             case Altoo:
 
                 // dejaremos de atender a este cliente
                 _red.eliminaConexion(ip);
 
                 // lo eliminaremos de todos los lugares dnd aparezca
-
+                break;
+                
             default:
                 // obvia el mensaje
                 break;
