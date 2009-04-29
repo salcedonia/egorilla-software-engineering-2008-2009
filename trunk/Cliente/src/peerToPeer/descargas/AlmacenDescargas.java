@@ -20,10 +20,15 @@ import mensajes.serverclient.DatosCliente;
  * @author Iñaki Goffard, José Miguel Guerrero
  */
 public class AlmacenDescargas {
-    
-    private ArrayList<Descarga> _listaDescargas;//lista circular de descargas
-    
-    private int _posListaDescargas;//En qué posición de la lista nos encontramos(para saber el siguiente)
+
+    /**lista circular de descargas*/
+    private ArrayList<Descarga> _listaDescargas;
+
+    /**En qué posición de la lista nos encontramos(para saber el siguiente)*/
+    private int _posListaDescargas;
+
+    /** el descargador que ira despachando las descargas */
+    private Descargador _descargador;
     
     /**
      * Constructor del almacén de descargas. Crea el ArrayList de descargas e inicializa
@@ -143,7 +148,8 @@ public class AlmacenDescargas {
         if (des!=null){
             des.actualizaPropietarios(datos);
         }
-        
+
+        _descargador.notify();
     }
     
     /**
@@ -160,40 +166,10 @@ public class AlmacenDescargas {
         if (des != null) {
             des.actualizaQuienTieneQue(msj);
         }
-        
+
+        _descargador.notify();
     }
-    
-    
-    
-    /*public void actualizaFragmentosPendientes (Archivo arch, Toma msj){
-        
-         Descarga des = this.buscaDescarga(arch);
-         if (des != null){
-             //des.eliminaFragmentos(msj);
-         }
-        
-    }*/
-    
-    @Deprecated
-    public void actualizaFragmentosEnsamblador (Archivo arch, Toma msj){
-        
-        //TODO: Al parecer finalmente se hablará con el gestorCompartidos (es un singelton)
-            /* Tengo que crear el fragmento con los datos del archivo, de la siguiente manera:
-             * El offset lo saco del mensaje */
-        
-        Descarga des = this.buscaDescarga(arch);
-        GestorCompartidos gestComp = GestorCompartidos.getInstancia();
-        /* Monto el fragmento del archivo arch para que el disco pueda recibirlo.
-         * Por lo que he visto en el gestorDeFicheros, al construir un nuevo fragmento,
-         * el campo tamaño corresponde al tamaño del archivo al que este fragmento pertenece.
-         * CONFIRMAR ESTE PUNTO, A VER SI NO VA A SER ASÍ */
-        Fragmento frag = new Fragmento (arch.getNombre(),arch.getHash(),arch.getSize(),msj.getOffset());
-        if (des != null) {
-            /*Ahora aquí le pasaría el fragmento al gestor de compartidos, pero creo que
-             * el método todavía no está hecho */ 
-        }
-        
-    }
+       
     
     /**
      * Función que proporciona el siguiente elemento de la lista.
@@ -232,5 +208,4 @@ public class AlmacenDescargas {
         return respuesta;
     }
     
-
 }

@@ -113,11 +113,6 @@ public class GestorEgorilla extends Thread{
         
         this.comienzaP2P();
         
-        //Faltaba inicializar esta vble
-        _conectado = true;
-        
-        //Notificar el evento a los observadores
-        this.notificarConexionCompletada(ipServidor, puertoServidor);
     }
 
     /**
@@ -141,9 +136,7 @@ public class GestorEgorilla extends Thread{
      */
     void conectado() {
         _conectado = true;
-        for (ObservadorGestorEgorilla obs : _listaObservadores) {
-            obs.conexionCompletada(this,_serverIP, _serverPort);
-        }
+        notificarConexionCompletada(_serverIP, _serverPort);
     }
     
     /**
@@ -309,25 +302,26 @@ public class GestorEgorilla extends Thread{
     
     @Override
     public synchronized void run() {
+        this.setName("Gestor eGorilla");
+        this.setPriority(MAX_PRIORITY);
+
         try {
             while (_doP2P) {
 
                 // por cada mensaje al que se le deba dar salida, se le da.
-                while (!_colaSalida.isEmpty()) {
+                if (!_colaSalida.isEmpty()) {
                     Mensaje msj = _colaSalida.poll();
                     _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
                 }
-                try {
 
+                if (_colaSalida.isEmpty())
                     this.wait();
+                else
+                    this.wait(100);
 
-                } catch (InterruptedException ex) {
-                    // continua
-                }
             }
-        } catch (NetError ex) {
-            // TODO: gestor de errores. hay no se ha podido hablar con quien dices
-            Logger.getLogger(GestorEgorilla.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NetError ex) {   
+        } catch (InterruptedException in){
         }
     }
 
