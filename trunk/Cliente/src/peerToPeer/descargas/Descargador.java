@@ -8,9 +8,6 @@ package peerToPeer.descargas;
 import datos.Fragmento;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
@@ -45,7 +42,7 @@ public class Descargador extends Thread{
                 if (_almacen.getListaDescargas().isEmpty())
                     wait();
                 else 
-                    wait(100);
+                    wait(1000);
                 
                 // 3 casos:
                 // no se nada -> espero al servidor
@@ -71,9 +68,18 @@ public class Descargador extends Thread{
                         break;
                     case Descarga.DESCARGA:
                         // envia DAME a los propietarios
-                        
-                        // TODO:  esto con el random
+                        Random r = new Random();
 
+                        int i = 0;
+                        if (d.getListaFragmentosPendientes().size() != 0)
+                            r.nextInt(d.getListaFragmentosPendientes().size());
+                        Fragmento chunk = d.getListaFragmentosPendientes().get(i);
+
+                        Cliente propietario = d.dameClienteQueTiene(chunk);
+                        Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
+                                            chunk, propietario.getIP(), propietario.getPuerto());
+
+                        _gestor.addMensajeParaEnviar(msj);
                         break;
                 }
                 d.decrementaEstado();
