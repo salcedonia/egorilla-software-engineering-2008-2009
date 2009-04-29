@@ -141,14 +141,14 @@ public class AlmacenDescargas {
      * @param arch Archivo correspondiente a la descarga que hay que actualizar
      * @param datos DatosCliente[] que es la lista de mensajes con los datos de los propietarios
      */
-    public void respuestaPeticionDescarga (Archivo arch, DatosCliente[] datos){
+    public synchronized void respuestaPeticionDescarga (Archivo arch, DatosCliente[] datos){
         
         Descarga des = this.buscaDescarga(arch);
         if (des!=null){
             des.actualizaPropietarios(datos);
         }
 
-        _descargador.notify();
+        _descargador.despierta();
     }
     
     /**
@@ -159,14 +159,14 @@ public class AlmacenDescargas {
      * @param msj Tengo, que es una mensaje que informa de los fragmentos que tiene el cliente
      */
     
-    public void actualizaDescarga (Tengo msj){
+    public synchronized void actualizaDescarga (Tengo msj){
         Archivo arch=new Archivo(msj.getNombre(),msj.getHash());
         Descarga des = this.buscaDescarga(arch);
         if (des != null) {
             des.actualizaQuienTieneQue(msj);
         }
 
-        _descargador.notify();
+        _descargador.despierta();
     }
        
     
