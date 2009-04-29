@@ -133,6 +133,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // CONTESTA: tengo
                 _gestor.addMensajeParaEnviar(resp);
                 
+                break;
                 
             case Tengo:
                 
