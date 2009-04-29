@@ -12,41 +12,75 @@ import java.util.*;
  */
 public class Ensamblador{
 
-  //Este podria volver a leer los datos de las properties o que le pasa los valores el 
-  //gestor de disco.
-  
-  //Hacer properties
-  private String extesionIndices = ".part.met";
+  /**
+   * Es la extesión que acompaña a los archivos de indices.
+   */
+  private String _extesionIndices;
 
-  private String extesionFicheroTemporal = ".tmp";
+  /**
+   * Es la extesión que acompaña a los archivos temporales.
+   */
+  private String _extesionFicheroTemporal;
 
-  private int tamanioBytesFragmento = 512;
+  /**
+   * Es el tamaño de bytes máximo que puede tener un fragmento.
+   */
+  private int _tamanioBytesFragmento;
 
+  /**
+   * Es la ruta relativa del directorio de los ficheros temporales.
+   */
   private String _directorioTemporales;
 
+  /**
+   * Es la ruta relativa del directorio de los ficheros completos.
+   */
   private String _directorioCompletos;
 
   //Lista de todos (temporales+completos)
+  /**
+   * Es la lista de todos los archivos que tiene el usuario.
+   */
   private ListaArchivos _listaTodos;
 
   //Lista de los temporales
+  /**
+   * Es la lista de todos los archivos temporales que tiene el usuario.
+   */
   private ListaArchivos _listaTemporales;
 
   //Lista de los completos
+  /**
+   * Es la lista de todos los archivos completos que tiene el usuario.
+   */
   private ListaArchivos _listaCompletos;
 
+  /**
+   * Es el propio gestor de disco que creado a dicho Ensamblador.
+   */
   private GestorDisco _gestorDisco;
 
+  /**
+   * Es la clase que contiene la funcionalidad para tratar adecuadamente los archivos de 
+   * indices.
+   */
   private ManejarIndices _manejarIndices;
 
+  /**
+   * Es la clase que contiene la funcionalidad para tratar adecuadamente las listas de archivos.
+   */
   private ManejarListaArchivos _manejarListaArchivos;
 
 
 
-  public Ensamblador( GestorDisco gestorDisco, String directorioCompletos, String directorioTemporales){
-    _directorioCompletos = directorioCompletos;
-    _directorioTemporales = directorioTemporales;
+  public Ensamblador( GestorDisco gestorDisco){
+    _directorioCompletos = gestorDisco.getDirectorioCompletos();
+    _directorioTemporales = gestorDisco.getDirectorioTemporales();
     _gestorDisco = gestorDisco;
+
+    _extesionIndices = gestorDisco.getExtesionIndices();
+    _extesionFicheroTemporal = gestorDisco.getExtesionFicheroTemporal();
+    _tamanioBytesFragmento = gestorDisco.getTamanioBytesFragmento();
 
     //Obtengo sus referencias, para poder tener las listas actualizarlas
     _listaCompletos = gestorDisco.getListaArchivosCompletos();
@@ -106,21 +140,25 @@ public class Ensamblador{
     //tambien en la de completos, para que no se baje un archivo que ya tiene dos veces
     //Tal vez sea interesante distinguir el que se intente crear un archivo q esta en los temp
     //o el que se intente crear cuando se encuentra en los completos.
-    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hashFragmento );
+    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, 
+        hashFragmento );
     if( archivoExistencia == null ){
       System.out.println( "No esta en la lista de temporales" );
       //Entonces miro tambien en los completos
-      archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hashFragmento );
+      archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, 
+          hashFragmento );
       if( archivoExistencia == null ){
         System.out.println( "No esta en la lista de completos" );
         System.out.println( "Asi que creo el fichero temporal y el indice" );
         //El archivo no se encuentra, es nuevo! Lo creo en los temporales
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
-            + extesionIndices );
+            + _extesionIndices );
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
-        _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, fragmentosArchivoNuevo( archivoNuevo ) );
+        _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, 
+            fragmentosArchivoNuevo( archivoNuevo ) );
         //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
-        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );
+        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() + 
+            _extesionFicheroTemporal  );
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
         
         //Y si todo ha ido bien actualizo las listas
@@ -150,10 +188,10 @@ public class Ensamblador{
       eliminado = false;
     }else{
       File ficheroIndices = new File( _directorioTemporales+"//" + 
-          archivoExistencia.getNombre() + extesionIndices );
+          archivoExistencia.getNombre() + _extesionIndices );
 
       File ficheroTemporal = new File( _directorioTemporales+"//" + 
-          archivoExistencia.getNombre() + extesionFicheroTemporal  );
+          archivoExistencia.getNombre() + _extesionFicheroTemporal  );
 
       //Puede qsten en uso cuando los quiera borrar
       eliminado = ficheroIndices.delete() && ficheroTemporal.delete();
@@ -174,9 +212,9 @@ public class Ensamblador{
     Fragmento fragmento = new Fragmento( archivo.getNombre(), 
           archivo.getHash(), archivo.getSize(), 0 ); //0 por ser el primero
       listaFragmento.add( fragmento );
-      for( int i = 1; fragmento.getOffset()+tamanioBytesFragmento < fragmento.getTama(); i++ ){
+      for( int i = 1; fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama(); i++ ){
         fragmento = new Fragmento( archivo.getNombre(),archivo.getHash(), 
-            archivo.getSize(), i*tamanioBytesFragmento );
+            archivo.getSize(), i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
       return listaFragmento;
@@ -205,7 +243,8 @@ public class Ensamblador{
 
     //Tengo qcomprobar cuando completo un archivo, para moverlo a completos
 
-    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hashFragmento );
+    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, 
+        hashFragmento );
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
       System.out.println( "No esta en la lista, posiblemente fragmento corrupto" );
@@ -214,7 +253,7 @@ public class Ensamblador{
       //Guardo la parte donde toque
       try{
       fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
-          extesionFicheroTemporal );
+          _extesionFicheroTemporal );
       RandomAccessFile punteroFichero = new RandomAccessFile( fichero, "rw" );
       /*FileOutputStream archivo = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( archivo );*/   
@@ -222,10 +261,10 @@ public class Ensamblador{
       //len = (int)(fragmento.getTama() - fragmento.getOffset() );
       //len = tamanioBytesFragmento;
       int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
-      if( tamanioBytesFragmentoAux < tamanioBytesFragmento )
+      if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
         len = tamanioBytesFragmentoAux;
       else
-        len = tamanioBytesFragmento;
+        len = _tamanioBytesFragmento;
       byte[] bytes = objetoAPrimitivo( byteArchivo );
       punteroFichero.seek( off );
       punteroFichero.write( bytes );      
@@ -241,7 +280,7 @@ public class Ensamblador{
 
       //Actualizo el fichero de indices
       File ficheroIndices = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()
-            + extesionIndices );
+            + _extesionIndices );
       Indices indices = _manejarIndices.leeFicheroIndices( ficheroIndices );
       indices.addTengo( fragmento );
       _manejarIndices.guardarFicheroIndices( ficheroIndices, indices );
