@@ -6,6 +6,7 @@
 package mensajes.serverclient;
 
 
+import datos.TipoArchivo;
 import java.io.Serializable;
 import mensajes.Mensaje;
 import mensajes.TipoMensaje;
@@ -24,6 +25,9 @@ public class RespuestaPeticionDescarga implements Mensaje, Serializable{
     public String hash;
     public String nombre;
     
+    public long tama;
+    public TipoArchivo tipo;
+    
     // ATRIBUTOS
     private DatosCliente[] _lista;
 
@@ -33,10 +37,12 @@ public class RespuestaPeticionDescarga implements Mensaje, Serializable{
      * 
      * @param lista Lista de clientes asociados.
      */
-    public RespuestaPeticionDescarga(String nmb, String h, DatosCliente[] lista) {
+    public RespuestaPeticionDescarga(String nmb, String h, long t, TipoArchivo ti, DatosCliente[] lista) {
         nombre = nmb;
         hash = h;
        _lista = lista;
+       tama =  t;
+       tipo = ti;
     }
 
 /*****************************************************************************/

@@ -144,7 +144,7 @@ public class Archivo implements Serializable {
         
         _tamano = tamano;
     }
-
+    
     /**
      * Establece la informacion del archivo con la informacion correspondiente.
      * 
@@ -196,6 +196,8 @@ public class Archivo implements Serializable {
       }*/
     }
     
+    
+    @Override
     public String toString (){
         return _nombre + "\t" + _hash + "\t" + this._tamano + "\t" +_tipo.name(); 
     }
