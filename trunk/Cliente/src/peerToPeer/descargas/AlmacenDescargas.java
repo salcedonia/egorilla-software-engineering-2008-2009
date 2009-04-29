@@ -36,7 +36,6 @@ public class AlmacenDescargas {
      * valor, salvo que alcance el tamaño actual de la lista, en cuyo caso vuelve a 0 (primera posición)
      */
     public AlmacenDescargas (){
-        
         _listaDescargas = new ArrayList<Descarga>();
         _posListaDescargas = -1;
     }
@@ -207,5 +206,8 @@ public class AlmacenDescargas {
         }
         return respuesta;
     }
-    
+
+   void registraDescargador(Descargador des){
+       _descargador = des;
+   }
 }
