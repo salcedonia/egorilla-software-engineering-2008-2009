@@ -70,9 +70,10 @@ public class Descargador extends Thread{
                         // envia DAME a los propietarios
                         Random r = new Random();
 
-                        int i = 0;
+                        int i = 1;
                         if (d.getListaFragmentosPendientes().size() != 0)
-                            r.nextInt(d.getListaFragmentosPendientes().size());
+                            i =r.nextInt(d.getListaFragmentosPendientes().size())+1;
+                      
                         Fragmento chunk = d.getListaFragmentosPendientes().get(i);
 
                         Cliente propietario = d.dameClienteQueTiene(chunk);
