@@ -42,7 +42,11 @@ public class GestorConexiones extends Thread{
 
     @Override
     public synchronized void run() {
-        long t = 120 ;//* 1000; // el tiempo a esperar para el siguiente envio
+
+        this.setName("gestorConexiones");
+        this.setPriority(MIN_PRIORITY);
+
+        long t = 30000; // el tiempo a esperar para el siguiente envio
         try {
             while (true) {
 
