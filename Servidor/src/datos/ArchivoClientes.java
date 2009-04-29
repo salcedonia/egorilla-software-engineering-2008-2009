@@ -258,4 +258,27 @@ public class ArchivoClientes {
             _relacion.remove(archivo.getHash());
         }
     }
+    
+    public Archivo buscarPorHash (String hash){
+        
+        // Vector<Archivo> lista =  new Vector<Archivo>();
+         
+         //boolean respuesta = false;
+        int pos = 0;
+        
+        Archivo arch = null;
+  
+        for (Archivo archivo : _archivos) {
+           
+           if (archivo.getHash().contains(hash)){
+              arch = _archivos.elementAt(pos);
+              break;
+           }
+           pos ++;
+              
+        }
+        
+        return arch;
+        
+    }
 }

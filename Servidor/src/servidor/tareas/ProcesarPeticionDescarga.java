@@ -34,7 +34,8 @@ public class ProcesarPeticionDescarga extends Thread {
         _peticion = peticion;
         _red  = red;
     }
-
+    
+   
 
     @Override
     public void run(){
@@ -53,9 +54,13 @@ public class ProcesarPeticionDescarga extends Thread {
            lista[i] = arr.get(i);
             
         
+        Archivo arc = _archivosClientes.buscarPorHash(_peticion.getHash());
+        
         // construye la respuesta
-        RespuestaPeticionDescarga resp = new RespuestaPeticionDescarga(_peticion.getNombre(),
+        RespuestaPeticionDescarga resp = new RespuestaPeticionDescarga(arc.getNombre(),
                                                             _peticion.getHash(), 
+                                                            arc._tamano,
+                                                            arc._tipo,
                                                             lista );
         
         resp.setDestino(_cliente.getIP(), _cliente.getPuertoEscucha());
