@@ -3,6 +3,7 @@ package gui.grafica.principal;
 import control.ControladorGrafica;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
 import gui.grafica.configuracion.GUIPanelConfiguracion;
@@ -62,7 +63,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     /**
      * Constructor de la clase VentanaPrincipal.
      */
-    public GUIVentanaPrincipal(ControladorGrafica controlador) {
+    public GUIVentanaPrincipal(ControladorGrafica controlador) throws ControlConfiguracionClienteException {
 
         _controlador = controlador;
         iniciarComponentes();
@@ -75,7 +76,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     /**
      * Inicia todos los componentes de la ventana.
      */
-    private void iniciarComponentes() {
+    private void iniciarComponentes() throws ControlConfiguracionClienteException {
 
         _panelPrincipal = new JPanel();
         _panelEstado = new JPanel();
@@ -115,7 +116,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _controlador.getGestorEGorilla().agregarObservador(panelBuscador);
         _panelPrincipal.add("Buscador", panelBuscador);
 
-        _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion());
+        _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
         _panelPrincipal.add("Descargas", new GUIPanelTrafico());
         _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
         _panelPrincipal.add("Estadisticas", new GUIPanelEstadisticas());

@@ -1,6 +1,7 @@
 package gui.grafica;
 
 import control.ControladorGrafica;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gui.grafica.principal.GUIVentanaPrincipal;
 
 /**
@@ -15,7 +16,7 @@ public class GUIGrafica {
      * 
      * @param controlador Controlador de la aplicacion en modo grafica.
      */
-    public GUIGrafica(ControladorGrafica controlador){  
+    public GUIGrafica(ControladorGrafica controlador) throws ControlConfiguracionClienteException{  
         
         new GUIVentanaPrincipal(controlador);
     }
