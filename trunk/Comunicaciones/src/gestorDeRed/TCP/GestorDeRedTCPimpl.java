@@ -15,6 +15,7 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mensajes.Mensaje;
 
 /**
  *
@@ -70,8 +71,8 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 
             s.close();
         } catch (IOException ex) {
-            
             this.generaErrorConexion(host);
+            throw new NetError("error en envio a " + host);
         }
     }
 
@@ -136,9 +137,8 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                          * envio el fichero.
                          * 
                          ***********************/
-                        String ip = s.getInetAddress().getHostName();
-
-
+                        String ip = s.getInetAddress().getHostAddress();
+                        
                         // solo si el paquete lleva carga util se envia a los receptores
                         if (paquete.getDatos() != null) {
                             for (Receptor<E> receptor : _receptores) {
@@ -146,12 +146,14 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                             }
                         }
                     } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+                        ex.printStackTrace();
+                     
                     }
                 }
             } catch (IOException ex) {
                 // problemas con el socket?? solo si es la primera vez, sino es que 
                 // hemos acabado con la ejecucion
+                ex.printStackTrace();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
