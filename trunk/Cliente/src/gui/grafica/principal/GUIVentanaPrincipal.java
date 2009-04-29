@@ -1,6 +1,7 @@
 package gui.grafica.principal;
 
 import control.ControladorGrafica;
+import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
@@ -14,16 +15,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import peerToPeer.egorilla.GestorEgorilla;
+import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
-//************************************************************************************//
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  * Clase que gestiona la ventana principal de la aplicación.
  * 
  * @author S@L-c
  */
-public class GUIVentanaPrincipal extends JFrame {
+public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgorilla{
 
     // CONSTANTES
     private static final long serialVersionUID = 1L;
@@ -59,20 +59,19 @@ public class GUIVentanaPrincipal extends JFrame {
     private ImageIcon _imgConfiguracion = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnConfiguracion.png"));
     private ImageIcon _imgAyuda = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnAyuda.png"));
 
-//	************************************************************************************//
     /**
      * Constructor de la clase VentanaPrincipal.
      */
     public GUIVentanaPrincipal(ControladorGrafica controlador) {
 
-        
         _controlador = controlador;
         iniciarComponentes();
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
+    
+        _controlador.getGestorEGorilla().agregarObservador(this);
     }
 
-//	************************************************************************************//
     /**
      * Inicia todos los componentes de la ventana.
      */
@@ -408,7 +407,6 @@ public class GUIVentanaPrincipal extends JFrame {
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Descargas");
     }
 
-//	************************************************************************************//
     /**
      * Muestra el panel de servidores en el panel principal de la ventana.
      * 
@@ -467,60 +465,46 @@ public class GUIVentanaPrincipal extends JFrame {
             int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
             String serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
             _controlador.peticionConexionAServidor(serverHost, sPuerto);
-            tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_CONECTADO, null);
         } else // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
         {
             _controlador.peticionDeDesconexionDeServidor();
-            tratarEvento(EventoVentanaPrincipal.MOSTRAR_ESTADO_DESCONECTADO, null);
         }
         } catch (Exception ex) {
-            tratarEvento(EventoVentanaPrincipal.MOSTRAR_MENSAJE_ERROR, "Error al intentar conectarse con el servidor");
-            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,"Error de conexión",
+		        "Error al conectarse al servidor",
+		        JOptionPane.ERROR_MESSAGE);
         }
     }
 
-//	************************************************************************************//
-    /**
-     * Cambia el estado del botón conectar. Lo pone al estado Conectar si estaba en Desconectar
-     * y viceversa, además de actualizar las etiquetas informativas correspondientes.
-     * 
-     * @param evento Evento producido sobre la ventana principal.
-     * @param params Parametros asociados a ese evento.
-     */
-    public void tratarEvento(EventoVentanaPrincipal evento, Object params) {
-
-        switch (evento) {
-
-            case MOSTRAR_ESTADO_CONECTADO:
-
-                // La imagen y el texto del botón ahora son Desconectar
+    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
+            // La imagen y el texto del botón ahora son Desconectar
                 _btnConectar.setText("Desconectar");
                 _btnConectar.setIcon(_imgDesconectar);
 
                 // Cambiamos las etiquetas de estado
                 _lblConexion.setText("Conectado");
                 _lblEstado.setText("eGorilla conectado");
-                break;
+    }
 
-            case MOSTRAR_ESTADO_DESCONECTADO:
-
-                // La imagen y el texto del botón ahora son Desconectar
+    public void desconexionCompletada(GestorEgorilla obj) {
+          // La imagen y el texto del botón ahora son Desconectar
                 _btnConectar.setText("Conectar");
                 _btnConectar.setIcon(_imgConectar);
 
-                // Cambiamos las etiquetas de estado
+                                // Cambiamos las etiquetas de estado
                 _lblConexion.setText("Desconectado");
                 _lblEstado.setText("eGorilla desconectado");
-                break;
+    }
 
-            case MOSTRAR_MENSAJE_ERROR:
+    public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
 
-                // Mostramos el mensaje de error correspondiente
-                JOptionPane.showMessageDialog(null,
-                        params,
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                break;
-        }
+    }
+
+    public void finDescarga(GestorEgorilla obj) {
+
+    }
+
+    public void perdidaConexion(GestorEgorilla obj) {
+
     }
 }
