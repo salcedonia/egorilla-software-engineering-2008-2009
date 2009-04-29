@@ -66,7 +66,6 @@ public class ControladorGrafica {
     public void peticionDeDesconexionDeServidor() {
 
         _gestorDeEgorilla.desconectar();
-
         // tambien acabamos con el p2p
         _gestorDeRed.terminaEscucha();
     }
