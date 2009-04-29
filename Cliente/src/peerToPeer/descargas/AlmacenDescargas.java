@@ -159,13 +159,12 @@ public class AlmacenDescargas {
      * @param msj Tengo, que es una mensaje que informa de los fragmentos que tiene el cliente
      */
     
-    public synchronized void actualizaDescarga (Tengo msj){
+    public synchronized  void actualizaDescarga (Tengo msj){
         Archivo arch=new Archivo(msj.getNombre(),msj.getHash());
         Descarga des = this.buscaDescarga(arch);
         if (des != null) {
             des.actualizaQuienTieneQue(msj);
         }
-
         _descargador.despierta();
     }
        
@@ -209,5 +208,6 @@ public class AlmacenDescargas {
 
    void registraDescargador(Descargador des){
        _descargador = des;
+     //  _descargador.
    }
 }

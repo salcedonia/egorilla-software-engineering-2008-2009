@@ -124,7 +124,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 listaFragmentos = GestorCompartidos.getInstancia().queFragmentosTienes( quiero.getHash() );
 
                 Tengo resp = new Tengo( quiero.getNombre(), quiero.getHash(), listaFragmentos, 
-                    quiero.ipDestino(), quiero.puertoDestino() );
+                    ip, port);
                 /*resp.hash = quiero.hash;
                 resp.nombre = quiero.nombre;*/  //TODO: deberia poner el nombre que tengo yo para este fichero
                 

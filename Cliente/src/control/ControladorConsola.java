@@ -102,8 +102,7 @@ public class ControladorConsola {
      *
      * @param hash El identificador unico de este fichero.
      */
-    public void peticionDescargarFichero(String nmb, String hash) {
-        
-        _gestorDeEgorilla.nuevaDescarga(new Archivo(nmb, hash));
+    public void peticionDescargarFichero(Archivo arch) {
+        _gestorDeEgorilla.nuevaDescarga(arch);
     }
 }

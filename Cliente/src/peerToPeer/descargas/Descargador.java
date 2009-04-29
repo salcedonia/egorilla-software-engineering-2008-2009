@@ -27,45 +27,56 @@ public class Descargador extends Thread{
         private final int MAX_INTENTOS=30;
         private Descarga _descargaActual=null;
         private GestorEgorilla _gestor=null;
-        private AlmacenDescargas _almacen=null;
-        private ArrayList<Integer>  _fragmentosPedidos=null;
+        private AlmacenDescargas _almacen = null;
+    private ArrayList<Integer> _fragmentosPedidos = null;
 
-        public Descargador(GestorEgorilla gestor, AlmacenDescargas almacen){
-            _gestor=gestor;
-            _almacen=almacen;
-            _fragmentosPedidos=new ArrayList<Integer>();
-            _almacen.registraDescargador(this);
+    public Descargador(GestorEgorilla gestor, AlmacenDescargas almacen) {
+        _gestor = gestor;
+        _almacen = almacen;
+        _fragmentosPedidos = new ArrayList<Integer>();
+        _almacen.registraDescargador(this);
     }
 
     @Override
     public synchronized void run() {
         this.setName("Descargador");
-
         try {
             while (true) {
-                wait();
-                if (_almacen.getListaDescargas().size() != 0){
-                    
-                    // 3 casos:
-                    // no se nada -> espero al servidor
-                    // se quien tiene -> envio holaquiero
-                    // se quien tiene que -> envio Dame
-                    
-                    Descarga d = _almacen.dameSiguiente();
-                    
-                    //if (d.)
-                    
-                    if (d.getListaPropietarios().size() != 0){
-                        for (DatosCliente propietario : d.getListaPropietarios()) {
-                            HolaQuiero msg = new HolaQuiero(d.getArchivo());
-                            msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
-                            
-                            _gestor.addMensajeParaEnviar(msg);
-                            
-                            
+                if (_almacen.getListaDescargas().isEmpty())
+                    wait();
+                else 
+                    wait(100);
+                
+                // 3 casos:
+                // no se nada -> espero al servidor
+                // se quien tiene -> envio holaquiero
+                // se quien tiene que -> envio Dame
+
+                Descarga d = _almacen.dameSiguiente();
+
+                switch (d.getEstado()) {
+                    case Descarga.PIDEASERVIDOR:
+                        //envia consulta a servidor
+                        _gestor.pedirPropietariosaServidor(d.getArchivo());
+                        break;
+                    case Descarga.PIDEALOSPROPIETARIOS:
+                        if (d.getListaPropietarios().size() != 0) {
+                            for (DatosCliente propietario : d.getListaPropietarios()) {
+                                HolaQuiero msg = new HolaQuiero(d.getArchivo());
+                                msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
+
+                                _gestor.addMensajeParaEnviar(msg);
+                            }
                         }
-                    }
+                        break;
+                    case Descarga.DESCARGA:
+                        // envia DAME a los propietarios
+                        
+                        // TODO:  esto con el random
+
+                        break;
                 }
+                d.decrementaEstado();
             }
         } catch (InterruptedException ex) {
             //  donothing
