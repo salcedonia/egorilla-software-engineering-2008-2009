@@ -67,12 +67,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-            try {
 
-                this.wait(1000);
-            } catch (InterruptedException ex) {
-              // continua
-            }
             s.close();
         } catch (IOException ex) {
             
@@ -116,6 +111,9 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 
     @Override
     public void run() {
+
+        this.setName("Gestor TCP");
+
         try {
             try {
                 _sock = new ServerSocket(_puerto);
