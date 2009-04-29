@@ -112,7 +112,10 @@ public class GUIVentanaPrincipal extends JFrame {
         _panelPrincipal.setPreferredSize(new Dimension(800, 600));
         _panelPrincipal.setLayout(new CardLayout());
         _panelPrincipal.add("Servidores", new GUIPanelServidores());
-        _panelPrincipal.add("Buscador", new GUIPanelBuscador());
+        GUIPanelBuscador panelBuscador =  new GUIPanelBuscador(_controlador);
+        _controlador.getGestorEGorilla().agregarObservador(panelBuscador);
+        _panelPrincipal.add("Buscador", panelBuscador);
+
         _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion());
         _panelPrincipal.add("Descargas", new GUIPanelTrafico());
         _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());

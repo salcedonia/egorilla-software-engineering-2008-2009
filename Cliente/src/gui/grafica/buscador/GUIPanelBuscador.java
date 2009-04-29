@@ -1,5 +1,6 @@
 package gui.grafica.buscador;
 
+import control.ControladorGrafica;
 import datos.Archivo;
 import javax.swing.*;
 
@@ -10,18 +11,16 @@ import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import peerToPeer.egorilla.GestorEgorilla;
+import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
-
-
-
-//************************************************************************************//
 /**
  * Panel de búsquedas de la aplicación.
  * 
- * @author  Mnemo
- * @author S@L-c
+ * @author  Iñaki Goffard
+ * @author Javier Salcedo
  */
-public class GUIPanelBuscador extends JPanel {
+public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla{
 
     // CONSTANTES
 	private static final long serialVersionUID = 1L;
@@ -40,20 +39,17 @@ public class GUIPanelBuscador extends JPanel {
     private int _numeroPestañas = 0; // Número de pestañas abiertas
 
     // CONTROL
-	private ControlPanelBuscador _controlPanelBuscador;
+    private ControladorGrafica _controlador;
     
-//	************************************************************************************//
 	/** 
 	 * Constructor de la clase PanelBusquedas. 
 	 */
-    public GUIPanelBuscador() {
-    
-    	_controlPanelBuscador = new ControlPanelBuscador(this);
-    	
+    public GUIPanelBuscador(ControladorGrafica c) {
+
+        _controlador = c;
     	iniciarComponentes();
     }
 
-//	************************************************************************************//
    /**
     * Inicia los componentes del panel de búsquedas.
     */
@@ -210,19 +206,19 @@ public class GUIPanelBuscador extends JPanel {
         getAccessibleContext().setAccessibleName("Buscador"); 
     }
 
-//	************************************************************************************//
     /**
      * Lanza la consulta al servidor leyendo el contenido del textbox.
      * 
      * @param evt Evento de pulsación del ratón.
      */
 	private void pulsacionBotonComenzar(ActionEvent evt) {
-		
-		// Llamamos al control del panel
-		_controlPanelBuscador.accionPanelBuscador(AccionPanelBuscador.BUSCAR_ARCHIVO_SERVIDOR, _txtBusqueda.getText().trim());	
-	}
+        if(_controlador.conectado())
+            // Enviamos la petición al control
+            _controlador.peticionBuscarFichero(_txtBusqueda.getText());
+        else
+            mostrarErrorNoConetadoAServidor();
+    }
 	
-//	************************************************************************************//
 	/**
 	 * Vacía la tabla de contenidos donde se cargan todos los resultados de las búsquedas
 	 * asociadas.
@@ -236,7 +232,6 @@ public class GUIPanelBuscador extends JPanel {
 		setNumeroNuevos(0);
 	}
 	
-//	************************************************************************************//
 	/**
 	 * Vacía el campo de texto donde se introducen los nombres de los archivos solicitados.
 	 * 
@@ -248,41 +243,7 @@ public class GUIPanelBuscador extends JPanel {
 		_txtBusqueda.setText("");
 	}
 
-//	************************************************************************************//
     /**
-     * Distingue entre los distintos eventos de actualización.
-     *  
-	 * @param evento Evento producido.
-	 * @param parametros Parametros asociados al evento.
-     */
-	public void tratarEvento(EventoPanelBuscador evento, Object parametros) {
-		
-		switch(evento){
-		
-			case MOSTRAR_RESULTADO_BUSQUEDA: 
-				
-				mostrarResultadoBusqueda((Archivo[]) parametros); 
-				break;
-			
-			case MOSTRAR_MENSAJE_BUSQUEDA_SIN_COINCIDENCIAS: 
-				
-            	mostrarMensajeBusquedaSinCoincidencias();
-            	break;
-            	
-			case MOSTRAR_ERROR_NOMBRE_NO_INTRODUCIDO: 
-				                
-	        	mostrarErrorNombreNoIntroducido();
-				break;
-			
-			case MOSTRAR_ERROR_NO_CONECTADO_SERVIDOR: 
-				
-				mostrarErrorNoConetadoAServidor();
-				break;
-		}
-	}
-
-//	************************************************************************************//
-	/**
 	 * Muestra un mensaje de error informando que no se ha conectado a ningún servidor.
 	 */
 	private void mostrarErrorNoConetadoAServidor() {
@@ -442,5 +403,28 @@ public class GUIPanelBuscador extends JPanel {
     public void setNumeroNuevos(int numeroNuevos){
     	
         _numeroPestañas = numeroNuevos;
+    }
+
+    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
+       
+    }
+
+    public void desconexionCompletada(GestorEgorilla obj) {
+
+    }
+
+    public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
+        if(lista.length != 0 )
+            mostrarResultadoBusqueda((Archivo[]) lista);
+        else
+            mostrarMensajeBusquedaSinCoincidencias();
+    }
+
+    public void finDescarga(GestorEgorilla obj) {
+
+    }
+
+    public void perdidaConexion(GestorEgorilla obj) {
+
     }
 }

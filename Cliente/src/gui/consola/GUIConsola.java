@@ -107,15 +107,6 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                     cad = _bufferedReader.readLine();
                     //creo q hay que quitar el retorno de carro
                     _controlador.peticionBuscarFichero(cad);
-                    // TODO: feedback es una comunicación asincrona
-
-//                    RespuestaPeticionConsulta respuestaConsulta = ControlAplicacion.peticionBuscarFichero(cad);
-//                    if (respuestaConsulta.getLista().length > 0) {
-//                        System.out.println("Archivos en el table: <" + respuestaConsulta.getLista().length + ">");
-//                        insertarBusquedas(respuestaConsulta.getLista());
-//                    } else {
-//                        System.out.print("\nSin resultados.\n");
-//                    }
                     break;
                 case '5':
                     mostrarMensaje("\nMD5 del fichero a descargar: ");

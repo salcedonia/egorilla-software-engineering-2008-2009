@@ -1,6 +1,7 @@
 package control;
 
 import gestorDeRed.GestorDeRed;
+import javax.swing.JLabel;
 import mensajes.Mensaje;
 //import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
@@ -40,6 +41,22 @@ public class ControladorGrafica {
         _gestorDeRed = gestorDeRed;
         //_gestorDeDescargas = gestorDeDescargas;
         _gestorDeEgorilla = gestorEgorilla;
+    }
+
+    /**
+     * Comprueba si estamos conectados al servidor.
+     * @return Verdadero si estamos conectados al servidor y falso en caso contrario.
+     */
+    public boolean conectado() {
+        return _gestorDeEgorilla.estaConectadoAServidor();
+    }
+
+    public GestorEgorilla getGestorEGorilla() {
+        return _gestorDeEgorilla;
+    }
+
+    public void peticionBuscarFichero(String nombre) {
+        _gestorDeEgorilla.nuevaConsulta(nombre);
     }
     
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
