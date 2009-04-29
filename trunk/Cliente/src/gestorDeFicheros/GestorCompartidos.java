@@ -74,4 +74,13 @@ public class GestorCompartidos {
         return _fragmentador.queFragmentosFaltan(hash);
     }
 
+    /**
+     * Metodo para devolver la cantidad de fragmentos de un archivo
+     * @param archivo Archivo del que queremos saber cuantos fragmentos tiene
+     * @return entero correspondiente a la cantidad de fragmentos.
+     */
+    public int cantidadFragmentosArchivo( Archivo archivo ){
+        return _fragmentador.cantidadFragmentosArchivo( archivo );
+    }
+
 }

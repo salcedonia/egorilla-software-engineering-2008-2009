@@ -11,7 +11,6 @@ import gestorDeFicheros.GestorCompartidos;
 import java.util.ArrayList;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
-import mensajes.p2p.Toma;
 import mensajes.serverclient.DatosCliente;
 
 /**
@@ -29,6 +28,9 @@ public class AlmacenDescargas {
 
     /** el descargador que ira despachando las descargas */
     private Descargador _descargador;
+
+    //Estructura de datos para almacenar los observadores sobre este objeto.
+    private ArrayList<ObservadorAlmacenDescargas> _listaObservadores;
     
     /**
      * Constructor del almacén de descargas. Crea el ArrayList de descargas e inicializa
@@ -38,6 +40,7 @@ public class AlmacenDescargas {
     public AlmacenDescargas (){
         _listaDescargas = new ArrayList<Descarga>();
         _posListaDescargas = -1;
+        _listaObservadores=new ArrayList<ObservadorAlmacenDescargas>();
     }
     
     /**
@@ -92,6 +95,10 @@ public class AlmacenDescargas {
         if (des == null){
             des = new Descarga(arch);
             _listaDescargas.add(des);
+            for (ObservadorAlmacenDescargas obs : _listaObservadores) {
+                int cantidadFragmentos=GestorCompartidos.getInstancia().cantidadFragmentosArchivo( arch );
+                obs.nuevaDescarga(arch.getNombre(), arch.getHash(), cantidadFragmentos);
+            }
         }
         
         
@@ -202,6 +209,9 @@ public class AlmacenDescargas {
         if (desc != null){
             //Eliminamos el fragmento de la lista de pendientes de la descarga
             respuesta = desc.fragmentoDescargado(frag);
+            for (ObservadorAlmacenDescargas obs : _listaObservadores) {
+                obs.fragmentoDescargado(frag.getHash());
+            }
         }
         return respuesta;
     }
@@ -210,4 +220,25 @@ public class AlmacenDescargas {
        _descargador = des;
      //  _descargador.
    }
+
+   //------------------------------------------
+   /**
+     * añade un observador que sera notificado con los eventos del modulo
+     * @param obs el observador
+     */
+    public void agregarObservador(ObservadorAlmacenDescargas obs){
+        int iIndice=_listaObservadores.indexOf(obs);
+        //Aniado el observador solo si no esta en la estructura de observadores
+        if ( iIndice == -1 )
+            _listaObservadores.add(obs);
+    }
+
+    /**
+     * elimina un observador
+     * @param obs el observador a eliminar
+     */
+    public void eliminarObservador(ObservadorAlmacenDescargas obs){
+        int indice=_listaObservadores.indexOf(obs);
+        _listaObservadores.remove(indice);
+    }
 }

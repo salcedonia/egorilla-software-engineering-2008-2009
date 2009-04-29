@@ -1,6 +1,7 @@
 package gui.grafica.trafico;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,15 +9,20 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
+import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 
-
-public class GUIPanelTrafico extends JPanel{
+/**
+ *
+ * @author José Miguel Guerrero
+ */
+public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescargas{
 	private ArrayList<DescargaIndividual> _listaDescargas;
     private JPanel _panelPrincipal;
     private int prueba=0;
@@ -32,7 +38,6 @@ public class GUIPanelTrafico extends JPanel{
 	public void initComponent(){
 		_panelPrincipal.setLayout(new GridLayout(0,1,0,0));
 		_panelPrincipal.add(new Cabecera());
-		nuevaDescarga("peli.avi","asdadsadafdagfadgadfg",100);
 	}
 
 	public void repintar(){
@@ -54,6 +59,16 @@ public class GUIPanelTrafico extends JPanel{
 		repaint();
 	}
 
+    public void fragmentoDescargado(String hash){
+        for(int i=0;i<_listaDescargas.size();i++){
+			if(_listaDescargas.get(i).getHash().equals(hash)){
+				_listaDescargas.get(i).incrementaProgressBar();
+				repintar();
+				break;
+			}
+		}
+    }
+
 	public void eliminarDescarga(String hash){
 		for(int i=0;i<_listaDescargas.size();i++){
 			if(_listaDescargas.get(i).getHash().equals(hash)){
@@ -72,13 +87,22 @@ public class GUIPanelTrafico extends JPanel{
 		private Cabecera(){
 			initComponent();
 		}
+        
 		private void initComponent(){
             _panelPrincipal=new JPanel();
-			_labelestado=new JLabel("Estado");
-			_labelnombre=new JLabel("Fichero");
-			_labelhash=new JLabel("Hash");
-			_labelprogreso=new JLabel("Progreso");
+			_labelestado=new JLabel("ESTADO");
+			_labelnombre=new JLabel("FICHERO");
+			_labelhash=new JLabel("HASH");
+			_labelprogreso=new JLabel("PROGRESO");
 			_panelPrincipal.setLayout(new GridLayout(0,4,150,150));
+            _panelPrincipal.setBackground(Color.BLUE);
+
+            
+            _labelnombre.setForeground(Color.white);
+            _labelhash.setForeground(Color.white);
+            _labelprogreso.setForeground(Color.white);
+            _labelestado.setForeground(Color.white);
+            
 			_panelPrincipal.add(_labelnombre);
 			_panelPrincipal.add(_labelhash);
 			_panelPrincipal.add(_labelprogreso);
@@ -93,6 +117,7 @@ public class GUIPanelTrafico extends JPanel{
 		private JLabel _labelnombre,_labelestado,_labelhash;
 		private JProgressBar _barra;
 		private String _hash;
+        private int _progreso;
 		private JMenuItem _menuItem, _menuItem2;
 	    private OyenteBoton _oyenteBoton;
         private JPanel _panelPrincipal;
@@ -124,6 +149,11 @@ public class GUIPanelTrafico extends JPanel{
 	    private String getHash(){
 			return _hash;
 		}
+
+        private void incrementaProgressBar(){
+            _progreso++;
+            _barra.setValue(_progreso);
+        }
 
 		/**
 		 * Crea el menu que aparecera al hacer click con el boton derecho del raton
