@@ -301,6 +301,10 @@ public class GestorEgorilla extends Thread{
         }
     }
 
+    public AlmacenDescargas getAlmacenDescargas(){
+        return _almacenDescargas;
+    }
+
     
     @Override
     public synchronized void run() {

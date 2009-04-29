@@ -117,8 +117,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.add("Buscador", panelBuscador);
 
         _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
-        JPanel trafico=new GUIPanelTrafico();
+        GUIPanelTrafico trafico=new GUIPanelTrafico();
         JScrollPane scroll=new JScrollPane(trafico);
+        _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(trafico);
         _panelPrincipal.add("Descargas", scroll);
         _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
         _panelPrincipal.add("Estadisticas", new GUIPanelEstadisticas());
