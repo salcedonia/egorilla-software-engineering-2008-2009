@@ -187,7 +187,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 RespuestaPeticionDescarga respDes = (RespuestaPeticionDescarga) msj;
                 
-                Archivo a =new Archivo(respDes.nombre, respDes.hash);
+                Archivo a =new Archivo(respDes.nombre, respDes.hash, respDes.tama, respDes.tipo);
                                 
                 _gestor.DescargaFichero(a, respDes.getLista());
                 
