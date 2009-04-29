@@ -6,6 +6,7 @@
 package gestorDeRed.TCP;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -73,6 +74,11 @@ public class GestorConexiones extends Thread{
     private boolean testConn(String ip, int puerto){
         try {
             Socket conn = new Socket(ip, puerto);
+
+            // envia un mensaje paquete sin carga.
+            Paquete p = new Paquete(null, ip, puerto);
+            new ObjectOutputStream(conn.getOutputStream()).writeObject(p);
+
             conn.close();
         } catch (UnknownHostException ex) {
            return false;

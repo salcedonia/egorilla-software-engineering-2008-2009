@@ -140,8 +140,12 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                          ***********************/
                         String ip = s.getInetAddress().getHostName();
 
-                        for (Receptor<E> receptor : _receptores) {
-                            receptor.recibeMensaje(paquete.getDatos(), ip, paquete.getPuertoRemite());
+
+                        // solo si el paquete lleva carga util se envia a los receptores
+                        if (paquete.getDatos() != null) {
+                            for (Receptor<E> receptor : _receptores) {
+                                receptor.recibeMensaje(paquete.getDatos(), ip, paquete.getPuertoRemite());
+                            }
                         }
                     } catch (ClassNotFoundException ex) {
                         Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
