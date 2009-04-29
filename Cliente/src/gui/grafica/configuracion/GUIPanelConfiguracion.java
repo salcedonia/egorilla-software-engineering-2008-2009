@@ -1,22 +1,35 @@
 package gui.grafica.configuracion;
 
+import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
+import java.util.Properties;
 import javax.swing.*;
 import java.awt.*;
-//import org.netbeans.lib.awtextra.*;
 
 //************************************************************************************//
 /**
  * Panel que se encarga de la configuración de la aplicación.
+ * El panel implementa la interfaz "observador sobre el objeto 
+ * ControlConfiguracionCliente", ya que dicho objeto es el que gestiona la configuración
+ * del cliente (es la parte del Modelo en el patrón MVC). El Panel es la parte de la
+ * vista. 
  *
- * @author  Mnemo
  * @author S@L-c
+ * @author F. Javier Sánchez Pardo
+ * 
  */
-public class GUIPanelConfiguracion extends JPanel{
+public class GUIPanelConfiguracion extends JPanel implements ObservadorControlConfiguracionCliente{
 
     // CONSTANTES
     private static final long serialVersionUID = 1L;
-	
+
     // ATRIBUTOS
+
+    // Se guarda una referencia al Modelo (PATRÓN MVC) que en este caso es un objeto
+    // ControlConfiguracionCliente.
+    private ControlConfiguracionCliente _modelo;
+    
+    // COMPONENTES GRÁFICOS
     private JButton _btnAceptar;
     private JButton _btnRestaurar;
     private JButton _btnCancelar;
@@ -49,55 +62,57 @@ public class GUIPanelConfiguracion extends JPanel{
     private JTextField _txtNombreUsuario;
     
     
-    // CONTROL
-    @SuppressWarnings("unused")
-	
-
 //	************************************************************************************//
     /**
      * Constructor de la clase PanelConfiguración.
+     * @param oControlConfiguracionCliente Objeto ControlConfiguracionCliente.
+     *        Mediante este parametro la Vista (este JPanel) tiene una referencia al Modelo
+     *        (el objeto ControlConfiguracionCliente) y le permite pedir información 
+     *        al Modelo para actualizarse convenientemente.
+     * 
      */
-    public GUIPanelConfiguracion() {
-            iniciarComponentes();
+    public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
+        _modelo = oControlConfiguracionCliente;
+        createGUI();
+        inicializarCampos ();        
     }
 
 //	************************************************************************************//
     /**
      * Inicia los componentes del panel de Configuración.
      */
-    private void iniciarComponentes() {
-        
+    private void createGUI() {
     	GridBagConstraints gridBagConstraints;
 
         _panelConexion = new JPanel();
         _lblNumDescargasSim = new JLabel();
-        _txtNumDescargasSim = new JTextField();
+        _txtNumDescargasSim = new JTextField(5);
         _lblLimVelocidadSubida = new JLabel();
-        _txtLimVelocidadSubida = new JTextField();
+        _txtLimVelocidadSubida = new JTextField(5);
         _lblLimVelocidadBajada = new JLabel();
-        _txtLimVelocidadBajada = new JTextField();
+        _txtLimVelocidadBajada = new JTextField(5);
         _lblPuerto = new JLabel();
-        _txtPuerto = new JTextField();
+        _txtPuerto = new JTextField(4);
         
         _panelDirectorios = new JPanel();
         _lblDirLlegada = new JLabel();
-        _txtDirLlegada = new JTextField();
+        _txtDirLlegada = new JTextField(40);
         _lblDirCompartidos = new JLabel();
-        _txtDirCompartidos = new JTextField();
+        _txtDirCompartidos = new JTextField(40);
         
         _panelServidor = new JPanel();
         _lblIPServidor = new JLabel();
         _lblPuertoServidor = new JLabel();
         _lblNombreServidor = new JLabel();
         _lblDescripServidor = new JLabel();        
-        _txtIPServidor = new JTextField();
-        _txtPuertoServidor = new JTextField();
-        _txtNombreServidor = new JTextField();
-        _txtDescripServidor = new JTextField();
+        _txtIPServidor = new JTextField(15);
+        _txtPuertoServidor = new JTextField(4);
+        _txtNombreServidor = new JTextField(25);
+        _txtDescripServidor = new JTextField(40);
         
         _panelUsuario = new JPanel();
         _lblNombreUsuario = new JLabel();
-        _txtNombreUsuario = new JTextField();
+        _txtNombreUsuario = new JTextField(25);
     
         _panelBotones = new JPanel();
         _btnAceptar = new JButton();
@@ -116,14 +131,16 @@ public class GUIPanelConfiguracion extends JPanel{
 
         //
         //LABEL NUMERO DE DESCARGAS SIMULTANEAS
-        _lblNumDescargasSim.setText("Numero de Descargas Simultaneas"); 
+        _lblNumDescargasSim.setText("Nº de Descargas Simultaneas"); 
         _lblNumDescargasSim.setName("lblNumDescargasSim"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_lblNumDescargasSim, gridBagConstraints);
-
+//        _panelConexion.add(_lblNumDescargasSim, gridBagConstraints);
+        this.add(_lblNumDescargasSim, gridBagConstraints);
+        
+        
         //TEXTBOX NUMERO DE DESCARGAS SIMULTANEAS
         _txtNumDescargasSim.setText(""); 
         _txtNumDescargasSim.setMinimumSize(new Dimension(100, 20));
@@ -134,17 +151,19 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_txtNumDescargasSim, gridBagConstraints);
+//        _panelConexion.add(_txtNumDescargasSim, gridBagConstraints);
+        this.add(_txtNumDescargasSim, gridBagConstraints);
 
         //
         //LABEL LIMITE DE VELOCIDAD DE SUBIDA
-        _lblLimVelocidadSubida.setText("Limite de Velocidad de subida"); 
+        _lblLimVelocidadSubida.setText("Limite de Velocidad de subida (KB/s)"); 
         _lblLimVelocidadSubida.setName("lblLimVelocidadSubida");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_lblLimVelocidadSubida, gridBagConstraints);
+//        _panelConexion.add(_lblLimVelocidadSubida, gridBagConstraints);
+        this.add(_lblLimVelocidadSubida, gridBagConstraints);
 
         //TEXTBOX LIMITE DE VELOCIDAD DE SUBIDA
         _txtLimVelocidadSubida.setText(""); 
@@ -156,17 +175,19 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_txtLimVelocidadSubida, gridBagConstraints);
+//        _panelConexion.add(_txtLimVelocidadSubida, gridBagConstraints);
+        this.add(_txtLimVelocidadSubida, gridBagConstraints);
 
         //
         //LABEL LIMITE DE VELOCIDAD DE BAJADA
-        _lblLimVelocidadBajada.setText("Limite de Velocidad de bajada"); 
+        _lblLimVelocidadBajada.setText("Limite de Velocidad de bajada (KB/s)"); 
         _lblLimVelocidadBajada.setName("lblLimVelocidadBajada");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_lblLimVelocidadBajada, gridBagConstraints);
+//        _panelConexion.add(_lblLimVelocidadBajada, gridBagConstraints);
+        this.add(_lblLimVelocidadBajada, gridBagConstraints);
 
         //TEXTBOX LIMITE DE VELOCIDAD DE BAJADA
         _txtLimVelocidadBajada.setText(""); 
@@ -178,7 +199,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_txtLimVelocidadBajada, gridBagConstraints);
+//        _panelConexion.add(_txtLimVelocidadBajada, gridBagConstraints);
+        this.add(_txtLimVelocidadBajada, gridBagConstraints);
 
         //
         //LABEL PUERTO
@@ -188,7 +210,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_lblPuerto, gridBagConstraints);
+//        _panelConexion.add(_lblPuerto, gridBagConstraints);
+        this.add(_lblPuerto, gridBagConstraints);
 
         //TEXTBOX PUERTO
         _txtPuerto.setText(""); 
@@ -200,7 +223,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelConexion.add(_txtPuerto, gridBagConstraints);
+//        _panelConexion.add(_txtPuerto, gridBagConstraints);
+        this.add(_txtPuerto, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -209,7 +233,7 @@ public class GUIPanelConfiguracion extends JPanel{
 //        gridBagConstraints.ipady = 40;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 200, 0, 0);
-        add(_panelConexion, gridBagConstraints);
+//        add(_panelConexion, gridBagConstraints);
 
 
         //----------------
@@ -226,7 +250,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_lblIPServidor, gridBagConstraints);
+//        _panelServidor.add(_lblIPServidor, gridBagConstraints);
+        this.add(_lblIPServidor, gridBagConstraints);
 
         //TEXTBOX IP SERVIDOR
         _txtIPServidor.setText(""); 
@@ -238,7 +263,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_txtIPServidor, gridBagConstraints);
+//        _panelServidor.add(_txtIPServidor, gridBagConstraints);
+        this.add(_txtIPServidor, gridBagConstraints);
         
         //
         //LABEL PUERTO SERVIDOR
@@ -248,7 +274,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_lblPuertoServidor, gridBagConstraints);
+//        _panelServidor.add(_lblPuertoServidor, gridBagConstraints);
+        this.add(_lblPuertoServidor, gridBagConstraints);
 
         //TEXTBOX PUERTO SERVIDOR
         _txtPuertoServidor.setText(""); 
@@ -260,7 +287,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_txtPuertoServidor, gridBagConstraints);
+//        _panelServidor.add(_txtPuertoServidor, gridBagConstraints);
+        this.add(_txtPuertoServidor, gridBagConstraints);
         
         //
         //LABEL NOMBRE SERVIDOR
@@ -270,7 +298,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_lblNombreServidor, gridBagConstraints);
+//        _panelServidor.add(_lblNombreServidor, gridBagConstraints);
+        this.add(_lblNombreServidor, gridBagConstraints);
 
         //TEXTBOX NOMBRE SERVIDOR
         _txtNombreServidor.setText(""); 
@@ -282,7 +311,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_txtNombreServidor, gridBagConstraints);
+//        _panelServidor.add(_txtNombreServidor, gridBagConstraints);
+        this.add(_txtNombreServidor, gridBagConstraints);
                 
         //
         //LABEL DESCRIPCION SERVIDOR
@@ -292,7 +322,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_lblDescripServidor, gridBagConstraints);
+//        _panelServidor.add(_lblDescripServidor, gridBagConstraints);
+        this.add(_lblDescripServidor, gridBagConstraints);
 
         //TEXTBOX DESCRIPCION SERVIDOR
         _txtDescripServidor.setText(""); 
@@ -304,7 +335,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelServidor.add(_txtDescripServidor, gridBagConstraints);
+//        _panelServidor.add(_txtDescripServidor, gridBagConstraints);
+        this.add(_txtDescripServidor, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = GridBagConstraints.REMAINDER;
@@ -312,7 +344,7 @@ public class GUIPanelConfiguracion extends JPanel{
 //        gridBagConstraints.ipady = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 200, 0, 0);
-        add(_panelServidor, gridBagConstraints);
+//        add(_panelServidor, gridBagConstraints);
         
         
         //----------------
@@ -329,7 +361,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelDirectorios.add(_lblDirLlegada, gridBagConstraints);
+//        _panelDirectorios.add(_lblDirLlegada, gridBagConstraints);
+        this.add(_lblDirLlegada, gridBagConstraints);
 
         //TEXTBOX NUMERO DE DESCARGAS SIMULTANEAS
         _txtDirLlegada.setText(""); 
@@ -341,7 +374,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelDirectorios.add(_txtDirLlegada, gridBagConstraints);
+//        _panelDirectorios.add(_txtDirLlegada, gridBagConstraints);
+        this.add(_txtDirLlegada, gridBagConstraints);
 
         //
         //LABEL DIRECTORIO DE COMPARTIDOS
@@ -351,7 +385,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelDirectorios.add(_lblDirCompartidos, gridBagConstraints);
+//        _panelDirectorios.add(_lblDirCompartidos, gridBagConstraints);
+        this.add(_lblDirCompartidos, gridBagConstraints);
 
         //TEXTBOX DIRECTORIO DE COMPARTIDOS
         _txtDirCompartidos.setText(""); 
@@ -363,7 +398,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelDirectorios.add(_txtDirCompartidos, gridBagConstraints);
+//        _panelDirectorios.add(_txtDirCompartidos, gridBagConstraints);
+        this.add(_txtDirCompartidos, gridBagConstraints);
         
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = GridBagConstraints.RELATIVE;
@@ -371,7 +407,7 @@ public class GUIPanelConfiguracion extends JPanel{
 //        gridBagConstraints.ipady = 40;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 200, 0, 0);
-        add(_panelDirectorios, gridBagConstraints);
+//        add(_panelDirectorios, gridBagConstraints);
 
         
         //----------------
@@ -388,7 +424,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelUsuario.add(_lblNombreUsuario, gridBagConstraints);
+//        _panelUsuario.add(_lblNombreUsuario, gridBagConstraints);
+        this.add(_lblNombreUsuario, gridBagConstraints);
 
         //TEXTBOX NOMBRE USUARIO
         _txtNombreUsuario.setText(""); 
@@ -400,7 +437,8 @@ public class GUIPanelConfiguracion extends JPanel{
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelUsuario.add(_txtNombreUsuario, gridBagConstraints);
+//        _panelUsuario.add(_txtNombreUsuario, gridBagConstraints);
+        this.add(_txtNombreUsuario, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = GridBagConstraints.REMAINDER;
@@ -408,7 +446,7 @@ public class GUIPanelConfiguracion extends JPanel{
 //        gridBagConstraints.ipady = 40;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 200, 0, 0);
-        add(_panelUsuario, gridBagConstraints);
+//        add(_panelUsuario, gridBagConstraints);
 
         
         //----------------
@@ -420,10 +458,10 @@ public class GUIPanelConfiguracion extends JPanel{
         //
         //BOTON ACEPTAR
         _btnAceptar.setText("Aceptar"); 
-        _btnAceptar.setMaximumSize(new Dimension(81, 23));
-        _btnAceptar.setMinimumSize(new Dimension(81, 23));
+        _btnAceptar.setMaximumSize(new Dimension(100, 23));
+        _btnAceptar.setMinimumSize(new Dimension(100, 23));
         _btnAceptar.setName("btnAceptar"); 
-        _btnAceptar.setPreferredSize(new Dimension(81, 23));
+        _btnAceptar.setPreferredSize(new Dimension(100, 23));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -434,10 +472,10 @@ public class GUIPanelConfiguracion extends JPanel{
         //
         //BOTON ACEPTAR
         _btnCancelar.setText("Cancelar"); 
-        _btnCancelar.setMaximumSize(new Dimension(81, 23));
-        _btnCancelar.setMinimumSize(new Dimension(81, 23));
+        _btnCancelar.setMaximumSize(new Dimension(100, 23));
+        _btnCancelar.setMinimumSize(new Dimension(100, 23));
         _btnCancelar.setName("btnCancelar"); 
-        _btnCancelar.setPreferredSize(new Dimension(81, 23));
+        _btnCancelar.setPreferredSize(new Dimension(100, 23));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
@@ -447,7 +485,7 @@ public class GUIPanelConfiguracion extends JPanel{
 
         //
         //BOTON RESTAURAR
-        _btnRestaurar.setText("Restaurar");
+        _btnRestaurar.setText("Config. defecto");
         _btnRestaurar.setName("btnRestaurar"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 3;
@@ -468,13 +506,36 @@ public class GUIPanelConfiguracion extends JPanel{
 
         getAccessibleContext().setAccessibleName("Configuracion");    
     }
-    
-//	************************************************************************************//
+
     /**
-     * Distingue entre los distintos eventos de actualización.
-     *  
-	 * @param evento Evento producido.
-	 * @param parametros Parametros asociados al evento.
+     * Este metodo inicializa los campos del panel con los valores
+     * contenidos en el objeto ControlConfiguracionCliente.
      */
-   
+    private void inicializarCampos(){
+        _txtNumDescargasSim.setText(_modelo.obtenerPropiedad("Num_descargas_sim"));
+        _txtLimVelocidadSubida.setText(_modelo.obtenerPropiedad("Lim_subida"));
+        _txtLimVelocidadBajada.setText(_modelo.obtenerPropiedad("Lim_bajada"));
+        _txtPuerto.setText(_modelo.obtenerPropiedad("Puerto"));
+        _txtDirLlegada.setText(_modelo.obtenerPropiedad("Dir_Llegada"));
+        _txtDirCompartidos.setText(_modelo.obtenerPropiedad("Dir_Compartidos"));
+        _txtIPServidor.setText(_modelo.obtenerPropiedad("IpServidor"));
+        _txtPuertoServidor.setText(_modelo.obtenerPropiedad("PuertoServidor"));
+        _txtNombreServidor.setText(_modelo.obtenerPropiedad("NombreServidor"));
+        _txtDescripServidor.setText(_modelo.obtenerPropiedad("Descripcion"));
+        _txtNombreUsuario.setText(_modelo.obtenerPropiedad("NmbUsuario"));
+    }
+    
+    /**
+     * Este metodo (implementacion de la interfaz ObservadorControlConfiguracionCliente) permite 
+     * reflejar en la Vista (este panel) los cambios que se han producido en el Modelo (objeto 
+     * ControlConfiguracionCliente). En el parametro propiedades están las propiedades
+     * que han cambiado de valor (no tienen porqué haber cambiado todas). EN ESTE CASO NO
+     * HACE FALTA tratar de manera diferenciada cada posible cambio: se muestra en el panel
+     * el contenido del objeto entero.
+     * @param obj Objeto ControlConfiguracionCliente que almacena la configuracion
+     * @param propiedades Conjunto de propiedades que han cambiado en el objeto anterior.
+     */
+    public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
+        inicializarCampos();
+    }
 }
