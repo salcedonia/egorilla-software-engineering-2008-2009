@@ -13,18 +13,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
 
 
 
 public class GUIPanelTrafico extends JPanel{
 	private ArrayList<DescargaIndividual> _listaDescargas;
     private JPanel _panelPrincipal;
+    private int prueba=0;
+    
 	public GUIPanelTrafico(){
 		_listaDescargas= new ArrayList<DescargaIndividual>();
         _panelPrincipal=new JPanel();
         setLayout(new BorderLayout());
-        add(new JScrollPane(_panelPrincipal),BorderLayout.CENTER);
+        add(_panelPrincipal,BorderLayout.NORTH);
 		initComponent();
 	}
 
@@ -67,6 +68,7 @@ public class GUIPanelTrafico extends JPanel{
 	private class Cabecera extends JPanel{
 		private JLabel _labelnombre,_labelestado,_labelprogreso,_labelhash;
         private JPanel _panelPrincipal;
+
 		private Cabecera(){
 			initComponent();
 		}
@@ -149,7 +151,8 @@ public class GUIPanelTrafico extends JPanel{
 			public void actionPerformed(ActionEvent event){
 				if(event.getActionCommand().equals("Pausar")){
 					_labelestado.setText("En pausa");
-					nuevaDescarga("peli.avi","asdadsadafdagfadgadfg",100);
+                    prueba++;
+					nuevaDescarga("peli"+prueba+".avi","asdadsadafdagfadgadfg"+prueba,100);
 					//TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
 					_menuItem.setText("Continuar");
 				}
