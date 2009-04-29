@@ -19,40 +19,73 @@ public class Fragmentador{
   //gestor de disco.
   //Hacer properties
 
-  private String extesionIndices = ".part.met";
+  /**
+   * Es la extesión que acompaña a los archivos de indices.
+   */
+  private String _extesionIndices;
 
-  //private String extesionFicheroTemporal = ".tmp";
+  //private String _extesionFicheroTemporal;
 
-  private int tamanioBytesFragmento = 512;
+  /**
+   * Es el tamaño de bytes máximo que puede tener un fragmento.
+   */
+  private int _tamanioBytesFragmento;
 
+  /**
+   * Es la ruta relativa del directorio de los ficheros temporales.
+   */
   private String _directorioTemporales;
 
+  /**
+   * Es la ruta relativa del directorio de los ficheros completos.
+   */
   private String _directorioCompletos;
 
   //Lista de todos (temporales+completos)
+  /**
+   * Es la lista de todos los archivos que tiene el usuario.
+   */
   private ListaArchivos _listaTodos;
 
   //Lista de los temporales
+  /**
+   * Es la lista de todos los archivos temporales que tiene el usuario.
+   */
   private ListaArchivos _listaTemporales;
 
   //Lista de los completos
+  /**
+   * Es la lista de todos los archivos completos que tiene el usuario.
+   */
   private ListaArchivos _listaCompletos; //Se necesita de un accion automatica o de recargar
 
+  /**
+   * Es el propio gestor de disco que creado a dicho Fragmentador.
+   */
   private GestorDisco _gestorDisco;
 
+  /**
+   * Es la clase que contiene la funcionalidad para tratar adecuadamente los archivos de 
+   * indices.
+   */
   private ManejarIndices _manejarIndices;
 
+  /**
+   * Es la clase que contiene la funcionalidad para tratar adecuadamente las listas de archivos.
+   */
   private ManejarListaArchivos _manejarListaArchivos;
 
 
 
   /**
    */
-  public Fragmentador( GestorDisco gestorDisco, String directorioCompletos, 
-      String directorioTemporales){
-    _directorioCompletos = directorioCompletos;
-    _directorioTemporales = directorioTemporales;
+  public Fragmentador( GestorDisco gestorDisco ){
+    _directorioCompletos = gestorDisco.getDirectorioCompletos();
+    _directorioTemporales = gestorDisco.getDirectorioTemporales();
     _gestorDisco = gestorDisco;
+
+    _extesionIndices = gestorDisco.getExtesionIndices();
+    _tamanioBytesFragmento = gestorDisco.getTamanioBytesFragmento();
 
     //Obtengo sus referencias, para poder tener las listas actualizarlas
     _listaCompletos = gestorDisco.getListaArchivosCompletos();
@@ -90,16 +123,18 @@ public class Fragmentador{
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
-    archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hashFragmento );
+    archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, 
+        hashFragmento );
     if( archivoRequerido == null ){
       //No esta en los completos, asi que miramos en los incompletos
-      archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hashFragmento );
+      archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, 
+          hashFragmento );
       if( archivoRequerido == null ){
         //El fichero no EXISTE - devuelvo un null - ERROR
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + extesionIndices );
+            + _extesionIndices );
         Indices indices = _manejarIndices.leeFicheroIndices( fichero );
         
         //Miro si el fragmento está en ese array
@@ -109,12 +144,13 @@ public class Fragmentador{
           punteroFichero = new RandomAccessFile( fichero, "r" );
           off = (int)fragmento.getOffset();
           int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
-          if( tamanioBytesFragmentoAux < tamanioBytesFragmento )
+          if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
             len = tamanioBytesFragmentoAux;
           else
-            len = tamanioBytesFragmento;
+            len = _tamanioBytesFragmento;
           bytesFragmento = new byte[ len ];
-          //System.out.println("offset "+off +" len "+len+" point "+punteroFichero.getFilePointer() );
+          //System.out.println("offset "+off +" len "+len+" point "+
+          //punteroFichero.getFilePointer() );
           punteroFichero.seek( off );
           //bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
           bytesLeidos = punteroFichero.read( bytesFragmento );
@@ -144,12 +180,13 @@ public class Fragmentador{
       punteroFichero = new RandomAccessFile( fichero, "r" );
       off = (int)fragmento.getOffset();
       int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
-      if( tamanioBytesFragmentoAux < tamanioBytesFragmento )
+      if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
         len = tamanioBytesFragmentoAux;
       else
-        len = tamanioBytesFragmento;
+        len = _tamanioBytesFragmento;
       bytesFragmento = new byte[ len ];
-      //System.out.println("offset "+off +" len "+len+" point "+punteroFichero.getFilePointer() );
+      //System.out.println("offset "+off +" len "+len+" point "+
+      //punteroFichero.getFilePointer() );
       punteroFichero.seek( off );
       //bytesLeidos = punteroFichero.read( bytesFragmento, off, len );
       bytesLeidos = punteroFichero.read( bytesFragmento );
@@ -183,9 +220,9 @@ public class Fragmentador{
     long tamanio = archivo.getSize();
     int cantidadFragmentos;
 
-    cantidadFragmentos = (int)tamanio / tamanioBytesFragmento;
+    cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
-    if( tamanio % tamanioBytesFragmento == 0 ){
+    if( tamanio % _tamanioBytesFragmento == 0 ){
       //Al no haber decimales, todas las partes tiene el mismo tamaño
     }else{
       cantidadFragmentos+=1;
@@ -214,7 +251,7 @@ public class Fragmentador{
         System.out.println("Si esta en los temporales - Abro fichero indices");
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + extesionIndices );
+            + _extesionIndices );
         Indices indices = _manejarIndices.leeFicheroIndices( fichero );
         listaFragmento = indices.getIndicesTengo();
       }
@@ -230,9 +267,9 @@ public class Fragmentador{
       Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
           archivoRequerido.getHash(), archivoRequerido.getSize(), 0 ); //0 por ser el primero
       listaFragmento.add( fragmento );
-      for( int i = 1;  fragmento.getOffset()+tamanioBytesFragmento < fragmento.getTama();  i++ ){
+      for( int i = 1;  fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama();  i++ ){
         fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
-            archivoRequerido.getSize(), i*tamanioBytesFragmento );
+            archivoRequerido.getSize(), i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
       //Esto último sobra, simplemente que el ultimo fragmento tiene
@@ -269,7 +306,7 @@ public class Fragmentador{
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
-            + extesionIndices );
+            + _extesionIndices );
         Indices indices = _manejarIndices.leeFicheroIndices( fichero );
         listaFragmento = indices.getIndicesFaltan();
       }
