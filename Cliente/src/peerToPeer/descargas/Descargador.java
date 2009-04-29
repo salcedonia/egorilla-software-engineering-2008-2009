@@ -34,6 +34,7 @@ public class Descargador extends Thread{
             _gestor=gestor;
             _almacen=almacen;
             _fragmentosPedidos=new ArrayList<Integer>();
+            _almacen.registraDescargador(this);
     }
 
     @Override
@@ -42,7 +43,6 @@ public class Descargador extends Thread{
 
         try {
             while (true) {
-
                 wait();
             }
         } catch (InterruptedException ex) {
