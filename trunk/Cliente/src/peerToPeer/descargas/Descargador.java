@@ -44,6 +44,28 @@ public class Descargador extends Thread{
         try {
             while (true) {
                 wait();
+                if (_almacen.getListaDescargas().size() != 0){
+                    
+                    // 3 casos:
+                    // no se nada -> espero al servidor
+                    // se quien tiene -> envio holaquiero
+                    // se quien tiene que -> envio Dame
+                    
+                    Descarga d = _almacen.dameSiguiente();
+                    
+                    //if (d.)
+                    
+                    if (d.getListaPropietarios().size() != 0){
+                        for (DatosCliente propietario : d.getListaPropietarios()) {
+                            HolaQuiero msg = new HolaQuiero(d.getArchivo());
+                            msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
+                            
+                            _gestor.addMensajeParaEnviar(msg);
+                            
+                            
+                        }
+                    }
+                }
             }
         } catch (InterruptedException ex) {
             //  donothing
@@ -53,5 +75,9 @@ public class Descargador extends Thread{
     public void parar(){
         this.interrupt();
     }
+    
+    synchronized void despierta (){
+         this.notify();
+     } 
 
 }
