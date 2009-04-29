@@ -38,6 +38,8 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * Indica si está conectado a un servidor o no.
      */
     private static boolean _conectado = false;
+/**  ultima busqueda para tener todos los datos de los archivos al descargar */
+    private GUIBusqueda _busqueda;
 
     /**
      * Constructor de la clase GUIConsola.
@@ -51,6 +53,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         _controlador = controlador;
         //Asocio al Controlador con su Vista.
         controlador._guiConsola = this;
+        _busqueda = new GUIBusqueda();
     }
     
     
@@ -118,17 +121,9 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                     mostrarMensaje("\nMD5 del fichero a descargar: ");
                     cad = _bufferedReader.readLine();
 
-
                     // TODO: coms asincronas, no hahy feedback
-                    _controlador.peticionDescargarFichero("nombre", cad);
+                    _controlador.peticionDescargarFichero(_busqueda.dameArchivoPorHash(cad));
 
-//                    RespuestaPeticionDescarga respuestaDescarga = ControlAplicacion.peticionDescargarFichero("nombre",cad);
-//                    if (respuestaDescarga.getLista().length > 0) {
-//                        System.out.println("<" + respuestaDescarga.getLista().length + "> clientes con el archivo <" + cad + ">");
-//                        insertarDescargas(respuestaDescarga.getLista());
-//                    } else {
-//                        System.out.print("\nNo existe el fichero.\n");
-//                    }
                     break;
                 case '0':
                     mostrarMensaje("\n\t\t\t\t\t\t\t\t\tBye!\n");
@@ -199,6 +194,8 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     //--------------------------------------------------------------------------
 
     public void resultadosBusqueda(String cad, Archivo[] lista) {
+
+        _busqueda.setBusqueda(lista);
 
         // notifica a la gui:
         mostrarMensaje("\nresultados de la busqueda: " + cad);

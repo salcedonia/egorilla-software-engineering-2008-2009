@@ -20,18 +20,22 @@ import mensajes.serverclient.DatosCliente;
  * @author Jose Miguel Guerrero
  */
 public class Descarga {
-    private final int TIMER=20;
-    private Archivo _archivo=null;
+
+    public static final int PIDEASERVIDOR = 0;
+    public static final int PIDEALOSPROPIETARIOS = 20;
+    public static final int DESCARGA = 70;
+
+    private int _estado;
+    private Archivo _archivo;
     private Vector<Fragmento> _listaFragmentosPendientes;
     private ArrayList<DatosCliente> _propietarios;
     private ArrayList<Par> _listaQuienTieneQue;
     //estado 0 es que debe hacer HolaQuiero, cada 20 veces que pase por el Descargador se hara
-    private int _estado=0;
     private int _posicion=0;
     
     public Descarga(Archivo archivo){
         _archivo=archivo;
-     
+        _estado = PIDEASERVIDOR;
         _listaFragmentosPendientes = new Vector<Fragmento>();
         _propietarios = new ArrayList<DatosCliente>();
         _listaQuienTieneQue = new ArrayList<Par>();
@@ -53,12 +57,14 @@ public class Descarga {
         for(int i=0;i<datos.length;i++){
              _propietarios.add(datos[i]);
         }
+        _estado = PIDEALOSPROPIETARIOS;
     }
 
     public void actualizaQuienTieneQue(Tengo mensaje){
         Cliente cliente=new Cliente(mensaje.ipDestino(),mensaje.puertoDestino());
         Par par=new Par(cliente,mensaje.getFragmentos());
         _listaQuienTieneQue.add(par);
+        _estado = DESCARGA;
     }
 
     public Cliente dameClienteQueTiene(Fragmento frag){
@@ -96,20 +102,14 @@ public class Descarga {
     public int getEstado(){
         return _estado;
     }
-
-    public void decrementarEstado(){
-        _estado--;
-    }
-
-    public void reiniciarEstado(){
-        _estado=TIMER;
-    }
     
     public boolean  fragmentoDescargado(Fragmento frag){
         return _listaFragmentosPendientes.remove(frag);
     }
 
-
+    public void decrementaEstado(){
+        _estado --;
+    }
 
     //---------- CLASES AUXILIARES
 
@@ -148,7 +148,7 @@ public class Descarga {
             return _listaFragmentosTiene;
         }
     }
-    
+
     public ArrayList<DatosCliente> getListaPropietarios(){
         return  _propietarios;
     }

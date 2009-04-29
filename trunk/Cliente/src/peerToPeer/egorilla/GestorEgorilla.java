@@ -229,9 +229,12 @@ public class GestorEgorilla extends Thread{
     public void nuevaDescarga(Archivo a) {
         _gestorDisco.getEnsamblador().nuevoArchivoTemporal(a);
         _almacenDescargas.nuevaDescarga(a);
+        this.pedirPropietariosaServidor(a);
+    }
+
+    public void pedirPropietariosaServidor (Archivo a){
         // realizamos una consulta al servidor para saber los propietarios.
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
-        
         peticion.setDestino(_serverIP, _serverPort);
         this.addMensajeParaEnviar(peticion);
     }
@@ -244,7 +247,6 @@ public class GestorEgorilla extends Thread{
      * @param lista lista de clientes que lo contienen
      */
     public void DescargaFichero(Archivo a, DatosCliente[] lista) {
-      
         _almacenDescargas.respuestaPeticionDescarga(a, lista);
     }
   
