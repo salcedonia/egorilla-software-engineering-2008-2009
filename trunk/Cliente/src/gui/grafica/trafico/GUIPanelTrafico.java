@@ -1,146 +1,192 @@
 package gui.grafica.trafico;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 
-import java.awt.*;
 
-//************************************************************************************//
-/**
- * Panel de tráfico entre archivos.
- * 
- * @author  Mnemo
- * @author S@L-c
- */
-public class GUIPanelTrafico extends JPanel {
 
-    // CONSTANTES
-	private static final long serialVersionUID = 1L;
-	
-	// ATRIBUTOS
-    private JLabel _lblEstado;
-    private JScrollPane _panelScroll1;
-    private JScrollPane _panelScroll2;
-    private JTable _tablaContenido;
-    private JTextArea _txtEstado;
-    
-    // CONTROL
-    @SuppressWarnings("unused")
-	private ControlPanelTrafico _controlPanelTrafico;
-
-//	************************************************************************************//
-	/**
-	 * Constructor de la clase PanelTrafico.
-	 */
-	public GUIPanelTrafico() {
-    
-		_controlPanelTrafico = new ControlPanelTrafico(this);
-		iniciarComponentes();
-    }
-    
-//	************************************************************************************//
-    /**
-     * Inicia los componentes del panel de tráfico.
-     */
-    private void iniciarComponentes() {
-
-    	GridBagConstraints gridBagConstraints;
-
-        _lblEstado = new JLabel();
-        _panelScroll1 = new JScrollPane();
-        _txtEstado = new JTextArea();
-        _panelScroll2 = new JScrollPane();
-        _tablaContenido = new JTable();
-
-        setBorder(BorderFactory.createTitledBorder("Trafico"));
-        setName("PanelTrafico"); 
-        setLayout(new GridBagLayout());
-
-        _lblEstado.setName("lblEstado");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        add(_lblEstado, gridBagConstraints);
-
-        _panelScroll1.setName("panelScroll1"); 
-
-        _txtEstado.setColumns(20);
-        _txtEstado.setRows(5);
-        _txtEstado.setName("textEstado");
-        _txtEstado.setEditable(false);
-        _panelScroll1.setViewportView(_txtEstado);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 357;
-        gridBagConstraints.ipady = 27;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(10, 10, 10, 10);
-        add(_panelScroll1, gridBagConstraints);
-
-        // TABLA DE CONTENIDO
-        _panelScroll2.setName("panelScroll2");
-        _tablaContenido.setBackground(new Color(235, 233, 237));
-        _tablaContenido.setModel(new DefaultTableModel( new Object [][] {},
-        												new String [] { "Nombre", "Tamaño", "Completado", "Velocidad", "Progreso", "Fuentes", "Prioridad", "Estado", "Restante"}) {
-            
-			private static final long serialVersionUID = 1L;
-			
-			Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-			
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            @SuppressWarnings("unchecked")
-			public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        
-        _tablaContenido.setEnabled(false);
-        _tablaContenido.setGridColor(new Color(235, 233, 237));
-        _tablaContenido.setName("tablaContenido");
-        _tablaContenido.setSelectionForeground(new Color(235, 233, 237)); 
-        _panelScroll2.setViewportView(_tablaContenido);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 2;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 357;
-        gridBagConstraints.ipady = 183;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(20, 10, 0, 10);
-        add(_panelScroll2, gridBagConstraints);
-
-        getAccessibleContext().setAccessibleName("Trafico"); 
-    }
-    
-//	************************************************************************************//
-    /**
-     * Distingue entre los distintos eventos de actualización.
-     *  
-	 * @param evento Evento producido.
-	 * @param parametros Parametros asociados al evento.
-     */
-    public void tratarEventos(EventoPanelTrafico accion, Object parametros) {
-		
+public class GUIPanelTrafico extends JPanel{
+	private ArrayList<DescargaIndividual> _listaDescargas;
+    private JPanel _panelPrincipal;
+	public GUIPanelTrafico(){
+		_listaDescargas= new ArrayList<DescargaIndividual>();
+        _panelPrincipal=new JPanel();
+        setLayout(new BorderLayout());
+        add(new JScrollPane(_panelPrincipal),BorderLayout.CENTER);
+		initComponent();
 	}
+
+	public void initComponent(){
+		_panelPrincipal.setLayout(new GridLayout(0,1,0,0));
+		_panelPrincipal.add(new Cabecera());
+		nuevaDescarga("peli.avi","asdadsadafdagfadgadfg",100);
+	}
+
+	public void repintar(){
+		_panelPrincipal.removeAll();
+		_panelPrincipal.add(new Cabecera());
+		for(int i=0;i<_listaDescargas.size();i++){
+			_panelPrincipal.add(_listaDescargas.get(i));
+		}
+		repaint();
+        _panelPrincipal.repaint();
+        _panelPrincipal.setVisible(true);
+	}
+
+	public void nuevaDescarga(String nombre, String hash, int tamanio){
+		DescargaIndividual descarga=new DescargaIndividual(nombre, hash, tamanio);
+		_panelPrincipal.add(descarga);
+		_listaDescargas.add(descarga);
+        _panelPrincipal.repaint();
+		repaint();
+	}
+
+	public void eliminarDescarga(String hash){
+		for(int i=0;i<_listaDescargas.size();i++){
+			if(_listaDescargas.get(i).getHash().equals(hash)){
+				_listaDescargas.remove(i);
+                _panelPrincipal.setVisible(false);
+				repintar();
+				break;
+			}
+		}
+	}
+
+	private class Cabecera extends JPanel{
+		private JLabel _labelnombre,_labelestado,_labelprogreso,_labelhash;
+        private JPanel _panelPrincipal;
+		private Cabecera(){
+			initComponent();
+		}
+		private void initComponent(){
+            _panelPrincipal=new JPanel();
+			_labelestado=new JLabel("Estado");
+			_labelnombre=new JLabel("Fichero");
+			_labelhash=new JLabel("Hash");
+			_labelprogreso=new JLabel("Progreso");
+			_panelPrincipal.setLayout(new GridLayout(0,4,150,150));
+			_panelPrincipal.add(_labelnombre);
+			_panelPrincipal.add(_labelhash);
+			_panelPrincipal.add(_labelprogreso);
+			_panelPrincipal.add(_labelestado);
+            setLayout(new BorderLayout());
+            add(_panelPrincipal,BorderLayout.NORTH);
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private class DescargaIndividual extends JPanel{
+		private JLabel _labelnombre,_labelestado,_labelhash;
+		private JProgressBar _barra;
+		private String _hash;
+		private JMenuItem _menuItem, _menuItem2;
+	    private OyenteBoton _oyenteBoton;
+        private JPanel _panelPrincipal;
+
+	    private DescargaIndividual(String nombre, String hash, int maximo){
+			_barra = new JProgressBar(0, maximo);
+			_barra.setValue(0);
+			_barra.setStringPainted(true);
+			_hash=hash;
+            _panelPrincipal=new JPanel();
+			_oyenteBoton=new OyenteBoton();
+			_labelnombre=new JLabel(nombre);
+			_labelhash=new JLabel(hash);
+			_labelestado=new JLabel("Descargando");
+			initComponent();
+			createPopupMenu();
+		}
+
+	    private void initComponent(){
+			_panelPrincipal.setLayout(new GridLayout(0,4,50,50));
+			_panelPrincipal.add(_labelnombre);
+			_panelPrincipal.add(_labelhash);
+			_panelPrincipal.add(_barra);
+			_panelPrincipal.add(_labelestado);
+            setLayout(new BorderLayout());
+            add(_panelPrincipal,BorderLayout.NORTH);
+		}
+
+	    private String getHash(){
+			return _hash;
+		}
+
+		/**
+		 * Crea el menu que aparecera al hacer click con el boton derecho del raton
+		 * asignando los componentes que apareceran.
+		 */
+	    private void createPopupMenu() {
+	        JPopupMenu popup = new JPopupMenu();
+
+	        _menuItem = new JMenuItem("Pausar"/*,new ImageIcon("img/pause.gif")*/);
+	        _menuItem.addActionListener(_oyenteBoton);
+	        popup.add(_menuItem);
+
+	        _menuItem2 = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
+	        _menuItem2.addActionListener(_oyenteBoton);
+	        popup.add(_menuItem2);
+
+	        MouseListener popupListener = new PopupListener(popup);
+	        _labelnombre.addMouseListener(popupListener);
+	        _labelestado.addMouseListener(popupListener);
+			_barra.addMouseListener(popupListener);
+	        this.addMouseListener(popupListener);
+	    }
+
+		class OyenteBoton implements ActionListener{
+			public void actionPerformed(ActionEvent event){
+				if(event.getActionCommand().equals("Pausar")){
+					_labelestado.setText("En pausa");
+					nuevaDescarga("peli.avi","asdadsadafdagfadgadfg",100);
+					//TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
+					_menuItem.setText("Continuar");
+				}
+				if(event.getActionCommand().equals("Continuar")){
+					_labelestado.setText("Descargando");
+                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
+					_menuItem.setText("Pausar");
+				}
+				if(event.getActionCommand().equals("Eliminar")){
+                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
+					eliminarDescarga(_hash);
+				}
+			}
+		}
+	}
+
+	class PopupListener extends MouseAdapter {
+        private JPopupMenu popup;
+
+        public PopupListener(JPopupMenu popupMenu) {
+            popup = popupMenu;
+        }
+
+        public void mousePressed(MouseEvent e) {
+            mostrarMenuRaton(e);
+        }
+
+        public void mouseReleased(MouseEvent e) {
+            mostrarMenuRaton(e);
+        }
+
+        private void mostrarMenuRaton(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                popup.show(e.getComponent(),e.getX(), e.getY());
+            }
+        }
+	}
+
+
 }
