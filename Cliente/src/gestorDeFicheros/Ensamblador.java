@@ -120,7 +120,7 @@ public class Ensamblador{
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
         _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, fragmentosArchivoNuevo( archivoNuevo ) );
         //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
-        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );   
+        fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() +extesionFicheroTemporal  );
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
         
         //Y si todo ha ido bien actualizo las listas
@@ -138,6 +138,34 @@ public class Ensamblador{
     }
     //Se puede dejar en un simple if-else sino me interesa diferenciar esos dos problemas
     return creado;
+  }
+
+  public boolean eliminarArchivoTemporal( String hash ){
+    boolean eliminado = false;
+    Archivo archivoExistencia;
+
+    archivoExistencia = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hash );
+    if( archivoExistencia == null ){
+      System.out.println("No se puede eliminar un archivo que no existe");
+      eliminado = false;
+    }else{
+      File ficheroIndices = new File( _directorioTemporales+"//" + 
+          archivoExistencia.getNombre() + extesionIndices );
+
+      File ficheroTemporal = new File( _directorioTemporales+"//" + 
+          archivoExistencia.getNombre() + extesionFicheroTemporal  );
+
+      //Puede qsten en uso cuando los quiera borrar
+      eliminado = ficheroIndices.delete() && ficheroTemporal.delete();
+      if( eliminado == false )
+        System.out.println("Problemas al eliminar el archivo temporal y/o de indices("+
+            archivoExistencia.getNombre()+")");
+
+      //comprobar que deja la lista actualizada
+      _manejarListaArchivos.eliminarArchivoDeLista( archivoExistencia, _listaTemporales );
+      _manejarListaArchivos.eliminarArchivoDeLista( archivoExistencia, _listaTodos );
+    }
+    return eliminado;
   }
 
   public Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
