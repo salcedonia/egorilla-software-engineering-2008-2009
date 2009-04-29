@@ -96,11 +96,9 @@ public class GestorConexiones extends Thread{
         this.interrupt();
     }
 
-    public synchronized  void addConexion(String host, int puerto){
+    public synchronized void addConexion(String host, int puerto){
         _listaHosts.add(host);
         _puertos.put(host, puerto);
-        if (_listaHosts.size() == 1)
-            this.notify();
     }
 
     public synchronized void eliminaConexion(String host){
