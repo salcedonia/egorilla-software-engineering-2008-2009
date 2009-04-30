@@ -65,7 +65,6 @@ public class Main {
                 int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
 
                 crearModulosCliente(puertoDeEscuchaCliente, modo);
-                ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);
             }
         } catch (IllegalOptionValueException ex) {
             log.info("Error no indentificado", ex); 
@@ -91,6 +90,10 @@ public class Main {
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
         _gestorEGorilla = new GestorEgorilla(_gestorDeRed,_gestorDeDisco);
         _controlDeSucesos = ControlDeSucesos.dameInstancia();
+        
+        //Registro a los observadores de la clase ControlConfiguracionCliente
+        ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorEGorilla);
+        ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);        
 
         crearTipoGUI(modo, _gestorDeRed, _gestorEGorilla);
     }

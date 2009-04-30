@@ -4,11 +4,13 @@ import datos.Archivo;
 import datos.Fragmento;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +23,7 @@ import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
 import gestorDeFicheros.*;
 import java.net.*;
+import java.util.Enumeration;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
@@ -31,8 +34,13 @@ import peerToPeer.descargas.Descargador;
  *
  * @author Luis Ayuso, José Miguel Guerrero
  * @author Modificado por Javier Sánchez
+ * 
+ * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de ControlConfiguracionCliente 
+ * y sera notificada cuando cambie la configuracion dando un tratamiento adecuado al cambio (o no hacer nada).
+ * //TODO: Dar tratamiento a los cambios en la configuracion del cliente (si asi se desea).
+ * 
  */
-public class GestorEgorilla extends Thread{
+public class GestorEgorilla extends Thread implements ObservadorControlConfiguracionCliente{
     
     private Queue<Mensaje> _colaSalida;
     private GestorDeRed<Mensaje> _gestorDeRed;
@@ -375,5 +383,27 @@ public class GestorEgorilla extends Thread{
         while (iterador.hasNext()){
             iterador.next().desconexionCompletada(this);
         }
+    }
+
+    //
+    //-------------------------------------------------
+    //Implementacion de la interfaz ObservadorControlConfiguracionCliente
+    //-------------------------------------------------
+    /**
+     * Este metodo es llamado cuando cambia la configuracion del cliente
+     * @param obj Objeto ControlConfiguracionCliente
+     * @param propiedades Conjunto de propiedades que ha cambiado
+     */
+    @Override
+    public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
+        String sNuevoValor;
+        for (Enumeration e = propiedades.propertyNames(); e.hasMoreElements() ; ) {
+            // Obtenemos el objeto
+            Object objeto = e.nextElement();
+            if (objeto.toString().compareTo (PropiedadCliente.PUERTO.obtenerLiteral()) == 0){
+                sNuevoValor = propiedades.getProperty(objeto.toString());
+                //TODO: Lo que se vaya a hacer cuando cambia de valor esta propiedad
+            }
+        }           
     }
 }
