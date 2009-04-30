@@ -8,6 +8,7 @@ package peerToPeer.descargas;
 import datos.Fragmento;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
@@ -71,12 +72,13 @@ public class Descargador extends Thread{
                         Random r = new Random();
 
                         Fragmento chunk = null;
-                        int i = (int)(Math.random()*((d.getListaFragmentosPendientes().size()-1)));
-                        if (d.getListaFragmentosPendientes().size() != 0){
+                        Vector<Fragmento> listado=d.getListaFragmentosPendientes();
+                        int i = (int)(Math.random()*((listado.size()-1)));
+                        if (listado.size() != 0){
                             //i =r.nextInt(d.getListaFragmentosPendientes().size())+1;                            
-                             chunk = d.getListaFragmentosPendientes().get(i);
-                             Cliente propietario = d.dameClienteQueTiene(chunk);
-                        Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
+                            chunk = listado.get(i);
+                            Cliente propietario = d.dameClienteQueTiene(chunk);
+                            Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
                                             chunk, propietario.getIP(), propietario.getPuerto());
 
                         _gestor.addMensajeParaEnviar(msj);
