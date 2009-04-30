@@ -135,6 +135,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // por ahora todos! 
                 
                 Tengo reciv = (Tengo) msj;
+                msj.setDestino(ip, port);
                 
                 /*Dame respuesta =  new Dame();                
                 respuesta.hash = reciv.hash;
