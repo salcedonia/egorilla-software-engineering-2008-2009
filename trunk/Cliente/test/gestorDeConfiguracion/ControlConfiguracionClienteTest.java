@@ -8,7 +8,6 @@ package gestorDeConfiguracion;
 import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
-
 /**
  *
  * @author F. Javier Sánchez Pardo
