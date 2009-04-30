@@ -1,8 +1,3 @@
-/*
- * Este proyecto esta sujeto a licencia GPL
- * This project and code is uncer GPL license
- */
-
 package peerToPeer.egorilla;
 
 import datos.Archivo;
@@ -23,15 +18,12 @@ import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
-
-
 import gestorDeFicheros.*;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import peerToPeer.descargas.AlmacenDescargas;
 import peerToPeer.descargas.Descargador;
-
 
 /**
  *
@@ -41,39 +33,37 @@ import peerToPeer.descargas.Descargador;
 public class GestorEgorilla extends Thread{
     
     private Queue<Mensaje> _colaSalida;
-   
-    //private GestorDescargas _gestorDescargas;
-
-//    private GestorSubidas _gestorSubidas;
-
     private GestorDeRed<Mensaje> _gestorDeRed;
-    
     private GestorDisco _gestorDisco;
-    
     private GestorClientes _gestorClientes;
-
     private AlmacenDescargas _almacenDescargas;
     private Descargador _descargador;
-    
     private boolean _conectado;
     private String  _serverIP;
     private int  _serverPort;
-    private boolean _doP2P;
-
-    
-    //Estructura de datos para almacenar los observadores sobre este objeto.
+    private boolean _doP2P;  
+    /**
+    * Estructura de datos para almacenar los observadores sobre este objeto.
+    */
     private ArrayList<ObservadorGestorEgorilla> _listaObservadores;
 
-    public GestorEgorilla(GestorDeRed<Mensaje> gr) {
+    /**
+     * Constructor de la clase GestorEgorilla.
+     * 
+     * @param gestorDeRed Gestor de Red de la aplicación.
+     */
+    public GestorEgorilla(GestorDeRed<Mensaje> gestorDeRed) {
+        
         _colaSalida = new LinkedList<Mensaje>();
-        _gestorDeRed = gr; 
+        _gestorDeRed = gestorDeRed; 
         _gestorClientes = new GestorClientes();
         _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
         _doP2P = false;
 
         //En donde se instancia gestorSubidas? No lo veo
+        //_gestorSubidas = new GestorSubidas( this, _gestorDisco );
+        
         _gestorDisco = new GestorDisco();
-     //   _gestorSubidas = new GestorSubidas( this, _gestorDisco );
         //inicializo la variable
         _conectado = false;
 
@@ -91,8 +81,8 @@ public class GestorEgorilla extends Thread{
      * @return si la conexion ha sido satisfactoria
      */
     public void conectaServidor(String ipServidor, int puertoServidor) throws ControlConfiguracionClienteException{
-        // realiza la conexion.
-        // para ello envia los datos al servidor
+        
+        // realiza la conexion. Envia los datos al servidor
         DatosCliente misDatos = new DatosCliente();
         
         // los datos se leen directamente del fichero de configuración
@@ -109,25 +99,27 @@ public class GestorEgorilla extends Thread{
         misDatos.setDestino(_serverIP, _serverPort);
         
         // envia mis datos
-        this.addMensajeParaEnviar(misDatos);
-        
-        this.comienzaP2P();
-        
+        addMensajeParaEnviar(misDatos);
+        comienzaP2P();       
     }
 
     /**
-     * devuleve la ip del servidor al que estamos conectados
-     * @return ip del servidor al que se conecta
+     * Devuelve la IP del servidor al que estamos conectados.
+     * 
+     * @return La IP del servidor al que se conecta.
      */
     public String getServerIP() {
-     return _serverIP;
+     
+        return _serverIP;
     }
 
     /**
-     * devuleve la ip del servidor al que estamos conectados
-     * @return ip del servidor al que se conecta
+     * Devuelve la IP del servidor al que estamos conectados.
+     * 
+     * @return La IP del servidor al que se conecta.
      */
     public int getServerPort() {
+        
         return _serverPort;
     }
      
@@ -183,12 +175,10 @@ public class GestorEgorilla extends Thread{
         this.start();
     }
     
-    
-    
     /**
-     * se realiza una consulta, el m�todo es asincrono, as� que no espera respuesta
-     * la ejecuci�n continua. 
-     * La respuesta llegara a la parte serividora, la cual lo comunicar� a sus listeners
+     * se realiza una consulta, el m�todo es asincrono, asi que no espera respuesta
+     * la ejecucion continua. 
+     * La respuesta llegara a la parte serividora, la cual lo comunicara a sus listeners
      * 
      * @param query la consulta a hacer.
      */

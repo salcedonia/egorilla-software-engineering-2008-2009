@@ -1,9 +1,7 @@
 package control;
 
 import gestorDeRed.GestorDeRed;
-import javax.swing.JLabel;
 import mensajes.Mensaje;
-//import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -11,7 +9,7 @@ import peerToPeer.egorilla.GestorEgorilla;
  * Se encarga de recibir los eventos producidos en la interfaz y se los 
  * notifica a la lógica de la aplicación para que ésta actúe en consecuencia.
  * 
- * @author Javier Salcedo Gómez
+ * @author Javier Salcedo
  */
 public class ControladorGrafica {
 
@@ -20,53 +18,70 @@ public class ControladorGrafica {
      */
     private GestorDeRed<Mensaje> _gestorDeRed;
     /**
-     * Gestor de descargas de la aplicación.
-     */
-    //private GestorDescargas _gestorDeDescargas;
-    /**
      * Gestor eGorilla.
      */
     private GestorEgorilla _gestorDeEgorilla;
-    
-    
+        
     /**
      * Constructor de la clase ControladorGrafica.
      * 
      * @param gestorDeRed Gestor de red de la aplicación.
-     * @param gestorDeDescargas Gestor de descargas de la aplicación.
      * @param gestorEgorilla Gestor eGorilla.
      */
     public ControladorGrafica(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla){
     
         _gestorDeRed = gestorDeRed;
-        //_gestorDeDescargas = gestorDeDescargas;
         _gestorDeEgorilla = gestorEgorilla;
     }
 
     /**
      * Comprueba si estamos conectados al servidor.
+     * 
      * @return Verdadero si estamos conectados al servidor y falso en caso contrario.
      */
     public boolean conectado() {
+
         return _gestorDeEgorilla.estaConectadoAServidor();
     }
 
+    /**
+     * Devuelve el GestorEGorilla de la aplicación.
+     * 
+     * @return El GestorEGorilla de la aplicación.
+     */
     public GestorEgorilla getGestorEGorilla() {
+        
         return _gestorDeEgorilla;
     }
 
+    /**
+     * Realiza una petición al GestorEGorilla de una búsqueda de un fichero.
+     * 
+     * @param nombre Nombre del fichero a buscar.
+     */
     public void peticionBuscarFichero(String nombre) {
+        
         _gestorDeEgorilla.nuevaConsulta(nombre);
     }
     
+    /**
+     * Realiza una petición de conexión al servidor al GestorEGorilla.
+     * 
+     * @param IP IP del servidor.
+     * @param puerto Puerto del servidor.
+     * @throws java.lang.Exception
+     */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
 
         _gestorDeEgorilla.conectaServidor(IP, puerto);
     }
+    
+    /**
+     * Realiza una petición de desconexión al servidor al GestorEGorilla.
+     */
     public void peticionDeDesconexionDeServidor() {
 
         _gestorDeEgorilla.desconectar();
-        // tambien acabamos con el p2p
         _gestorDeRed.terminaEscucha();
     }
 }

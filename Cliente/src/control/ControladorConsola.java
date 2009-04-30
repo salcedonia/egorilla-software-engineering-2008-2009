@@ -2,9 +2,7 @@ package control;
 
 import datos.Archivo;
 import gestorDeRed.GestorDeRed;
-import gui.consola.GUIConsola;
 import mensajes.Mensaje;
-//import peerToPeer.descargas.GestorDescargas;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -21,19 +19,11 @@ public class ControladorConsola {
      * Gestor de red de la aplicación.
      */
     private GestorDeRed<Mensaje> _gestorDeRed;
-    /**
-     * Gestor de descargas de la aplicación.
-     */
-//    private GestorDescargas _gestorDeDescargas;
+
     /**
      * Gestor eGorilla.
      */
-    private GestorEgorilla _gestorDeEgorilla;
-
-    /** Vista asociada a este controlador. Mediante esta referencia el controlador
-     * puede comunicarse con la Vista.
-     */
-    public GUIConsola _guiConsola;
+    private GestorEgorilla _gestorEGorilla;
     
     /**
      * Constructor de la clase.
@@ -45,42 +35,33 @@ public class ControladorConsola {
     public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla) {
         
         _gestorDeRed = gestorDeRed;
-        //_gestorDeDescargas = gestorDeDescargas;
-        _gestorDeEgorilla = gestorEgorilla;
+        _gestorEGorilla = gestorEgorilla;
     }
 
-    /**
-     * Configura el gestor de archivos compartidos del cliente a partir del 
-     * nombre del directorio que el usuario del Cliente eGorilla comparte.
-     * 
-     * @param nombreDirectorio
-     */
-    private void compartidos(String nombreDirectorio) {
-        // TODO: inicializa el gestor de compartidos o lo que sea
+    public GestorEgorilla getGestorEGorilla() {
+    
+        return _gestorEGorilla;
     }
 
     /**
      * Realiza la conexion a un servidor de este cliente.
-     *
+     * 
+     * @param IP IP del servidor.
+     * @param puerto Puerto del servidor. 
+     * 
      * @throws java.io.IOException
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
-        _guiConsola.mostrarMensaje("\nConectando a servidor....");
-        if ( !_gestorDeEgorilla.estaConectadoAServidor() ) {
-            _gestorDeEgorilla.conectaServidor(IP, puerto);
-        } else {
-            _guiConsola.mostrarMensaje("Ya estas conectado a un servidor.\n");
-        }
+        
+        _gestorEGorilla.conectaServidor(IP, puerto);
     }
 
     /**
      * Cierra la conexion con el servidor.
      */
     public void peticionDesconexionDeServidor() {
-        _guiConsola.mostrarMensaje("\nDesconectando del servidor...");
-        _gestorDeEgorilla.desconectar();
-
-        // tambien acabamos con el p2p
+        
+        _gestorEGorilla.desconectar();
         _gestorDeRed.terminaEscucha();
 }
 
@@ -88,21 +69,20 @@ public class ControladorConsola {
      * Pregunta al servidor por algun fichero con algunos datos proporcionados por
      * el cliente.
      *
-     * //TODO: buscar algo mas que por el nombre
-     *
-     * @param cad nombre de fichero buscado
+     * @param nombre nombre de fichero buscado
      */
-    public void peticionBuscarFichero(String cad) {
+    public void peticionBuscarFichero(String nombre) {
         
-        _gestorDeEgorilla.nuevaConsulta(cad);
+        _gestorEGorilla.nuevaConsulta(nombre);
     }
 
     /**
      * Da la orden para proceder a peticionDescargarFichero un fichero.
      *
-     * @param hash El identificador unico de este fichero.
+     * @param Archivo El archivo que se pretende descargar.
      */
-    public void peticionDescargarFichero(Archivo arch) {
-        _gestorDeEgorilla.nuevaDescarga(arch);
+    public void peticionDescargarFichero(Archivo archivo) {
+        
+        _gestorEGorilla.nuevaDescarga(archivo);
     }
 }

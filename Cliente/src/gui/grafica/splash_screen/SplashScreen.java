@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gui.grafica.splash_screen;
 
 import java.awt.*;
@@ -12,140 +7,131 @@ import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 import javax.swing.JWindow;
 
-//************************************************************************************//
 /**
  * Clase que representa un Splash Screen.
  * 
- * @author S@L-c
+ * @author Víctor Adaíl, Javier Salcedo
  */
 public class SplashScreen extends JWindow {
-	
-	// CONSTANTES
-	private static final long serialVersionUID = 1L;
-	public static final String RUTA_RECURSOS = "/recursos/interfaz/splash_screen/";
-	
-	// ATRIBUTOS
-	private Image _imagen;
-	private int _X, _Y, _ancho, _alto;
+    // CONSTANTES
+    private static final long serialVersionUID = 1L;
+    public static final String RUTA_RECURSOS = "/recursos/interfaz/splash_screen/";    // ATRIBUTOS
+    private Image _imagen;
+    private int _X,  _Y,  _ancho,  _alto;
 
-//	************************************************************************************//
-	/**
-	 * Constructor de la clase SplashScreen.
-	 * 
-	 * @param ruta Ruta donde se encuentra la imagen a dibujar.
-	 */
-	public SplashScreen() {
-		
-		super(new Frame());
+    /**
+     * Constructor de la clase SplashScreen.
+     * 
+     * @param ruta Ruta donde se encuentra la imagen a dibujar.
+     */
+    public SplashScreen() {
 
-		try {
-		
-			Toolkit toolkit = Toolkit.getDefaultToolkit();
+        super(new Frame());
 
-			// Obtenemos la imagen
-			_imagen = toolkit.getImage(getClass().getResource(RUTA_RECURSOS + "eGorillaSplash.jpg"));
+        try {
 
-			MediaTracker mediaTracker = new MediaTracker(this);
-			mediaTracker.addImage(_imagen, 0);
-			mediaTracker.waitForID(0);
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-			_ancho = _imagen.getWidth(this);
-			_alto = _imagen.getHeight(this);
+            // Obtenemos la imagen
+            _imagen = toolkit.getImage(getClass().getResource(RUTA_RECURSOS + "eGorillaSplash.jpg"));
 
-			Dimension screenSize = toolkit.getScreenSize();
+            MediaTracker mediaTracker = new MediaTracker(this);
+            mediaTracker.addImage(_imagen, 0);
+            mediaTracker.waitForID(0);
 
-			_X = (screenSize.width - _ancho) / 2;
-			_Y = (screenSize.height - _alto) / 2;
-		} 
-		catch (Exception exception) {
-		
-			exception.printStackTrace();
-			_imagen = null;
-		}
-	}
+            _ancho = _imagen.getWidth(this);
+            _alto = _imagen.getHeight(this);
 
-//	************************************************************************************//
-	/**
-	 * Constructor de la clase SplashScreen.
-	 * 
-	 * @param imagen Imagen a dibujar.
-	 */
-	public SplashScreen(Image imagen) {
-		
-		super(new Frame());
+            Dimension screenSize = toolkit.getScreenSize();
 
-		try {
+            _X = (screenSize.width - _ancho) / 2;
+            _Y = (screenSize.height - _alto) / 2;
+        } catch (Exception exception) {
 
-			Toolkit toolkit = Toolkit.getDefaultToolkit();
+            exception.printStackTrace();
+            _imagen = null;
+        }
+    }
 
-			_imagen = imagen;
+    /**
+     * Constructor de la clase SplashScreen.
+     * 
+     * @param imagen Imagen a dibujar.
+     */
+    public SplashScreen(Image imagen) {
 
-			MediaTracker mediaTracker = new MediaTracker(this);
-			mediaTracker.addImage(_imagen, 0);
-			mediaTracker.waitForID(0);
+        super(new Frame());
 
-			_ancho = _imagen.getWidth(this);
-			_alto = _imagen.getHeight(this);
+        try {
 
-			Dimension screenSize = toolkit.getScreenSize();
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
 
-			_X = (screenSize.width - _ancho) / 2;
-			_Y = (screenSize.height - _alto) / 2;
-		} 
-		catch (Exception exception) {
-		
-			exception.printStackTrace();
-			_imagen = null;
-		}
-	}
+            _imagen = imagen;
 
-//	************************************************************************************//
-	/**
-	 * Abre el splash screen y lo mantiene abierto la duración especificada o hasta
-	 * que se cierre explícitamente.
-	 * 
-	 * @param milisegundos Milisegundos que está visible el Splash Screen.
-	 */
-	public void open(int milisegundos) {
-		
-		if (_imagen == null)
-			return;
+            MediaTracker mediaTracker = new MediaTracker(this);
+            mediaTracker.addImage(_imagen, 0);
+            mediaTracker.waitForID(0);
 
-		Timer timer = new Timer(Integer.MAX_VALUE, new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				((Timer) event.getSource()).stop();
-				close();
-			};
-		});
+            _ancho = _imagen.getWidth(this);
+            _alto = _imagen.getHeight(this);
 
-		timer.setInitialDelay(milisegundos);
-		timer.start();
+            Dimension screenSize = toolkit.getScreenSize();
 
-		setBounds(_X, _Y, _ancho, _alto);
-		setVisible(true);
-	}
+            _X = (screenSize.width - _ancho) / 2;
+            _Y = (screenSize.height - _alto) / 2;
+        } catch (Exception exception) {
 
-//	************************************************************************************//
-	/**
-	 * Cierra el splash screen.
-	 */
-	public void close() {
-		
-		setVisible(false);
-		dispose();
-	}
+            exception.printStackTrace();
+            _imagen = null;
+        }
+    }
 
-//	************************************************************************************//
-	/**
-	 * Dibuja el splash screen.
-	 * 
-	 * @param graphics La instancia graphics.
-	 */
-	public void paint(Graphics graphics) {
+    /**
+     * Abre el splash screen y lo mantiene abierto la duración especificada o hasta
+     * que se cierre explícitamente.
+     * 
+     * @param milisegundos Milisegundos que está visible el Splash Screen.
+     */
+    public void open(int milisegundos) {
 
-		if (_imagen == null)
-			return;
-		
-		graphics.drawImage(_imagen, 0, 0, _ancho, _alto, this);
-	}
+        if (_imagen == null) {
+            return;
+        }
+        Timer timer = new Timer(Integer.MAX_VALUE, new ActionListener() {
+
+            public void actionPerformed(ActionEvent event) {
+                ((Timer) event.getSource()).stop();
+                close();
+            }
+            ;
+        });
+
+        timer.setInitialDelay(milisegundos);
+        timer.start();
+
+        setBounds(_X, _Y, _ancho, _alto);
+        setVisible(true);
+    }
+
+    /**
+     * Cierra el splash screen.
+     */
+    public void close() {
+
+        setVisible(false);
+        dispose();
+    }
+
+    /**
+     * Dibuja el splash screen.
+     * 
+     * @param graphics La instancia graphics.
+     */
+    public void paint(Graphics graphics) {
+
+        if (_imagen == null) {
+            return;
+        }
+        graphics.drawImage(_imagen, 0, 0, _ancho, _alto, this);
+    }
 }

@@ -6,7 +6,6 @@ import java.util.Properties;
 import javax.swing.*;
 import java.awt.*;
 
-//************************************************************************************//
 /**
  * Panel que se encarga de la configuración de la aplicación.
  * El panel implementa la interfaz "observador sobre el objeto 
@@ -25,8 +24,10 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
     // ATRIBUTOS
 
-    // Se guarda una referencia al Modelo (PATRÓN MVC) que en este caso es un objeto
-    // ControlConfiguracionCliente.
+    /**
+     * Se guarda una referencia al Modelo (PATRÓN MVC) que en este caso es 
+     * un objeto ControlConfiguracionCliente.
+     */
     private ControlConfiguracionCliente _objetoModelo;
     
     // COMPONENTES GRÁFICOS
@@ -60,9 +61,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
     private JTextField _txtNombreServidor;
     private JTextField _txtDescripServidor;
     private JTextField _txtNombreUsuario;
-    
-    
-//	************************************************************************************//
+        
     /**
      * Constructor de la clase PanelConfiguración.
      * @param oControlConfiguracionCliente Objeto ControlConfiguracionCliente.
@@ -77,7 +76,6 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         inicializarCampos ();        
     }
 
-//	************************************************************************************//
     /**
      * Inicia los componentes del panel de Configuración.
      */
