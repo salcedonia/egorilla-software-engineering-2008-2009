@@ -1,4 +1,4 @@
-package gui.grafica.configuracion;
+package gestorDeConfiguracion;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
@@ -7,18 +7,15 @@ import javax.swing.*;
 import java.awt.*;
 
 //************************************************************************************//
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 /**
- * Panel que se encarga de la configuración de la aplicación.
- * El panel implementa la interfaz "observador sobre el objeto 
- * ControlConfiguracionCliente", ya que dicho objeto es el que gestiona la configuración
- * del cliente (es la parte del Modelo en el patrón MVC). El Panel es la parte de la
- * vista. 
- *
- * @author S@L-c
+ * Panel observador sobre el objeto ControlConfiguracionCliente
+ * 
  * @author F. Javier Sánchez Pardo
  * 
  */
-public class GUIPanelConfiguracion extends JPanel implements ObservadorControlConfiguracionCliente{
+public class VistaObservadorControlConfiguracion extends JPanel implements ObservadorControlConfiguracionCliente{
 
     // CONSTANTES
     private static final long serialVersionUID = 1L;
@@ -27,7 +24,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
     // Se guarda una referencia al Modelo (PATRÓN MVC) que en este caso es un objeto
     // ControlConfiguracionCliente.
-    private ControlConfiguracionCliente _objetoModelo;
+    private ControlConfiguracionCliente _modelo;
     
     // COMPONENTES GRÁFICOS
     private JButton _btnAceptar;
@@ -61,6 +58,20 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
     private JTextField _txtDescripServidor;
     private JTextField _txtNombreUsuario;
     
+    public static void main(String[] args) throws ControlConfiguracionClienteException {
+        
+        VistaObservadorControlConfiguracion vista = 
+                new VistaObservadorControlConfiguracion(ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties"));
+        JFrame aplicacion = new JFrame("Solo observa...");
+        aplicacion.getContentPane().add(vista);
+        aplicacion.addWindowListener(new WindowAdapter() {
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                    }
+        });
+        aplicacion.pack();
+        aplicacion.setVisible(true);
+    }    
     
 //	************************************************************************************//
     /**
@@ -71,8 +82,8 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      *        al Modelo para actualizarse convenientemente.
      * 
      */
-    public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
-        _objetoModelo = oControlConfiguracionCliente;
+    public VistaObservadorControlConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
+        _modelo = oControlConfiguracionCliente;
         createGUI();
         inicializarCampos ();        
     }
@@ -467,10 +478,10 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelBotones.add(_btnAceptar, gridBagConstraints);
+//        _panelBotones.add(_btnAceptar, gridBagConstraints);
 
         //
-        //BOTON CANCELAR
+        //BOTON ACEPTAR
         _btnCancelar.setText("Cancelar"); 
         _btnCancelar.setMaximumSize(new Dimension(100, 23));
         _btnCancelar.setMinimumSize(new Dimension(100, 23));
@@ -481,7 +492,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelBotones.add(_btnCancelar, gridBagConstraints);
+//        _panelBotones.add(_btnCancelar, gridBagConstraints);
 
         //
         //BOTON RESTAURAR
@@ -492,7 +503,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelBotones.add(_btnRestaurar, gridBagConstraints);
+//        _panelBotones.add(_btnRestaurar, gridBagConstraints);
 
         gridBagConstraints = new GridBagConstraints();
 //        gridBagConstraints.gridx = 0;
@@ -502,7 +513,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 //        gridBagConstraints.ipady = 107;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 200, 0, 0);
-        add(_panelBotones, gridBagConstraints);
+//        add(_panelBotones, gridBagConstraints);
 
         getAccessibleContext().setAccessibleName("Configuracion");    
     }
@@ -512,17 +523,17 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      * contenidos en el objeto ControlConfiguracionCliente.
      */
     private void inicializarCampos(){
-        _txtNumDescargasSim.setText(_objetoModelo.obtenerPropiedad("Num_descargas_sim"));
-        _txtLimVelocidadSubida.setText(_objetoModelo.obtenerPropiedad("Lim_subida"));
-        _txtLimVelocidadBajada.setText(_objetoModelo.obtenerPropiedad("Lim_bajada"));
-        _txtPuerto.setText(_objetoModelo.obtenerPropiedad("Puerto"));
-        _txtDirLlegada.setText(_objetoModelo.obtenerPropiedad("Dir_Temporales"));
-        _txtDirCompartidos.setText(_objetoModelo.obtenerPropiedad("Dir_Completos"));
-        _txtIPServidor.setText(_objetoModelo.obtenerPropiedad("IpServidor"));
-        _txtPuertoServidor.setText(_objetoModelo.obtenerPropiedad("PuertoServidor"));
-        _txtNombreServidor.setText(_objetoModelo.obtenerPropiedad("NombreServidor"));
-        _txtDescripServidor.setText(_objetoModelo.obtenerPropiedad("Descripcion"));
-        _txtNombreUsuario.setText(_objetoModelo.obtenerPropiedad("NmbUsuario"));
+        _txtNumDescargasSim.setText(_modelo.obtenerPropiedad("Num_descargas_sim"));
+        _txtLimVelocidadSubida.setText(_modelo.obtenerPropiedad("Lim_subida"));
+        _txtLimVelocidadBajada.setText(_modelo.obtenerPropiedad("Lim_bajada"));
+        _txtPuerto.setText(_modelo.obtenerPropiedad("Puerto"));
+        _txtDirLlegada.setText(_modelo.obtenerPropiedad("Dir_Temporales"));
+        _txtDirCompartidos.setText(_modelo.obtenerPropiedad("Dir_Completos"));
+        _txtIPServidor.setText(_modelo.obtenerPropiedad("IpServidor"));
+        _txtPuertoServidor.setText(_modelo.obtenerPropiedad("PuertoServidor"));
+        _txtNombreServidor.setText(_modelo.obtenerPropiedad("NombreServidor"));
+        _txtDescripServidor.setText(_modelo.obtenerPropiedad("Descripcion"));
+        _txtNombreUsuario.setText(_modelo.obtenerPropiedad("NmbUsuario"));
     }
     
     /**
@@ -537,67 +548,5 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      */
     public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
         inicializarCampos();
-    }
-    
-    //
-    //Metodos auxiliares que devuelven los valores de los controles de entrada
-    //
-    public String obtenerNumDescargasSim(){
-        return _txtNumDescargasSim.getText();
-    }
-    
-    public String obtenerLimVelocidadSubida(){
-        return _txtLimVelocidadSubida.getText();
-    }
-    
-    public String obtenerLimVelocidadBajada(){
-        return _txtLimVelocidadBajada.getText();
-    }
-
-    public String obtenerPuerto(){
-        return _txtPuerto.getText();
-    }
-
-    public String obtenerDirLlegada(){
-        return _txtDirLlegada.getText();
-    }
-
-    public String obtenerDirCompartidos(){
-        return _txtDirCompartidos.getText();
-    }
-
-    public String obtenerIPServidor(){
-        return _txtIPServidor.getText();
-    }
-
-    public String obtenerPuertoServidor(){
-        return _txtPuertoServidor.getText();
-    }
-
-    public String obtenerNombreServidor(){
-        return _txtNombreServidor.getText();
-    }
-
-    public String obtenerDescripServidor(){
-        return _txtDescripServidor.getText();
-    }
-
-    public String obtenerNombreUsuario(){
-        return _txtNombreUsuario.getText();
-    }
-
-    //
-    //Metodos auxiliares que devuelven referencias a los botones
-    //
-    public Object obtenerBotonAceptar(){
-        return _btnAceptar;
-    }
-    
-    public Object obtenerBotonCancelar(){
-        return _btnCancelar;
-    }
-    
-    public Object obtenerBotonRestaurar(){
-        return _btnRestaurar;
     }
 }
