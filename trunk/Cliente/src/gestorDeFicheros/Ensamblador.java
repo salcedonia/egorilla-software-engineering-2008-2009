@@ -16,17 +16,17 @@ import java.util.*;
 public class Ensamblador{
 
   /**
-   * Es la extesión que acompaña a los archivos de indices.
+   * Es la extesion que acompaï¿½a a los archivos de indices.
    */
   private String _extesionIndices;
 
   /**
-   * Es la extesión que acompaña a los archivos temporales.
+   * Es la extesiï¿½n que acompaï¿½a a los archivos temporales.
    */
   private String _extesionFicheroTemporal;
 
   /**
-   * Es el tamaño de bytes máximo que puede tener un fragmento.
+   * Es el tamaï¿½o de bytes mï¿½ximo que puede tener un fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -101,14 +101,14 @@ public class Ensamblador{
       if( fichero.createNewFile() == true ){ //crea el fichero pero con 0 bytes
       FileOutputStream ficheroIndices = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      //Meto bytes aleatorios (basura) para llegar al tamamño indicado
+      //Meto bytes aleatorios (basura) para llegar al tamamï¿½o indicado
       if( tamBuf < size ){
         bytes = new byte[ tamBuf ];
         long i;
         for( i = size;  i > tamBuf;  i-=tamBuf )
           bufferedOutput.write( bytes, 0, bytes.length );
         if( i > 0 ){
-          //Si quedan todavía bytes por escribir
+          //Si quedan todavï¿½a bytes por escribir
           bytes = new byte[ (int)i ];
           bufferedOutput.write( bytes, 0, bytes.length );
         }
@@ -159,7 +159,7 @@ public class Ensamblador{
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
         _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, 
             fragmentosArchivoNuevo( archivoNuevo ) );
-        //Creo el fichero con el tamaño que se me indica, pero sin tener sentido
+        //Creo el fichero con el tamaï¿½o que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() + 
             _extesionFicheroTemporal  );
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
@@ -332,7 +332,7 @@ public class Ensamblador{
 
   public static boolean copiar( File source, File destination ){
     boolean resultado = false;
-    // declaración del flujo
+    // declaraciï¿½n del flujo
     FileInputStream sourceFile = null;
     FileOutputStream destinationFile = null;
     try {
