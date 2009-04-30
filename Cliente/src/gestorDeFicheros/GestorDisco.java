@@ -1,3 +1,6 @@
+/**
+ * Paquete donde tenemos las clases que tratan con el disco.
+ */
 package gestorDeFicheros;
 
 import java.io.*;
@@ -38,7 +41,7 @@ public class GestorDisco {
   private String _extesionFicheroTemporal;
 
   /**
-   * Es el tamaño de bytes máximo que puede tener un fragmento.
+   * Es el tamaño de bytes máximo que puede tener un Fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -92,7 +95,7 @@ public class GestorDisco {
   /**
    * Constructor por defecto del Gestor de Disco, el cual realiza todas una serie de operaciones   * iniciales sobre el disco.
    */
-  public GestorDisco() /*throws IOException*/ {  
+  public GestorDisco(){  
 
     _listaTodos = new ListaArchivos();
     _listaTemporales = new ListaArchivos();
@@ -132,6 +135,7 @@ public class GestorDisco {
 
     if( fDirectorioTemporales.isDirectory() == false ||
         fDirectorioCompletos.isDirectory() == false) {
+      System.out.println("Directorio de temporales o de completos no valido");
       //throw new IOException("Algun directorio no es un directorio valido");
     }
 
@@ -141,8 +145,26 @@ public class GestorDisco {
     System.out.println("\nDirectorio de completos: ");
     System.out.println( fDirectorioCompletos.getAbsolutePath() + "\n");
     
+    listarArchivosTemporalesIniciales( fDirectorioTemporales );
+
+    listarArchivosCompletosIniciales( fDirectorioCompletos );    
+
+    //Creo una nueva lista con todos los ficheros actuales
+    _listaTodos = getManejarListaArchivos().unirListas( _listaTemporales, _listaCompletos );
+    //Cuando haya varios directorio por cada una se hara la union , usando un for
+    //incluso, como son atributos de clase no hace falta pasarlos como parametros
+    
+    _fragmentador = new Fragmentador( this );
+    _ensamblador = new Ensamblador( this );
+  }
+
+  /**
+   * .
+   */
+  private void listarArchivosTemporalesIniciales( File fDirectorioTemporales ){
     //Debo filtrar los ficheros y leer solo los .part.met
-    File[] ficherosTemporales = fDirectorioTemporales.listFiles( new PartMetFileFilter() );
+    File[] ficherosTemporales = fDirectorioTemporales.listFiles( new IndicesFileFilter( 
+          getExtesionIndices() ) );
     //si el length() es 0 digo que el dir esta vacio
     if( ficherosTemporales.length > 0 ){
       System.out.println( "Procesando archivos de indices..." );
@@ -158,7 +180,12 @@ public class GestorDisco {
     }else{
       System.out.println( "Directorio de temporales vacio.\n" );
     }
+  }
 
+  /**
+   * .
+   */
+  private void listarArchivosCompletosIniciales( File fDirectorioCompletos ){
     File[] ficherosCompletos = fDirectorioCompletos.listFiles();
 
     if( ficherosCompletos.length > 0 ){
@@ -172,51 +199,74 @@ public class GestorDisco {
     }else{
       System.out.println( "Directorio de compartidos vacio.\n" );
     }
-
-    //Creo una nueva lista con todos los ficheros actuales
-    _listaTodos = getManejarListaArchivos().unirListas( _listaTemporales, _listaCompletos );
-    //Cuando haya varios directorio por cada una se hara la union , usando un for
-    //incluso, como son atributos de clase no hace falta pasarlos como parametros
-    
-    _fragmentador = new Fragmentador( this );
-    _ensamblador = new Ensamblador( this );
   }
 
-
-  //estos metodos estrictamente no deberian estar, q se pregunte a las properties
+  /**
+   * Obtiene la ruta relativa del directorio de los ficheros temporales.
+   * @return Devuelve la cadena que representa dicha ruta.
+   */
   public String getDirectorioTemporales(){
     return _directorioTemporales;
   }
 
-  //estos metodos estrictamente no deberian estar, q se pregunte a las properties
+  /**
+   * Obtiene la ruta relativa del directorio de los ficheros completos.
+   * @return Devuelve la cadena que representa dicha ruta.
+   */
   public String getDirectorioCompletos(){
     return _directorioCompletos;
   }
 
+  /**
+   * Obtiene la extensión actual de los archivos de indices.
+   * @return Devuelve la cadena que representa a la extensión de los indices.
+   */
   public String getExtesionIndices(){
     return _extesionIndices;
   }
 
+  /**
+   * Obtiene la extensión actual de los archivos de temporales.
+   * @return Devuelve la cadena que representa a la extensión de los temporales.
+   */
   public String getExtesionFicheroTemporal(){
     return _extesionFicheroTemporal;
   }
 
+  /**
+   * Obtiene el tamaño máximo que puede tener un Fragmento.
+   * @return Devuelve la cantidad máxima de bytes que tendrá un Fragmento.
+   */
   public int getTamanioBytesFragmento(){
     return _tamanioBytesFragmento;
   }
 
+  /**
+   * Obtiene la lista de los archivos temporales que tiene el usuario.
+   * @return Devuelve la lista de los archivos temporales.
+   */
   public ListaArchivos getListaArchivosTemporales(){
     return _listaTemporales;
   }
 
+  /**
+   * Obtiene la lista de los archivos completos que tiene el usuario.
+   * @return Devuelve la lista de los archivos completos.
+   */
   public ListaArchivos getListaArchivosCompletos(){
     return _listaCompletos;
   }
 
+  /**
+   * Obtiene la lista de todos los archivos que tiene el usuario, tanto los completos como los
+   * incompletos.
+   * @return Devuelve la lista de todos los archivos.
+   */
   public ListaArchivos getListaArchivosTodos(){
     return _listaTodos;
   }
 
+  /*
   public void setListaArchivosTemporales( ListaArchivos listaTemporales ){
     _listaTemporales = listaTemporales;
   }
@@ -227,16 +277,29 @@ public class GestorDisco {
 
   public void setListaArchivosTodos( ListaArchivos listaTodos ){
     _listaTodos = listaTodos;
-  }
+  }*/
 
+  /**
+   * Obtiene la instancia adecuada para la fragmentación de todos los archivos del usuario.
+   * @return Devuelve la instancia del Fragmentador.
+   */
   public Fragmentador getFragmentador(){
     return _fragmentador;
   }
 
+  /**
+   * Obtiene la instancia adecuada para el ensamblado de los archivos temporales del usuario.
+   * @return Devuelve la instancia del Ensamblador.
+   */
   public Ensamblador getEnsamblador(){
     return _ensamblador;
   }
 
+  /**
+   * Obtiene la instancia adecuada que ofrece la funcionalidad para tratar adecuadamente los 
+   * archivos de indices.
+   * @return Devuelve la instancia del manejador de indices.
+   */
   public ManejarIndices getManejarIndices(){
     return _manejarIndices;
   }
@@ -271,16 +334,21 @@ public class GestorDisco {
 
 }
 
-class PartMetFileFilter implements FileFilter {
+class IndicesFileFilter implements FileFilter {
 
-  private String extesionIndices = ".part.met";
+  private String _extesionIndices;
 
-    public boolean accept(File f) {
-      return f.getName().toLowerCase().endsWith( extesionIndices );
-        //return f.isDirectory() || f.getName().toLowerCase().endsWith(".part.met");
-    }
-    
-    public String getDescription() {
-        return ".part.met files";
-    }
+  public IndicesFileFilter( String extesionIndices ){
+    _extesionIndices = extesionIndices;
+  }
+  
+  public boolean accept(File f) {
+    return f.getName().toLowerCase().endsWith( _extesionIndices );
+    //return f.isDirectory() || f.getName().toLowerCase().endsWith(".part.met");
+  }
+  
+  
+  public String getDescription() {
+    return _extesionIndices+" files";
+  }
 }

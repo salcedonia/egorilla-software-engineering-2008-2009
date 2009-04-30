@@ -1,3 +1,6 @@
+/**
+ * Paquete donde tenemos las clases que tratan con el disco.
+ */
 package gestorDeFicheros;
 
 import mensajes.serverclient.*;
@@ -78,6 +81,7 @@ public class Fragmentador{
 
 
   /**
+   * .
    */
   public Fragmentador( GestorDisco gestorDisco ){
     _directorioCompletos = gestorDisco.getDirectorioCompletos();

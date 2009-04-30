@@ -1,3 +1,6 @@
+/**
+ * Paquete donde tenemos las clases que tratan con el disco.
+ */
 package gestorDeFicheros;
 
 import mensajes.serverclient.*;
