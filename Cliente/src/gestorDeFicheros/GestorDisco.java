@@ -119,8 +119,8 @@ public class GestorDisco {
     
     try{
     ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstancia();
-    _directorioTemporales = config.obtenerPropiedad("Dir_Temporales");
-    _directorioCompletos = config.obtenerPropiedad("Dir_Completos");
+    _directorioTemporales = config.obtenerPropiedad(PropiedadCliente.DIR_LLEGADA.obtenerLiteral());
+    _directorioCompletos = config.obtenerPropiedad(PropiedadCliente.DIR_COMPARTIDOS.obtenerLiteral());
     }catch( Exception e ){
       System.out.println( "No se encuentra el fichero de configuracion. Estableciendo"+
           "valores por defecto." );

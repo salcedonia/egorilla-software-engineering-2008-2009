@@ -244,9 +244,9 @@ public class GUIPanelServidores extends JPanel {
     private void iniciarPanelServidor() {
         try {
             _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
-            _serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
-            String nombreServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("NombreServidor");
-            String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("Descripcion");
+            _serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
+            String nombreServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral());
+            String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral());
 
             Object[] servidor = new Object[7];
             servidor[0] = servidor[0] = nombreServidor;

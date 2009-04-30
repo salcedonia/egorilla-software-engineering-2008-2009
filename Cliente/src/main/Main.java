@@ -3,6 +3,7 @@ package main;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import control.*;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.PropiedadCliente;
 import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
@@ -61,7 +62,7 @@ public class Main {
                 String modo = (String) parser.getOptionValue(gui);
 
                 ControlConfiguracionCliente controlConfiguracionCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties");
-                int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad("Puerto"));
+                int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
 
                 crearModulosCliente(puertoDeEscuchaCliente, modo);
             }
