@@ -192,7 +192,9 @@ public class AlmacenDescargas {
         } else {//Acabamos de superar al último
             _posListaDescargas = 0;//El siguiente por tanto será el primero
         }
-        return _listaDescargas.get(_posListaDescargas);
+        Descarga desc = _listaDescargas.get(_posListaDescargas);
+        desc.actualiza();
+        return desc;
        
     }
     
