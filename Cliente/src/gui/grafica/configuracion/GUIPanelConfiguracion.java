@@ -31,7 +31,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      * este caso es ControladorPanelConfiguracion.
      */
     private ControlConfiguracionCliente _objetoModelo;
-    private ControladorPanelConfiguracion _objetoControlador;
+    //private ControladorPanelConfiguracion _objetoControlador;
     
     // COMPONENTES GRÁFICOS
     private JButton _btnAceptar;
@@ -75,7 +75,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      */
     public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
         _objetoModelo = oControlConfiguracionCliente;
-        _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
+//        _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
         createGUI();
         inicializarCampos (_objetoModelo.obtenerConfiguracion());        
     }
@@ -471,7 +471,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
         _panelBotones.add(_btnAceptar, gridBagConstraints);
         //Pongo al objeto controlador a "escuchar" al boton.
-        _btnAceptar.addActionListener(_objetoControlador);
+//        _btnAceptar.addActionListener(_objetoControlador);
 
         //
         //BOTON DESHACER
@@ -484,7 +484,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
         _panelBotones.add(_btnDeshacer, gridBagConstraints);
         //Pongo al objeto controlador a "escuchar" al boton.
-        _btnDeshacer.addActionListener(_objetoControlador);
+//        _btnDeshacer.addActionListener(_objetoControlador);
 
         //
         //BOTON RESTAURAR
@@ -497,7 +497,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
         _panelBotones.add(_btnRestaurar, gridBagConstraints);
         //Pongo al objeto controlador a "escuchar" al boton.
-        _btnRestaurar.addActionListener(_objetoControlador);
+//        _btnRestaurar.addActionListener(_objetoControlador);
 
         gridBagConstraints = new GridBagConstraints();
 //        gridBagConstraints.gridx = 0;
