@@ -52,7 +52,7 @@ public class GestorEgorilla extends Thread{
      * 
      * @param gestorDeRed Gestor de Red de la aplicación.
      */
-    public GestorEgorilla(GestorDeRed<Mensaje> gestorDeRed) {
+    public GestorEgorilla(GestorDeRed<Mensaje> gestorDeRed, GestorDisco disco) {
         
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDeRed = gestorDeRed; 
@@ -63,7 +63,7 @@ public class GestorEgorilla extends Thread{
         //En donde se instancia gestorSubidas? No lo veo
         //_gestorSubidas = new GestorSubidas( this, _gestorDisco );
         
-        _gestorDisco = new GestorDisco();
+        _gestorDisco = disco;
         //inicializo la variable
         _conectado = false;
 
