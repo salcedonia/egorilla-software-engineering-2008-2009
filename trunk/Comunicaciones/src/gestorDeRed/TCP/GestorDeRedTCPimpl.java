@@ -61,14 +61,18 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * @param host el nombre de host o ip
      * @param port el puerto
      */
-    public synchronized void envia(E var, String host, int port) throws NetError {
+    public synchronized void envia(E var, String host, int port) throws NetError {     
         try {
             Socket s = new Socket(host, port);
-
             Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-
+            try {
+            Thread.sleep(20);
+            } catch (InterruptedException ex) {
+                
+            }
+            
             s.close();
         } catch (IOException ex) {
             this.generaErrorConexion(host);
