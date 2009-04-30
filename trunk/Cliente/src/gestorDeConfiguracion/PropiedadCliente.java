@@ -2,6 +2,7 @@
 package gestorDeConfiguracion;
 
 /**
+ * ¡¡ANTES DE TOCAR LEER ESTO POR FAVOR!!
  * Defino en esta clase constantes para nombrar a las propiedades
  * del fichero de configuracion del cliente. Si se quiere cambiar el nombre de una propiedad
  * basta con cambiar su nombre en los 2 ficheros de propiedades (cliente.properties y

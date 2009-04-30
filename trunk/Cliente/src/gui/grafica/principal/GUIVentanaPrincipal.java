@@ -492,7 +492,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         if (_btnConectar.getText().equals("Conectar")) // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
         {
             int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
-            String serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
+            String serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
             _controlador.peticionConexionAServidor(serverHost, sPuerto);
         } else // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
         {
