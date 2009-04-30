@@ -47,7 +47,7 @@ public class ManejarIndices {
 
       FileOutputStream ficheroIndices = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      //Pese a existir ya el fichero, como voy añadiendo fragmentos, el file aumenta
+      //Pese a existir ya el fichero, como voy anadiendo fragmentos, el file aumenta
       //por lo q sobreescribo el fichero con mas bytes y no menos, ya que si fueran menos
       //quedarian bytes malos en el file
       bufferedOutput.write( bytes, 0, bytes.length );
@@ -68,8 +68,8 @@ public class ManejarIndices {
     int byteIndicesLeidos = ficheroIndices.read( bytes );
     ficheroIndices.close();
     //para el ensamblador q es el q guarda, seria mejor guardar los bytes adicionales, es
-    //decir, guadar los ultimos fragmentos añadidos, aunque me parece q sera mas facil, xo
-    //ineficiente, recuperar el array de fragmentos anterior, añadir los fragmentos, y
+    //decir, guadar los ultimos fragmentos anadidos, aunque me parece q sera mas facil, xo
+    //ineficiente, recuperar el array de fragmentos anterior, anadir los fragmentos, y
     //sobreescribir todo
        
     ByteArrayInputStream bs = new ByteArrayInputStream( bytes ); // bytes es el byte[]

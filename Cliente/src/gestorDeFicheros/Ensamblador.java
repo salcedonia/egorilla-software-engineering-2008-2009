@@ -21,12 +21,12 @@ public class Ensamblador{
   private String _extesionIndices;
 
   /**
-   * Es la extesi�n que acompa�a a los archivos temporales.
+   * Es la extesion que acompana a los archivos temporales.
    */
   private String _extesionFicheroTemporal;
 
   /**
-   * Es el tama�o de bytes m�ximo que puede tener un fragmento.
+   * Es el tamano de bytes maximo que puede tener un fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -75,7 +75,13 @@ public class Ensamblador{
   private ManejarListaArchivos _manejarListaArchivos;
 
 
-
+  /**
+   * Constructor que recibe una instancia del disco para obtener la información necesaria para el
+   * ensamblado de los archivos del usuario, y mantener actualizada dicha información en función
+   * de los nuevos archivos o partes de los mismos que se han ido recibiendo.
+   * @param gestorDisco es la instancia del disco de donde obtengo y mantengo la informacion 
+   *                    referente a los archivos.
+   */
   public Ensamblador( GestorDisco gestorDisco){
     _directorioCompletos = gestorDisco.getDirectorioCompletos();
     _directorioTemporales = gestorDisco.getDirectorioTemporales();
@@ -94,6 +100,13 @@ public class Ensamblador{
     _manejarListaArchivos = gestorDisco.getManejarListaArchivos();
   }
 
+  /**
+   * Reserva una cantidad de espacio, indicada por parámetro, requerido para un fichero concreto.
+   * El contenido de este fichero es aleatorio y sera ira completando adecuadamente a medida que
+   * obtengamos los byte's de cada fragmento del fichero original.
+   * @param fichero indica la ruta y nombre del fichero nuevo que sera creado.
+   * @param size cantidad de bytes que seran reservados en el disco para el fichero.
+   */
   public void reservarEspacioFicheroNuevo( File fichero, long size ){
     byte[] bytes;
     int tamBuf = 9000;
@@ -108,7 +121,7 @@ public class Ensamblador{
         for( i = size;  i > tamBuf;  i-=tamBuf )
           bufferedOutput.write( bytes, 0, bytes.length );
         if( i > 0 ){
-          //Si quedan todav�a bytes por escribir
+          //Si quedan todavia bytes por escribir
           bytes = new byte[ (int)i ];
           bufferedOutput.write( bytes, 0, bytes.length );
         }
@@ -159,7 +172,7 @@ public class Ensamblador{
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
         _manejarIndices.crearFicheroIndices( fichero, archivoNuevo, 
             fragmentosArchivoNuevo( archivoNuevo ) );
-        //Creo el fichero con el tama�o que se me indica, pero sin tener sentido
+        //Creo el fichero con el tamano que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() + 
             _extesionFicheroTemporal  );
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
@@ -332,7 +345,7 @@ public class Ensamblador{
 
   public static boolean copiar( File source, File destination ){
     boolean resultado = false;
-    // declaraci�n del flujo
+    // declaracion del flujo
     FileInputStream sourceFile = null;
     FileOutputStream destinationFile = null;
     try {

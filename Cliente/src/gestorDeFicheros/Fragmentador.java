@@ -23,14 +23,14 @@ public class Fragmentador{
   //Hacer properties
 
   /**
-   * Es la extesion que acompa�a a los archivos de indices.
+   * Es la extesion que acompana a los archivos de indices.
    */
   private String _extesionIndices;
 
   //private String _extesionFicheroTemporal;
 
   /**
-   * Es el tama�o de bytes m�ximo que puede tener un fragmento.
+   * Es el tamano de bytes maximo que puede tener un fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -123,7 +123,7 @@ public class Fragmentador{
 
     String hashFragmento = fragmento.getHash();
     
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estar�)
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
@@ -277,7 +277,7 @@ public class Fragmentador{
         listaFragmento.add( fragmento );
       }
       //Esto �ltimo sobra, simplemente que el ultimo fragmento tiene
-      //un tama�o de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
+      //un tamano de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
       /*if( fragmento.getOffset() < fragmento.getTama() ){
         long diferencia = fragmento.getTama() - fragmento.getOffset();
         long offsetDiff = fragmento.getOffset()+diferencia;
@@ -295,7 +295,7 @@ public class Fragmentador{
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
 
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estar�)
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas

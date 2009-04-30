@@ -10,8 +10,8 @@ import gestorDeConfiguracion.*;
 
 /**
  * Esta clase se encarga de hacer un listado previo de todos los archivos completos y temporales
- * que tiene el usuario en el momento de arrancar la aplicacion. Adem�s, se encarga de tener 
- * todo la informaci�n previa necesaria para el Ensamblador y Fragmentador de archivos.
+ * que tiene el usuario en el momento de arrancar la aplicacion. Ademas, se encarga de tener 
+ * todo la informacion previa necesaria para el Ensamblador y Fragmentador de archivos.
  *
  */
 public class GestorDisco {
@@ -31,12 +31,12 @@ public class GestorDisco {
   private String _directorioCompletos;
 
   /**
-   * Es la extesi�n que acompa�a a los archivos de indices.
+   * Es la extesion que acompana a los archivos de indices.
    */
   private String _extesionIndices;
 
   /**
-   * Es la extesi�n que acompa�a a los archivos temporales.
+   * Es la extesion que acompana a los archivos temporales.
    */
   private String _extesionFicheroTemporal;
 
@@ -69,13 +69,13 @@ public class GestorDisco {
   private TipoArchivo _tipo;
 
   /**
-   * Es el Ensamblador que se utilizar� para tratar los archivos de indices/temporales que tiene
+   * Es el Ensamblador que se utilizara para tratar los archivos de indices/temporales que tiene
    * el usuario.
    */
   private Ensamblador _ensamblador;
 
   /**
-   * Es el Fragmentador que se utilizar� para obtener partes de los ficheros completos y 
+   * Es el Fragmentador que se utilizara para obtener partes de los ficheros completos y 
    * temporales del usuario.
    */
   private Fragmentador _fragmentador;
@@ -108,12 +108,12 @@ public class GestorDisco {
     TipoArchivo.iniciarTiposArchivo();
 
     //Hacer properties - Finalmente no, xq puede dar problemas si el usuario es un poco bruto,
-    //es decir, si las cambia habiendo alg�n archivo temporal con estas extensiones se perderan
+    //es decir, si las cambia habiendo algun archivo temporal con estas extensiones se perderan
     _extesionIndices = ".part.met";
     _extesionFicheroTemporal = ".tmp";
 
     //Esto en principio tampoco va como properties, xq "creo" qademas de los problemas 
-    //anteriores puede haber problemas si el resto de clientes no usan el mismo tama�o, yaq 
+    //anteriores puede haber problemas si el resto de clientes no usan el mismo tamano, yaq 
     //variar� el numero de fragmentos de un mismo fichero
     _tamanioBytesFragmento = 512;
     
@@ -172,7 +172,7 @@ public class GestorDisco {
       //la lista.
       //Debo recorrer los archivos de indices y no los archivos temporales
       for( File f : ficherosTemporales){
-        if( f.isFile() == true ) { //Creo que no hace falta esta comprobaci�n
+        if( f.isFile() == true ) { //Creo que no hace falta esta comprobacion
           _listaTemporales.add( procesarArchivoIndices( f ) );
         }//Sino es fichero no le aniado
       }
@@ -218,24 +218,24 @@ public class GestorDisco {
   }
 
   /**
-   * Obtiene la extensi�n actual de los archivos de indices.
-   * @return Devuelve la cadena que representa a la extensi�n de los indices.
+   * Obtiene la extension actual de los archivos de indices.
+   * @return Devuelve la cadena que representa a la extension de los indices.
    */
   public String getExtesionIndices(){
     return _extesionIndices;
   }
 
   /**
-   * Obtiene la extensi�n actual de los archivos de temporales.
-   * @return Devuelve la cadena que representa a la extensi�n de los temporales.
+   * Obtiene la extension actual de los archivos de temporales.
+   * @return Devuelve la cadena que representa a la extension de los temporales.
    */
   public String getExtesionFicheroTemporal(){
     return _extesionFicheroTemporal;
   }
 
   /**
-   * Obtiene el tama�o m�ximo que puede tener un Fragmento.
-   * @return Devuelve la cantidad m�xima de bytes que tendr� un Fragmento.
+   * Obtiene el tamano maximo que puede tener un Fragmento.
+   * @return Devuelve la cantidad m�xima de bytes que tendra un Fragmento.
    */
   public int getTamanioBytesFragmento(){
     return _tamanioBytesFragmento;
@@ -280,7 +280,7 @@ public class GestorDisco {
   }*/
 
   /**
-   * Obtiene la instancia adecuada para la fragmentaci�n de todos los archivos del usuario.
+   * Obtiene la instancia adecuada para la fragmentacion de todos los archivos del usuario.
    * @return Devuelve la instancia del Fragmentador.
    */
   public Fragmentador getFragmentador(){
