@@ -70,17 +70,17 @@ public class Descargador extends Thread{
                         // envia DAME a los propietarios
                         Random r = new Random();
 
-                        int i = 1;
-                        if (d.getListaFragmentosPendientes().size() != 0)
-                            i =r.nextInt(d.getListaFragmentosPendientes().size())+1;
-                      
-                        Fragmento chunk = d.getListaFragmentosPendientes().get(i);
-
-                        Cliente propietario = d.dameClienteQueTiene(chunk);
+                        Fragmento chunk = null;
+                        int i = (int)(Math.random()*((d.getListaFragmentosPendientes().size()-1)));
+                        if (d.getListaFragmentosPendientes().size() != 0){
+                            //i =r.nextInt(d.getListaFragmentosPendientes().size())+1;                            
+                             chunk = d.getListaFragmentosPendientes().get(i);
+                             Cliente propietario = d.dameClienteQueTiene(chunk);
                         Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
                                             chunk, propietario.getIP(), propietario.getPuerto());
 
                         _gestor.addMensajeParaEnviar(msj);
+                        }
                         break;
                 }
                 d.decrementaEstado();

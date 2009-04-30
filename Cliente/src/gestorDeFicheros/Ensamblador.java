@@ -143,6 +143,13 @@ public class Ensamblador{
 
   //****Se debe actualizar las listas cada vez que se pone a bajar un nuevo archivo o cuando se
   //coloca un archivo nuevo a compartir y se "pincha en recargar"
+  /**
+   * Genera los archivos temporales, tanto el de indices como el temporal correspondiente, creando
+   * el indice por defecto y el fichero temporal con el tamano concreto. El fichero se dara de 
+   * alta solo si no se encuentra actualmente en los completos o en los temporales.
+   * @param archivoNuevo es un objeto que representa el nuevo fichero que vamos a dar de alta.
+   * @return Devuelve un booleano que indica si se ha creado correctamente el nuevo temporal. 
+   */
   public boolean nuevoArchivoTemporal( Archivo archivoNuevo ){
     boolean creado = false;
     Archivo archivoExistencia;
@@ -194,6 +201,13 @@ public class Ensamblador{
     return creado;
   }
 
+  /**
+   * Elimina los archivos temporales, tanto el de indices del fichero, identificado por su hash, 
+   * como el archivo temporal incompleto.
+   * @param hash cadena que representa el valor de MD5 del fichero.
+   * @return Devuelve un booleano que indica si se ha eliminado correctamente el fichero temporal
+   *         y el de indices correspondientes.
+   */
   public boolean eliminarArchivoTemporal( String hash ){
     boolean eliminado = false;
     Archivo archivoExistencia;
@@ -222,6 +236,12 @@ public class Ensamblador{
     return eliminado;
   }
 
+  /**
+   * Crea automaticamente todos los fragmentos que tendria un fichero nuevo, en funcion del tamano
+   * maximo del fragmento y el tamano del fichero nuevo.
+   * @param archivo representa al archivo nuevo de cual voy a generar los fragmentos que necesito.
+   * @return Devuelve todos los fragmentos de los que se compone el archivo nuevo.
+   */
   public Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
     Vector<Fragmento> listaFragmento = new Vector<Fragmento>();
    
@@ -238,6 +258,11 @@ public class Ensamblador{
 
 
 
+  /**
+   * Metodo auxiliar que convierto un array de objetos de Byte a un array de tipos primitivos byte.
+   * @param bytes es un array de objetos del tipo Byte.
+   * @return Devuelve un array de tipos primitivos byte.
+   */
   private byte[] objetoAPrimitivo( Byte[] bytes ){
     byte[] pBytesFragmento = new byte[ bytes.length ];
 
@@ -250,6 +275,15 @@ public class Ensamblador{
 
 
   //Este ya debe comprobar mediante el part.met si le llegan byte[]-fragmentos duplicados o con error, etc
+  /**
+   * Guarda el array de byte de la parte del archivo que nos pasan, en el archivo y lugar 
+   * correspondiente indicado por el fragmento. En caso de error 
+   * @param fragmento es el que indica de que archivo es el fragmento y donde se colocara el array
+   *                  de bytes.
+   * @param byteArchivo es el array de objetos de byte que lleva una parte de la informacion del 
+   *                    fichero.
+   * return Devuelve un booleano en funcion de si se ha guardado el fragmento o no.
+   */
   public boolean guardarFragmentoEnArchivo(Fragmento fragmento, Byte[] byteArchivo){
     boolean guardado = false;
     Archivo archivoExistencia;
@@ -325,6 +359,15 @@ public class Ensamblador{
     return guardado;
   }
 
+  /**
+   * Mueve un fichero de una ruta a otra, o de la misma ruta a un nombre diferente sin necesidad
+   * de tener que copiar el archivo. En caso de no poder mover el fichero se intentara copiar, 
+   * borrando posteriormente el fichero que no se pudo mover previamente. 
+   * @param source representa el fichero que queremos mover.
+   * @param destination representa el fichero donde queremos mover el fichero origen.
+   * @return Devuelve un booleano en funcion de si puedo mover o no el fichero, o en caso de no 
+   *         poder mover si pueod copiar o no el fichero.
+   */
   public boolean mover(File source, File destination) {
     if( !destination.exists() ) {
       // intentamos con renameTo
@@ -343,7 +386,13 @@ public class Ensamblador{
     } 
   }
 
-  public static boolean copiar( File source, File destination ){
+  /**
+   * Copia el fichero origen en un fichero destino, en caso de no ocurrir problemas.
+   * @param source representa el fichero que queremos copiar.
+   * @param destination representa el fichero donde queremos copiar el fichero origen.
+   * @return Devuelve un booleano en funcion de si puedo copiar o no el fichero.
+   */
+  public boolean copiar( File source, File destination ){
     boolean resultado = false;
     // declaracion del flujo
     FileInputStream sourceFile = null;
@@ -365,15 +414,21 @@ public class Ensamblador{
       resultado = true;
       }
     } catch( FileNotFoundException f ) {
+        f.printStackTrace();
     } catch( IOException e ) {
+        e.printStackTrace();
     } finally {
       // pase lo que pase, cerramos flujo
       try {
         sourceFile.close();
-      } catch(Exception e) { }
+      } catch(Exception e) {
+          e.printStackTrace();
+      }
       try {
         destinationFile.close();
-      } catch(Exception e) { }
+      } catch(Exception e) {
+          e.printStackTrace();
+      }
     } 
     return resultado;
   }
