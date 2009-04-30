@@ -19,6 +19,7 @@ import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.GestorClientes;
 import gestorDeFicheros.*;
+import java.net.*;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
@@ -91,12 +92,18 @@ public class GestorEgorilla extends Thread{
         int puerto = Integer.parseInt(config.obtenerPropiedad("Puerto"));
         String nmb = config.obtenerPropiedad("NmbUsuario");
         
+        
         misDatos.setNombreUsuario(nmb); 
         misDatos.setPuertoEscucha(puerto);
         
        _serverPort = puertoServidor;
        _serverIP = ipServidor;
         misDatos.setDestino(_serverIP, _serverPort);
+        try {
+            misDatos.setIP(InetAddress.getLocalHost().getHostAddress());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         
         // envia mis datos
         addMensajeParaEnviar(misDatos);
@@ -317,6 +324,7 @@ public class GestorEgorilla extends Thread{
 
             }
         } catch (NetError ex) {   
+            // TODO: aki  propaga error, comunica a injterfaz y esas cosas
         } catch (InterruptedException in){
         }
     }

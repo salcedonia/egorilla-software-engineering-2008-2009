@@ -48,7 +48,11 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         } catch (IOException ex) {
             generaErrorConexion(destino.getHostAddress());
         }
@@ -68,9 +72,9 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
             try {
-            Thread.sleep(20);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
-                
+                ex.printStackTrace();
             }
             
             s.close();
