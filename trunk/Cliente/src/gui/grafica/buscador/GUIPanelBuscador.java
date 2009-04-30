@@ -33,7 +33,8 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     private JLabel _lblNombre;
     private JScrollPane _panelScroll;
     private JSeparator _separador;
-    private JTable _tablaContenido;
+    //private JTable _tablaContenido;
+    private PanelBusqueda _panelBusqueda;
     private JTextField _txtBusqueda;
     private JTabbedPane _panelPestanas;
     /**
@@ -58,6 +59,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         _controlador = controlador;
         _controlador.getGestorEGorilla().agregarObservador(this);
+        _ultimasBusquedas = new Vector<Archivo[]>();
         iniciarComponentes();
     }
 
@@ -273,7 +275,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
     /**
      * Muestra el mensaje de error informando que no se ha introducido el nombre
-     * del archivo a buscar.
+     * del lista a buscar.
      */
     private void mostrarErrorNombreNoIntroducido() {
 
@@ -299,29 +301,29 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * La tabla va dentro del _panelScroll y éste a su vez es el contenido de la 
      * nueva pestaña que se abre en el _panelPestanas.
      * 
-     * @param archivo Archivo a insertar.
+     * @param lista Lista de archivos a insertar.
      */
-    private void mostrarResultadoBusqueda(Archivo[] archivo) {
+    private void mostrarResultadoBusqueda(Archivo[] lista) {
 
         // Nombre de las columnas
-        String[] nombreColumnas = {"Nombre",
+        /*String[] nombreColumnas = {"Nombre",
             "Tamaño",
             "Disponibilidad",
             "Fuentes",
             "Tipo",
-            "Identificador de archivo"
+            "Identificador de lista"
         };
 
         // Recuperamos los datos
-        Object datos[][] = new Object[archivo.length][nombreColumnas.length];
+        Object datos[][] = new Object[lista.length][nombreColumnas.length];
 
-        for (int i = 0; i < archivo.length; i++) {
-            datos[i][0] = archivo[i]._nombre;
-            datos[i][1] = String.valueOf(archivo[i]._tamano) + " bytes";
+        for (int i = 0; i < lista.length; i++) {
+            datos[i][0] = lista[i]._nombre;
+            datos[i][1] = String.valueOf(lista[i]._tamano) + " bytes";
             datos[i][2] = "100%";
             datos[i][3] = "1(1)";
-            datos[i][4] = archivo[i]._tipo.toString();
-            datos[i][5] = archivo[i]._hash;
+            datos[i][4] = lista[i]._tipo.toString();
+            datos[i][5] = lista[i]._hash;
         }
 
         _tablaContenido = new JTable(datos, nombreColumnas);
@@ -385,14 +387,19 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
                     columna.setPreferredWidth(225);
                     break;
             }
-        }
+        }*/
 
+        // Creamos el contenido
+        _panelBusqueda = new PanelBusqueda(lista);
+        
         // PANEL DE SCROLL
         _panelScroll = new JScrollPane();
         _panelScroll.setName("panelScroll");
         _panelScroll.setBackground(Color.WHITE);
-        _panelScroll.add(_tablaContenido);
-        _panelScroll.setViewportView(_tablaContenido);
+        _panelScroll.add(_panelBusqueda);
+        _panelScroll.setViewportView(_panelBusqueda);
+        //_panelScroll.add(_tablaContenido);
+        //_panelScroll.setViewportView(_tablaContenido);
 
         // Hay una nueva pestaña
         setNumeroNuevos(getNumeroNuevos() + 1);
@@ -455,7 +462,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * Se han recibido los resultados de la busqueda.
      *
      * @param gestorEGorilla GestorEGorilla de la aplicación.
-     * @param nombre Nombre del archivo a buscar.
+     * @param nombre Nombre del lista a buscar.
      * @param lista Lista de archivos de la última búsqueda.
      */
     public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String cad, Archivo[] lista) {
@@ -471,7 +478,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     }
 
     /**
-     * La descarga de un archivo ha sido completada.
+     * La descarga de un lista ha sido completada.
      * 
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
