@@ -87,7 +87,7 @@ public class Main {
         _gestorDeDisco = new GestorDisco();
         _gestorDeCompartidos = GestorCompartidos.getInstancia();
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
-        _gestorEGorilla = new GestorEgorilla(_gestorDeRed);
+        _gestorEGorilla = new GestorEgorilla(_gestorDeRed,_gestorDeDisco);
         _controlDeSucesos = ControlDeSucesos.dameInstancia();
 
         crearTipoGUI(modo, _gestorDeRed, _gestorEGorilla);
