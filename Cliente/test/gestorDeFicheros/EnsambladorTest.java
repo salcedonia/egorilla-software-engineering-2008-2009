@@ -1,6 +1,8 @@
 package gestorDeFicheros;
 
-import static org.junit.Assert.*;
+import datos.Archivo;
+import datos.TipoArchivo;
+import java.io.File;
 import junit.framework.JUnit4TestAdapter;
 import org.junit.*;
 
