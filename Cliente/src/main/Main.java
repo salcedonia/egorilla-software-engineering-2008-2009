@@ -65,6 +65,7 @@ public class Main {
                 int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
 
                 crearModulosCliente(puertoDeEscuchaCliente, modo);
+                ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);
             }
         } catch (IllegalOptionValueException ex) {
             log.info("Error no indentificado", ex); 

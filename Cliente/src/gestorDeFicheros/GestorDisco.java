@@ -4,17 +4,23 @@
 package gestorDeFicheros;
 
 import java.io.*;
+import java.util.Properties;
 import mensajes.serverclient.*;
 import datos.*;
 import gestorDeConfiguracion.*;
+import java.util.Enumeration;
+
 
 /**
  * Esta clase se encarga de hacer un listado previo de todos los archivos completos y temporales
  * que tiene el usuario en el momento de arrancar la aplicacion. Ademas, se encarga de tener 
  * todo la informacion previa necesaria para el Ensamblador y Fragmentador de archivos.
- *
+ * 
+ * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de ControlConfiguracionCliente 
+ * y sera notificada cuando cambie la configuracion dando un tratamiento adecuado al cambio (o no hacer nada).
+ * //TODO: Dar tratamiento a los cambios en la configuracion del cliente (si asi se desea).
  */
-public class GestorDisco {
+public class GestorDisco  implements ObservadorControlConfiguracionCliente {
 
   
   //Sacar valores de properties
@@ -332,8 +338,28 @@ public class GestorDisco {
       return indices.getArchivo();
     }
 
-}
+    /**
+     * Este metodo es llamado cuando cambia la configuracion del cliente
+     * @param obj Objeto ControlConfiguracionCliente
+     * @param propiedades Conjunto de propiedades que ha cambiado
+     */
+    @Override
+    public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
+        String sNuevoValor;
+        for (Enumeration e = propiedades.propertyNames(); e.hasMoreElements() ; ) {
+            // Obtenemos el objeto
+            Object objeto = e.nextElement();
+            if (objeto.toString().compareTo (PropiedadCliente.DIR_LLEGADA.obtenerLiteral()) == 0){
+                sNuevoValor = propiedades.getProperty(objeto.toString());
+                //TODO: Lo que se vaya a hacer cuando cambia de valor esta propiedad
+            } else if (objeto.toString().compareTo (PropiedadCliente.DIR_COMPARTIDOS.obtenerLiteral()) == 0){
+                sNuevoValor = propiedades.getProperty(objeto.toString());
+                //TODO: Lo que se vaya a hacer cuando cambia de valor esta propiedad
+            }
+        }           
+    }
 
+}
 class IndicesFileFilter implements FileFilter {
 
   private String _extesionIndices;
