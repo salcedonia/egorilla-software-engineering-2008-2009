@@ -38,7 +38,7 @@ public class MiTest {
                 TipoArchivo.ARCHIVO);
         System.out.println(archivoComJar.toString());
         ensamblador.nuevoArchivoTemporal(archivoComJar);
-        //Debo comprobar que el archivo generado tiene el tama�o indicado   
+        //Debo comprobar que el archivo generado tiene el tamano indicado   
         File fileTemp = new File(gestorDisco.getDirectorioTemporales() + "//" + nombreFileComJar + ".tmp");
         //No hace falta comprobarlo, pero casi en un 99% el hash debe ser diferente
         String hashTemp = MD5Sum.getFileMD5Sum(fileTemp);
