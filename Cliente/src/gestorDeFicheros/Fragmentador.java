@@ -23,14 +23,14 @@ public class Fragmentador{
   //Hacer properties
 
   /**
-   * Es la extesión que acompaña a los archivos de indices.
+   * Es la extesion que acompaï¿½a a los archivos de indices.
    */
   private String _extesionIndices;
 
   //private String _extesionFicheroTemporal;
 
   /**
-   * Es el tamaño de bytes máximo que puede tener un fragmento.
+   * Es el tamaï¿½o de bytes mï¿½ximo que puede tener un fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -123,7 +123,7 @@ public class Fragmentador{
 
     String hashFragmento = fragmento.getHash();
     
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estará)
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estarï¿½)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
@@ -141,7 +141,7 @@ public class Fragmentador{
             + _extesionIndices );
         Indices indices = _manejarIndices.leeFicheroIndices( fichero );
         
-        //Miro si el fragmento está en ese array
+        //Miro si el fragmento estï¿½ en ese array
         if( indices.containsTengo( fragmento ) == true ){
           //Si esta -> Obtengo los bytes del fragmento que me han pedido
           try{
@@ -227,7 +227,7 @@ public class Fragmentador{
     cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
     if( tamanio % _tamanioBytesFragmento == 0 ){
-      //Al no haber decimales, todas las partes tiene el mismo tamaño
+      //Al no haber decimales, todas las partes tiene el mismo tamaï¿½o
     }else{
       cantidadFragmentos+=1;
     }
@@ -239,7 +239,7 @@ public class Fragmentador{
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estará)    
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estarï¿½)    
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
     archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hash );
@@ -276,8 +276,8 @@ public class Fragmentador{
             archivoRequerido.getSize(), i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
-      //Esto último sobra, simplemente que el ultimo fragmento tiene
-      //un tamaño de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
+      //Esto ï¿½ltimo sobra, simplemente que el ultimo fragmento tiene
+      //un tamaï¿½o de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
       /*if( fragmento.getOffset() < fragmento.getTama() ){
         long diferencia = fragmento.getTama() - fragmento.getOffset();
         long offsetDiff = fragmento.getOffset()+diferencia;
@@ -295,7 +295,7 @@ public class Fragmentador{
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
 
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estará)
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estarï¿½)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
