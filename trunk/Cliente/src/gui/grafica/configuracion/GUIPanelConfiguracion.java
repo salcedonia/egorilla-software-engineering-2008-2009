@@ -2,6 +2,7 @@ package gui.grafica.configuracion;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
+import gestorDeConfiguracion.PropiedadCliente;
 import java.util.Properties;
 import javax.swing.*;
 import java.awt.*;
@@ -132,7 +133,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL NUMERO DE DESCARGAS SIMULTANEAS
-        _lblNumDescargasSim.setText("Nº de Descargas Simultaneas"); 
+        _lblNumDescargasSim.setText(PropiedadCliente.NUM_DESCARGAS_SIM.obtenerLiteralEdicion()); 
         _lblNumDescargasSim.setName("lblNumDescargasSim"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -157,7 +158,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL LIMITE DE VELOCIDAD DE SUBIDA
-        _lblLimVelocidadSubida.setText("Limite de Velocidad de subida (KB/s)"); 
+        _lblLimVelocidadSubida.setText(PropiedadCliente.LIM_VELOCIDAD_SUBIDA.obtenerLiteralEdicion()); 
         _lblLimVelocidadSubida.setName("lblLimVelocidadSubida");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -181,7 +182,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL LIMITE DE VELOCIDAD DE BAJADA
-        _lblLimVelocidadBajada.setText("Limite de Velocidad de bajada (KB/s)"); 
+        _lblLimVelocidadBajada.setText(PropiedadCliente.LIM_VELOCIDAD_BAJADA.obtenerLiteralEdicion()); 
         _lblLimVelocidadBajada.setName("lblLimVelocidadBajada");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -205,7 +206,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL PUERTO
-        _lblPuerto.setText("Puerto"); 
+        _lblPuerto.setText(PropiedadCliente.PUERTO.obtenerLiteralEdicion()); 
         _lblPuerto.setName("lblPuerto"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -245,7 +246,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL IP SERVIDOR
-        _lblIPServidor.setText("IP Servidor"); 
+        _lblIPServidor.setText(PropiedadCliente.IP_SERVIDOR.obtenerLiteralEdicion()); 
         _lblIPServidor.setName("lblIPServidor"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -269,7 +270,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         
         //
         //LABEL PUERTO SERVIDOR
-        _lblPuertoServidor.setText("Puerto Servidor"); 
+        _lblPuertoServidor.setText(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteralEdicion()); 
         _lblPuertoServidor.setName("lblPuertoServidor"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -293,7 +294,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         
         //
         //LABEL NOMBRE SERVIDOR
-        _lblNombreServidor.setText("Nombre Servidor"); 
+        _lblNombreServidor.setText(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteralEdicion()); 
         _lblNombreServidor.setName("lblNombreServidor"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -317,7 +318,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
                 
         //
         //LABEL DESCRIPCION SERVIDOR
-        _lblDescripServidor.setText("Descripcion Servidor"); 
+        _lblDescripServidor.setText(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteralEdicion()); 
         _lblDescripServidor.setName("lblDescripServidor"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -356,7 +357,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         
         //
         //LABEL DIRECTORIO DE LLEGADA
-        _lblDirLlegada.setText("Directorio de llegada"); 
+        _lblDirLlegada.setText(PropiedadCliente.DIR_LLEGADA.obtenerLiteralEdicion()); 
         _lblDirLlegada.setName("lblDirLlegada"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -380,7 +381,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
         //
         //LABEL DIRECTORIO DE COMPARTIDOS
-        _lblDirCompartidos.setText("Directorio de compartidos"); 
+        _lblDirCompartidos.setText(PropiedadCliente.DIR_COMPARTIDOS.obtenerLiteralEdicion()); 
         _lblDirCompartidos.setName("lblDirCompartidos"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -419,7 +420,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         
         //
         //LABEL NOMBRE USUARIO
-        _lblNombreUsuario.setText("Nombre usuario"); 
+        _lblNombreUsuario.setText(PropiedadCliente.NOMBRE_USUARIO.obtenerLiteralEdicion()); 
         _lblNombreUsuario.setName("lblNombreUsuario"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridwidth = GridBagConstraints.RELATIVE;
@@ -516,17 +517,17 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      * contenidos en el objeto properties.
      */
     public void inicializarCampos(Properties properties){
-        _txtNumDescargasSim.setText(properties.getProperty("Num_descargas_sim"));
-        _txtLimVelocidadSubida.setText(properties.getProperty("Lim_subida"));
-        _txtLimVelocidadBajada.setText(properties.getProperty("Lim_bajada"));
-        _txtPuerto.setText(properties.getProperty("Puerto"));
-        _txtDirLlegada.setText(properties.getProperty("Dir_Temporales"));
-        _txtDirCompartidos.setText(properties.getProperty("Dir_Completos"));
-        _txtIPServidor.setText(properties.getProperty("IpServidor"));
-        _txtPuertoServidor.setText(properties.getProperty("PuertoServidor"));
-        _txtNombreServidor.setText(properties.getProperty("NombreServidor"));
-        _txtDescripServidor.setText(properties.getProperty("Descripcion"));
-        _txtNombreUsuario.setText(properties.getProperty("NmbUsuario"));
+        _txtNumDescargasSim.setText(properties.getProperty(PropiedadCliente.NUM_DESCARGAS_SIM.obtenerLiteral()));
+        _txtLimVelocidadSubida.setText(properties.getProperty(PropiedadCliente.LIM_VELOCIDAD_SUBIDA.obtenerLiteral()));
+        _txtLimVelocidadBajada.setText(properties.getProperty(PropiedadCliente.LIM_VELOCIDAD_BAJADA.obtenerLiteral()));
+        _txtPuerto.setText(properties.getProperty(PropiedadCliente.PUERTO.obtenerLiteral()));
+        _txtDirLlegada.setText(properties.getProperty(PropiedadCliente.DIR_LLEGADA.obtenerLiteral()));
+        _txtDirCompartidos.setText(properties.getProperty(PropiedadCliente.DIR_COMPARTIDOS.obtenerLiteral()));
+        _txtIPServidor.setText(properties.getProperty(PropiedadCliente.IP_SERVIDOR.obtenerLiteral()));
+        _txtPuertoServidor.setText(properties.getProperty(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
+        _txtNombreServidor.setText(properties.getProperty(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral()));
+        _txtDescripServidor.setText(properties.getProperty(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral()));
+        _txtNombreUsuario.setText(properties.getProperty(PropiedadCliente.NOMBRE_USUARIO.obtenerLiteral()));
     }
 
     /**

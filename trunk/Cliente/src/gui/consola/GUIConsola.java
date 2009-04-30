@@ -3,6 +3,7 @@ package gui.consola;
 import control.ControladorConsola;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.PropiedadCliente;
 import mensajes.serverclient.DatosCliente;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -239,11 +240,10 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     private void opcionConexionAServidorPorDefecto() throws IOException, Exception {
 
         // Recuperamos los parámetros del fichero de configuración
-        String IPServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
-        int puertoServidor = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
+        String IPServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
+        int puertoServidor = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
 
-        mostrarMensaje("\nConectando a servidor....");
-        
+        mostrarMensaje("\nConectando a servidor....");     
         if ( !_controlador.getGestorEGorilla().estaConectadoAServidor() )
             _controlador.peticionConexionAServidor(IPServidor, puertoServidor);
         else 
