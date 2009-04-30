@@ -3,6 +3,7 @@ package gui.grafica.servidores;
 import control.ControladorGrafica;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.PropiedadCliente;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -242,7 +243,7 @@ public class GUIPanelServidores extends JPanel {
 
     private void iniciarPanelServidor() {
         try {
-            _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
+            _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
             _serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
             String nombreServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("NombreServidor");
             String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("Descripcion");

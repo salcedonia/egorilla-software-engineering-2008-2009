@@ -4,6 +4,7 @@ import datos.Archivo;
 import datos.Fragmento;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.PropiedadCliente;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
@@ -89,8 +90,8 @@ public class GestorEgorilla extends Thread{
         // los datos se leen directamente del fichero de configuración
         ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstancia();
         
-        int puerto = Integer.parseInt(config.obtenerPropiedad("Puerto"));
-        String nmb = config.obtenerPropiedad("NmbUsuario");
+        int puerto = Integer.parseInt(config.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
+        String nmb = config.obtenerPropiedad(PropiedadCliente.NOMBRE_USUARIO.obtenerLiteral());
         
         
         misDatos.setNombreUsuario(nmb); 
