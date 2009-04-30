@@ -141,7 +141,7 @@ public class Fragmentador{
             + _extesionIndices );
         Indices indices = _manejarIndices.leeFicheroIndices( fichero );
         
-        //Miro si el fragmento est� en ese array
+        //Miro si el fragmento esta en ese array
         if( indices.containsTengo( fragmento ) == true ){
           //Si esta -> Obtengo los bytes del fragmento que me han pedido
           try{
@@ -227,7 +227,7 @@ public class Fragmentador{
     cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
     if( tamanio % _tamanioBytesFragmento == 0 ){
-      //Al no haber decimales, todas las partes tiene el mismo tama�o
+      //Al no haber decimales, todas las partes tiene el mismo tamano
     }else{
       cantidadFragmentos+=1;
     }
@@ -239,7 +239,7 @@ public class Fragmentador{
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
-    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estar�)    
+    //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)    
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
     archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hash );
@@ -276,7 +276,7 @@ public class Fragmentador{
             archivoRequerido.getSize(), i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
-      //Esto �ltimo sobra, simplemente que el ultimo fragmento tiene
+      //Esto ultimo sobra, simplemente que el ultimo fragmento tiene
       //un tamano de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
       /*if( fragmento.getOffset() < fragmento.getTama() ){
         long diferencia = fragmento.getTama() - fragmento.getOffset();

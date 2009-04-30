@@ -41,7 +41,7 @@ public class GestorDisco {
   private String _extesionFicheroTemporal;
 
   /**
-   * Es el tama�o de bytes m�ximo que puede tener un Fragmento.
+   * Es el tamano de bytes maximo que puede tener un Fragmento.
    */
   private int _tamanioBytesFragmento;
 
@@ -114,7 +114,7 @@ public class GestorDisco {
 
     //Esto en principio tampoco va como properties, xq "creo" qademas de los problemas 
     //anteriores puede haber problemas si el resto de clientes no usan el mismo tamano, yaq 
-    //variar� el numero de fragmentos de un mismo fichero
+    //variara el numero de fragmentos de un mismo fichero
     _tamanioBytesFragmento = 512;
     
     try{
@@ -235,7 +235,7 @@ public class GestorDisco {
 
   /**
    * Obtiene el tamano maximo que puede tener un Fragmento.
-   * @return Devuelve la cantidad m�xima de bytes que tendra un Fragmento.
+   * @return Devuelve la cantidad maxima de bytes que tendra un Fragmento.
    */
   public int getTamanioBytesFragmento(){
     return _tamanioBytesFragmento;

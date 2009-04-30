@@ -16,7 +16,7 @@ import java.util.*;
 public class Ensamblador{
 
   /**
-   * Es la extesion que acompa�a a los archivos de indices.
+   * Es la extesion que acompana a los archivos de indices.
    */
   private String _extesionIndices;
 
@@ -114,7 +114,7 @@ public class Ensamblador{
       if( fichero.createNewFile() == true ){ //crea el fichero pero con 0 bytes
       FileOutputStream ficheroIndices = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      //Meto bytes aleatorios (basura) para llegar al tamam�o indicado
+      //Meto bytes aleatorios (basura) para llegar al tamamno indicado
       if( tamBuf < size ){
         bytes = new byte[ tamBuf ];
         long i;
