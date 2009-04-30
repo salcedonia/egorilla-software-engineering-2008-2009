@@ -7,7 +7,7 @@ import gui.grafica.principal.GUIVentanaPrincipal;
 /**
  * Clase que se encarga de gestionar la gui de la aplicación en modo gráfico.
  * 
- * @author Javier Salcedo Gómez
+ * @author Javier Salcedo
  */
 public class GUIGrafica {
     

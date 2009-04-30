@@ -14,7 +14,7 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
 /**
  * Interfaz en modo consola de la aplicacion Cliente eGorilla.
  * 
- * @author Ivan Munsuri, Javier Salcedo, Javier Sánchez
+ * @author Iván Munsuri, Javier Salcedo, Javier Sánchez
  */
 public class GUIConsola implements ObservadorGestorEgorilla {
 
@@ -38,7 +38,9 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * Indica si está conectado a un servidor o no.
      */
     private static boolean _conectado = false;
-/**  ultima busqueda para tener todos los datos de los archivos al descargar */
+    /**  
+     * Última busqueda para tener todos los datos de los archivos al descargar 
+     */
     private GUIBusqueda _busqueda;
 
     /**
@@ -49,24 +51,26 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      */
     public GUIConsola(ControladorConsola controlador) throws IOException, Exception {
 
-        //Asocio la Vista (el objeto GUIConsola) con su controlador.
         _controlador = controlador;
-        //Asocio al Controlador con su Vista.
-        controlador._guiConsola = this;
+        
+        // Registramos la vista como observador del GestorEGorilla
+        _controlador.getGestorEGorilla().agregarObservador(this);
+        
         _busqueda = new GUIBusqueda();
+        
+        run();
     }
-    
-    
 
     /**
-     * pinta este mensaje por pantalla
+     * Muestra un mensaje por pantalla.
      * 
-     * @param string
+     * @param mensaje Mensaje a mostrar.
      */
-    public synchronized void mostrarMensaje(String string) {
-        System.out.println(string);
-    }
+    public synchronized void mostrarMensaje(String mensaje) {
 
+        System.out.println(mensaje);
+    }
+    
     /**
      * Muestra el menú de la aplicación en modo consola e invoca a los métodos 
      * correspondientes del ControladorConsola en función de la opción elegida
@@ -74,88 +78,60 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * 
      * @throws java.io.IOException Se lanza cuando se produce algún error de IO.
      */
-    public void mostrarMenu() throws Exception {
-        String cad;
+    public void run() throws Exception {
+        
         char op;
         do {
-            op = menu();
+            
+            mostrarMenu();
+            
+            op = elegirOpcion();
             switch (op) {
                 case '1':
-                    mostrarMensaje("\n\tIntroduce IP del servidor: ");
-                    String sIP = _bufferedReader.readLine();
-                    mostrarMensaje("\n\tIntroduce puerto del servidor: ");
-                    String sPuerto = _bufferedReader.readLine();
-                    int puerto = Integer.parseInt(sPuerto);
-                    //Invoco el método correspondiente del controlador.
-                    _controlador.peticionConexionAServidor(sIP, puerto);
+                    opcionConexionAServidor();
                     break;
-
                 case '2':
-                    String ServerHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
-                    int puertoS = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
-                    //Invoco el método correspondiente del controlador.
-                    _controlador.peticionConexionAServidor(ServerHost, puertoS);
+                    opcionConexionAServidorPorDefecto();
                     break;
-
                 case '3':
-                    //Invoco el método correspondiente del controlador.
-                    _controlador.peticionDesconexionDeServidor();
+                    opcionDesconexionDeServidor();
                     break;
-
                 case '4':
-                    mostrarMensaje("\nNombre del fichero a buscar: "); /*Mostrar mensaje de error si no se ha conectado antes*/
-                    cad = _bufferedReader.readLine();
-                    //creo q hay que quitar el retorno de carro
-                    _controlador.peticionBuscarFichero(cad);
+                    opcionBuscarFichero();
                     break;
                 case '5':
-                    mostrarMensaje("\nMD5 del fichero a descargar: ");
-                    cad = _bufferedReader.readLine();
-
-                    // TODO: coms asincronas, no hahy feedback
-                    _controlador.peticionDescargarFichero(_busqueda.dameArchivoPorHash(cad));
-
+                    opcionDescargarFichero();
                     break;
-                case '0':
-                    mostrarMensaje("\n\t\t\t\t\t\t\t\t\tBye!\n");
-                    System.exit(-1);
+                case '0': 
+                    opcionSalir();
                     break;
                 default:
-                    mostrarMensaje("ERROR, opcion no valida\n");
+                    mostrarMensaje("ERROR, La opción introducida no es válida!!\n");
             }
         } while (op != '0');
     }
 
     /**
-     * Pinta el menú de consola y devuelve la opción elegida por el usuario.
-     * @return Opción tecleada por el usuario.
+     * Muestra el menú y devuelve la opción elegida por el usuario.
+     * 
+     * @return La opción introducida por el usuario.
      * @throws IOException
      */
-    public char menu() throws IOException {
-        char op;
-        String aux;
+    public char elegirOpcion() throws IOException {
+
+        String op;
         do {
-            System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
-            System.out.print("\t1. Conectar.\n");
-            System.out.print("\t2. Conectar servidor por defecto.\n");
-            System.out.print("\t3. Desconectar.\n");
-            System.out.print("\t4. Buscar.          \n");
-            System.out.print("\t5. Descargar.          \n");
-            System.out.print("\t0. Salir.\n");
-            System.out.print("\n\tOpcion: ");
+            
+            op = _bufferedReader.readLine();
+        } while (op.length() == 0);
 
-            aux = _bufferedReader.readLine();
-
-        } while (aux.length() == 0);
-
-        op = aux.charAt(0);
-
-        return op;
+        return op.charAt(0);
     }
 
     /**
+     * Muestra las descargas del usuario.
      * 
-     * @param datos
+     * @param datos Datos del cliente.
      */
     public static void insertarDescargas(DatosCliente[] datos) {
 
@@ -167,7 +143,6 @@ public class GUIConsola implements ObservadorGestorEgorilla {
             System.out.println("");
             System.out.println("Resultados anadidos; " + i);
         }
-
     }
 
     /**
@@ -177,47 +152,192 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * contrario.
      */
     public boolean conectado() {
+        
         return _conectado;
     }
 
-    //--------------------------------------------------------------------------
-    //           INTERFACE OBSERVADOREGORILLA
-    //--------------------------------------------------------------------------
-
-    public void resultadosBusqueda(String cad, Archivo[] lista) {
+    /**
+     * Muestra los resultados de una petición de búsqueda de un archivo
+     * al servidor.
+     * 
+     * @param nombre Nombre del archivo solicitado.
+     * @param lista Lista de coincidencias.
+     */
+    public void mostrarResultadosDeBusqueda(String nombre, Archivo[] lista) {
 
         _busqueda.setBusqueda(lista);
 
-        // notifica a la gui:
-        mostrarMensaje("\nresultados de la busqueda: " + cad);
+        mostrarMensaje("\nResultados de la búsqueda de " + nombre);
         mostrarMensaje("================================================");
 
-        if (lista.length > 0) {
-            for (Archivo archivo : lista) {
+        if (lista.length > 0)
+            for (Archivo archivo : lista)
                 mostrarMensaje(archivo.toString());
-            }
-        } else {
-            mostrarMensaje("no hubo resultados! \n");
-        }
+        else 
+            mostrarMensaje("La búsqueda finalizó sin resultados. \n");
     }
 
+    /**
+     * Muestra el menú de opciones al usuario.
+     */
+    private void mostrarMenu() {
+        
+        System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
+        System.out.print("\t1. Conexión a Servidor.\n");
+        System.out.print("\t2. Conexión a Servidor por defecto.\n");
+        System.out.print("\t3. Desconexión de Servidor.\n");
+        System.out.print("\t4. Búsqueda de un Fichero.\n");
+        System.out.print("\t5. Descarga de un Fichero.\n");
+        System.out.print("\t0. Salir de la Aplicación.\n");
+        System.out.print("\n\tElige la Opción: ");
+    }
+
+    /**
+     * Solicita una petición de búsqueda de un fichero al servidor.
+     * Para ello se le solicita al usuario el nombre del fichero 
+     * a buscar.
+     * 
+     * @throws java.io.IOException
+     */
+    private void opcionBuscarFichero() throws IOException {
+
+        mostrarMensaje("\nNombre del fichero a buscar: ");
+        String nombre = _bufferedReader.readLine();
+
+        _controlador.peticionBuscarFichero(nombre);
+    }
+
+    /**
+     * Solicita una petición de conexión a un servidor.
+     * Para ello se le solicitará al usuario la dirección IP y el 
+     * puerto por el que se desea establecer la conexión con dicho
+     * servidor.
+     */
+    private void opcionConexionAServidor() throws IOException, Exception {
+
+        mostrarMensaje("\n\tIntroduce la IP del Servidor: ");
+        String sIP = _bufferedReader.readLine();
+        mostrarMensaje("\n\tIntroduce el Puerto del Servidor: ");
+        String sPuerto = _bufferedReader.readLine();
+        int puerto = Integer.parseInt(sPuerto);
+
+        mostrarMensaje("\nConectando a servidor....");
+        
+        if ( !_controlador.getGestorEGorilla().estaConectadoAServidor() )
+            _controlador.peticionConexionAServidor(sIP, puerto);
+        else 
+            mostrarMensaje("Ya estás conectado a un Servidor.\n");    
+    }
+
+    /**
+     * Solicita una petición de conexión al servidor que el cliente tenga
+     * establecido por defecto.
+     * 
+     * @throws java.io.IOException
+     * @throws java.lang.Exception
+     */
+    private void opcionConexionAServidorPorDefecto() throws IOException, Exception {
+
+        // Recuperamos los parámetros del fichero de configuración
+        String IPServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("IpServidor");
+        int puertoServidor = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad("PuertoServidor"));
+
+        mostrarMensaje("\nConectando a servidor....");
+        
+        if ( !_controlador.getGestorEGorilla().estaConectadoAServidor() )
+            _controlador.peticionConexionAServidor(IPServidor, puertoServidor);
+        else 
+            mostrarMensaje("Ya estas conectado a un servidor.\n");    
+    }
+
+    /**
+     * Solicita una petición de descarga de un archivo al servidor.
+     * Para ello se le solicita al usuario que introduzca el
+     * hash del fichero a descargar.
+     * 
+     * @throws java.io.IOException
+     */
+    private void opcionDescargarFichero() throws IOException {
+
+        mostrarMensaje("\nIntroduce el Hash del fichero a descargar: ");
+        String hash = _bufferedReader.readLine();
+
+        // TODO: coms asincronas, no hahy feedback
+        _controlador.peticionDescargarFichero(_busqueda.dameArchivoPorHash(hash));
+    }
+
+    /**
+     * Solicita una petición de desconexión al servidor.
+     */
+    private void opcionDesconexionDeServidor() {
+
+        mostrarMensaje("\nDesconectando del servidor...");
+        _controlador.peticionDesconexionDeServidor();
+    }
+
+    /**
+     * Muestra un mensaje de despedida cuando el usuario decide
+     * salir de la aplicación.
+     */
+    private void opcionSalir() {
+        
+        mostrarMensaje("\n\t\t\t\t\t\t\t\t\tAdiós!\n");
+        System.exit(-1);
+    }
+    
+    //------------------------------------------\\
+    //      INTERFACE OBSERVADOREGORILLA        \\
+    //------------------------------------------\\
+    /**
+     * Muestra un mensaje indicativo cuando la conexión con el servidor 
+     * se ha realizado con éxito.
+     * 
+     * @param obj GestorEGorilla de la aplicación.
+     * @param ip IP de la conexión.
+     * @param port Puerto de la conexión.
+     */
     public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
-        this.mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
+
+        mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
     }
 
+    /**
+     * Muestra un mensaje indicativo cuando la desconexión con el servidor 
+     * se ha realizado con éxito.
+     * 
+     * @param obj GestorEGorilla de la aplicación.
+     */
     public void desconexionCompletada(GestorEgorilla obj) {
-        this.mostrarMensaje("\nDesconectado.");
+
+        mostrarMensaje("\nDesconectado.");
     }
 
+    /**
+     * Muestra los resultados de una petición de búsqueda de un archivo
+     * al servidor.
+     * 
+     * @param obj GestorEGorilla de la aplicación.
+     * @param nombre Nombre del archivo solicitado.
+     * @param lista Lista de coincidencias.
+     */
     public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
-        this.resultadosBusqueda(cad, lista);
+
+        mostrarResultadosDeBusqueda(cad, lista);
     }
 
+    /**
+     * Se produce cuando una descarga se ha completado con éxito.
+     * 
+     * @param obj GestorEGorilla de la aplicación.
+     */
     public void finDescarga(GestorEgorilla obj) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * Se produce cuando se ha caído el servidor.
+     * 
+     * @param obj GestorEGorilla de la aplicación.
+     */
     public void perdidaConexion(GestorEgorilla obj) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

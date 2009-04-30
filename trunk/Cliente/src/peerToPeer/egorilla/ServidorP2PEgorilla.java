@@ -1,8 +1,3 @@
-/*
- * Este proyecto esta sujeto a licencia GPL
- * This project and code is uncer GPL license
- */
-
 package peerToPeer.egorilla;
 
 import datos.Archivo;
@@ -16,9 +11,8 @@ import gestorDeFicheros.*;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 
 /**
- *
  * Esta clase es lo que implementa la parte servidora de un cliente
- * esto es, cuando recibe un mensaje, lo decodifica y opera con el
+ * esto es, cuando recibe un mensaje, lo decodifica y opera con el.
  * 
  * se encarga, basicamente de realizar toda la negociaci�n.
  * 

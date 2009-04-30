@@ -22,13 +22,14 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
 /**
  * Clase que gestiona la ventana principal de la aplicación.
  * 
- * @author S@L-c
+ * @author Javier Salcedo, Víctor Adaíl
  */
 public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgorilla{
 
     // CONSTANTES
     private static final long serialVersionUID = 1L;
     private static final String RUTA_RECURSOS = "/recursos/interfaz/principal/";
+    
     // ATRIBUTOS
     private JButton _btnBuscar;
     private JButton _btnCompartidos;
@@ -66,11 +67,11 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     public GUIVentanaPrincipal(ControladorGrafica controlador) throws ControlConfiguracionClienteException {
 
         _controlador = controlador;
+        _controlador.getGestorEGorilla().agregarObservador(this);
+
         iniciarComponentes();
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
-    
-        _controlador.getGestorEGorilla().agregarObservador(this);
     }
 
     /**
@@ -112,13 +113,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.setPreferredSize(new Dimension(800, 600));
         _panelPrincipal.setLayout(new CardLayout());
         _panelPrincipal.add("Servidores", new GUIPanelServidores());
-        GUIPanelBuscador panelBuscador =  new GUIPanelBuscador(_controlador);
-        _controlador.getGestorEGorilla().agregarObservador(panelBuscador);
-        _panelPrincipal.add("Buscador", panelBuscador);
-
+        _panelPrincipal.add("Buscador", new GUIPanelBuscador(_controlador));
         _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
         GUIPanelTrafico trafico=new GUIPanelTrafico();
-        JScrollPane scroll=new JScrollPane(trafico);
+        JScrollPane scroll= new JScrollPane(trafico);
         _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(trafico);
         _panelPrincipal.add("Descargas", scroll);
         _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
@@ -182,6 +180,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnConectar.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonConectar(evt);
             }
@@ -209,6 +208,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnServidores.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonServidores(evt);
             }
@@ -236,6 +236,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnBuscar.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonBuscar(evt);
             }
@@ -263,6 +264,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnTrafico.addMouseListener(new java.awt.event.MouseAdapter() {
 
+            @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 pulsacionBotonTrafico(evt);
             }
@@ -291,6 +293,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnCompartidos.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonCompartidos(evt);
             }
@@ -318,6 +321,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnEstadisticas.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonEstadisticas(evt);
             }
@@ -344,6 +348,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnConfiguracion.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonConfiguracion(evt);
             }
@@ -370,6 +375,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // Añadimos el evento de pulsación del ratón
         _btnAyuda.addMouseListener(new MouseAdapter() {
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 pulsacionBotonAyuda(evt);
             }
@@ -421,7 +427,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Compartidos");
     }
 
-//	************************************************************************************//
     /**
      * Muestra el panel de estadísticas en el panel principal de la ventana.
      * 
@@ -432,7 +437,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Estadisticas");
     }
 
-//	************************************************************************************//
     /**
      * Muestra el panel de configuración en el panel principal de la ventana.
      * 
@@ -443,7 +447,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Configuracion");
     }
 
-//	************************************************************************************//
     /**
      * Muestra el manual de ayuda de la aplicación.
      * 
@@ -453,7 +456,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         // TODO: En pagina web, en otra ventana, se admiten sugerencias
     }
 
-//	************************************************************************************//
     /**
      * Cambia el estado del botón conectar. Lo pone al estado Conectar si estaba en Desconectar
      * y viceversa, además de actualizar las etiquetas informativas correspondientes.
