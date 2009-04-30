@@ -25,15 +25,17 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
     // ATRIBUTOS
 
     /**
-     * Se guarda una referencia al Modelo (PATRÓN MVC) que en este caso es 
-     * un objeto ControlConfiguracionCliente.
+     * En la Vista (PATRÓN MVC) se guarda una referencia al Modelo que en este caso es 
+     * un objeto ControlConfiguracionCliente y una referencia al Controlador que en
+     * este caso es ControladorPanelConfiguracion.
      */
     private ControlConfiguracionCliente _objetoModelo;
+    private ControladorPanelConfiguracion _objetoControlador;
     
     // COMPONENTES GRÁFICOS
     private JButton _btnAceptar;
     private JButton _btnRestaurar;
-    private JButton _btnCancelar;
+    private JButton _btnDeshacer;
     private JLabel _lblNumDescargasSim;
     private JLabel _lblLimVelocidadSubida;
     private JLabel _lblLimVelocidadBajada;
@@ -72,8 +74,9 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      */
     public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
         _objetoModelo = oControlConfiguracionCliente;
+        _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
         createGUI();
-        inicializarCampos ();        
+        inicializarCampos (_objetoModelo.obtenerConfiguracion());        
     }
 
     /**
@@ -115,7 +118,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         _panelBotones = new JPanel();
         _btnAceptar = new JButton();
         _btnRestaurar = new JButton();
-        _btnCancelar =  new JButton();
+        _btnDeshacer =  new JButton();
 
         setBorder(BorderFactory.createTitledBorder("Configuración")); 
         setName("PanelConfiguracion"); 
@@ -466,20 +469,21 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
         _panelBotones.add(_btnAceptar, gridBagConstraints);
+        //Pongo al objeto controlador a "escuchar" al boton.
+        _btnAceptar.addActionListener(_objetoControlador);
 
         //
-        //BOTON CANCELAR
-        _btnCancelar.setText("Cancelar"); 
-        _btnCancelar.setMaximumSize(new Dimension(100, 23));
-        _btnCancelar.setMinimumSize(new Dimension(100, 23));
-        _btnCancelar.setName("btnCancelar"); 
-        _btnCancelar.setPreferredSize(new Dimension(100, 23));
+        //BOTON DESHACER
+        _btnDeshacer.setText("Deshacer cambios"); 
+        _btnDeshacer.setName("btnDeshacer"); 
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
-        _panelBotones.add(_btnCancelar, gridBagConstraints);
+        _panelBotones.add(_btnDeshacer, gridBagConstraints);
+        //Pongo al objeto controlador a "escuchar" al boton.
+        _btnDeshacer.addActionListener(_objetoControlador);
 
         //
         //BOTON RESTAURAR
@@ -491,6 +495,8 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(10, 100, 0, 0);
         _panelBotones.add(_btnRestaurar, gridBagConstraints);
+        //Pongo al objeto controlador a "escuchar" al boton.
+        _btnRestaurar.addActionListener(_objetoControlador);
 
         gridBagConstraints = new GridBagConstraints();
 //        gridBagConstraints.gridx = 0;
@@ -507,22 +513,22 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
 
     /**
      * Este metodo inicializa los campos del panel con los valores
-     * contenidos en el objeto ControlConfiguracionCliente.
+     * contenidos en el objeto properties.
      */
-    private void inicializarCampos(){
-        _txtNumDescargasSim.setText(_objetoModelo.obtenerPropiedad("Num_descargas_sim"));
-        _txtLimVelocidadSubida.setText(_objetoModelo.obtenerPropiedad("Lim_subida"));
-        _txtLimVelocidadBajada.setText(_objetoModelo.obtenerPropiedad("Lim_bajada"));
-        _txtPuerto.setText(_objetoModelo.obtenerPropiedad("Puerto"));
-        _txtDirLlegada.setText(_objetoModelo.obtenerPropiedad("Dir_Temporales"));
-        _txtDirCompartidos.setText(_objetoModelo.obtenerPropiedad("Dir_Completos"));
-        _txtIPServidor.setText(_objetoModelo.obtenerPropiedad("IpServidor"));
-        _txtPuertoServidor.setText(_objetoModelo.obtenerPropiedad("PuertoServidor"));
-        _txtNombreServidor.setText(_objetoModelo.obtenerPropiedad("NombreServidor"));
-        _txtDescripServidor.setText(_objetoModelo.obtenerPropiedad("Descripcion"));
-        _txtNombreUsuario.setText(_objetoModelo.obtenerPropiedad("NmbUsuario"));
+    public void inicializarCampos(Properties properties){
+        _txtNumDescargasSim.setText(properties.getProperty("Num_descargas_sim"));
+        _txtLimVelocidadSubida.setText(properties.getProperty("Lim_subida"));
+        _txtLimVelocidadBajada.setText(properties.getProperty("Lim_bajada"));
+        _txtPuerto.setText(properties.getProperty("Puerto"));
+        _txtDirLlegada.setText(properties.getProperty("Dir_Temporales"));
+        _txtDirCompartidos.setText(properties.getProperty("Dir_Completos"));
+        _txtIPServidor.setText(properties.getProperty("IpServidor"));
+        _txtPuertoServidor.setText(properties.getProperty("PuertoServidor"));
+        _txtNombreServidor.setText(properties.getProperty("NombreServidor"));
+        _txtDescripServidor.setText(properties.getProperty("Descripcion"));
+        _txtNombreUsuario.setText(properties.getProperty("NmbUsuario"));
     }
-    
+
     /**
      * Este metodo (implementacion de la interfaz ObservadorControlConfiguracionCliente) permite 
      * reflejar en la Vista (este panel) los cambios que se han producido en el Modelo (objeto 
@@ -534,7 +540,7 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
      * @param propiedades Conjunto de propiedades que han cambiado en el objeto anterior.
      */
     public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
-        inicializarCampos();
+        inicializarCampos (_objetoModelo.obtenerConfiguracion()); 
     }
     
     //
@@ -591,8 +597,8 @@ public class GUIPanelConfiguracion extends JPanel implements ObservadorControlCo
         return _btnAceptar;
     }
     
-    public Object obtenerBotonCancelar(){
-        return _btnCancelar;
+    public Object obtenerBotonDeshacer(){
+        return _btnDeshacer;
     }
     
     public Object obtenerBotonRestaurar(){

@@ -4,6 +4,7 @@ import control.ControladorGrafica;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.VistaObservadorControlConfiguracion;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
 import gui.grafica.configuracion.GUIPanelConfiguracion;
@@ -16,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -114,7 +117,26 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.setLayout(new CardLayout());
         _panelPrincipal.add("Servidores", new GUIPanelServidores());
         _panelPrincipal.add("Buscador", new GUIPanelBuscador(_controlador));
+        //Pestania de Configuración:
+        //Creo la Vista (un JPanel) y le paso el Modelo (segun el patron MVC) en el constructor.
+        GUIPanelConfiguracion vistaPanelConfig = new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia());
+        //Registro a la Vista como observadora del Modelo
+        ControlConfiguracionCliente.obtenerInstancia().anadirObservador (vistaPanelConfig);
         _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
+        //**PRUEBAS: Creo un segundo panel observador para ver que se actualiza con los cambios sobre el Modelo.
+//        VistaObservadorControlConfiguracion vista2 = new VistaObservadorControlConfiguracion (ControlConfiguracionCliente.obtenerInstancia());
+//        ControlConfiguracionCliente.obtenerInstancia().anadirObservador (vista2);
+//        JFrame aplicacion = new JFrame("Solo observa...");
+//        aplicacion.getContentPane().add(vista2);
+//        aplicacion.addWindowListener(new WindowAdapter() {
+//                    public void windowClosing(WindowEvent e) {
+//                        System.exit(0);
+//                    }
+//                });
+//        aplicacion.pack();
+//        aplicacion.setVisible(true);
+        //**FIN PRUEBAS
+        
         GUIPanelTrafico trafico=new GUIPanelTrafico();
         JScrollPane scroll= new JScrollPane(trafico);
         _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(trafico);

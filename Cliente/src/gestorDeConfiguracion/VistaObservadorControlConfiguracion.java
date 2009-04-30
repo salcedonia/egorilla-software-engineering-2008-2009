@@ -58,21 +58,7 @@ public class VistaObservadorControlConfiguracion extends JPanel implements Obser
     private JTextField _txtDescripServidor;
     private JTextField _txtNombreUsuario;
     
-    public static void main(String[] args) throws ControlConfiguracionClienteException {
-        
-        VistaObservadorControlConfiguracion vista = 
-                new VistaObservadorControlConfiguracion(ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties"));
-        JFrame aplicacion = new JFrame("Solo observa...");
-        aplicacion.getContentPane().add(vista);
-        aplicacion.addWindowListener(new WindowAdapter() {
-                    public void windowClosing(WindowEvent e) {
-                        System.exit(0);
-                    }
-        });
-        aplicacion.pack();
-        aplicacion.setVisible(true);
-    }    
-    
+   
 //	************************************************************************************//
     /**
      * Constructor de la clase PanelConfiguración.

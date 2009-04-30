@@ -154,6 +154,8 @@ public class ControlConfiguracionCliente{
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     public void establecerConfiguracion(Properties propiedades) throws ControlConfiguracionClienteException {
+        if (propiedades.size() == 0)
+            return;
         _oFicheroPropsPpal.establecerConjuntoPropiedades(propiedades);
         notificarCambioEnPropiedades (propiedades);
     }
