@@ -99,7 +99,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 
                 // YA SE CONTESTARA CON TOMA, no aki
                 Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
-                Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),0,informacion,ip,port);
+                Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),msjDame.getFragmento().getOffset(),informacion,ip,port);
                 _gestor.addMensajeParaEnviar(mensajeToma);
                 break;
                 

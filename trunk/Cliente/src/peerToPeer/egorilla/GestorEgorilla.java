@@ -300,10 +300,12 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         //indicamos primero al gestor de disco que se ha descargado un fragmento
         if(!_gestorDisco.getEnsamblador().guardarFragmentoEnArchivo(f, datos)){
             //TODO LANZAR ERROR
+            System.out.println("ERROR GUARDAR FRAGMENTO");
         }
         //informamos al almacen del fragmento descargado
         if(!_almacenDescargas.fragmentoDescargado(f)){
             //TODO LANZAR ERROR
+            System.out.println("ERROR FRAGMENTO DECARGADO ALMACEN");
         }
     }
 
