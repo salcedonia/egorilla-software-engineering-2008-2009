@@ -74,9 +74,8 @@ public class Descargador extends Thread{
                         Fragmento chunk = null;
                         Vector<Fragmento> listado=d.getListaFragmentosPendientes();
                         int i = (int)(Math.random()*((listado.size()-1)));
-                        if (listado.size() != 0){
-                            //i =r.nextInt(d.getListaFragmentosPendientes().size())+1;                            
-                            chunk = listado.get(i);
+                        if (listado.size() != 0){                           
+                            chunk = listado.get(0);
                             Cliente propietario = d.dameClienteQueTiene(chunk);
                             Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
                                             chunk, propietario.getIP(), propietario.getPuerto());
