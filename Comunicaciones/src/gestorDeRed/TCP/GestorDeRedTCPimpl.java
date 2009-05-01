@@ -15,9 +15,10 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import mensajes.Mensaje;
+
 
 /**
+ * implementacion de la interfaz de red usnado comunicaciones TCP
  *
  * @author Luis Ayuso
  */
@@ -41,21 +42,9 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * @param var el paquete a enviar
      * @param destino destino en formato ip v4
      */
+    @Override
     public synchronized void envia(E var, Inet4Address destino, int puerto) throws NetError {
-        try {
-            Socket s = new Socket(destino, puerto);
-
-            Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
-
-            new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        } catch (IOException ex) {
-            generaErrorConexion(destino.getHostAddress());
-        }
+        this.envia(var, destino.getHostAddress(), puerto);
     }
 
     /**
@@ -65,18 +54,20 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * @param host el nombre de host o ip
      * @param port el puerto
      */
+    @Override
     public synchronized void envia(E var, String host, int port) throws NetError {     
         try {
             Socket s = new Socket(host, port);
             Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
             
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
+
             s.close();
         } catch (IOException ex) {
             this.generaErrorConexion(host);
@@ -90,6 +81,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      *
      * @param r el receptor debe implementar esta interface.
      */
+    @Override
     public void registraReceptor(Receptor<E> r) {
         this._receptores.add(r);
     }
@@ -100,6 +92,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      * dicho puerto se deja a discrección de quien instancie la implementación
      * de esta interface.
      */
+    @Override
     public void comienzaEscucha() {
         this.start();
     }
@@ -107,6 +100,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     /**
      * acaba con la escucha y libera los recursos
      */
+    @Override
     public void terminaEscucha() {
         if (_sock != null) {
             try {
@@ -116,6 +110,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             }
         }
         _sock = null;
+        _conexiones.parar();
     }
 
     @Override
@@ -181,10 +176,12 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     }
 
 
+    @Override
    public void addConexion(String host, int puerto){
         _conexiones.addConexion(host, puerto);
     }
 
+    @Override
     public void eliminaConexion(String host){
         _conexiones.addConexion(host, _puerto);
     }
