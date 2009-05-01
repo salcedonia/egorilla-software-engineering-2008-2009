@@ -52,6 +52,16 @@ public class AlmacenDescargas {
         
         return _listaDescargas;
     }
+
+    /**
+     * se notifica que se ha perdido la conexion con algún peer, que posiblemente
+     * sea alguien a quien estabamos enviado datos, se deja de hacer.
+     *
+     * @param ip el host con el que no es posible establecer comunicación
+     */
+    public void perdidaConexion(String ip) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
     
     /**
      * Mutador de la _listaDescargas
@@ -242,5 +252,12 @@ public class AlmacenDescargas {
     public void eliminarObservador(ObservadorAlmacenDescargas obs){
         int indice=_listaObservadores.indexOf(obs);
         _listaObservadores.remove(indice);
+    }
+
+    /**
+     * finaliza las descargas
+     */
+    public void pararDescargas(){
+        _descargador.parar();
     }
 }

@@ -203,8 +203,9 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
         }
     }
 
+    @Override
     public void perdidaDeConexion(String ip) {
-       // TODO: se ha perdido la conexión con este tipo
+       _gestor.perdidaDeConexion(ip);
     }
 
 }

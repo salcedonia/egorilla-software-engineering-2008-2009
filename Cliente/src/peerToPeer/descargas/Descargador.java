@@ -80,7 +80,7 @@ public class Descargador extends Thread{
                             Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
                                             chunk, propietario.getIP(), propietario.getPuerto());
 
-                        _gestor.addMensajeParaEnviar(msj);
+                            _gestor.addMensajeParaEnviar(msj);
                         }
                         break;
                 }
