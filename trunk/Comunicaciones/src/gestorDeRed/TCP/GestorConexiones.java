@@ -17,7 +17,7 @@ import java.util.Hashtable;
  *El gestor de conexiones mantiene comunicacion para comprobar el enlace entre los
  * peers, de forma que comunica
  *
- * se realizaran envios cada 120 segundos, si no es posible se
+ * se realizaran envios cada 30 segundos, si no es posible se
  * tendra que dar por perdido el host.
  *
  * estos datos son así y van en el codigo, no son parametrizables
@@ -52,11 +52,13 @@ public class GestorConexiones extends Thread{
 
                 if (_listaHosts.size() ==0)
                     wait();
+                else
+                    wait(t);
 
-                Thread.sleep(t);
-                
+                // array list para almacenar los que fallen la prueba
                 ArrayList<String> tmp = new ArrayList<String>();
 
+                // prueba las conexiones a todos los hosts
                 for (String host : _listaHosts) {
                     if (!testConn(host,_puertos.get(host))){
                         tmp.add(host);
@@ -75,6 +77,14 @@ public class GestorConexiones extends Thread{
         }
     }
 
+    /**
+     * envia un mensaje de keepAlive para comprobar que la conexión sigue
+     * en linea
+     *
+     * @param ip destino al que enviar
+     * @param puerto puerto por el que escucha
+     * @return si el envio se realizo correctamente tenemos conexion
+     */
     private boolean testConn(String ip, int puerto){
         try {
             Socket conn = new Socket(ip, puerto);
@@ -92,15 +102,30 @@ public class GestorConexiones extends Thread{
         return true;
     }
 
+    /**
+     * termina con esto, deja de comprobar conexiones
+     */
     public void parar(){
         this.interrupt();
     }
 
+    /**
+     * añade un host para estar pendiente de que se mantenga la conexión con el
+     * 
+     * @param host
+     * @param puerto
+     */
     public synchronized void addConexion(String host, int puerto){
         _listaHosts.add(host);
         _puertos.put(host, puerto);
+        this.notify();
     }
 
+    /**
+     * elimina la conexion con un peer
+     *
+     * @param host
+     */
     public synchronized void eliminaConexion(String host){
         _listaHosts.remove(host);
         _puertos.remove(host);
