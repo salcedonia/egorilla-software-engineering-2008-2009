@@ -18,7 +18,7 @@ public class GestorCompartidos {
     // ATRIBUTOS
     private static GestorCompartidos _instancia=null;
 
-    private Fragmentador _fragmentador=null;
+    //private Fragmentador _fragmentador=null;
 
     private GestorDisco _gestorDisco=null;
 
@@ -37,7 +37,7 @@ public class GestorCompartidos {
      */
     public void setGestorDisco(GestorDisco disco){
         _gestorDisco=disco;
-        _fragmentador=disco.getFragmentador();
+        //_fragmentador=disco.getFragmentador();
     }
 
     /**
@@ -54,7 +54,7 @@ public class GestorCompartidos {
      * @return Vector<Fragmento> del fichero indicado en el hash.
      */
     public Vector<Fragmento> queFragmentosTienes( String hash ){
-        return _fragmentador.queFragmentosTienes(hash);
+        return _gestorDisco.getFragmentador().queFragmentosTienes(hash);
     }
 
     /**
@@ -63,7 +63,7 @@ public class GestorCompartidos {
      * @return Byte[] correspondiente a la informacion enviada del fragmento.
      */
     public Byte[] dameBytesDelFragmento( Fragmento frag ){
-        return _fragmentador.dameBytesDelFragmento(frag);
+        return _gestorDisco.getFragmentador().dameBytesDelFragmento(frag);
     }
     /**
      * Metodo para consultar fragmentos pendientes de un determinado archivo.
@@ -71,7 +71,7 @@ public class GestorCompartidos {
      * @return Vector<Fragmento> del fichero indicado en el hash.
      */
     public Vector<Fragmento> queFragmentosTienesPendientes( String hash ){
-        return _fragmentador.queFragmentosFaltan(hash);
+        return _gestorDisco.getFragmentador().queFragmentosFaltan(hash);
     }
 
     /**
@@ -80,7 +80,7 @@ public class GestorCompartidos {
      * @return entero correspondiente a la cantidad de fragmentos.
      */
     public int cantidadFragmentosArchivo( Archivo archivo ){
-        return _fragmentador.cantidadFragmentosArchivo( archivo );
+        return _gestorDisco.getFragmentador().cantidadFragmentosArchivo( archivo );
     }
 
 }

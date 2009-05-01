@@ -4,6 +4,10 @@ import java.util.*;
 import mensajes.serverclient.*;
 import datos.*;
 
+/**
+ *
+ * @author Ivan Munsuri Ibanez
+ */
 class ManejarListaArchivos {
   
   protected Archivo buscarArchivoEnLista( ListaArchivos listaArchivos, String hash){
