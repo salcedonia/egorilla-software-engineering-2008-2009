@@ -16,9 +16,11 @@ import java.util.Enumeration;
  * que tiene el usuario en el momento de arrancar la aplicacion. Ademas, se encarga de tener 
  * todo la informacion previa necesaria para el Ensamblador y Fragmentador de archivos.
  * 
- * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de ControlConfiguracionCliente 
- * y sera notificada cuando cambie la configuracion dando un tratamiento adecuado al cambio (o no hacer nada).
- * //TODO: Dar tratamiento a los cambios en la configuracion del cliente (si asi se desea).
+ * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de 
+ * ControlConfiguracionCliente y sera notificada cuando cambie la configuracion dando un 
+ * tratamiento adecuado al cambio (o no hacer nada).
+ *
+ * @author Ivan Munsuri Ibanez
  */
 public class GestorDisco  implements ObservadorControlConfiguracionCliente {
 
@@ -339,9 +341,9 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     }
 
     /**
-     * Este metodo es llamado cuando cambia la configuracion del cliente
-     * @param obj Objeto ControlConfiguracionCliente
-     * @param propiedades Conjunto de propiedades que ha cambiado
+     * Este metodo es llamado cuando cambia la configuracion del cliente.
+     * @param obj Objeto ControlConfiguracionCliente.
+     * @param propiedades Conjunto de propiedades que ha cambiado.
      */
     @Override
     public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {

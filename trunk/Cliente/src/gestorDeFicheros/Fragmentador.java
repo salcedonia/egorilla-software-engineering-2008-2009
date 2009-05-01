@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * Fragmenta los archivos de los directorios especificados para los temporales y los completos.
  *
+ * @author Ivan Munsuri Ibanez
  */
 /*Es mas optimo diferencias el fragmentador de completos e incompletos, ya que preguntar 
  * por una variable es mas rapido que buscar en que lista esta el fichero.*/
@@ -44,44 +45,19 @@ public class Fragmentador{
    */
   private String _directorioCompletos;
 
-  //Lista de todos (temporales+completos)
-  /**
-   * Es la lista de todos los archivos que tiene el usuario.
-   */
-  private ListaArchivos _listaTodos;
-
-  //Lista de los temporales
-  /**
-   * Es la lista de todos los archivos temporales que tiene el usuario.
-   */
-  private ListaArchivos _listaTemporales;
-
-  //Lista de los completos
-  /**
-   * Es la lista de todos los archivos completos que tiene el usuario.
-   */
-  private ListaArchivos _listaCompletos; //Se necesita de un accion automatica o de recargar
-
   /**
    * Es el propio gestor de disco que creado a dicho Fragmentador.
    */
   private GestorDisco _gestorDisco;
 
-  /**
-   * Es la clase que contiene la funcionalidad para tratar adecuadamente los archivos de 
-   * indices.
-   */
-  private ManejarIndices _manejarIndices;
 
   /**
-   * Es la clase que contiene la funcionalidad para tratar adecuadamente las listas de archivos.
-   */
-  private ManejarListaArchivos _manejarListaArchivos;
-
-
-
-  /**
-   * .
+   * Constructor que recibe una instancia del disco para obtener la informacion necesaria para
+   * el fragmentado de los archivos del usuario, temporales y completos. A traves del gestor de
+   * disco, y gracias ensamblador, se podra fragmentar los archivos en estado temporal sin tener
+   * que esperar a tenerlos completos.
+   * @param gestorDisco es la instancia del disco de donde obtengo la informacion referente a 
+   *                    los archivos.
    */
   public Fragmentador( GestorDisco gestorDisco ){
     _directorioCompletos = gestorDisco.getDirectorioCompletos();
@@ -90,17 +66,15 @@ public class Fragmentador{
 
     _extesionIndices = gestorDisco.getExtesionIndices();
     _tamanioBytesFragmento = gestorDisco.getTamanioBytesFragmento();
-
-    //Obtengo sus referencias, para poder tener las listas actualizarlas
-    _listaCompletos = gestorDisco.getListaArchivosCompletos();
-    _listaTemporales = gestorDisco.getListaArchivosTemporales();
-    _listaTodos = gestorDisco.getListaArchivosTodos();
-
-    _manejarIndices = gestorDisco.getManejarIndices();
-    _manejarListaArchivos = gestorDisco.getManejarListaArchivos();
   }
 
 
+  /**
+   * Metodo auxiliar que convierto un array de objetos de Byte a un array de tipos primitivos 
+   * byte.
+   * @param bytes es un array de objetos del tipo Byte.
+   * @return Devuelve un array de tipos primitivos byte.
+   */
   private Byte[] primitivoAObjeto( byte[] bytes ){
     Byte[] oBytesFragmento = new Byte[ bytes.length ];
 
@@ -120,18 +94,21 @@ public class Fragmentador{
     Archivo archivoRequerido;
     File fichero;
     RandomAccessFile punteroFichero;
-
+    ManejarIndices manejarIndices = _gestorDisco.getManejarIndices();
+    ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
     String hashFragmento = fragmento.getHash();
+    ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
+    ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
     
     //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
-    archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, 
+    archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, 
         hashFragmento );
     if( archivoRequerido == null ){
       //No esta en los completos, asi que miramos en los incompletos
-      archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, 
+      archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
           hashFragmento );
       if( archivoRequerido == null ){
         //El fichero no EXISTE - devuelvo un null - ERROR
@@ -139,7 +116,7 @@ public class Fragmentador{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
-        Indices indices = _manejarIndices.leeFicheroIndices( fichero );
+        Indices indices = manejarIndices.leeFicheroIndices( fichero );
         
         //Miro si el fragmento esta en ese array
         if( indices.containsTengo( fragmento ) == true ){
@@ -239,15 +216,19 @@ public class Fragmentador{
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
+    ManejarIndices manejarIndices = _gestorDisco.getManejarIndices();
+    ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
+    ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
+    ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
     //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)    
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
-    archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hash );
+    archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, hash );
     if( archivoRequerido == null ){
       //Debo buscarlo en los temporales
       //No esta en los completos, asi que miramos en los incompletos
       System.out.println("No esta en los completos");
-      archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hash );
+      archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
       if( archivoRequerido == null ){
         System.out.println("No esta en los temporales tampoco - ERROR");
         //El fichero no EXISTE - devuelvo un null - ERROR
@@ -256,7 +237,7 @@ public class Fragmentador{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
-        Indices indices = _manejarIndices.leeFicheroIndices( fichero );
+        Indices indices = manejarIndices.leeFicheroIndices( fichero );
         listaFragmento = indices.getIndicesTengo();
       }
     }else{
@@ -294,16 +275,20 @@ public class Fragmentador{
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
     Vector<Fragmento> listaFragmento = null;
+    ManejarIndices manejarIndices = _gestorDisco.getManejarIndices();
+    ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
+    ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
+    ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
 
     //Compruebo si tengo el fichero con ese hash (aunque se supone que siempre estara)
     
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
-    archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaCompletos, hash );
+    archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, hash );
     if( archivoRequerido == null ){
       //Debo buscarlo en los temporales
       //No esta en los completos, asi que miramos en los incompletos
-      archivoRequerido = _manejarListaArchivos.buscarArchivoEnLista( _listaTemporales, hash );
+      archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
       if( archivoRequerido == null ){
         //El fichero no EXISTE - devuelvo un null - ERROR
         System.out.println("No esta en los temporales tampoco - ERROR");
@@ -311,7 +296,7 @@ public class Fragmentador{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
-        Indices indices = _manejarIndices.leeFicheroIndices( fichero );
+        Indices indices = manejarIndices.leeFicheroIndices( fichero );
         listaFragmento = indices.getIndicesFaltan();
       }
     }else{

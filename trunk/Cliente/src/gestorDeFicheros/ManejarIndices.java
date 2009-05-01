@@ -5,6 +5,10 @@ import java.io.*;
 
 import datos.*;
 
+/**
+ *
+ * @author Ivan Munsuri Ibanez
+ */
 public class ManejarIndices {
 
   public void crearFicheroIndices( File fichero, Archivo archivo, Vector<Fragmento> fragmentos ){
