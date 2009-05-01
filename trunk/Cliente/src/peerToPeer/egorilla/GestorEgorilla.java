@@ -12,16 +12,15 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mensajes.Mensaje;
 import mensajes.p2p.Altoo;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
-import peerToPeer.GestorClientes;
 import gestorDeFicheros.*;
+import gestorDeSucesos.ControlDeSucesos;
+import gestorDeSucesos.Sucesos;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -45,13 +44,11 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     private Queue<Mensaje> _colaSalida;
     private GestorDeRed<Mensaje> _gestorDeRed;
     private GestorDisco _gestorDisco;
-    private GestorClientes _gestorClientes;
     private AlmacenDescargas _almacenDescargas;
     private Descargador _descargador;
     private boolean _conectado;
     private String  _serverIP;
-    private int  _serverPort;
-    private boolean _doP2P;  
+    private int  _serverPort; 
     /**
     * Estructura de datos para almacenar los observadores sobre este objeto.
     */
@@ -66,9 +63,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         
         _colaSalida = new LinkedList<Mensaje>();
         _gestorDeRed = gestorDeRed; 
-        _gestorClientes = new GestorClientes();
         _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
-        _doP2P = false;
 
         //En donde se instancia gestorSubidas? No lo veo
         //_gestorSubidas = new GestorSubidas( this, _gestorDisco );
@@ -108,6 +103,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
        _serverPort = puertoServidor;
        _serverIP = ipServidor;
         misDatos.setDestino(_serverIP, _serverPort);
+        
         try {
             misDatos.setIP(InetAddress.getLocalHost().getHostAddress());
         } catch (Exception ex) {
@@ -116,6 +112,10 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         
         // envia mis datos
         addMensajeParaEnviar(misDatos);
+
+
+
+        // ademas, comenzamos la escucha
         comienzaP2P();       
     }
 
@@ -144,6 +144,9 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      */
     void conectado() {
         _conectado = true;
+        // estamos pendientes del servidor, para ver si se cae
+        _gestorDeRed.addConexion(_serverIP, _serverPort);
+        
         notificarConexionCompletada(_serverIP, _serverPort);
     }
     
@@ -151,9 +154,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      *desconecta y termina con el p2p
      */
    public void desconectar(){
-        // TODO: termina esto
-        
-        // envia alto a todos los peers con descargas pendientes a los que 
+        // TODO: envia alto a todos los peers con descargas pendientes a los que
         // estemos subiendo fragmentos
         
         
@@ -162,9 +163,11 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         alto.setDestino(_serverIP, _serverPort);
         this.addMensajeParaEnviar(alto);
         this._conectado = false;
+
+        this.paraloTodo();
         
-        // finaliza el p2p.
-        this._doP2P = false;
+        // dejamos de estar "pendientes" del servidor
+        this._gestorDeRed.eliminaConexion(_serverIP);
 
         //Notificar el evento a los observadores
         this.notificarDesconexionCompletada();
@@ -177,6 +180,18 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     public boolean estaConectadoAServidor(){
         return this._conectado;
     }
+
+    void perdidaDeConexion(String ip) {
+
+        if (ip.equals(_serverIP)){ // emos perdido la conexion con el servidor
+            ControlDeSucesos.dameInstancia().registrarError(Sucesos.ERROR_CONEXION_SERVIDOR);
+            
+            this.paraloTodo();
+        }
+        else
+            _almacenDescargas.perdidaConexion(ip);
+       
+    }
     
     /**
      * pone el p2p en modo escucha, de forma que se atiende a otros
@@ -187,7 +202,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         
         _gestorDeRed.registraReceptor(new ServidorP2PEgorilla(this));
         _gestorDeRed.comienzaEscucha();
-        _doP2P = true;
+        
         this.start();
     }
     
@@ -214,6 +229,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     
     /**
      * notifica la llegada de una consulta a los observadores
+     * 
      * @param respuesta
      */
     void resultadoBusqueda(RespuestaPeticionConsulta respuesta) {
@@ -238,6 +254,12 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         this.pedirPropietariosaServidor(a);
     }
 
+    /**
+     * realiza una comunicacion para enviar una solicitud para recuperar los
+     * propietarios de un archivo en descarga
+     *
+     * @param a el archivo por le cual pedimos información de propietarios
+     */
     public void pedirPropietariosaServidor (Archivo a){
         // realizamos una consulta al servidor para saber los propietarios.
         PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
@@ -309,36 +331,39 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         }
     }
 
-    public AlmacenDescargas getAlmacenDescargas(){
+    public AlmacenDescargas getAlmacenDescargas() {
         return _almacenDescargas;
     }
 
-    
     @Override
     public synchronized void run() {
         this.setName("Gestor eGorilla");
         this.setPriority(MAX_PRIORITY);
 
         try {
-            while (_doP2P) {
+            while (true) {
 
-                // por cada mensaje al que se le deba dar salida, se le da.
-                if (!_colaSalida.isEmpty()) {
-                    Mensaje msj = _colaSalida.poll();
-                    _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
-                }
-
-                if (_colaSalida.isEmpty())
+                if (_colaSalida.isEmpty()) {
                     this.wait();
-                else
-                    this.wait(100);
+                }
+                if (!_colaSalida.isEmpty()) {
+                    Mensaje msj = null;
+                    try {
+                        // por cada mensaje al que se le deba dar salida, se le da.
+                        msj = _colaSalida.poll();
+                        _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
 
+                    } catch (NetError ex) {
+                        ControlDeSucesos.dameInstancia().registrarError(Sucesos.ERROR_RED,
+                                "error al enviar mensaje a " + msj.ipDestino());
+                    }
+                }
             }
-        } catch (NetError ex) {   
-            // TODO: aki  propaga error, comunica a injterfaz y esas cosas
-        } catch (InterruptedException in){
+        } catch (InterruptedException in) {
+            // termina
         }
     }
+
 
     //
     //-------------------------------------------------
@@ -407,5 +432,20 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
                 //TODO: Lo que se vaya a hacer cuando cambia de valor esta propiedad
             }
         }           
+    }
+
+
+    private void paraloTodo(){
+        // acaba con el envio de mensajes
+        this.interrupt();
+
+        // vacia la cola de mensajes
+        this._colaSalida.clear();
+
+        // termina con las descargas
+        this._almacenDescargas.pararDescargas();
+
+        this._conectado = false;
+        this._gestorDeRed.terminaEscucha();
     }
 }

@@ -14,11 +14,14 @@ public class Sucesos {
     public static final int ERROR_NO_INDENTIFICADO = 100;
     public static final int ERROR_RED = 101;
     public static final int ERROR_DISCO = 102;
+    public static final int ERROR_CONEXION_SERVIDOR = 103;
+
     public static String dameMesaje(int code) {
         switch (code)  {
           case ERROR_NO_INDENTIFICADO : return "Error no identificado";
           case ERROR_RED : return "Error en la red del sistema";
           case ERROR_DISCO : return "Error en disco";
+            case ERROR_CONEXION_SERVIDOR :return "Error de perdida de conexión con servidor";
         }
         return "Error no identificado";
     }
