@@ -13,6 +13,8 @@ import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.GUIPanelServidores;
 import gui.grafica.trafico.GUIPanelTrafico;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 import java.awt.*;
@@ -123,20 +125,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         GUIPanelConfiguracion vistaPanelConfig = new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia());
         //Registro a la Vista como observadora del Modelo
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador (vistaPanelConfig);
-        _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
-        //**PRUEBAS: Creo un segundo panel observador para ver que se actualiza con los cambios sobre el Modelo.
-//        VistaObservadorControlConfiguracion vista2 = new VistaObservadorControlConfiguracion (ControlConfiguracionCliente.obtenerInstancia());
-//        ControlConfiguracionCliente.obtenerInstancia().anadirObservador (vista2);
-//        JFrame aplicacion = new JFrame("Solo observa...");
-//        aplicacion.getContentPane().add(vista2);
-//        aplicacion.addWindowListener(new WindowAdapter() {
-//                    public void windowClosing(WindowEvent e) {
-//                        System.exit(0);
-//                    }
-//                });
-//        aplicacion.pack();
-//        aplicacion.setVisible(true);
-        //**FIN PRUEBAS
+        _panelPrincipal.add("Configuracion", vistaPanelConfig);
         
         GUIPanelTrafico trafico=new GUIPanelTrafico();
         JScrollPane scroll= new JScrollPane(trafico);
@@ -465,10 +454,28 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
      * 
      * @param evt Evento de pulsación del ratón sobre el botón _btnConfiguracion.
      */
-    private void pulsacionBotonConfiguracion(MouseEvent evt) {
-
+    private void pulsacionBotonConfiguracion(MouseEvent evt){
+        //Opcion 1: mostrar un panel sobre la aplicacion principal.
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Configuracion");
-    }
+        //Opcion 2: mostrar una ventanita aparte con los datos de configuracion.
+//        JFrame ventana = new JFrame("Configuracion de eGorilla");
+//        try {
+//            //Creo la Vista (un JPanel) y le paso el Modelo (segun el patron MVC) en el constructor.
+//            GUIPanelConfiguracion vistaPanelConfig = new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia());
+//            //Registro a la Vista como observadora del Modelo
+//            ControlConfiguracionCliente.obtenerInstancia().anadirObservador(vistaPanelConfig);
+//            ventana.getContentPane().add(vistaPanelConfig);
+//            ventana.addWindowListener(new WindowAdapter() {
+//                public void windowClosing(WindowEvent e) {
+//                    System.exit(0);
+//                }
+//            });
+//            ventana.pack();
+//            ventana.setVisible(true);
+//        } catch (ControlConfiguracionClienteException ex) {
+//            Logger.getLogger(GUIVentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+     }
 
     /**
      * Muestra el manual de ayuda de la aplicación.
