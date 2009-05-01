@@ -41,7 +41,7 @@ public class ControladorPanelConfiguracion implements ActionListener{
         _objetoModelo = oCtrlConfigCli;
         _objetoVista = oGUIPanelConfig;
     }
-            
+
     public void actionPerformed(ActionEvent evt) {
         Object source = evt.getSource();
         //Boton de Aceptar
