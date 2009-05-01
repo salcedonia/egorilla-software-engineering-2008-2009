@@ -106,6 +106,8 @@ public class GestorConexiones extends Thread{
      * termina con esto, deja de comprobar conexiones
      */
     public void parar(){
+        this._listaHosts.clear();
+        this._puertos.clear();
         this.interrupt();
     }
 
