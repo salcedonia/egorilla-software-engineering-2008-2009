@@ -102,15 +102,8 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      */
     @Override
     public void terminaEscucha() {
-        if (_sock != null) {
-            try {
-                _sock.close();
-            } catch (IOException ex) {
-                Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        _sock = null;
-        _conexiones.parar();
+
+        this.interrupt();
     }
 
     @Override
@@ -165,7 +158,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 
 
     /**
-     * comunica a los oyentes la iposibilidad de hablar con determinado host
+     * comunica a los oyentes la imposibilidad de hablar con determinado host
      *
      * @param host la ip del destino perdido
      */
