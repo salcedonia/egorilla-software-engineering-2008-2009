@@ -1,6 +1,7 @@
 package gui.grafica.servidores;
 
 import control.ControladorGrafica;
+import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
@@ -11,6 +12,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
+import peerToPeer.egorilla.GestorEgorilla;
+import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
  * Panel que gestiona los distintos servidores disponibles
@@ -18,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * 
  * @author David Fernández
  */
-public class GUIPanelServidores extends JPanel {
+public class GUIPanelServidores extends JPanel{
 
     // CONSTANTES
     private static final long serialVersionUID = 1L;    
@@ -44,9 +47,11 @@ public class GUIPanelServidores extends JPanel {
     /** 
      * Constructor de la clase PanelServidores.
      */
-    public GUIPanelServidores() {
+    public GUIPanelServidores(ControladorGrafica controlador) {
 
-
+    
+        _controlador = controlador;
+      //  _controlador.getGestorEGorilla().agregarObservador(this);
         iniciarComponentes();
     }
 
@@ -90,7 +95,7 @@ public class GUIPanelServidores extends JPanel {
         _tablaContenido.setBackground(new Color(235, 233, 237));
 
 
-        _defaultTableModel = new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Nombre del Servidor", "IP", "Descripción", "Usuarios", "Número máximo de usuarios", "Archivos", "Preferencia"});
+        _defaultTableModel = new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Puerto", "IP"});
         _tablaContenido = new JTable(_defaultTableModel) {
             // CONSTANTES
             private static final long serialVersionUID = 1L;
@@ -216,27 +221,7 @@ public class GUIPanelServidores extends JPanel {
         gridBagConstraints.insets = new Insets(7, 20, 0, 3);
         add(_separador, gridBagConstraints);
 
-        _lblActualizarViaURL.setText("Actualizar via URL");
-        _lblActualizarViaURL.setName("jLabel4");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 24;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(8, 20, 0, 3);
-        add(_lblActualizarViaURL, gridBagConstraints);
-
-        _txtActualizarViaURL.setText("");
-        _txtActualizarViaURL.setName("txtActualizarViaURL");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 104;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 20, 0, 3);
-        add(_txtActualizarViaURL, gridBagConstraints);
+        
 
         iniciarPanelServidor();
     }
@@ -245,17 +230,12 @@ public class GUIPanelServidores extends JPanel {
         try {
             _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
             _serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
-            String nombreServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral());
             String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral());
 
-            Object[] servidor = new Object[7];
-            servidor[0] = servidor[0] = nombreServidor;
+            Object[] servidor = new Object[2];
+            servidor[0] = _sPuerto;
             servidor[1] = _serverHost;
-            servidor[2] = descripcion;
-            servidor[3] = "";
-            servidor[4] = "";
-            servidor[5] = "";
-            servidor[6] = "";
+            
             _defaultTableModel.addRow(servidor);
         } catch (ControlConfiguracionClienteException ex) {
             Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
@@ -277,5 +257,8 @@ public class GUIPanelServidores extends JPanel {
         Object[] parametros = new Object[2];
         parametros[0] = _txtPuerto.getText().trim();
         parametros[1] = _txtDireccionIP.getText().trim();
+        _defaultTableModel.addRow(parametros);
     }
+
+ 
 }
