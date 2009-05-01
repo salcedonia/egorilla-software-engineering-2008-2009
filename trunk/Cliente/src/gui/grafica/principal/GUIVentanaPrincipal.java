@@ -118,7 +118,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.setName("panelPrincipal");
         _panelPrincipal.setPreferredSize(new Dimension(800, 600));
         _panelPrincipal.setLayout(new CardLayout());
-        _panelPrincipal.add("Servidores", new GUIPanelServidores());
+        _panelPrincipal.add("Servidores", new GUIPanelServidores(_controlador));
         _panelPrincipal.add("Buscador", new GUIPanelBuscador(_controlador));
         //Pestania de Configuración:
         //Creo la Vista (un JPanel) y le paso el Modelo (segun el patron MVC) en el constructor.
