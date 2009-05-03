@@ -1,5 +1,6 @@
 package gui.grafica.buscador;
 
+import control.ControladorGrafica;
 import datos.Archivo;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,29 +15,38 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
  * Panel que contiene el resultado de una búsqueda.
  * 
  * @author Javier Salcedo
  */
-public class PanelBusqueda extends JPanel {
+public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
 
     /**
      * Lista de archivos que ha respondido el servidor en respuesta a la búsqueda
      */
     private Archivo[] _busqueda;
+    /**
+     * Lista de paneles de archivos (BusquedaIndividual).
+     */
     private ArrayList<BusquedaIndividual> _listaArchivos;
     /**
      * Panel principal del contenedor
      */
     private JPanel _panelPrincipal;
+    /**
+     * Controlador de la aplicacion en modo grafico.
+     */
+    private ControladorGrafica _controlador;
 
     /**
      * Constructor de la clase PanelBusqueda.
      */
-    public PanelBusqueda(Archivo[] lista) {
+    public PanelBusqueda(ControladorGrafica controlador, Archivo[] lista){
 
+        _controlador = controlador;
         _busqueda = lista;
         _listaArchivos = new ArrayList<BusquedaIndividual>();
         _panelPrincipal = new JPanel();
@@ -56,30 +66,13 @@ public class PanelBusqueda extends JPanel {
         // Representa los resultados de la búsqueda
         for (int i = 0; i < _busqueda.length; i++) {
 
-            BusquedaIndividual b = new BusquedaIndividual(_busqueda[i].getNombre(),
-                    _busqueda[i].getSize(),                                        
-                    _busqueda[i].getTipo().toString(),
-                    _busqueda[i].getHash());
+            BusquedaIndividual b = new BusquedaIndividual(_busqueda[i]);
             
             // Guardamos la fila en el ArrayList
             _listaArchivos.add(b);
             // Creamos una nueva fila
             _panelPrincipal.add(b);
         }
-    }
-
-    /**
-     * Repinta el panel.
-     */
-    public void repintar() {
-        _panelPrincipal.removeAll();
-        _panelPrincipal.add(new Cabecera());
-        for (int i = 0; i < _listaArchivos.size(); i++) {
-            _panelPrincipal.add(_listaArchivos.get(i));
-        }
-        repaint();
-        _panelPrincipal.repaint();
-        _panelPrincipal.setVisible(true);
     }
 
     /**
@@ -127,25 +120,34 @@ public class PanelBusqueda extends JPanel {
     /**
      * Representa un archivo de la lista devuelta por el servidor.
      */
-    private class BusquedaIndividual extends JPanel {
+    private class BusquedaIndividual extends JPanel{
 
+        /**
+         * Archivo que representa la búsqueda individual. Lo necesitamos
+         * para pasarselo al controlador.
+         */
+        private Archivo _archivo;
         /**
          * Etiquetas de representación de los datos
          */
         private  JLabel _lblNombre,   _lblTamanio ,  _lblTipoArchivo ,  _lblHash ;
         /**
-         * Opción descargar del popup.
+         * Opción descargar del _popup.
          */
         private JMenuItem _menuDescargar;
         /**
-         * Para procesar pulsaciones sobre las opciones del popup.
+         * Para procesar pulsaciones sobre las opciones del _popup.
          */
         private OyenteBoton _oyenteBoton;
+        /*
+         * Para procesar los eventos del raton sobre el panel. 
+         */
+        private EventosRaton _eventosRaton;
         /**
          * Panel principal contenedor.
          */
         private JPanel _panelPrincipal;
-
+        
         /**
          * Constructor de la clase BusquedaIndividual.
          * 
@@ -154,15 +156,26 @@ public class PanelBusqueda extends JPanel {
          * @param tipo Tipo del archivo.
          * @param hash Hash del archivo.
          */
-        private BusquedaIndividual(String nombre, long tamanio, String tipo, String hash) {
+        private BusquedaIndividual(Archivo archivo) {
 
-            _panelPrincipal = new JPanel();
+            _archivo = archivo;
+            
+            _eventosRaton = new EventosRaton();
             _oyenteBoton = new OyenteBoton();
-            _lblNombre = new JLabel(nombre);
-            _lblTamanio = new JLabel(Long.toString(tamanio) + " bytes");
-            _lblTipoArchivo = new JLabel(tipo);
-            _lblHash = new JLabel(hash);
+            
+            _panelPrincipal = new JPanel();
+            _panelPrincipal.addMouseListener(_eventosRaton);
+            _lblNombre = new JLabel(_archivo.getNombre());
+            _lblNombre.addMouseListener(_eventosRaton);
+            _lblTamanio = new JLabel(Long.toString(_archivo.getSize()) + " bytes");
+            _lblTamanio.addMouseListener(_eventosRaton);
+            _lblTipoArchivo = new JLabel(_archivo.getTipo().name());
+            _lblTipoArchivo.addMouseListener(_eventosRaton);
+            _lblHash = new JLabel(_archivo.getHash());
+            _lblHash.addMouseListener(_eventosRaton);
+            
             initComponent();
+            
             createPopupMenu();
         }
 
@@ -170,6 +183,7 @@ public class PanelBusqueda extends JPanel {
          * Inicia los componentes de una busqueda individual
          */
         private void initComponent() {
+            
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
             _panelPrincipal.add(_lblNombre);
             _panelPrincipal.add(_lblTamanio);
@@ -177,6 +191,8 @@ public class PanelBusqueda extends JPanel {
             _panelPrincipal.add(_lblHash);
             setLayout(new BorderLayout());
             add(_panelPrincipal, BorderLayout.NORTH);
+            _panelPrincipal.setBackground(Color.WHITE);
+            _panelPrincipal.repaint();
         }
 
         /**
@@ -205,6 +221,49 @@ public class PanelBusqueda extends JPanel {
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Descargar")) {
+                    
+                    // Aviso al controlador con el archivo asociado
+                    // a la BusquedaIndividual a la que se ha pulsado
+                    _controlador.peticionDescargarFichero(_archivo);
+                }
+            }
+        }
+        
+        /**
+         * Clase que implementa los métodos necesarios para procesar 
+         * eventos del raton producidos sobre el panel.
+         */
+        class EventosRaton extends MouseAdapter{
+        
+            @Override
+            public void mouseClicked(MouseEvent evt){
+            
+                if(evt.getClickCount() == 2){
+                    
+                    // Aviso al controlador con el archivo asociado
+                    // a la BusquedaIndividual a la que se ha pulsado
+                    _controlador.peticionDescargarFichero(_archivo);
+                }
+                else 
+                    if(evt.getClickCount() == 1){
+                    
+                        repintar();
+                        // Solo se queda marcado el que ha sido seleccionado
+                        _panelPrincipal.setBackground(Color.CYAN);
+                        _panelPrincipal.repaint();
+                    }     
+            }
+
+            /**
+             * Establece el color blanco de fondo para todos los componentes
+             * del panel.
+             */
+            private void repintar() {
+            
+                for(BusquedaIndividual b : _listaArchivos){
+                
+                    b._panelPrincipal.setBackground(Color.WHITE);
+                    b._panelPrincipal.repaint();
                 }
             }
         }
@@ -219,10 +278,10 @@ public class PanelBusqueda extends JPanel {
         /**
          * Popup del panel.
          */
-        private JPopupMenu popup;
+        private JPopupMenu _popup;
 
         public PopupListener(JPopupMenu popupMenu) {
-            popup = popupMenu;
+            _popup = popupMenu;
         }
 
         @Override
@@ -237,8 +296,39 @@ public class PanelBusqueda extends JPanel {
 
         private void mostrarMenuRaton(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                popup.show(e.getComponent(), e.getX(), e.getY());
+                _popup.show(e.getComponent(), e.getX(), e.getY());
             }
         }
+    }
+    
+    //--------------------------------------\\
+    //      INTERFACE ALMACEN DESCARGAS     \\
+    //--------------------------------------\\
+    
+    /**
+     * Pone en rojo todas la línea de la nueva descarga. 
+     */
+    @Override
+    public void nuevaDescarga(String nombre, String hash, int tamanio) {
+
+        for(BusquedaIndividual b : _listaArchivos){
+                
+            // Ponemos en rojo esa fila cuando ha llegado esa descarga
+            if(b._lblHash.getText().matches(hash)){
+            
+                b._panelPrincipal.setBackground(Color.WHITE);
+                b._lblNombre.setForeground(Color.RED);
+                b._lblTamanio.setForeground(Color.RED);
+                b._lblTipoArchivo.setForeground(Color.RED);
+                b._lblHash.setForeground(Color.RED);
+                
+                b._panelPrincipal.repaint();
+            }        
+        }
+    }
+
+    @Override
+    public void fragmentoDescargado(String hash) {
+
     }
 }

@@ -7,11 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.Vector;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -22,32 +18,60 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
  */
 public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla{
 
-    // CONSTANTES
-    private static final long serialVersionUID = 1L;    
-    
-    // ATRIBUTOS
+    /**
+     * Constante de identificador de clase
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * Boton de comienzo de busqueda
+     */
     private JButton _btnComenzar;
-    private JButton _btnDescargar;
+    /**
+     * Boton que cierra todas las pestañas asociadas a las busquedas
+     */
     private JButton _btnEliminar;
+    /**
+     * Boton que vacia el contenido del cuadro de texto donde el usuario
+     * introduce el nombre del archivo que quiere buscar
+     */
     private JButton _btnLimpiar;
+    /**
+     * Etiqueta del nombre del archivo a buscar
+     */
     private JLabel _lblNombre;
+    /**
+     * ScrollPane que contiene el contenido de una busqueda 
+     */
     private JScrollPane _panelScroll;
+    /**
+     * Separador
+     */
     private JSeparator _separador;
-    //private JTable _tablaContenido;
+    /**
+     * Contiene el resultado de una busqueda compuesta por una lista de archivos
+     */
     private PanelBusqueda _panelBusqueda;
+    /**
+     * Cuadro de texto donde el usuario introduce el nombre del archivo que 
+     * quiere buscar
+     */
     private JTextField _txtBusqueda;
+    /**
+     * Panel que contiene las pestañas de cada una de las busquedas realizadas
+     */
     private JTabbedPane _panelPestanas;
     /**
      * Número de pestañas abiertas
      */
-    private int _numeroPestañas = 0; 
+    private int _numeroPestañas = 0;
     /**
-     * Vector de búsquedas realizadas. 
-     * Cada componente representa una búsqueda de una pestaña determinada.
+     * Vector de búsquedas realizadas
+     * Cada componente representa una búsqueda de una pestaña determinada
      */
-    private Vector<Archivo[]> _ultimasBusquedas;
-
-    // CONTROLADOR
+    private Vector<Archivo[]> _ultimasBusquedas;    
+    /**
+     * Controlador de la aplicacion en modo grafico
+     */
     private ControladorGrafica _controlador;
 
     /** 
@@ -74,7 +98,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _txtBusqueda = new JTextField();
         _separador = new JSeparator();
         _btnComenzar = new JButton();
-        _btnDescargar = new JButton();
         _btnEliminar = new JButton();
         _btnLimpiar = new JButton();
 
@@ -118,6 +141,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _btnComenzar.setPreferredSize(new Dimension(100, 20));
         _btnComenzar.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 pulsacionBotonComenzar(evt);
             }
@@ -138,6 +162,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _btnLimpiar.setPreferredSize(new Dimension(100, 20));
         _btnLimpiar.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 pulsacionBotonLimpiar(evt);
             }
@@ -162,20 +187,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         gridBagConstraints.insets = new Insets(50, 10, 0, 0);
         add(_separador, gridBagConstraints);
 
-        // BOTON DESCARGAR
-        _btnDescargar.setText("Descargar");
-        _btnDescargar.setName("btnDescargar");
-        _btnDescargar.setMaximumSize(new Dimension(100, 20));
-        _btnDescargar.setMinimumSize(new Dimension(100, 20));
-        _btnDescargar.setPreferredSize(new Dimension(100, 20));
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(20, 10, 10, 10);
-        add(_btnDescargar, gridBagConstraints);
-
         // BOTON ELIMINAR
         _btnEliminar.setText("Eliminar Todo");
         _btnEliminar.setName("btnEliminar");
@@ -184,16 +195,17 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _btnEliminar.setPreferredSize(new Dimension(150, 20));
         _btnEliminar.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 pulsacionBotonEliminar(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(20, 90, 10, 10);
+        gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(_btnEliminar, gridBagConstraints);
 
         // PANEL CON PESTAÑAS
@@ -228,14 +240,16 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * @param evt Evento de pulsación del ratón.
      */
     private void pulsacionBotonComenzar(ActionEvent evt) {
-        
-        if (_controlador.conectado()) 
-            if(!_txtBusqueda.getText().matches(""))
+
+        if (_controlador.conectado()) {
+            if (!_txtBusqueda.getText().matches("")) {
                 _controlador.peticionBuscarFichero(_txtBusqueda.getText());
-            else
+            } else {
                 mostrarErrorNombreNoIntroducido();
-        else 
+            }
+        } else {
             mostrarErrorNoConetadoAServidor();
+        }
     }
 
     /**
@@ -305,92 +319,10 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      */
     private void mostrarResultadoBusqueda(Archivo[] lista) {
 
-        // Nombre de las columnas
-        /*String[] nombreColumnas = {"Nombre",
-            "Tamaño",
-            "Disponibilidad",
-            "Fuentes",
-            "Tipo",
-            "Identificador de lista"
-        };
-
-        // Recuperamos los datos
-        Object datos[][] = new Object[lista.length][nombreColumnas.length];
-
-        for (int i = 0; i < lista.length; i++) {
-            datos[i][0] = lista[i]._nombre;
-            datos[i][1] = String.valueOf(lista[i]._tamano) + " bytes";
-            datos[i][2] = "100%";
-            datos[i][3] = "1(1)";
-            datos[i][4] = lista[i]._tipo.toString();
-            datos[i][5] = lista[i]._hash;
-        }
-
-        _tablaContenido = new JTable(datos, nombreColumnas);
-        _tablaContenido.setName("tablaContenido");
-        _tablaContenido.setModel(new DefaultTableModel(datos, nombreColumnas));
-        _tablaContenido.setBackground(Color.WHITE);
-        _tablaContenido.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Para que no se ajuste al tamaño del scroll panel
-        _tablaContenido.setShowGrid(false); // Para que no se vean las líneas de división
-        _tablaContenido.setAutoCreateRowSorter(true); // Para ordenar las columnas
-        _tablaContenido.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        _tablaContenido.setRowMargin(5);
-        _tablaContenido.setRowHeight(20);
-
-        // Damos un ancho a las columnas del JTable y centramos su contenido
-        for (int i = 0; i < _tablaContenido.getModel().getColumnCount(); i++) {
-
-            TableColumn columna = _tablaContenido.getColumnModel().getColumn(i);
-            DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
-
-            switch (i) {
-
-                // Nombre
-                case 0:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(375);
-                    break;
-
-                // Tamaño
-                case 1:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(100);
-                    break;
-
-                // Disponibilidad
-                case 2:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(100);
-                    break;
-
-                // Fuentes
-                case 3:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(75);
-                    break;
-
-                // Tipo
-                case 4:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(100);
-                    break;
-
-                // Hash
-                case 5:
-                    tableCellRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-                    columna.setCellRenderer(tableCellRenderer);
-                    columna.setPreferredWidth(225);
-                    break;
-            }
-        }*/
-
         // Creamos el contenido
-        _panelBusqueda = new PanelBusqueda(lista);
+        _panelBusqueda = new PanelBusqueda(_controlador, lista);
+        // Registramos como observador del almacen de descargas 
+        _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(_panelBusqueda);
         
         // PANEL DE SCROLL
         _panelScroll = new JScrollPane();
@@ -398,8 +330,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _panelScroll.setBackground(Color.WHITE);
         _panelScroll.add(_panelBusqueda);
         _panelScroll.setViewportView(_panelBusqueda);
-        //_panelScroll.add(_tablaContenido);
-        //_panelScroll.setViewportView(_tablaContenido);
 
         // Hay una nueva pestaña
         setNumeroNuevos(getNumeroNuevos() + 1);
@@ -447,6 +377,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * @param ip IP del servidor.
      * @param puerto Puerto del servidor.
      */
+    @Override
     public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int port) {
     }
 
@@ -455,6 +386,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * 
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
+    @Override
     public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
     }
 
@@ -465,10 +397,11 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * @param nombre Nombre del lista a buscar.
      * @param lista Lista de archivos de la última búsqueda.
      */
+    @Override
     public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String cad, Archivo[] lista) {
-        
+
         if (lista.length != 0) {
-            
+
             // Guardo la búsqueda en el vector de busquedas
             _ultimasBusquedas.add(lista);
             mostrarResultadoBusqueda((Archivo[]) lista);
@@ -482,6 +415,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * 
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
+    @Override
     public void finDescarga(GestorEgorilla obj) {
     }
 
@@ -490,6 +424,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      *
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
+    @Override
     public void perdidaConexion(GestorEgorilla obj) {
     }
 }
