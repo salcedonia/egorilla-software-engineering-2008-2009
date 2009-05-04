@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -24,9 +24,14 @@ class AdministradorDescarga extends ModuloTrafico {
     private static final Logger log = Logger.getLogger(AdministradorDescarga.class.getName());
 
     
-    protected AdministradorDescarga(DataInputStream fichero) throws IOException {
+    protected AdministradorDescarga(DataInputStream fichero) {
         if (fichero != null) {
-            cargaDatosGlobales(fichero);
+            try {
+                cargaDatosGlobales(fichero);
+            } catch (IOException ex) {
+                incioGlobal();
+                log.info("Las estadisticas no se han podido cargar, comenzaran desde 0");
+            }
         } else {
             incioGlobal();
         }

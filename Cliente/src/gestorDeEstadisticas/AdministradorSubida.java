@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * Modulo que gestiona las datos que se envian.
@@ -25,9 +25,14 @@ public class AdministradorSubida extends ModuloTrafico{
     private String ruta = "../stadUpload.bin";
   
     private static final Logger log = Logger.getLogger(AdministradorSubida.class.getName());
-    AdministradorSubida(DataInputStream fichero) throws IOException{
+    AdministradorSubida(DataInputStream fichero){
         if (fichero != null) {
-        cargaDatosGlobales(fichero);
+            try {
+                cargaDatosGlobales(fichero);
+            } catch (IOException ex) {
+                incioGlobal();
+                log.info("Las estadisticas no se han podido cargar, comenzaran desde 0");
+            }
         } else {
             incioGlobal();
         }
@@ -72,7 +77,7 @@ public class AdministradorSubida extends ModuloTrafico{
       //TODO Hay que realizar el volcado
       /*  try
 		{
-			//Se abre el fichero donde se hará la copia
+			//Se abre el fichero donde se har� la copia
             writer.writeInt(_totalGlobal.size());
             for (int valor : _totalGlobal.keySet()) {
                 cantidad = _totalGlobal.get(valor);

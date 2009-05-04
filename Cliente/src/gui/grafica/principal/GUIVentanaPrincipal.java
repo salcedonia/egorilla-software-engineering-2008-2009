@@ -1,6 +1,7 @@
 package gui.grafica.principal;
 
 import datos.Archivo;
+import gestorDeEstadisticas.GestorEstadisticas;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
@@ -160,7 +161,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
             _controlador = controlador;
             _controlador.getGestorEGorilla().agregarObservador(this);
-     
+            _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(GestorEstadisticas.getInstacia());
             iniciarComponentes();
             
         } catch (ControlConfiguracionClienteException ex) {

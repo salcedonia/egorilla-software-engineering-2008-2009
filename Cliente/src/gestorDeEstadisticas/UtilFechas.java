@@ -34,6 +34,15 @@ public class UtilFechas {
         fecha.append(calendario.get(Calendar.SECOND));
         return Integer.parseInt(fecha.toString());
      }
+     
+     
+      public static Integer dameHoras(Date date) {
+        Calendar calendario = Calendar.getInstance();
+        calendario.setTime(date);
+        StringBuilder fecha = new StringBuilder();
+        fecha.append(calendario.get(Calendar.HOUR));
+        return Integer.parseInt(fecha.toString());
+     }
 
      public static Date stringToDate(String fecha) {
         String[] tokens = fecha.split(":");
@@ -82,6 +91,20 @@ public class UtilFechas {
     public static Date restarMinutos(Date fecha, int intervalo) {
         intervalo = intervalo * conversorMinutos;
         long newDate = fecha.getTime()- intervalo;
+        Date nuevaFecha = new Date(newDate);
+        return nuevaFecha;
+    }
+    
+    public static Date restarSegundos(Date fecha, int intervalo) {
+        intervalo = intervalo * conversorSegundos;
+        long newDate = fecha.getTime()- intervalo;
+        Date nuevaFecha = new Date(newDate);
+        return nuevaFecha;
+    }
+    
+     public static Date sumarSegundos(Date fecha, int intervalo) {
+        intervalo = intervalo * conversorSegundos;
+        long newDate = fecha.getTime()+ intervalo;
         Date nuevaFecha = new Date(newDate);
         return nuevaFecha;
     }

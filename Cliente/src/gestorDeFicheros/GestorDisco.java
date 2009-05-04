@@ -143,6 +143,13 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
 
     if( fDirectorioTemporales.isDirectory() == false ||
         fDirectorioCompletos.isDirectory() == false) {
+      //throw new IOException("Algun directorio no es un directorio valido");
+    }
+
+    //Cuando haya multiples directorio, hacer un for para comprobar todos
+
+    if( fDirectorioTemporales.isDirectory() == false ||
+        fDirectorioCompletos.isDirectory() == false) {
       System.out.println("Directorio de temporales o de completos no valido");
       //throw new IOException("Algun directorio no es un directorio valido");
     }
