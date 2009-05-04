@@ -427,7 +427,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _btnConfiguracion.setFont(new Font("Tahoma", Font.BOLD, 11));
         _btnConfiguracion.setText("Configuración");
         _btnConfiguracion.setIcon(_imgConfiguracion);
-        _btnConfiguracioX(setBorderPainted(false);
+        _btnConfiguracion.setBorderPainted(false);
         _btnConfiguracion.setAlignmentX(0.5F);
         _btnConfiguracion.setDoubleBuffered(true);
         _btnConfiguracion.setFocusCycleRoot(true);
