@@ -5,12 +5,13 @@
 
 package gestorDeEstadisticas;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
+ * @see GestorEstadisticas.
  * @author Qiang
  */
 public abstract class ModuloTrafico {
@@ -144,8 +145,10 @@ public abstract class ModuloTrafico {
         return UtilFechas.restarMinutos(ultimaActualizacion, cantidad);
     }
     
-    public List<Double> getListaVelocidadMediaSesion() {
-        return listaVelocidadSesion;
+    public ArrayList<Double> getListaVelocidadMediaSesion() {
+        ArrayList retorno = new ArrayList();
+         retorno.addAll(listaVelocidadSesion);
+         return retorno;
     }
 
     public List<Double> getListaDatosMediaSesion() {

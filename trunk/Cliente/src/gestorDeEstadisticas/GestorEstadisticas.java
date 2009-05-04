@@ -13,9 +13,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
  * <p>Gestor de estadisticas: Es el encargado de almacenar y ordenar la canatidad de
@@ -23,9 +25,9 @@ import java.util.logging.Logger;
  * ejemplo la GUI. </p>
  * Datos almacenados:
  * <ul>
- *   <li>Se dispondras la informaciÃ³n de los datos enviados y los datos descargados asÃ­ como 
+ *   <li>Se dispondras la información de los datos enviados y los datos descargados así como 
  *      la velocidades de subida y descarga.</li>
- *   <li>Para las velocidades se ofrecera los datos de la Ãºltima hora en periodos de medio minuto
+ *   <li>Para las velocidades se ofrecera los datos de la última hora en periodos de medio minuto
  *       por lo tanto estas variables se mostraran de forma discreta aunque se tendra en cuenta todo
  *       el rango de tiempo. La media de velocidades se calculara por defecto para periodos de 5 minutos;
  *   </li>   
@@ -42,17 +44,17 @@ import java.util.logging.Logger;
  *       Al finalizar cerramos: instancia.cerrar() 
  *   <li>   
  *  </ul>
- *   Es importante realizar el Ãºltimo paso de cerrar las estadisticas ya que con ello liberamos
+ *   Es importante realizar el último paso de cerrar las estadisticas ya que con ello liberamos
  *   los recursos y hacemos persistente los datos,
  * @author Qiang
  */
-public class GestorEstadisticas implements ObservadorDatos {
+public class GestorEstadisticas implements ObservadorAlmacenDescargas {
 
     protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;
     AdministradorSubida subida;
     protected final static String PATH = "temp/statistics";
-    private static Logger log = Logger.getLogger(GestorEstadisticas.class.getName());
+    private static Logger log = Logger.getLogger(GestorEstadisticas.class);
 
     protected GestorEstadisticas() {
         DataInputStream fichero = null;
@@ -67,15 +69,15 @@ public class GestorEstadisticas implements ObservadorDatos {
             subida = new AdministradorSubida(fichero);
 
         } catch (FileNotFoundException ex) {
-            log.log(Level.SEVERE, "Error al abrir el fichero de estadisticas", ex);
+            log.error( "Error al abrir el fichero de estadisticas", ex);
         } catch (IOException ex) {
-            log.log(Level.SEVERE, "Error al cargar los datos de estadisticas", ex);
+            log.error("Error al cargar los datos de estadisticas", ex);
         } finally {
             try {
                 if (fichero != null)
                     fichero.close();
             } catch (IOException ex) {
-                log.log(Level.SEVERE, "Error al cerrar los datos de estadisticas", ex);
+                log.error("Error al cerrar los datos de estadisticas", ex);
             }
         }
     }
@@ -95,7 +97,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Inicia el gestor de estadisticas para poder comenzar a almacenar los
      * datos sobre las estadisticas.
      */
-    void inicioSesion() {
+    public void inicioSesion() {
         descarga.inicioSesion();
         subida.inicioSesion();
     }
@@ -103,7 +105,7 @@ public class GestorEstadisticas implements ObservadorDatos {
     /**
      * Pone a cero los datos guardados de la sesion y los datos globales.
      */
-    void reiniciarTodo() {
+    public void reiniciarTodo() {
         descarga.reniciarSesion();
         subida.inicioSesion();
 
@@ -112,14 +114,14 @@ public class GestorEstadisticas implements ObservadorDatos {
     /**
      * Pone a cero los datos guardados de la sesion.
      */
-    void reniciarSesion() {
+    public void reniciarSesion() {
     }
 
     /**
      * Cierra el sistema gestor de estadisticas. Debe ser llamado al eliminar
      * el objeto.
      */
-    void cerrar() {
+   public  void cerrar() {
         OutputStream stream = null;
         try {
             DataOutputStream fichero;
@@ -129,14 +131,14 @@ public class GestorEstadisticas implements ObservadorDatos {
             subida.cerrar(fichero);
 
         } catch (FileNotFoundException ex) {
-            log.log(Level.SEVERE, "Error al abrir el fichero de estadisticas", ex);
+            log.error("Error al abrir el fichero de estadisticas", ex);
         } catch (IOException ex) {
-            log.log(Level.SEVERE, "Error al escribir los datos de estadisticas", ex);
+            log.error("Error al escribir los datos de estadisticas", ex);
         } finally {
             try {
                 stream.close();
             } catch (IOException ex) {
-                log.log(Level.SEVERE, "Error al cerrar el fichero de estadisticas", ex);
+                log.error("Error al cerrar el fichero de estadisticas", ex);
             }
         }
     }
@@ -145,7 +147,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Lista de velocidades medias recibidos durante la sesion.
      * @return
      */
-    List<Double> getListaVelocidadMediaSubidaSesion() {
+   public  List<Double> getListaVelocidadMediaSubidaSesion() {
         return subida.getListaVelocidadMediaSesion();
     }
 
@@ -153,7 +155,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Lista de velocidades medias recibidos durante la sesion.
      * @return
      */
-    List<Double> getListaVelocidadMediaBajadaSesion() {
+   public ArrayList<Double> getListaVelocidadMediaBajadaSesion() {
         return descarga.getListaVelocidadMediaSesion();
     }
 
@@ -161,7 +163,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Numero de ficheros descargados en el global de las estadisticas.
      * @return
      */
-    int getFicherosDescargadosGlobal() {
+    public int getFicherosDescargadosGlobal() {
         return descarga.getFicherosDescargadosGlobal();
     }
 
@@ -169,7 +171,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Numero de ficheros descargados durante la sesion.
      * @return
      */
-    int getFicherosDescargadosSesion() {
+    public int getFicherosDescargadosSesion() {
         return descarga.getFicherosDescargadosSesion();
     }
 
@@ -177,7 +179,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Velocidad de descarga actual.
      * @return
      */
-    double getVelocidadActualDescarga() {
+    public double getVelocidadActualDescarga() {
         return descarga.getVelocidadActual();
     }
 
@@ -185,7 +187,7 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Velocidad de subida actual.
      * @return
      */
-    double getVelocidadActualSubida() {
+    public double getVelocidadActualSubida() {
         return subida.getVelocidadActual();
     }
 
@@ -193,11 +195,11 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Numero total de bytes descargados durante la sesion.
      * @return
      */
-    double getTotalDatosDescargaSesion() {
+   public  double getTotalDatosDescargaSesion() {
         return descarga.getTotalDatosSesion();
     }
 
-    double getTotalDatosDescargaGlobal() {
+    public double getTotalDatosDescargaGlobal() {
         return descarga.getTotalDatosGlobal();
     }
 
@@ -205,11 +207,11 @@ public class GestorEstadisticas implements ObservadorDatos {
      * Numero total de bytes subidos durante la sesion.
      * @return
      */
-    double getTotalDatosSubidaSesion() {
+    public double getTotalDatosSubidaSesion() {
         return subida.getTotalDatosSesion();
     }
 
-    double getTotalDatosSubidaGlobal() {
+    public double getTotalDatosSubidaGlobal() {
         return subida.getTotalDatosGlobal();
     }
 
@@ -223,5 +225,19 @@ public class GestorEstadisticas implements ObservadorDatos {
 
     public void llegadaDatosSubida(double longitud) {
         subida.llegadaDatos(longitud);
+    }
+
+    @Override
+    public void nuevaDescarga(String nombre, String hash, int tamanio) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void fragmentoDescargado(String hash) {
+     llegadaDatosDescarga(512);
+    }
+    
+    public Date getFechaInicio() {
+        return descarga.getFechaInicio();
     }
 }

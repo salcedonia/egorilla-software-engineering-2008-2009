@@ -25,6 +25,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.RespuestaPeticionConsulta;
+import org.apache.log4j.Logger;
 import peerToPeer.descargas.AlmacenDescargas;
 import peerToPeer.descargas.Descargador;
 
@@ -48,6 +49,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     private boolean _conectado;
     private String  _serverIP;
     private int  _serverPort; 
+    private static final Logger log = Logger.getLogger(GestorEgorilla.class);
     /**
     * Estructura de datos para almacenar los observadores sobre este objeto.
     */
@@ -85,7 +87,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      * @return si la conexion ha sido satisfactoria
      */
     public void conectaServidor(String ipServidor, int puertoServidor) throws ControlConfiguracionClienteException{
-        
+        log.info("IP : "+ ipServidor+ " Puerto: "+puertoServidor);
         // realiza la conexion. Envia los datos al servidor
         DatosCliente misDatos = new DatosCliente();
         

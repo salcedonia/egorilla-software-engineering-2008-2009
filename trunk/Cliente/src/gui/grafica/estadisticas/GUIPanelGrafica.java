@@ -7,6 +7,7 @@ package gui.grafica.estadisticas;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Date;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -22,8 +23,8 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class GUIPanelGrafica extends javax.swing.JPanel {
 
     BufferedImage buffer;
-    ArrayList listaEjeX;
-    ArrayList listaEjeY;
+    ArrayList<Date> listaEjeX;
+    ArrayList<Double> listaEjeY;
 
     public void setLeyendaEjeX(String leyendaEjeX) {
         this.leyendaEjeX = leyendaEjeX;
@@ -43,7 +44,12 @@ public class GUIPanelGrafica extends javax.swing.JPanel {
 
     /** Creates new form GUIPanelGrafica */
     public GUIPanelGrafica() {
+        listaEjeX = new ArrayList();
+        listaEjeY = new ArrayList();
+        this.setDoubleBuffered(true);
         initComponents();
+        
+
     }
 
     /** This method is called from within the constructor to
@@ -89,18 +95,20 @@ public class GUIPanelGrafica extends javax.swing.JPanel {
 
     public BufferedImage creaImagen() {
         XYSeries series = new XYSeries("Evolucion");
-//          for (int i = 0; i < listaEjeY.size() ; i++) {
-//            series.add(i, listaEjeY.get);
-//        }
-        series.add(4, 23);
-        series.add(2, 34);
-        series.add(3, 51);
-        series.add(4, 67);
-        series.add(5, 89);
-        series.add(6, 121);
-        series.add(7, 137);
+          for (int i = 0; i < listaEjeY.size() ; i++) {
+              Date date = listaEjeX.get(i);
+              date.getTime();
+            series.add( date.getTime(), listaEjeY.get(i));
+        }
+//        series.add(4, 23);
+//        series.add(2, 34);
+//        series.add(3, 51);
+//        series.add(4, 67);
+//        series.add(5, 89);
+//        series.add(6, 121);
+//        series.add(7, 137);
         XYDataset juegoDatos = new XYSeriesCollection(series);
-
+        log.info(listaEjeX.toString());
         JFreeChart chart = ChartFactory.createXYLineChart(titulo,
                 leyendaEjeX, leyendaEjeY, juegoDatos, PlotOrientation.VERTICAL,
                 false,
@@ -114,11 +122,18 @@ public class GUIPanelGrafica extends javax.swing.JPanel {
     }
 
     public void setEjeX(ArrayList valores) {
+        listaEjeX.clear();
+        listaEjeX.addAll(valores);
     }
 
-    public void setEjeY(ArrayList valores) {
+    public void setEjeY(ArrayList<Double> valores) {
+        listaEjeY.clear();
+        listaEjeY.addAll(valores);
     }
-
+    
+    public void changeImage() {
+        buffer = null;
+    }
     public void setInicioX(ArrayList valores) {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
