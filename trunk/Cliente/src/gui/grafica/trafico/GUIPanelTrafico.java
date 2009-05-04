@@ -9,7 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -24,18 +23,25 @@ import peerToPeer.descargas.ObservadorAlmacenDescargas;
 public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescargas {
 
     private ArrayList<DescargaIndividual> _listaDescargas;
+    private ControladorPanelTrafico _controlador;
     private JPanel _panelPrincipal;
     private int prueba = 0;
 
-    public GUIPanelTrafico() {
+    public GUIPanelTrafico(ControladorPanelTrafico controlador) {
+        
+        _controlador = controlador;
+        
+        // Registramos la vista como observadora del almacen de descargas
+        _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(this);
+        
         _listaDescargas = new ArrayList<DescargaIndividual>();
         _panelPrincipal = new JPanel();
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
-        initComponent();
+        iniciarComponentes();
     }
 
-    public void initComponent() {
+    public void iniciarComponentes() {
         _panelPrincipal.setLayout(new GridLayout(0, 1, 0, 0));
         _panelPrincipal.add(new Cabecera());
     }
@@ -51,6 +57,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         _panelPrincipal.setVisible(true);
     }
 
+    @Override
     public void nuevaDescarga(String nombre, String hash, int tamanio) {
         DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
         _panelPrincipal.add(descarga);
@@ -59,6 +66,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         repaint();
     }
 
+    @Override
     public void fragmentoDescargado(String hash) {
         for (int i = 0; i < _listaDescargas.size(); i++) {
             if (_listaDescargas.get(i).getHash().equals(hash)) {
@@ -86,10 +94,10 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         private JPanel _panelPrincipal;
 
         private Cabecera() {
-            initComponent();
+            iniciarComponentes();
         }
 
-        private void initComponent() {
+        private void iniciarComponentes() {
             _panelPrincipal = new JPanel();
             _labelestado = new JLabel("ESTADO");
             _labelnombre = new JLabel("FICHERO");
@@ -181,6 +189,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
 
         class OyenteBoton implements ActionListener {
 
+            @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Pausar")) {
                     _labelestado.setText("En pausa");
@@ -210,10 +219,12 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             popup = popupMenu;
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
             mostrarMenuRaton(e);
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             mostrarMenuRaton(e);
         }

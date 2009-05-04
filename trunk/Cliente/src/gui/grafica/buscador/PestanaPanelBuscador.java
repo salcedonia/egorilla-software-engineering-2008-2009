@@ -13,10 +13,14 @@ import java.awt.event.*;
  */
 public class PestanaPanelBuscador extends JPanel implements ActionListener {
 
-    // CONSTANTES
+    /**
+     * Identificador de la clase.
+     */
     private static final long serialVersionUID = 1L;
+    /**
+     * Ruta donde se encuentran los recursos de la clase.
+     */
     private static final String RUTA_RECURSOS = "/recursos/interfaz/buscador/";    
-    
     /**
      * Referencia al coponente contenedor, una vez asigado no cambia.
      */
@@ -110,11 +114,7 @@ public class PestanaPanelBuscador extends JPanel implements ActionListener {
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
     }
 
-    /**
-     * Pulsacion sobre el botón cerrar.
-     * 
-     * @param ev Evento de acción.
-     */
+    @Override
     public void actionPerformed(ActionEvent ev) {
 
         Object o = ev.getSource();

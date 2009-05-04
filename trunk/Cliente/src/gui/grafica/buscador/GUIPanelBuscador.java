@@ -1,13 +1,11 @@
 package gui.grafica.buscador;
 
-import control.ControladorGrafica;
 import datos.Archivo;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -16,74 +14,77 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
  * 
  * @author  Javier Salcedo
  */
-public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla{
+public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla, ObservadorPanelBusqueda {
 
     /**
-     * Constante de identificador de clase
+     * Identificador de la clase.
      */
     private static final long serialVersionUID = 1L;
     /**
-     * Boton de comienzo de busqueda
+     * Boton de comienzo de busqueda.
      */
     private JButton _btnComenzar;
     /**
-     * Boton que cierra todas las pestañas asociadas a las busquedas
+     * Boton que cierra todas las pestañas asociadas a las busquedas.
      */
     private JButton _btnEliminar;
     /**
      * Boton que vacia el contenido del cuadro de texto donde el usuario
-     * introduce el nombre del archivo que quiere buscar
+     * introduce el nombre del archivo que quiere buscar.
      */
     private JButton _btnLimpiar;
     /**
-     * Etiqueta del nombre del archivo a buscar
+     * Boton que descarga el archivo seleccionado de la lista de archivos
+     * que componen el resultado de una busqueda.
+     */
+    private JButton _btnDescargar;
+    /**
+     * Etiqueta del nombre del archivo a buscar.
      */
     private JLabel _lblNombre;
     /**
-     * ScrollPane que contiene el contenido de una busqueda 
+     * ScrollPane que contiene el contenido de una busqueda. 
      */
     private JScrollPane _panelScroll;
     /**
-     * Separador
+     * Separador.
      */
     private JSeparator _separador;
     /**
-     * Contiene el resultado de una busqueda compuesta por una lista de archivos
+     * Contiene el resultado de una busqueda compuesta por una lista de archivos.
      */
     private PanelBusqueda _panelBusqueda;
     /**
      * Cuadro de texto donde el usuario introduce el nombre del archivo que 
-     * quiere buscar
+     * quiere buscar.
      */
     private JTextField _txtBusqueda;
     /**
-     * Panel que contiene las pestañas de cada una de las busquedas realizadas
+     * Panel que contiene las pestañas de cada una de las busquedas realizadas.
      */
     private JTabbedPane _panelPestanas;
     /**
-     * Número de pestañas abiertas
+     * Número de pestañas abiertas.
      */
     private int _numeroPestañas = 0;
     /**
-     * Vector de búsquedas realizadas
-     * Cada componente representa una búsqueda de una pestaña determinada
+     * Controlador del panel buscador.
      */
-    private Vector<Archivo[]> _ultimasBusquedas;    
+    private ControladorPanelBuscador _controlador;
     /**
-     * Controlador de la aplicacion en modo grafico
+     * Archivo seleccionado de la lista de busquedas.
      */
-    private ControladorGrafica _controlador;
+    private Archivo _archivoSeleccionado;
 
     /** 
      * Constructor de la clase PanelBusquedas.
      * 
-     * @param controlador Controlador de la interfaz gráfica. 
+     * @param controlador Controlador del panel buscador. 
      */
-    public GUIPanelBuscador(ControladorGrafica controlador) {
+    public GUIPanelBuscador(ControladorPanelBuscador controlador) {
 
         _controlador = controlador;
         _controlador.getGestorEGorilla().agregarObservador(this);
-        _ultimasBusquedas = new Vector<Archivo[]>();
         iniciarComponentes();
     }
 
@@ -100,16 +101,15 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _btnComenzar = new JButton();
         _btnEliminar = new JButton();
         _btnLimpiar = new JButton();
+        _btnDescargar = new JButton();
 
         // PANEL PRINCIPAL
         setBorder(BorderFactory.createTitledBorder("Buscador"));
-        setName("PanelBuscador");
         setLayout(new GridBagLayout());
 
         // LABEL NOMBRE
         _lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
         _lblNombre.setText("Nombre: ");
-        _lblNombre.setName("lblNombre");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -122,7 +122,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _txtBusqueda.setMinimumSize(new Dimension(100, 20));
         _txtBusqueda.setMaximumSize(new Dimension(100, 20));
         _txtBusqueda.setPreferredSize(new Dimension(100, 20));
-        _txtBusqueda.setName("txtBusqueda");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -135,10 +134,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         // BOTON COMENZAR
         _btnComenzar.setText("Comenzar");
-        _btnComenzar.setName("btnComenzar");
-        _btnComenzar.setMaximumSize(new Dimension(100, 20));
-        _btnComenzar.setMinimumSize(new Dimension(100, 20));
-        _btnComenzar.setPreferredSize(new Dimension(100, 20));
         _btnComenzar.addActionListener(new ActionListener() {
 
             @Override
@@ -156,10 +151,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         // BOTON LIMPIAR
         _btnLimpiar.setText("Limpiar");
-        _btnLimpiar.setName("btnLimpiar");
-        _btnLimpiar.setMaximumSize(new Dimension(100, 20));
-        _btnLimpiar.setMinimumSize(new Dimension(100, 20));
-        _btnLimpiar.setPreferredSize(new Dimension(100, 20));
         _btnLimpiar.addActionListener(new ActionListener() {
 
             @Override
@@ -176,7 +167,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         add(_btnLimpiar, gridBagConstraints);
 
         // SEPARADOR
-        _separador.setName("separador");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -189,10 +179,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         // BOTON ELIMINAR
         _btnEliminar.setText("Eliminar Todo");
-        _btnEliminar.setName("btnEliminar");
-        _btnEliminar.setMaximumSize(new Dimension(150, 20));
-        _btnEliminar.setMinimumSize(new Dimension(150, 20));
-        _btnEliminar.setPreferredSize(new Dimension(150, 20));
         _btnEliminar.addActionListener(new ActionListener() {
 
             @Override
@@ -205,8 +191,25 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(20, 10, 10, 10);
+        gridBagConstraints.insets = new Insets(20, 250, 10, 10);
         add(_btnEliminar, gridBagConstraints);
+
+        // BOTON DESCARGAR
+        _btnDescargar.setText("Descargar Archivo");
+        _btnDescargar.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                pulsacionBotonDescargar(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(20, 10, 10, 10);
+        add(_btnDescargar, gridBagConstraints);
 
         // PANEL CON PESTAÑAS
         _panelPestanas = new JTabbedPane();
@@ -245,10 +248,15 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
             if (!_txtBusqueda.getText().matches("")) {
                 _controlador.peticionBuscarFichero(_txtBusqueda.getText());
             } else {
-                mostrarErrorNombreNoIntroducido();
+                mostrarMensaje("Debe especificar un nombre para el archivo",
+                        "Búsqueda no informada",
+                        JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            mostrarErrorNoConetadoAServidor();
+
+            mostrarMensaje("¡No se ha conectado a ningún servidor!",
+                    "Error de conexión",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -256,13 +264,28 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * Vacía la tabla de contenidos donde se cargan todos los resultados de las búsquedas
      * asociadas.
      * 
-     * @param evt Evento de pulsación de ratón.
+     * @param evt Evento de pulsacion de raton.
      */
     private void pulsacionBotonEliminar(ActionEvent evt) {
 
         // Cerramos todas las pestañas activas
         _panelPestanas.removeAll();
         setNumeroNuevos(0);
+    }
+
+    /**
+     * Descarga el archivo seleccionado de la lista de archivos como resultado
+     * de una busqueda.
+     * 
+     * @param evt Evento de pulsacion de raton.
+     */
+    private void pulsacionBotonDescargar(ActionEvent evt) {
+
+        if (_archivoSeleccionado != null) {
+            _controlador.peticionDescargarFichero(_archivoSeleccionado);
+        } else {
+            mostrarMensaje("Debes seleccionar un archivo antes", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -277,37 +300,15 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     }
 
     /**
-     * Muestra un mensaje de error informando que no se ha conectado a ningún servidor.
+     * Muestra un mensaje explicativo al usuario.
+     * 
+     * @param mensaje Mensaje asociado.
+     * @param cabecera Cabecera de la ventana informativa.
+     * @param tipoMensaje Tipo de mensaje.
      */
-    private void mostrarErrorNoConetadoAServidor() {
+    private void mostrarMensaje(String mensaje, String cabecera, int tipoMensaje) {
 
-        JOptionPane.showMessageDialog(null,
-                "¡No se ha conectado a ningún servidor!",
-                "Error conexión",
-                JOptionPane.WARNING_MESSAGE);
-    }
-
-    /**
-     * Muestra el mensaje de error informando que no se ha introducido el nombre
-     * del lista a buscar.
-     */
-    private void mostrarErrorNombreNoIntroducido() {
-
-        JOptionPane.showMessageDialog(null,
-                "Debe especificar un nombre para el archivo",
-                "Búsqueda no informada",
-                JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    /**
-     * Muestra el mensaje informando que la busqueda ha concluido sin coincidencias.
-     */
-    private void mostrarMensajeBusquedaSinCoincidencias() {
-
-        JOptionPane.showMessageDialog(null,
-                "No se han encontrado coincidencias para el archivo especificado",
-                "Busqueda sin resultados",
-                JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(null, mensaje, cabecera, tipoMensaje);
     }
 
     /**
@@ -323,6 +324,8 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _panelBusqueda = new PanelBusqueda(_controlador, lista);
         // Registramos como observador del almacen de descargas 
         _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(_panelBusqueda);
+        // Registramos a la pestania de busquedas como observador del panel de resultados
+        _panelBusqueda.addObservador(this);
         
         // PANEL DE SCROLL
         _panelScroll = new JScrollPane();
@@ -370,61 +373,43 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     //------------------------------------------\\
     //      INTERFACE OBSERVADOREGORILLA        \\
     //------------------------------------------\\
-    /**
-     * La conexion con el servidor ha sido completada.
-     *
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     * @param ip IP del servidor.
-     * @param puerto Puerto del servidor.
-     */
+    
     @Override
     public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int port) {
     }
 
-    /**
-     * Se ha completado la desconexion con el servidor.
-     * 
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     */
     @Override
     public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
     }
 
-    /**
-     * Se han recibido los resultados de la busqueda.
-     *
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     * @param nombre Nombre del lista a buscar.
-     * @param lista Lista de archivos de la última búsqueda.
-     */
     @Override
     public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String cad, Archivo[] lista) {
 
         if (lista.length != 0) {
-
-            // Guardo la búsqueda en el vector de busquedas
-            _ultimasBusquedas.add(lista);
             mostrarResultadoBusqueda((Archivo[]) lista);
         } else {
-            mostrarMensajeBusquedaSinCoincidencias();
+
+            mostrarMensaje("No se han encontrado coincidencias para el archivo especificado",
+                    "Busqueda sin resultados",
+                    JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    /**
-     * La descarga de un lista ha sido completada.
-     * 
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     */
     @Override
-    public void finDescarga(GestorEgorilla obj) {
+    public void finDescarga(GestorEgorilla gestorEGorilla) {
     }
 
-    /**
-     * La conexion con el servidor se ha perdido.
-     *
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     */
     @Override
-    public void perdidaConexion(GestorEgorilla obj) {
+    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
+    }
+
+    //----------------------------------------------\\
+    //      INTERFACE OBSERVADORPANELBUSCADOR       \\
+    //----------------------------------------------\\
+
+    @Override
+    public void archivoSeleccionado(Archivo archivo) {
+
+        _archivoSeleccionado = archivo;
     }
 }

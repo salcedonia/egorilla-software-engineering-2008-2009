@@ -3,10 +3,9 @@ package gui.consola;
 import datos.Archivo;
 
 /**
- *
  * Almacena los resultados de la última búsqueda realizada al servidor.
  *
- * @author pitidecaner
+ * @author Luis Ayuso
  */
 class GUIBusqueda {
     

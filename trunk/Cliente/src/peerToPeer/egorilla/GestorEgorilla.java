@@ -6,6 +6,7 @@ import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
+import gestorDeErrores.*;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.ArrayList;
@@ -19,8 +20,6 @@ import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import gestorDeFicheros.*;
-import gestorDeSucesos.ControlDeSucesos;
-import gestorDeSucesos.Sucesos;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -184,7 +183,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     void perdidaDeConexion(String ip) {
 
         if (ip.equals(_serverIP)){ // emos perdido la conexion con el servidor
-            ControlDeSucesos.dameInstancia().registrarError(Sucesos.ERROR_CONEXION_SERVIDOR);
+            ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_CONEXION_SERVIDOR);
             
             this.paraloTodo();
         }
@@ -354,7 +353,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
                         _gestorDeRed.envia(msj, msj.ipDestino(), msj.puertoDestino());
 
                     } catch (NetError ex) {
-                        ControlDeSucesos.dameInstancia().registrarError(Sucesos.ERROR_RED,
+                        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_RED,
                                 "error al enviar mensaje a " + msj.ipDestino());
                     }
                 }

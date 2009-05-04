@@ -1,6 +1,7 @@
 package gui.grafica.configuracion;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
 import java.util.Properties;
@@ -13,21 +14,24 @@ import java.util.Properties;
  * vista. 
  *
  * @author F. Javier Sánchez Pardo
- * 
  */
-
-
 public class GUIPanelConfiguracion extends javax.swing.JPanel implements ObservadorControlConfiguracionCliente{
 
     /**
      * Constructor de la clase PanelConfiguración.
+     * 
      * @param oControlConfiguracionCliente Objeto ControlConfiguracionCliente.
      *        Mediante este parametro la Vista (este JPanel) tiene una referencia al Modelo
      *        (el objeto ControlConfiguracionCliente) y le permite pedir información 
      *        al Modelo para actualizarse convenientemente.
-     * 
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     * @see gestorDeConfiguracion.ControlConfiguracionClienteException
      */
-    public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) {
+    public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) throws ControlConfiguracionClienteException {
+        
+        // Registramos la vista como observadora del modelo
+        ControlConfiguracionCliente.obtenerInstancia().anadirObservador(this);
+        
         _objetoModelo = oControlConfiguracionCliente;
         _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
         initComponents();
@@ -86,6 +90,7 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
 
         jTextField4.setText("jTextField1");
 
+        setBorder(javax.swing.BorderFactory.createTitledBorder("Configuracion"));
         setLayout(new java.awt.GridLayout(1, 0));
 
         _panelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
