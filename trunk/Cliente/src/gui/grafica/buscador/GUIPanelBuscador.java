@@ -331,7 +331,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(_panelBusqueda);
         // Registramos a la pestania de busquedas como observador del panel de resultados
         _panelBusqueda.addObservador(this);
-        
+
         // PANEL DE SCROLL
         _panelScroll = new JScrollPane();
         _panelScroll.setName("panelScroll");
@@ -378,7 +378,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     //------------------------------------------\\
     //      INTERFACE OBSERVADOREGORILLA        \\
     //------------------------------------------\\
-    
     @Override
     public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int port) {
     }
@@ -411,7 +410,6 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     //----------------------------------------------\\
     //      INTERFACE OBSERVADORPANELBUSCADOR       \\
     //----------------------------------------------\\
-
     @Override
     public void archivoSeleccionado(Archivo archivo) {
 
@@ -419,18 +417,23 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     }
 
     /**
-     * Clase Oyente para la tecla ENTER de JTextField de busqueda
+     * Clase Oyente para la tecla ENTER de JTextField de busqueda.
      */
-    class OyenteTeclasBuscar implements KeyListener{
+    class OyenteTeclasBuscar implements KeyListener {
+
         @Override
-		public void keyPressed(KeyEvent arg0) {}
+        public void keyPressed(KeyEvent arg0) {
+        }
+
         @Override
-		public void keyTyped(KeyEvent arg0) {}
+        public void keyTyped(KeyEvent arg0) {
+        }
+
         @Override
-		public void keyReleased(KeyEvent arg0) {
-			if (arg0.getKeyChar()==KeyEvent.VK_ENTER){
-					pulsacionBotonComenzar();
-			}
-		}
-	}
+        public void keyReleased(KeyEvent arg0) {
+            if (arg0.getKeyChar() == KeyEvent.VK_ENTER) {
+                pulsacionBotonComenzar();
+            }
+        }
+    }
 }
