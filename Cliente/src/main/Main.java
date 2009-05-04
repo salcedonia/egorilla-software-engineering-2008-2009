@@ -1,16 +1,17 @@
 package main;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
-import control.*;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
+import gestorDeErrores.ControlDeErrores;
 import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
 import gestorDeRed.TCP.GestorDeRedTCPimpl;
-import gestorDeSucesos.ControlDeSucesos;
+import gui.consola.ControladorConsola;
 import gui.consola.GUIConsola;
 import gui.grafica.GUIGrafica;
+import gui.grafica.principal.ControladorVentanaPrincipal;
 import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.IllegalOptionValueException;
 import jargs.gnu.CmdLineParser.UnknownOptionException;
@@ -31,7 +32,7 @@ public class Main {
     private static GestorEgorilla _gestorEGorilla;
     private static GestorCompartidos _gestorDeCompartidos;
     private static GestorDisco _gestorDeDisco;
-    private static ControlDeSucesos _controlDeSucesos;
+    private static ControlDeErrores _gestorDeErrores;
 
     /**
      * Método main de la aplicacion Cliente eGorilla.
@@ -89,7 +90,7 @@ public class Main {
         _gestorDeCompartidos = GestorCompartidos.getInstancia();
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
         _gestorEGorilla = new GestorEgorilla(_gestorDeRed,_gestorDeDisco);
-        _controlDeSucesos = ControlDeSucesos.dameInstancia();
+        _gestorDeErrores = ControlDeErrores.getInstancia();
         
         //Registro a los observadores de la clase ControlConfiguracionCliente
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorEGorilla);
@@ -110,7 +111,7 @@ public class Main {
 
         if (modo.equalsIgnoreCase("grafico") || modo.equals("")) {
 
-            ControladorGrafica controladorGrafica = new ControladorGrafica(gestorDeRed, gestorEGorilla);
+            ControladorVentanaPrincipal controladorGrafica = new ControladorVentanaPrincipal(gestorDeRed, gestorEGorilla);
             new GUIGrafica(controladorGrafica);
         }
         else 

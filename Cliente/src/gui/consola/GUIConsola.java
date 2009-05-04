@@ -1,6 +1,5 @@
 package gui.consola;
 
-import control.ControladorConsola;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
@@ -296,6 +295,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param ip IP de la conexión.
      * @param port Puerto de la conexión.
      */
+    @Override
     public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
 
         mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
@@ -307,6 +307,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * 
      * @param obj GestorEGorilla de la aplicación.
      */
+    @Override
     public void desconexionCompletada(GestorEgorilla obj) {
 
         mostrarMensaje("\nDesconectado.");
@@ -320,6 +321,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param nombre Nombre del archivo solicitado.
      * @param lista Lista de coincidencias.
      */
+    @Override
     public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
 
         mostrarResultadosDeBusqueda(cad, lista);
@@ -330,6 +332,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * 
      * @param obj GestorEGorilla de la aplicación.
      */
+    @Override
     public void finDescarga(GestorEgorilla obj) {
     }
 
@@ -338,6 +341,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * 
      * @param obj GestorEGorilla de la aplicación.
      */
+    @Override
     public void perdidaConexion(GestorEgorilla obj) {
     }
 }

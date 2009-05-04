@@ -1,7 +1,7 @@
 package gui.grafica.buscador;
 
-import control.ControladorGrafica;
 import datos.Archivo;
+import gui.grafica.servidores.ObservadorPanelServidores;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import javax.swing.JPopupMenu;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
- * Panel que contiene el resultado de una búsqueda.
+ * Panel que contiene el resultado de una busqueda.
  * 
  * @author Javier Salcedo
  */
@@ -37,28 +38,36 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
      */
     private JPanel _panelPrincipal;
     /**
-     * Controlador de la aplicacion en modo grafico.
+     * Controlador del panel buscador.
      */
-    private ControladorGrafica _controlador;
+    private ControladorPanelBuscador _controlador;
+    /**
+     * Vector de observadores de esta clase.
+     */
+    private Vector<ObservadorPanelBusqueda> _observadores;
 
     /**
      * Constructor de la clase PanelBusqueda.
+     * 
+     * @param controlador Controlador del panel buscador.
+     * @param lista Lista de archivos devuelta por el servidor.
      */
-    public PanelBusqueda(ControladorGrafica controlador, Archivo[] lista){
+    public PanelBusqueda(ControladorPanelBuscador controlador, Archivo[] lista){
 
         _controlador = controlador;
         _busqueda = lista;
         _listaArchivos = new ArrayList<BusquedaIndividual>();
+        _observadores = new Vector<ObservadorPanelBusqueda>();
         _panelPrincipal = new JPanel();
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
-        initComponent();
+        iniciarComponentes();
     }
 
     /**
      * Inicia los componentes del panel.
      */
-    public void initComponent() {
+    public void iniciarComponentes() {
 
         _panelPrincipal.setLayout(new GridLayout(0, 1, 0, 0));
         _panelPrincipal.add(new Cabecera());
@@ -87,17 +96,17 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          * Constructor de la clase Cabecera.
          */
         private Cabecera() {
-            initComponent();
+            iniciarComponentes();
         }
 
         /**
          * Inicia los componentes de la cabecera.
          */
-        private void initComponent() {
+        private void iniciarComponentes() {
 
             _panelPrincipal = new JPanel();
             _lblNombre = new JLabel("Nombre");
-            _lblTamanio = new JLabel("Tamanio");
+            _lblTamanio = new JLabel("Tamaño");
             _lblTipoArchivo = new JLabel("Tipo");
             _lblHash = new JLabel("Hash");
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
@@ -128,9 +137,21 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          */
         private Archivo _archivo;
         /**
-         * Etiquetas de representación de los datos
+         * Etiqueta que muestra el nombre del archivo.
          */
-        private  JLabel _lblNombre,   _lblTamanio ,  _lblTipoArchivo ,  _lblHash ;
+        private JLabel _lblNombre;   
+        /**
+         * Etiqueta que muestra el valor del tamanio del archivo.
+         */
+        private JLabel _lblTamanio;  
+        /**
+         * Etiqueta que muestra el tipo de archivo del archivo.
+         */
+        private JLabel _lblTipoArchivo;  
+        /**
+         * Etiqueta que muestra el hash del archivo.
+         */
+        private JLabel _lblHash;
         /**
          * Opción descargar del _popup.
          */
@@ -174,7 +195,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
             _lblHash = new JLabel(_archivo.getHash());
             _lblHash.addMouseListener(_eventosRaton);
             
-            initComponent();
+            iniciarComponentes();
             
             createPopupMenu();
         }
@@ -182,7 +203,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         /**
          * Inicia los componentes de una busqueda individual
          */
-        private void initComponent() {
+        private void iniciarComponentes() {
             
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
             _panelPrincipal.add(_lblNombre);
@@ -251,6 +272,9 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
                         // Solo se queda marcado el que ha sido seleccionado
                         _panelPrincipal.setBackground(Color.CYAN);
                         _panelPrincipal.repaint();
+                        
+                        // Avisamos de la seleccion de una fila
+                        avisarArchivoSeleccionado(_archivo);
                     }     
             }
 
@@ -280,8 +304,25 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          */
         private JPopupMenu _popup;
 
+        /**
+         * Constructor de la clase PopupListener.
+         * 
+         * @param popupMenu Popup asociado.
+         */
         public PopupListener(JPopupMenu popupMenu) {
+            
             _popup = popupMenu;
+        }
+
+        /**
+         * Muestra el menu contextual.
+         * 
+         * @param e Evento del raton.
+         */
+        private void mostrarMenuRaton(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                _popup.show(e.getComponent(), e.getX(), e.getY());
+            }
         }
 
         @Override
@@ -293,21 +334,45 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         public void mouseReleased(MouseEvent e) {
             mostrarMenuRaton(e);
         }
-
-        private void mostrarMenuRaton(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                _popup.show(e.getComponent(), e.getX(), e.getY());
-            }
-        }
     }
+    
+    /**
+     * Aniade un observador a la lista de observadores.
+     * 
+     * @param observador Nuevo observador a aniadir a la lista.
+     */
+    public void addObservador(ObservadorPanelBusqueda observador){
+    
+        if(!_observadores.contains(observador))
+            _observadores.add(observador);
+    }
+    
+    /**
+     * Elimina un observador de la lista de observadores.
+     * 
+     * @param observador Observador a eliminar de la lista.
+     */
+    public void eliminaObservador(ObservadorPanelServidores observador){
+    
+        _observadores.remove(observador);
+    }
+    
+    /**
+     * Avisa a todos los observadores registrados en la lista de la 
+     * seleccion de un servidor en la lista de servidores.
+     * 
+     * @param archivo Archivo seleccionado.
+     */
+    private void avisarArchivoSeleccionado(Archivo archivo){
+    
+        for(ObservadorPanelBusqueda observador : _observadores)
+            observador.archivoSeleccionado(archivo);
+    } 
     
     //--------------------------------------\\
     //      INTERFACE ALMACEN DESCARGAS     \\
     //--------------------------------------\\
     
-    /**
-     * Pone en rojo todas la línea de la nueva descarga. 
-     */
     @Override
     public void nuevaDescarga(String nombre, String hash, int tamanio) {
 

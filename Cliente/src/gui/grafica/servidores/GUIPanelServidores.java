@@ -1,57 +1,99 @@
 package gui.grafica.servidores;
 
-import control.ControladorGrafica;
-import datos.Archivo;
-import gestorDeConfiguracion.ControlConfiguracionCliente;
-import gestorDeConfiguracion.ControlConfiguracionClienteException;
-import gestorDeConfiguracion.PropiedadCliente;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.table.DefaultTableModel;
-import peerToPeer.egorilla.GestorEgorilla;
-import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
  * Panel que gestiona los distintos servidores disponibles
  * en el cliente.
  * 
- * @author David Fernández
+ * @author David Fernández, Javier Salcedo
  */
-public class GUIPanelServidores extends JPanel{
+public class GUIPanelServidores extends JPanel implements ObservadorPanelServidores {
 
-    // CONSTANTES
-    private static final long serialVersionUID = 1L;    
-    
-    // ATRIBUTOS
+    /**
+     * Indentificador de la clase.
+     */
+    private static final long serialVersionUID = 1L;
+    /**
+     * Boton que solicita la peticion de conexion al servidor seleccionado
+     * en la lista de servidores disponibles al controlador del panel de servidores.
+     */
     private JButton _btnConectar;
+    /**
+     * Boton que aniade el servidor a la lista de servidores disponibles
+     * en la aplicacion.
+     */
     private JButton _btnAñadir;
-    private JLabel _lblListaServidores;
+    /**
+     * Etiqueta de direccion IP del servidor a aniadir.
+     */
     private JLabel _lblDireccionIP;
+    /**
+     * Etiqueta de puerto del servidor a aniadir.
+     */
     private JLabel _lblPuerto;
-    private JLabel _lblActualizarViaURL;
-    private JScrollPane _panelScroll;
-    private JSeparator _separador;
-    private JTable _tablaContenido;
+    /**
+     * Etiqueta de nombre del servidor a aniadir.
+     */
+    private JLabel _lblNombre;
+    /**
+     * Etiqueta de descripcion del servidor a aniadir.
+     */
+    private JLabel _lblDescripcion;
+    /**
+     * Scroll panel que contiene a la lista de servidores disponibles.
+     */
+    private JScrollPane _scrollPaneListaServidores;
+    /**
+     * Campo de texto donde el usuario introduce la direccion IP del servidor
+     * a aniadir.
+     */
     private JTextField _txtDireccionIP;
+    /**
+     * Campo de texto donde el usuario introduce el puerto del servidor
+     * a aniadir.
+     */
     private JTextField _txtPuerto;
-    private JTextField _txtActualizarViaURL;
-    private DefaultTableModel _defaultTableModel;   
-    private ControladorGrafica _controlador;
-    private String _serverHost;
-    private Integer _sPuerto;
+    /**
+     * Campo de texto donde el usuario introduce el nombre del servidor
+     * a aniadir.
+     */    
+    private JTextField _txtNombre;
+    /**
+     * Campo de texto donde el usuario introduce la descripcion del servidor
+     * a aniadir.
+     */
+    private JTextField _txtDescripcion;
+    /**
+     * Controlador del panel de servidores.
+     */
+    private ControladorPanelServidores _controlador;
+    /**
+     * Panel que contiene la lista de servidores disponibles en la aplicacion.
+     */
+    private PanelServidores _panelServidores;
+    /**
+     * Direccion IP del servidor seleccionado en la lista de servidores disponibles
+     * en la aplicacion.
+     */
+    private String _direccionIPSeleccionada;
+    /**
+     * Puerto del servidor seleccionado en la lista de servidores disponibles
+     * en la aplicacion.
+     */
+    private Integer _puertoSeleccionado;
 
     /** 
      * Constructor de la clase PanelServidores.
+     * 
+     * @param controladorPanelServidores Controlador del panel de servidores.
      */
-    public GUIPanelServidores(ControladorGrafica controlador) {
+    public GUIPanelServidores(ControladorPanelServidores controlador) {
 
-    
         _controlador = controlador;
-      //  _controlador.getGestorEGorilla().agregarObservador(this);
         iniciarComponentes();
     }
 
@@ -64,201 +106,219 @@ public class GUIPanelServidores extends JPanel{
 
         _btnConectar = new JButton();
         _btnAñadir = new JButton();
-        _lblListaServidores = new JLabel();
+        _lblNombre = new JLabel();
         _lblDireccionIP = new JLabel();
         _lblPuerto = new JLabel();
-        _lblActualizarViaURL = new JLabel();
+        _lblDescripcion = new JLabel();
+        _txtNombre = new JTextField();
         _txtDireccionIP = new JTextField();
         _txtPuerto = new JTextField();
-        _txtActualizarViaURL = new JTextField();
-        _separador = new JSeparator();
-        _panelScroll = new JScrollPane();
-        _tablaContenido = new JTable();
-
+        _txtDescripcion = new JTextField();
+        _scrollPaneListaServidores = new JScrollPane();
+        
         setBorder(BorderFactory.createTitledBorder("Servidores"));
-        setName("PanelServidores");
         setLayout(new GridBagLayout());
 
-        _lblListaServidores.setFont(new Font("Tahoma", Font.BOLD, -11));
-        _lblListaServidores.setText("Lista Servidores");
-        _lblListaServidores.setName("lblListaServidores");
+        // ETIQUETA DIRECCION IP
+        _lblDireccionIP.setText("IP Servidor");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(20, 20, 0, 0);
-        add(_lblListaServidores, gridBagConstraints);
-
-        _panelScroll.setName("panelScroll");
-
-        _tablaContenido.setBackground(new Color(235, 233, 237));
-
-
-        _defaultTableModel = new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Puerto", "IP"});
-        _tablaContenido = new JTable(_defaultTableModel) {
-            // CONSTANTES
-            private static final long serialVersionUID = 1L;
-            Class[] types = new Class[]{
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean[]{
-                false, false, false, false, false, false, false
-            };
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-            }
-        };
-        _tablaContenido.setName("tablaContenido");
-        _panelScroll.setViewportView(_tablaContenido);
-
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.gridheight = 9;
-        gridBagConstraints.fill = GridBagConstraints.BOTH;
-        gridBagConstraints.ipadx = 337;
-        gridBagConstraints.ipady = 183;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(6, 10, 0, 0);
-        add(_panelScroll, gridBagConstraints);
-
-        _btnConectar.setText("Conectar");
-        _btnConectar.setMaximumSize(new Dimension(81, 23));
-        _btnConectar.setMinimumSize(new Dimension(81, 23));
-        _btnConectar.setName("btnConectar");
-        _btnConectar.setPreferredSize(new Dimension(81, 23));
-        _btnConectar.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent evt) {
-                pulsacionBotonConectarServidor(evt);
-            }
-        });
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.ipadx = 5;
-        gridBagConstraints.ipady = 5;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(20, 10, 7, 0);
-        add(_btnConectar, gridBagConstraints);
-
-        _txtDireccionIP.setText("");
-        _txtDireccionIP.setName("txtDireccionIP");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 74;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 20, 0, 0);
-        add(_txtDireccionIP, gridBagConstraints);
-
-        _lblDireccionIP.setText("Direccion IP");
-        _lblDireccionIP.setName("lblDireccionIP");
-        gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 20, 0, 0);
         add(_lblDireccionIP, gridBagConstraints);
 
-        _lblPuerto.setText("Puerto");
-        _lblPuerto.setName("lblPuerto");
+        // TEXTO DIRECCION IP
+        _txtDireccionIP.setText("");
+        _txtDireccionIP.setColumns(15);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(0, 20, 0, 0);
+        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        add(_txtDireccionIP, gridBagConstraints);
+
+        // ETIQUETA PUERTO
+        _lblPuerto.setText("Puerto Servidor");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
         add(_lblPuerto, gridBagConstraints);
 
+        // TEXTO PUERTO
         _txtPuerto.setText("");
-        _txtPuerto.setName("txtPuerto");
+        _txtPuerto.setColumns(4);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.ipadx = 74;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 20, 0, 0);
+        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_txtPuerto, gridBagConstraints);
 
-        _btnAñadir.setText("Añadir a la Lista");
-        _btnAñadir.setName("btnAñadir");
+        // ETIQUETA NOMBRE
+        _lblNombre.setText("Nombre Servidor");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        add(_lblNombre, gridBagConstraints);
+
+        // TEXTO NOMBRE
+        _txtNombre.setText("");
+        _txtNombre.setColumns(20);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        add(_txtNombre, gridBagConstraints);
+
+        // ETIQUETA DESCRIPCION
+        _lblDescripcion.setText("Descripcion Servidor");
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        add(_lblDescripcion, gridBagConstraints);
+
+        // TEXTO DESCRIPCION
+        _txtDescripcion.setText("");
+        _txtDescripcion.setColumns(20);
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        add(_txtDescripcion, gridBagConstraints);
+
+        // BOTON AÑADIR
+        _btnAñadir.setText("Añadir a la Lista de Servidores");
         _btnAñadir.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent evt) {
                 pulsacionBotonAñadirServidor(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        gridBagConstraints.gridwidth = 4;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(10, 20, 0, 0);
+        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_btnAñadir, gridBagConstraints);
 
-        _separador.setName("separador");
+        // PANEL DE SERVIDORES
+        _panelServidores = new PanelServidores(_controlador);
+        _panelServidores.addObservador(this);
+        _scrollPaneListaServidores.add(_panelServidores);
+        _scrollPaneListaServidores.setViewportView(_panelServidores);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 120;
-        gridBagConstraints.ipady = 1;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(7, 20, 0, 3);
-        add(_separador, gridBagConstraints);
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        add(_scrollPaneListaServidores, gridBagConstraints);
 
-        
+        // BOTON CONECTAR
+        _btnConectar.setText("Conectar al Servidor");
+        _btnConectar.addActionListener(new ActionListener() {
 
-        iniciarPanelServidor();
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                pulsacionBotonConectarServidor(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        add(_btnConectar, gridBagConstraints);
     }
 
-    private void iniciarPanelServidor() {
-        try {
-            _sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
-            _serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
-            String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral());
-
-            Object[] servidor = new Object[2];
-            servidor[0] = _sPuerto;
-            servidor[1] = _serverHost;
-            
-            _defaultTableModel.addRow(servidor);
-        } catch (ControlConfiguracionClienteException ex) {
-            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
-    private void pulsacionBotonConectarServidor(ActionEvent evt) {
-        try {
-            _controlador.peticionConexionAServidor(_serverHost, _sPuerto);
-        } catch (Exception ex) {
-            Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    /**
+     * Pulsacion del boton de añadir un nuevo servidor. Le indica al panel 
+     * de servidores que añada un nuevo servidor a su lista.
+     * 
+     * @param evt Evento de pulsacion.
+     */
     private void pulsacionBotonAñadirServidor(ActionEvent evt) {
 
-        // Llamamos al control del panel
-        Object[] parametros = new Object[2];
-        parametros[0] = _txtPuerto.getText().trim();
-        parametros[1] = _txtDireccionIP.getText().trim();
-        _defaultTableModel.addRow(parametros);
+        // Añadimos el nuevo servidor al panel
+        if (_txtDireccionIP.getText().matches("")) {
+            mostrarMensajeError("Introduce la dirección IP del servidor");
+        } else if (_txtPuerto.getText().matches("")) {
+            mostrarMensajeError("Introduce el puerto del servidor");
+        } else if (_txtNombre.getText().matches("")) {
+            mostrarMensajeError("Introduce el nombre del servidor");
+        } else if (_txtDescripcion.getText().matches("")) {
+            mostrarMensajeError("Introduce la descripcion del servidor");
+        } else {
+
+            try {
+                // Aniadimos el nuevo servidor
+                _panelServidores.addServidor(_txtDireccionIP.getText().trim(), Integer.parseInt(_txtPuerto.getText().trim()), _txtNombre.getText().trim(), _txtDescripcion.getText().trim());
+                _scrollPaneListaServidores.add(_panelServidores);
+                _scrollPaneListaServidores.setViewportView(_panelServidores);
+                repaint();
+            } catch (NumberFormatException ex) {
+
+                mostrarMensajeError("El Puerto Servidor no es un valor numérico");
+            }
+        }
     }
 
- 
+    /**
+     * Metodo que se ejecuta cuando se pulsa el boton de conectar.
+     * 
+     * @param evt Evento de pulsacion del boton.
+     */
+    private void pulsacionBotonConectarServidor(ActionEvent evt) {
+
+        // Si se ha seleccionado un servidor primero
+        if (_direccionIPSeleccionada != null && _puertoSeleccionado != null) {
+
+            try {
+
+                _controlador.peticionConexionAServidor(_direccionIPSeleccionada, _puertoSeleccionado);
+            } catch (Exception ex) {
+
+                JOptionPane.showMessageDialog(null, "Error de conexión",
+                        "Error al conectarse al servidor",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            mostrarMensajeError("Selecciona un servidor primero");
+        }
+    }
+
+    /**
+     * Muestra un Mensaje alertando de un error en la introducción de los datos.
+     * 
+     * @param mensaje Mensaje de error a mostrar.
+     */
+    private void mostrarMensajeError(String mensaje) {
+
+        JOptionPane.showMessageDialog(null,
+                mensaje,
+                "Error al introducir los datos del servidor",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
+    //------------------------------------------------\\
+    //      INTERFACE OBSERVADORPANELSERVIDORES       \\
+    //------------------------------------------------\\
+    
+    @Override
+    public void servidorSeleccionado(String direccionIP, Integer puerto) {
+
+        _direccionIPSeleccionada = direccionIP;
+        _puertoSeleccionado = puerto;
+    }
 }

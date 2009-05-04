@@ -1,27 +1,21 @@
 package gui.grafica.principal;
 
-import control.ControladorGrafica;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
-import gestorDeConfiguracion.VistaObservadorControlConfiguracion;
+import gui.grafica.buscador.ControladorPanelBuscador;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
 import gui.grafica.configuracion.GUIPanelConfiguracion;
 import gui.grafica.estadisticas.GUIPanelEstadisticas;
+import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
-import gui.grafica.trafico.GUIPanelTrafico;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import gui.grafica.trafico.*;
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -30,58 +24,188 @@ import peerToPeer.egorilla.ObservadorGestorEgorilla;
  * 
  * @author Javier Salcedo, Víctor Adaíl
  */
-public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgorilla{
+public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgorilla {
 
-    // CONSTANTES
+    /**
+     * Identificador de la clase. 
+     */
     private static final long serialVersionUID = 1L;
-    private static final String RUTA_RECURSOS = "/recursos/interfaz/principal/";
-    
-    // ATRIBUTOS
+    /**
+     * Ruta donde se encuentran los recursos necesarios para la ventana principal
+     * de la interfaz grafica.
+     */
+    private static final String RUTA_RECURSOS = "/recursos/interfaz/principal/";    // ATRIBUTOS
+    /**
+     * Boton que muestra el panel buscador.
+     */
     private JButton _btnBuscar;
+    /**
+     * Boton que muestra el panel de compartidos.
+     */
     private JButton _btnCompartidos;
+    /**
+     * Boton que manda la peticion de conexion/desconexion a su controlador
+     * para que este se lo comunique al servidor.
+     */
     private JButton _btnConectar;
+    /**
+     * Boton que muestra el panel de configuracion de la aplicacion.
+     */
     private JButton _btnConfiguracion;
+    /**
+     * Boton que muestra el panel de las estadisticas.
+     */
     private JButton _btnEstadisticas;
+    /**
+     * Boton que muestra el panel de servidores.
+     */
     private JButton _btnServidores;
+    /**
+     * Boton que muestra el panel de trafico.
+     */
     private JButton _btnTrafico;
+    /**
+     * Boton que muestra la ventan de ayuda de la aplicacion.
+     */
     private JButton _btnAyuda;
+    /**
+     * Etiqueta que muestra el estado de la conexion (conectado/desconectado).
+     */
     private JLabel _lblConexion;
+    /**
+     * Etiqueta que muestra el estado de la aplicacion.
+     */
     private JLabel _lblEstado;
+    /**
+     * Panel que contiene la etiqueta de estado.
+     */
     private JPanel _panelEstado;
+    /**
+     * Panel que contiene la etiqueta de conexion.
+     */
     private JPanel _panelConexion;
+    /**
+     * Separador que separa el panel estado del principal.
+     */
     private JSeparator _separador1;
+    /**
+     * Separador que separa el panel estado con el de conexion.
+     */
     private JSeparator _separador2;
+    /**
+     * Botonera superior que contiene los botones con las acciones principales
+     * de la aplicacion.
+     */
     private JToolBar _botonera;
+    /**
+     * Panel principal que muestra cada una de los paneles ante la pulsacion 
+     * de su respectivo boton en la botonera.
+     */
     private JPanel _panelPrincipal;
-    // CONTROL
-    private ControladorGrafica _controlador;
-    // IMAGENES
+    /**
+     * Controlador de la ventana principal.
+     */
+    private ControladorVentanaPrincipal _controlador;
+    /**
+     * Icono de la ventana principal.
+     */
     private ImageIcon _iconoVentana = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/icono.png"));
+    /**
+     * Icono del boton de conexion cuando la aplicacion se encuentra desconectada
+     * a un servidor.
+     */
     private ImageIcon _imgConectar = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnConectar.png"));
+    /**
+     * Icono del boton de conexion cuando la aplicacion se encuentra conectada a
+     * un servidor.
+     */
     private ImageIcon _imgDesconectar = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnDesconectar.png"));
+    /**
+     * Icono del boton de servidores.
+     */
     private ImageIcon _imgServidores = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnServidores.png"));
+    /**
+     * Icono del boton de busquedas.
+     */
     private ImageIcon _imgBuscar = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnBuscar.png"));
+    /**
+     * Icono del boton de trafico.
+     */
     private ImageIcon _imgTrafico = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnTrafico.png"));
+    /**
+     * Icono del boton de compartidos.
+     */
     private ImageIcon _imgCompartidos = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnCompartidos.png"));
+    /**
+     * Icono del boton de estadisticas.
+     */
     private ImageIcon _imgEstadisticas = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnEstadisticas.png"));
+    /**
+     * Icono del boton de configuracion.
+     */
     private ImageIcon _imgConfiguracion = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnConfiguracion.png"));
+    /**
+     * Icono del boton de ayuda.
+     */
     private ImageIcon _imgAyuda = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnAyuda.png"));
 
     /**
      * Constructor de la clase VentanaPrincipal.
+     * 
+     * @param controlador Controlador de la ventana principal. 
      */
-    public GUIVentanaPrincipal(ControladorGrafica controlador) throws ControlConfiguracionClienteException {
+    public GUIVentanaPrincipal(ControladorVentanaPrincipal controlador) {
 
-        _controlador = controlador;
-        _controlador.getGestorEGorilla().agregarObservador(this);
+        try {
 
-        iniciarComponentes();
-        setExtendedState(MAXIMIZED_BOTH);
-        setVisible(true);
+            _controlador = controlador;
+            _controlador.getGestorEGorilla().agregarObservador(this);
+     
+            iniciarComponentes();
+            
+        } catch (ControlConfiguracionClienteException ex) {
+        
+            // Llamada al gestor de errores
+        }    
+    }
+
+    /**
+     * Crea y configura todos los paneles que se visualizan el panel principal.
+     * 
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     * @see gestorDeConfiguracion.ControlConfiguracionClienteException
+     */
+    private void configurarPanelPrincipal() throws ControlConfiguracionClienteException {
+
+        _panelPrincipal.setPreferredSize(new Dimension(800, 600));
+        _panelPrincipal.setLayout(new CardLayout());
+        
+        // PANEL DE SERVIDORES
+        _panelPrincipal.add("Servidores", new GUIPanelServidores(new ControladorPanelServidores(_controlador.getGestorEGorilla())));
+        
+        // PANEL BUSCADOR
+        _panelPrincipal.add("Buscador", new GUIPanelBuscador(new ControladorPanelBuscador(_controlador.getGestorEGorilla())));
+
+        // PANEL DE CONFIGURACION
+        _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
+
+        // PANEL DE TRAFICO
+        _panelPrincipal.add("Descargas", new JScrollPane(new GUIPanelTrafico(new ControladorPanelTrafico(_controlador.getGestorEGorilla()))));
+        
+        // PANEL DE COMPARTIDOS
+        _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
+        
+        // PANEL DE ESTADISTICAS
+        _panelPrincipal.add("Estadisticas", new GUIPanelEstadisticas());
+
+        getContentPane().add(_panelPrincipal, BorderLayout.CENTER);
     }
 
     /**
      * Inicia todos los componentes de la ventana.
+     * 
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     * @see gestorDeConfiguracion.ControlConfiguracionClienteException
      */
     private void iniciarComponentes() throws ControlConfiguracionClienteException {
 
@@ -96,45 +220,18 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _btnEstadisticas = new JButton();
         _btnConfiguracion = new JButton();
         _btnAyuda = new JButton();
-        _separador1 = new JSeparator(); // Separa el panel estado del principal
-
-        _separador2 = new JSeparator(); // Separa el panel estado con el de conexión
-
-        _botonera = new JToolBar();
         _lblEstado = new JLabel();
         _lblConexion = new JLabel();
+        _separador1 = new JSeparator(); 
+        _separador2 = new JSeparator(); 
+        _botonera = new JToolBar();
 
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("eGorilla - v.Eclipse");
-        setBounds(new Rectangle(0, 0, 0, 0));
-        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        setExtendedState(MAXIMIZED_BOTH);
-        setForeground(new Color(255, 255, 255));
+        setTitle("eGorilla");
         setIconImage(_iconoVentana.getImage());
         setLocationByPlatform(true);
         setMinimumSize(new Dimension(560, 500));
-        setName("VentanaPrincipal");
 
-        _panelPrincipal.setName("panelPrincipal");
-        _panelPrincipal.setPreferredSize(new Dimension(800, 600));
-        _panelPrincipal.setLayout(new CardLayout());
-        _panelPrincipal.add("Servidores", new GUIPanelServidores(_controlador));
-        _panelPrincipal.add("Buscador", new GUIPanelBuscador(_controlador));
-        //Pestania de Configuración:
-        //Creo la Vista (un JPanel) y le paso el Modelo (segun el patron MVC) en el constructor.
-        GUIPanelConfiguracion vistaPanelConfig = new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia());
-        //Registro a la Vista como observadora del Modelo
-        ControlConfiguracionCliente.obtenerInstancia().anadirObservador (vistaPanelConfig);
-        _panelPrincipal.add("Configuracion", vistaPanelConfig);
-        
-        GUIPanelTrafico trafico=new GUIPanelTrafico();
-        JScrollPane scroll= new JScrollPane(trafico);
-        _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(trafico);
-        _panelPrincipal.add("Descargas", scroll);
-        _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
-        _panelPrincipal.add("Estadisticas", new GUIPanelEstadisticas());
-
-        getContentPane().add(_panelPrincipal, BorderLayout.CENTER);
+        configurarPanelPrincipal();
 
         _panelEstado.setName("panelEstado");
         _panelEstado.setLayout(new BorderLayout());
@@ -143,21 +240,13 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelEstado.add(_separador1, BorderLayout.NORTH);
 
         _lblEstado.setText("Bienvenido a eGorilla");
-        _lblEstado.setName("estado");
         _panelEstado.add(_lblEstado, BorderLayout.CENTER);
 
         _panelConexion.setMinimumSize(new Dimension(40, 20));
-        _panelConexion.setName("panelConexion");
         _panelConexion.setPreferredSize(new Dimension(100, 20));
-        //_panelConexion.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         _separador2.setOrientation(SwingConstants.VERTICAL);
-        _separador2.setName("separador2");
-        //_panelConexion.add(_separador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 10, 20));
-
         _lblConexion.setText("Desconectado");
-        _lblConexion.setName("lblConexion");
-        //_panelConexion.add(_lblConexion, new org.netbeans.lib.awtextra.AbsoluteConstraints(8, 0, 90, -1));
 
         _panelEstado.add(_panelConexion, BorderLayout.EAST);
         getContentPane().add(_panelEstado, BorderLayout.PAGE_END);
@@ -168,12 +257,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _botonera.setRollover(true);
         _botonera.setAutoscrolls(true);
         _botonera.setDoubleBuffered(true);
-        _botonera.setName("botonera");
         _botonera.setOpaque(false);
 
         // BOTON CONECTAR
         _btnConectar.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnConectar.setName("btnConectar");
         _btnConectar.setText("Conectar");
         _btnConectar.setIcon(_imgConectar);
         _btnConectar.setBorderPainted(false);
@@ -201,7 +288,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON SERVIDORES
         _btnServidores.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnServidores.setName("btnServidores");
         _btnServidores.setText("Servidores");
         _btnServidores.setIcon(_imgServidores);
         _btnServidores.setBorderPainted(false);
@@ -229,7 +315,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON BUSCAR
         _btnBuscar.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnBuscar.setName("btnBuscar");
         _btnBuscar.setText("Buscar");
         _btnBuscar.setIcon(_imgBuscar);
         _btnBuscar.setBorderPainted(false);
@@ -257,7 +342,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON TRAFICO
         _btnTrafico.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnTrafico.setName("btnTrafico");
         _btnTrafico.setText("Tráfico");
         _btnTrafico.setIcon(_imgTrafico);
         _btnTrafico.setBorderPainted(false);
@@ -285,7 +369,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON COMPARTIDOS
         _btnCompartidos.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnCompartidos.setName("btnCompartidos");
         _btnCompartidos.setText("Compartidos");
         _btnCompartidos.setIcon(_imgCompartidos);
         _btnCompartidos.setBorderPainted(false); // No pinta los bordes de los botones
@@ -342,10 +425,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON CONFIGURACION
         _btnConfiguracion.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnConfiguracion.setName("btnConfiguracion");
         _btnConfiguracion.setText("Configuración");
         _btnConfiguracion.setIcon(_imgConfiguracion);
-        _btnConfiguracion.setBorderPainted(false);
+        _btnConfiguracioX(setBorderPainted(false);
         _btnConfiguracion.setAlignmentX(0.5F);
         _btnConfiguracion.setDoubleBuffered(true);
         _btnConfiguracion.setFocusCycleRoot(true);
@@ -369,7 +451,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // BOTON AYUDA
         _btnAyuda.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnAyuda.setName("btnAyuda");
         _btnAyuda.setText("Ayuda");
         _btnAyuda.setIcon(_imgAyuda);
         _btnAyuda.setBorderPainted(false);
@@ -397,6 +478,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         getContentPane().add(_botonera, BorderLayout.PAGE_START);
 
         pack();
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(MAXIMIZED_BOTH);
+        setVisible(true);
     }
 
     /**
@@ -454,28 +539,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
      * 
      * @param evt Evento de pulsación del ratón sobre el botón _btnConfiguracion.
      */
-    private void pulsacionBotonConfiguracion(MouseEvent evt){
-        //Opcion 1: mostrar un panel sobre la aplicacion principal.
+    private void pulsacionBotonConfiguracion(MouseEvent evt) {
+    
         ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Configuracion");
-        //Opcion 2: mostrar una ventanita aparte con los datos de configuracion.
-//        JFrame ventana = new JFrame("Configuracion de eGorilla");
-//        try {
-//            //Creo la Vista (un JPanel) y le paso el Modelo (segun el patron MVC) en el constructor.
-//            GUIPanelConfiguracion vistaPanelConfig = new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia());
-//            //Registro a la Vista como observadora del Modelo
-//            ControlConfiguracionCliente.obtenerInstancia().anadirObservador(vistaPanelConfig);
-//            ventana.getContentPane().add(vistaPanelConfig);
-//            ventana.addWindowListener(new WindowAdapter() {
-//                public void windowClosing(WindowEvent e) {
-//                    System.exit(0);
-//                }
-//            });
-//            ventana.pack();
-//            ventana.setVisible(true);
-//        } catch (ControlConfiguracionClienteException ex) {
-//            Logger.getLogger(GUIVentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-     }
+    }
 
     /**
      * Muestra el manual de ayuda de la aplicación.
@@ -495,52 +562,59 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     private void pulsacionBotonConectar(MouseEvent evt) {
 
         try {
-        // Si el botón conectar tiene el texto Conectar
-        if (_btnConectar.getText().equals("Conectar")) // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
-        {
-            int sPuerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
-            String serverHost = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
-            _controlador.peticionConexionAServidor(serverHost, sPuerto);
-        } else // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
-        {
-            _controlador.peticionDeDesconexionDeServidor();
-        }
+            // Si el botón conectar tiene el texto Conectar
+            if (_btnConectar.getText().equals("Conectar")) {
+                
+                // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
+                int puerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
+                String direccionIP = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
+                _controlador.peticionConexionAServidor(direccionIP, puerto);
+            } else {   
+                // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
+                _controlador.peticionDeDesconexionDeServidor();
+            }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this,"Error de conexión",
-		        "Error al conectarse al servidor",
-		        JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error de conexión",
+                    "Error al conectarse al servidor",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
-            // La imagen y el texto del botón ahora son Desconectar
-                _btnConectar.setText("Desconectar");
-                _btnConectar.setIcon(_imgDesconectar);
+    //------------------------------------------\\
+    //      INTERFACE OBSERVADOREGORILLA        \\
+    //------------------------------------------\\
+    
+    @Override
+    public void conexionCompletada(GestorEgorilla gestorEGorilla, String direccionIP, int puerto) {
+        // La imagen y el texto del botón ahora son Desconectar
+        _btnConectar.setText("Desconectar");
+        _btnConectar.setIcon(_imgDesconectar);
 
-                // Cambiamos las etiquetas de estado
-                _lblConexion.setText("Conectado");
-                _lblEstado.setText("eGorilla conectado");
+        // Cambiamos las etiquetas de estado
+        _lblConexion.setText("Conectado");
+        _lblEstado.setText("eGorilla conectado");
     }
 
-    public void desconexionCompletada(GestorEgorilla obj) {
-          // La imagen y el texto del botón ahora son Desconectar
-                _btnConectar.setText("Conectar");
-                _btnConectar.setIcon(_imgConectar);
+    @Override
+    public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
+        // La imagen y el texto del botón ahora son Desconectar
+        _btnConectar.setText("Conectar");
+        _btnConectar.setIcon(_imgConectar);
 
-                                // Cambiamos las etiquetas de estado
-                _lblConexion.setText("Desconectado");
-                _lblEstado.setText("eGorilla desconectado");
+        // Cambiamos las etiquetas de estado
+        _lblConexion.setText("Desconectado");
+        _lblEstado.setText("eGorilla desconectado");
     }
 
-    public void resultadosBusqueda(GestorEgorilla obj, String cad, Archivo[] lista) {
-
+    @Override
+    public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String nombre, Archivo[] lista) {
     }
 
-    public void finDescarga(GestorEgorilla obj) {
-
+    @Override
+    public void finDescarga(GestorEgorilla gestorEGorilla) {
     }
 
-    public void perdidaConexion(GestorEgorilla obj) {
-
+    @Override
+    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
     }
 }
