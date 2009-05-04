@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package estadisticas;
+package gestorDeEstadisticas;
 
 import java.util.Date;
 import java.util.LinkedList;

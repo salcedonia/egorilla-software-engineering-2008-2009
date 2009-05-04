@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package estadisticas;
+package gestorDeEstadisticas;
 
 /**
  * Esta intefaz se utiliza para que  el modulo que reciba los datos notifique

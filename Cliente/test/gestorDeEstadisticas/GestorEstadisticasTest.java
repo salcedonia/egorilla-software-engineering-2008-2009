@@ -3,8 +3,11 @@
  * and open the template in the editor.
  */
 
-package estadisticas;
+package gestorDeEstadisticas;
 
+import gestorDeEstadisticas.AdministradorDescarga;
+import gestorDeEstadisticas.AdministradorSubida;
+import gestorDeEstadisticas.GestorEstadisticas;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
