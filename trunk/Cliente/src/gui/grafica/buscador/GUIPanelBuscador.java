@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -122,6 +124,8 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         _txtBusqueda.setMinimumSize(new Dimension(100, 20));
         _txtBusqueda.setMaximumSize(new Dimension(100, 20));
         _txtBusqueda.setPreferredSize(new Dimension(100, 20));
+        _txtBusqueda.addKeyListener(new OyenteTeclasBuscar());
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -138,9 +142,10 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                pulsacionBotonComenzar(evt);
+                pulsacionBotonComenzar();
             }
         });
+
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
@@ -242,7 +247,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      * 
      * @param evt Evento de pulsación del ratón.
      */
-    private void pulsacionBotonComenzar(ActionEvent evt) {
+    private void pulsacionBotonComenzar() {
 
         if (_controlador.conectado()) {
             if (!_txtBusqueda.getText().matches("")) {
@@ -412,4 +417,20 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         _archivoSeleccionado = archivo;
     }
+
+    /**
+     * Clase Oyente para la tecla ENTER de JTextField de busqueda
+     */
+    class OyenteTeclasBuscar implements KeyListener{
+        @Override
+		public void keyPressed(KeyEvent arg0) {}
+        @Override
+		public void keyTyped(KeyEvent arg0) {}
+        @Override
+		public void keyReleased(KeyEvent arg0) {
+			if (arg0.getKeyChar()==KeyEvent.VK_ENTER){
+					pulsacionBotonComenzar();
+			}
+		}
+	}
 }
