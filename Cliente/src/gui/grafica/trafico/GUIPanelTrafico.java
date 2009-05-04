@@ -5,10 +5,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -25,7 +25,6 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
     private ArrayList<DescargaIndividual> _listaDescargas;
     private ControladorPanelTrafico _controlador;
     private JPanel _panelPrincipal;
-    private int prueba = 0;
 
     public GUIPanelTrafico(ControladorPanelTrafico controlador) {
         
@@ -130,6 +129,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         private int _progreso;
         private JMenuItem _menuItem,  _menuItem2;
         private OyenteBoton _oyenteBoton;
+        private OyenteRaton _oyenteRaton;
         private JPanel _panelPrincipal;
 
         private DescargaIndividual(String nombre, String hash, int maximo) {
@@ -152,6 +152,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _panelPrincipal.add(_labelhash);
             _panelPrincipal.add(_barra);
             _panelPrincipal.add(_labelestado);
+            _panelPrincipal.setBackground(Color.WHITE);
             setLayout(new BorderLayout());
             add(_panelPrincipal, BorderLayout.NORTH);
         }
@@ -180,11 +181,25 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _menuItem2.addActionListener(_oyenteBoton);
             popup.add(_menuItem2);
 
-            MouseListener popupListener = new PopupListener(popup);
-            _labelnombre.addMouseListener(popupListener);
-            _labelestado.addMouseListener(popupListener);
-            _barra.addMouseListener(popupListener);
-            this.addMouseListener(popupListener);
+            
+            _oyenteRaton=new OyenteRaton(popup);
+            
+            _labelnombre.addMouseListener(_oyenteRaton);
+            _labelestado.addMouseListener(_oyenteRaton);
+            _labelhash.addMouseListener(_oyenteRaton);
+            _barra.addMouseListener(_oyenteRaton);
+            this.addMouseListener(_oyenteRaton);
+        }
+
+        public void cambiarColor(Color c){
+            /*_labelnombre.setBackground(c);
+            _labelestado.setBackground(c);
+            _labelhash.setBackground(c);*/
+            _panelPrincipal.setBackground(c);
+        }
+
+        public void crearBorde(Color c){
+            this.setBorder(BorderFactory.createLineBorder(c));
         }
 
         class OyenteBoton implements ActionListener {
@@ -193,8 +208,6 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Pausar")) {
                     _labelestado.setText("En pausa");
-                    prueba++;
-                    nuevaDescarga("peli" + prueba + ".avi", "asdadsadafdagfadgadfg" + prueba, 100);
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
                     _menuItem.setText("Continuar");
                 }
@@ -209,30 +222,55 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
                 }
             }
         }
-    }
 
-    class PopupListener extends MouseAdapter {
+            class OyenteRaton implements MouseListener {
+                private JPopupMenu popup;
 
-        private JPopupMenu popup;
+                public OyenteRaton(JPopupMenu pop){
+                    popup=pop;
+                }
+                
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    asignar(e,Color.CYAN,Color.BLACK);
+                }
 
-        public PopupListener(JPopupMenu popupMenu) {
-            popup = popupMenu;
-        }
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    mostrarMenuRaton(e);
+                    asignar(e,Color.CYAN,Color.BLACK);
+                }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
-            mostrarMenuRaton(e);
-        }
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    mostrarMenuRaton(e);
+                    asignar(e,Color.CYAN,Color.BLACK);
+                }
 
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            mostrarMenuRaton(e);
-        }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    asignar(e,Color.CYAN,Color.BLACK);
+                }
 
-        private void mostrarMenuRaton(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                popup.show(e.getComponent(), e.getX(), e.getY());
+                @Override
+                public void mouseExited(MouseEvent e) {
+                   asignar(e,Color.WHITE,Color.WHITE);
+                }
+
+
+                public void asignar(MouseEvent e, Color back, Color borde){
+                    cambiarColor(back);
+                    crearBorde(borde);
+                }
+
+                private void mostrarMenuRaton(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        popup.show(e.getComponent(), e.getX(), e.getY());
+                    }
+                }
             }
-        }
     }
+
+
+    
 }
