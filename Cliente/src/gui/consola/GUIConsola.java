@@ -1,5 +1,6 @@
 package gui.consola;
 
+import control.ControladorConsola;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
