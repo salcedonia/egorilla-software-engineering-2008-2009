@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -34,7 +36,6 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         _puerto = port;
         _receptores = new Stack<Receptor<E>>();
         _conexiones  = new GestorConexiones(this);
-        _conexiones.start();
     }
 
     /**
@@ -61,12 +62,6 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
             Paquete<E> p = new Paquete<E>(var, s.getLocalAddress().getHostAddress(), _puerto);
 
             new ObjectOutputStream(s.getOutputStream()).writeObject(p);
-            
-//            try {
-//                Thread.sleep(1000);
-//            } catch (InterruptedException ex) {
-//                ex.printStackTrace();
-//            }
 
             s.close();
         } catch (IOException ex) {
@@ -95,6 +90,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     @Override
     public void comienzaEscucha() {
         this.start();
+        _conexiones.start();
     }
 
     /**
@@ -102,8 +98,32 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
      */
     @Override
     public void terminaEscucha() {
+        try {
+            _conexiones.parar();
+            String localIp = null;
+            // mata este hilo con paquete bomba
+            try {
+                localIp = InetAddress.getLocalHost().getHostAddress();
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
-        this.interrupt();
+            Paquete p = new Paquete(null, localIp, _puerto);
+            p.creaBomba();
+            Socket s = new Socket(localIp, _puerto);
+    
+            new ObjectOutputStream(s.getOutputStream()).writeObject(p);
+
+            s.close();
+            
+            this.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(GestorDeRedTCPimpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -140,6 +160,10 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                             for (Receptor<E> receptor : _receptores) {
                                 receptor.recibeMensaje(paquete.getDatos(), ip, paquete.getPuertoRemite());
                             }
+                        }
+                        else{ // mira si es una bomba
+                            if (paquete.esBomba())
+                                return;  // finaliza el hilo
                         }
                     } catch (ClassNotFoundException ex) {
                         ex.printStackTrace();
