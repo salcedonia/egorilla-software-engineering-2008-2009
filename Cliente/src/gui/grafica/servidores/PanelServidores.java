@@ -5,6 +5,7 @@ import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +14,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.border.BevelBorder;
 
 /**
  * Panel que contiene la información de los servidores disponibles en la 
@@ -43,6 +46,22 @@ public class PanelServidores extends JPanel {
      * Panel de Servidores que contiene a esta clase.
      */
     private Vector<ObservadorPanelServidores> _observadores;
+        /**
+     * Color de selección.
+     */
+    private Color _colorSeleccion = new Color(102, 204, 255);
+    /**
+     * Color de fondo del panel.
+     */
+    private Color _colorFondo = Color.WHITE;
+    /**
+     * Color archivo descargado.
+     */
+    private Color _colorDescargado = Color.RED;
+    /**
+     * Color del borde del panel.
+     */
+    private Color _colorBorde = Color.BLACK;
     
     /**
      * Constructor de la clase PanelServidores.
@@ -53,6 +72,8 @@ public class PanelServidores extends JPanel {
         _listaServidores = new ArrayList<ServidorIndividual>();
         _observadores = new Vector<ObservadorPanelServidores>();
         _panelPrincipal = new JPanel();
+        _panelPrincipal.setBackground(_colorFondo);
+        setBackground(_colorFondo);
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
         initComponent();
@@ -141,7 +162,15 @@ public class PanelServidores extends JPanel {
          * Panel principal que contiene a todos los anteriores elementos.
          */
         private JPanel _panelPrincipal;
-
+        /**
+         * Color de la fuente de la cabecera.
+         */
+        private Color _colorFuente = Color.WHITE;
+        /**
+         * Color de fondo de la cabecera.
+         */
+        private Color _colorFondo = Color.BLUE;
+        
         /**
          * Constructor de la clase Cabecera.
          */
@@ -155,18 +184,24 @@ public class PanelServidores extends JPanel {
          */
         private void iniciarComponentes() {
 
+            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, 
+                    new Color(102, 204, 255), 
+                    new Color(51, 153, 255), 
+                    new Color(0, 0, 102), 
+                    new Color(0, 0, 153)));          
+            
             _panelPrincipal = new JPanel();
             _lblDireccionIP = new JLabel("IP Servidor");
             _lblPuerto = new JLabel("Puerto Servidor");
             _lblNombre = new JLabel("Nombre Servidor");
             _lblDescripcion = new JLabel("Descripcion Servidor");
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
-            _panelPrincipal.setBackground(Color.BLUE);
+            _panelPrincipal.setBackground(_colorFondo);
 
-            _lblDireccionIP.setForeground(Color.WHITE);
-            _lblPuerto.setForeground(Color.WHITE);
-            _lblNombre.setForeground(Color.WHITE);
-            _lblDescripcion.setForeground(Color.WHITE);
+            _lblDireccionIP.setForeground(_colorFuente);
+            _lblPuerto.setForeground(_colorFuente);
+            _lblNombre.setForeground(_colorFuente);
+            _lblDescripcion.setForeground(_colorFuente);
 
             _panelPrincipal.add(_lblNombre);
             _panelPrincipal.add(_lblDireccionIP);
@@ -251,6 +286,10 @@ public class PanelServidores extends JPanel {
             _oyenteBoton = new OyenteBoton();
 
             _panelPrincipal = new JPanel();
+            _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
+            _panelPrincipal.setBackground(_colorFondo);
+            setBackground(_colorFondo);
+                        
             _panelPrincipal.addMouseListener(_eventosRaton);
             _lblDireccionIP = new JLabel(direccionIP);
             _lblDireccionIP.addMouseListener(_eventosRaton);
@@ -271,14 +310,13 @@ public class PanelServidores extends JPanel {
          */
         private void iniciarComponentes() {
 
-            _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
+            _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 15));
             _panelPrincipal.add(_lblNombre);
             _panelPrincipal.add(_lblDireccionIP);
             _panelPrincipal.add(_lblPuerto);
             _panelPrincipal.add(_lblDescripcion);
             setLayout(new BorderLayout());
-            add(_panelPrincipal, BorderLayout.NORTH);
-            _panelPrincipal.setBackground(Color.WHITE);
+            add(_panelPrincipal, BorderLayout.CENTER);
             _panelPrincipal.repaint();
             repaint();
         }
@@ -348,8 +386,10 @@ public class PanelServidores extends JPanel {
                 } else if (evt.getClickCount() == 1) {
 
                     borrarSeleccionAnterior();
+                    
                     // Solo se queda marcado el que ha sido seleccionado
-                    _panelPrincipal.setBackground(Color.CYAN);
+                    _panelPrincipal.setBackground(_colorSeleccion);
+                    _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorBorde));
                     _panelPrincipal.repaint();
                     repaint();
                     
@@ -366,7 +406,8 @@ public class PanelServidores extends JPanel {
 
                 for (ServidorIndividual b : _listaServidores) {
 
-                    b._panelPrincipal.setBackground(Color.WHITE);
+                    b._panelPrincipal.setBackground(_colorFondo);
+                    b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
                     b._panelPrincipal.repaint();
                     repaint();
                 }
