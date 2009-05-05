@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import org.apache.log4j.Logger;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
@@ -148,6 +147,7 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
      * @return
      */
    public  ArrayList<Double> getListaVelocidadMediaSubidaSesion() {
+       subida.llegadaDatos(0);
         return subida.getListaVelocidadMediaSesion();
     }
 
@@ -156,6 +156,7 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
      * @return
      */
    public ArrayList<Double> getListaVelocidadMediaBajadaSesion() {
+       descarga.llegadaDatos(0);
         return descarga.getListaVelocidadMediaSesion();
     }
 
