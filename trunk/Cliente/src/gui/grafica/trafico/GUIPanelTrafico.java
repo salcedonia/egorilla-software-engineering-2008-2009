@@ -2,6 +2,7 @@ package gui.grafica.trafico;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
+import javax.swing.border.BevelBorder;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
@@ -27,12 +29,12 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
     private JPanel _panelPrincipal;
 
     public GUIPanelTrafico(ControladorPanelTrafico controlador) {
-        
+
         _controlador = controlador;
-        
+
         // Registramos la vista como observadora del almacen de descargas
         _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(this);
-        
+
         _listaDescargas = new ArrayList<DescargaIndividual>();
         _panelPrincipal = new JPanel();
         _panelPrincipal.setBackground(Color.WHITE);
@@ -121,14 +123,21 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         }
 
         private void iniciarComponentes() {
+            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, 
+                    new Color(102, 204, 255), 
+                    new Color(51, 153, 255), 
+                    new Color(0, 0, 102), 
+                    new Color(0, 0, 153)));
+
             _panelPrincipal = new JPanel();
-            _labelestado = new JLabel("ESTADO");
-            _labelnombre = new JLabel("FICHERO");
-            _labelhash = new JLabel("HASH");
-            _labelprogreso = new JLabel("PROGRESO");
+            _panelPrincipal.setPreferredSize(new Dimension(10, 25));
+
+            _labelestado = new JLabel("Estado");
+            _labelnombre = new JLabel("Fichero");
+            _labelhash = new JLabel("Hash");
+            _labelprogreso = new JLabel("Progreso");
             _panelPrincipal.setLayout(new GridLayout(0, 4, 150, 150));
             _panelPrincipal.setBackground(Color.BLUE);
-
 
             _labelnombre.setForeground(Color.white);
             _labelhash.setForeground(Color.white);
@@ -209,9 +218,8 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _menuItem3.addActionListener(_oyenteBoton);
             popup.add(_menuItem3);
 
-            
-            _oyenteRaton=new OyenteRaton(popup);
-            
+            _oyenteRaton = new OyenteRaton(popup);
+
             _labelnombre.addMouseListener(_oyenteRaton);
             _labelestado.addMouseListener(_oyenteRaton);
             _labelhash.addMouseListener(_oyenteRaton);
@@ -219,7 +227,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             this.addMouseListener(_oyenteRaton);
         }
 
-        public void cambiarColor(Color c){
+        public void cambiarColor(Color c) {
             _panelPrincipal.setBackground(c);
         }
         
@@ -228,7 +236,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _barra.setForeground(c);
         }
 
-        public void crearBorde(Color c){
+        public void crearBorde(Color c) {
             this.setBorder(BorderFactory.createLineBorder(c));
         }
         
@@ -265,54 +273,51 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             }
         }
 
-            class OyenteRaton implements MouseListener {
-                private JPopupMenu popup;
+        class OyenteRaton implements MouseListener {
 
-                public OyenteRaton(JPopupMenu pop){
-                    popup=pop;
-                }
-                
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    asignar(e,Color.CYAN,Color.BLACK);
-                }
+            private JPopupMenu popup;
 
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    mostrarMenuRaton(e);
-                    asignar(e,Color.CYAN,Color.BLACK);
-                }
+            public OyenteRaton(JPopupMenu pop) {
+                popup = pop;
+            }
 
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    mostrarMenuRaton(e);
-                    asignar(e,Color.CYAN,Color.BLACK);
-                }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                asignar(e, Color.CYAN, Color.BLACK);
+            }
 
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    asignar(e,Color.CYAN,Color.BLACK);
-                }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mostrarMenuRaton(e);
+                asignar(e, Color.CYAN, Color.BLACK);
+            }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                   asignar(e,Color.WHITE,Color.WHITE);
-                }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                mostrarMenuRaton(e);
+                asignar(e, Color.CYAN, Color.BLACK);
+            }
 
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                asignar(e, Color.CYAN, Color.BLACK);
+            }
 
-                public void asignar(MouseEvent e, Color back, Color borde){
-                    cambiarColor(back);
-                    crearBorde(borde);
-                }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                asignar(e, Color.WHITE, Color.WHITE);
+            }
 
-                private void mostrarMenuRaton(MouseEvent e) {
-                    if (e.isPopupTrigger()) {
-                        popup.show(e.getComponent(), e.getX(), e.getY());
-                    }
+            public void asignar(MouseEvent e, Color back, Color borde) {
+                cambiarColor(back);
+                crearBorde(borde);
+            }
+
+            private void mostrarMenuRaton(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
+        }
     }
-
-
-    
 }

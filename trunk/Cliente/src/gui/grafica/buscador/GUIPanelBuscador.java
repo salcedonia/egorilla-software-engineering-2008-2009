@@ -111,7 +111,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         // LABEL NOMBRE
         _lblNombre.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _lblNombre.setText("Nombre: ");
+        _lblNombre.setText("Nombre:");
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -121,9 +121,9 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         // TEXTBOX BUSQUEDAS
         _txtBusqueda.setText("");
-        _txtBusqueda.setMinimumSize(new Dimension(100, 20));
-        _txtBusqueda.setMaximumSize(new Dimension(100, 20));
-        _txtBusqueda.setPreferredSize(new Dimension(100, 20));
+        _txtBusqueda.setMinimumSize(new Dimension(150, 20));
+        _txtBusqueda.setMaximumSize(new Dimension(150, 20));
+        _txtBusqueda.setPreferredSize(new Dimension(150, 20));
         _txtBusqueda.addKeyListener(new OyenteTeclasBuscar());
 
         gridBagConstraints = new GridBagConstraints();
@@ -137,7 +137,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         add(_txtBusqueda, gridBagConstraints);
 
         // BOTON COMENZAR
-        _btnComenzar.setText("Comenzar");
+        _btnComenzar.setText("Comenzar Búsqueda");
         _btnComenzar.addActionListener(new ActionListener() {
 
             @Override
@@ -151,11 +151,11 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(0, 200, 0, 0);
+        gridBagConstraints.insets = new Insets(0, 250, 0, 0);
         add(_btnComenzar, gridBagConstraints);
 
         // BOTON LIMPIAR
-        _btnLimpiar.setText("Limpiar");
+        _btnLimpiar.setText("Limpiar Búsqueda");
         _btnLimpiar.addActionListener(new ActionListener() {
 
             @Override
@@ -168,7 +168,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridheight = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(15, 200, 0, 0);
+        gridBagConstraints.insets = new Insets(15, 256, 0, 0);
         add(_btnLimpiar, gridBagConstraints);
 
         // SEPARADOR
@@ -176,14 +176,14 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 400;
+        gridBagConstraints.ipadx = 500;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(50, 10, 0, 0);
         add(_separador, gridBagConstraints);
 
         // BOTON ELIMINAR
-        _btnEliminar.setText("Eliminar Todo");
+        _btnEliminar.setText("Eliminar Todas las Búsquedas");
         _btnEliminar.addActionListener(new ActionListener() {
 
             @Override

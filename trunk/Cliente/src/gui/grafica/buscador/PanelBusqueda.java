@@ -12,10 +12,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.border.BevelBorder;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
@@ -23,7 +25,7 @@ import peerToPeer.descargas.ObservadorAlmacenDescargas;
  * 
  * @author Javier Salcedo
  */
-public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
+public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas {
 
     /**
      * Lista de archivos que ha respondido el servidor en respuesta a la búsqueda
@@ -45,20 +47,38 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
      * Vector de observadores de esta clase.
      */
     private Vector<ObservadorPanelBusqueda> _observadores;
-
+    /**
+     * Color de selección.
+     */
+    private Color _colorSeleccion = new Color(102, 204, 255);
+    /**
+     * Color de fondo del panel.
+     */
+    private Color _colorFondo = Color.WHITE;
+    /**
+     * Color archivo descargado.
+     */
+    private Color _colorDescargado = Color.RED;
+    /**
+     * Color del borde del panel.
+     */
+    private Color _colorBorde = Color.BLACK;
+    
     /**
      * Constructor de la clase PanelBusqueda.
      * 
      * @param controlador Controlador del panel buscador.
      * @param lista Lista de archivos devuelta por el servidor.
      */
-    public PanelBusqueda(ControladorPanelBuscador controlador, Archivo[] lista){
+    public PanelBusqueda(ControladorPanelBuscador controlador, Archivo[] lista) {
 
         _controlador = controlador;
         _busqueda = lista;
         _listaArchivos = new ArrayList<BusquedaIndividual>();
         _observadores = new Vector<ObservadorPanelBusqueda>();
         _panelPrincipal = new JPanel();
+        _panelPrincipal.setBackground(Color.WHITE);
+        setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
         iniciarComponentes();
@@ -76,7 +96,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         for (int i = 0; i < _busqueda.length; i++) {
 
             BusquedaIndividual b = new BusquedaIndividual(_busqueda[i]);
-            
+
             // Guardamos la fila en el ArrayList
             _listaArchivos.add(b);
             // Creamos una nueva fila
@@ -89,13 +109,40 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
      */
     private class Cabecera extends JPanel {
 
-        private  JLabel _lblNombre,  _lblTamanio ,  _lblTipoArchivo ,  _lblHash ;
+        /**
+         * Etiqueta del nombre del archivo.
+         */
+        private JLabel _lblNombre;
+        /**
+         * Etiqueta del tamanio del archivo.
+         */
+        private JLabel _lblTamanio;
+        /**
+         * Etiqueta del tipo de archivo del archivo.
+         */
+        private JLabel _lblTipoArchivo;
+        /**
+         * Etiqueta del hash del archivo.
+         */
+        private JLabel _lblHash;
+        /**
+         * Panel principal que contiene a todos los elementos anteriores.
+         */
         private JPanel _panelPrincipal;
-
+        /**
+         * Color de fuente de la cabecera.
+         */
+        private Color _colorFuente = Color.WHITE;
+        /**
+         * Color de fondo de la cabecera.
+         */
+        private Color _colorFondo = Color.BLUE;
+        
         /**
          * Constructor de la clase Cabecera.
          */
         private Cabecera() {
+
             iniciarComponentes();
         }
 
@@ -104,18 +151,24 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          */
         private void iniciarComponentes() {
 
+            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
+                    new Color(102, 204, 255),
+                    new Color(51, 153, 255),
+                    new Color(0, 0, 102),
+                    new Color(0, 0, 153)));
+
             _panelPrincipal = new JPanel();
             _lblNombre = new JLabel("Nombre");
             _lblTamanio = new JLabel("Tamaño");
             _lblTipoArchivo = new JLabel("Tipo");
             _lblHash = new JLabel("Hash");
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
-            _panelPrincipal.setBackground(Color.BLUE);
+            _panelPrincipal.setBackground(_colorFondo);
 
-            _lblNombre.setForeground(Color.WHITE);
-            _lblTamanio.setForeground(Color.WHITE);
-            _lblTipoArchivo.setForeground(Color.WHITE);
-            _lblHash.setForeground(Color.WHITE);
+            _lblNombre.setForeground(_colorFuente);
+            _lblTamanio.setForeground(_colorFuente);
+            _lblTipoArchivo.setForeground(_colorFuente);
+            _lblHash.setForeground(_colorFuente);
 
             _panelPrincipal.add(_lblNombre);
             _panelPrincipal.add(_lblTamanio);
@@ -129,7 +182,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
     /**
      * Representa un archivo de la lista devuelta por el servidor.
      */
-    private class BusquedaIndividual extends JPanel{
+    private class BusquedaIndividual extends JPanel {
 
         /**
          * Archivo que representa la búsqueda individual. Lo necesitamos
@@ -139,15 +192,15 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         /**
          * Etiqueta que muestra el nombre del archivo.
          */
-        private JLabel _lblNombre;   
+        private JLabel _lblNombre;
         /**
          * Etiqueta que muestra el valor del tamanio del archivo.
          */
-        private JLabel _lblTamanio;  
+        private JLabel _lblTamanio;
         /**
          * Etiqueta que muestra el tipo de archivo del archivo.
          */
-        private JLabel _lblTipoArchivo;  
+        private JLabel _lblTipoArchivo;
         /**
          * Etiqueta que muestra el hash del archivo.
          */
@@ -168,7 +221,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          * Panel principal contenedor.
          */
         private JPanel _panelPrincipal;
-        
+
         /**
          * Constructor de la clase BusquedaIndividual.
          * 
@@ -180,11 +233,15 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         private BusquedaIndividual(Archivo archivo) {
 
             _archivo = archivo;
-            
+
             _eventosRaton = new EventosRaton();
             _oyenteBoton = new OyenteBoton();
-            
+
             _panelPrincipal = new JPanel();
+            _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
+            _panelPrincipal.setBackground(_colorFondo);
+            setBackground(_colorFondo);
+
             _panelPrincipal.addMouseListener(_eventosRaton);
             _lblNombre = new JLabel(_archivo.getNombre());
             _lblNombre.addMouseListener(_eventosRaton);
@@ -194,9 +251,9 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
             _lblTipoArchivo.addMouseListener(_eventosRaton);
             _lblHash = new JLabel(_archivo.getHash());
             _lblHash.addMouseListener(_eventosRaton);
-            
+
             iniciarComponentes();
-            
+
             createPopupMenu();
         }
 
@@ -204,15 +261,14 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          * Inicia los componentes de una busqueda individual
          */
         private void iniciarComponentes() {
-            
-            _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
+
+            _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 5));
             _panelPrincipal.add(_lblNombre);
             _panelPrincipal.add(_lblTamanio);
             _panelPrincipal.add(_lblTipoArchivo);
             _panelPrincipal.add(_lblHash);
             setLayout(new BorderLayout());
-            add(_panelPrincipal, BorderLayout.NORTH);
-            _panelPrincipal.setBackground(Color.WHITE);
+            add(_panelPrincipal, BorderLayout.CENTER);
             _panelPrincipal.repaint();
         }
 
@@ -230,6 +286,10 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
 
             MouseListener popupListener = new PopupListener(popup);
             _lblNombre.addMouseListener(popupListener);
+            _lblTamanio.addMouseListener(popupListener);
+            _lblHash.addMouseListener(popupListener);
+            _lblTipoArchivo.addMouseListener(popupListener);
+
             this.addMouseListener(popupListener);
         }
 
@@ -237,164 +297,165 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
          * Clase que implementa los métodos necesarios para procesar 
          * eventos producidos sobre los diferentes botones del panel.
          */
-        class OyenteBoton implements ActionListener {
+        private class OyenteBoton implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Descargar")) {
-                    
+
                     // Aviso al controlador con el archivo asociado
                     // a la BusquedaIndividual a la que se ha pulsado
                     _controlador.peticionDescargarFichero(_archivo);
                 }
             }
         }
-        
+
         /**
          * Clase que implementa los métodos necesarios para procesar 
          * eventos del raton producidos sobre el panel.
          */
-        class EventosRaton extends MouseAdapter{
-        
+        private class EventosRaton extends MouseAdapter {
+
             @Override
-            public void mouseClicked(MouseEvent evt){
-            
-                if(evt.getClickCount() == 2){
-                    
+            public void mouseClicked(MouseEvent evt) {
+
+                if (evt.getClickCount() == 2) {
+
                     // Aviso al controlador con el archivo asociado
                     // a la BusquedaIndividual a la que se ha pulsado
                     _controlador.peticionDescargarFichero(_archivo);
+                } else if (evt.getClickCount() == 1) {
+
+                    repintar();
+                    // Solo se queda marcado el que ha sido seleccionado
+                    _panelPrincipal.setBackground(_colorSeleccion);
+                    setBorder(BorderFactory.createLineBorder(_colorBorde));
+                    _panelPrincipal.repaint();
+
+                    // Avisamos de la seleccion de una fila
+                    avisarArchivoSeleccionado(_archivo);
                 }
-                else 
-                    if(evt.getClickCount() == 1){
-                    
-                        repintar();
-                        // Solo se queda marcado el que ha sido seleccionado
-                        _panelPrincipal.setBackground(Color.CYAN);
-                        _panelPrincipal.repaint();
-                        
-                        // Avisamos de la seleccion de una fila
-                        avisarArchivoSeleccionado(_archivo);
-                    }     
+            }
+        }
+
+        /**
+         * Establece el color blanco de fondo para todos los componentes
+         * del panel.
+         */
+        private void repintar() {
+
+            for (BusquedaIndividual b : _listaArchivos) {
+
+                b._panelPrincipal.setBackground(_colorFondo);
+                b.setBorder(BorderFactory.createLineBorder(_colorFondo));
+                b._panelPrincipal.repaint();
+            }
+        }
+
+        /**
+         * Clase que interpreta los eventos de ratón para mostrar un popup
+         * asociado.
+         */
+        class PopupListener extends MouseAdapter {
+
+            /**
+             * Popup del panel.
+             */
+            private JPopupMenu _popup;
+
+            /**
+             * Constructor de la clase gestorEGorilla.
+             * 
+             * @param popupMenu Popup asociado.
+             */
+            public PopupListener(JPopupMenu popupMenu) {
+                _popup = popupMenu;
             }
 
             /**
-             * Establece el color blanco de fondo para todos los componentes
-             * del panel.
+             * Muestra el menu contextual.
+             * 
+             * @param e Evento del raton.
              */
-            private void repintar() {
-            
-                for(BusquedaIndividual b : _listaArchivos){
-                
-                    b._panelPrincipal.setBackground(Color.WHITE);
-                    b._panelPrincipal.repaint();
+            private void mostrarMenuRaton(MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    _popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
-        }
-    }
 
-    /**
-     * Clase que interpreta los eventos de ratón para mostrar un popup
-     * asociado.
-     */
-    class PopupListener extends MouseAdapter {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                mostrarMenuRaton(e);
+            }
 
-        /**
-         * Popup del panel.
-         */
-        private JPopupMenu _popup;
-
-        /**
-         * Constructor de la clase PopupListener.
-         * 
-         * @param popupMenu Popup asociado.
-         */
-        public PopupListener(JPopupMenu popupMenu) {
-            
-            _popup = popupMenu;
-        }
-
-        /**
-         * Muestra el menu contextual.
-         * 
-         * @param e Evento del raton.
-         */
-        private void mostrarMenuRaton(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                _popup.show(e.getComponent(), e.getX(), e.getY());
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                mostrarMenuRaton(e);
             }
         }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            mostrarMenuRaton(e);
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            mostrarMenuRaton(e);
-        }
     }
-    
+
     /**
      * Aniade un observador a la lista de observadores.
      * 
      * @param observador Nuevo observador a aniadir a la lista.
      */
-    public void addObservador(ObservadorPanelBusqueda observador){
-    
-        if(!_observadores.contains(observador))
+    public void addObservador(ObservadorPanelBusqueda observador) {
+
+        if (!_observadores.contains(observador)) {
             _observadores.add(observador);
+        }
+
     }
-    
+
     /**
      * Elimina un observador de la lista de observadores.
      * 
      * @param observador Observador a eliminar de la lista.
      */
-    public void eliminaObservador(ObservadorPanelServidores observador){
-    
+    public void eliminaObservador(ObservadorPanelServidores observador) {
+
         _observadores.remove(observador);
     }
-    
+
     /**
      * Avisa a todos los observadores registrados en la lista de la 
      * seleccion de un servidor en la lista de servidores.
      * 
      * @param archivo Archivo seleccionado.
      */
-    private void avisarArchivoSeleccionado(Archivo archivo){
-    
-        for(ObservadorPanelBusqueda observador : _observadores)
+    private void avisarArchivoSeleccionado(Archivo archivo) {
+
+        for (ObservadorPanelBusqueda observador : _observadores) {
             observador.archivoSeleccionado(archivo);
-    } 
-    
+        }
+
+    }
+
     //--------------------------------------\\
     //      INTERFACE ALMACEN DESCARGAS     \\
     //--------------------------------------\\
-    
     @Override
     public void nuevaDescarga(String nombre, String hash, int tamanio) {
 
-        for(BusquedaIndividual b : _listaArchivos){
-                
+        for (BusquedaIndividual b : _listaArchivos) {
+
             // Ponemos en rojo esa fila cuando ha llegado esa descarga
-            if(b._lblHash.getText().matches(hash)){
-            
-                b._panelPrincipal.setBackground(Color.WHITE);
-                b._lblNombre.setForeground(Color.RED);
-                b._lblTamanio.setForeground(Color.RED);
-                b._lblTipoArchivo.setForeground(Color.RED);
-                b._lblHash.setForeground(Color.RED);
-                
+            if (b._lblHash.getText().matches(hash)) {
+
+                b._panelPrincipal.setBackground(_colorFondo);
+                b._lblNombre.setForeground(_colorDescargado);
+                b._lblTamanio.setForeground(_colorDescargado);
+                b._lblTipoArchivo.setForeground(_colorDescargado);
+                b._lblHash.setForeground(_colorDescargado);
+
                 b._panelPrincipal.repaint();
-            }        
+            }
         }
     }
 
     @Override
     public void fragmentoDescargado(String hash) {
-
     }
 
     @Override
@@ -407,3 +468,4 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
         //TODO DESCARGADO
     }
 }
+
