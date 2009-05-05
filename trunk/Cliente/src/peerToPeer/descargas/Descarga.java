@@ -9,8 +9,6 @@ import datos.Archivo;
 import datos.Fragmento;
 import gestorDeFicheros.GestorCompartidos;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
 import java.util.Vector;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.DatosCliente;
@@ -22,10 +20,10 @@ import mensajes.serverclient.DatosCliente;
 public class Descarga {
 
     public static final int PIDEASERVIDOR = 0;
-    public static final int PIDEALOSPROPIETARIOS = 20;
+    public static final int PIDEALOSPROPIETARIOS = 13;
     public static final int DESCARGA = 70;
 
-    private int _estado;
+    private int _estado, _estado_aux;
     private Archivo _archivo;
     private Vector<Fragmento> _listaFragmentosPendientes;
     private ArrayList<DatosCliente> _propietarios;
@@ -36,6 +34,7 @@ public class Descarga {
     public Descarga(Archivo archivo){
         _archivo=archivo;
         _estado = PIDEASERVIDOR;
+        _estado_aux = PIDEASERVIDOR;
         _listaFragmentosPendientes = new Vector<Fragmento>();
         _propietarios = new ArrayList<DatosCliente>();
         _listaQuienTieneQue = new ArrayList<Par>();
@@ -56,10 +55,13 @@ public class Descarga {
     }
 
     public void actualizaPropietarios(DatosCliente[] datos){
+        _propietarios = new ArrayList<DatosCliente>();
+        _listaQuienTieneQue = new ArrayList<Par>();
         for(int i=0;i<datos.length;i++){
              _propietarios.add(datos[i]);
         }
         _estado = PIDEALOSPROPIETARIOS;
+        decrementaEstado();
     }
 
     public void actualizaQuienTieneQue(Tengo mensaje){
@@ -67,6 +69,7 @@ public class Descarga {
         Par par=new Par(cliente,mensaje.getFragmentos());
         _listaQuienTieneQue.add(par);
         _estado = DESCARGA;
+        decrementaEstado();
     }
 
     public Cliente dameClienteQueTiene(Fragmento frag){
@@ -97,14 +100,25 @@ public class Descarga {
         return cliente;
     }
 
-    private Par dameSiguienteCliente(){
-        int tamLista = _listaQuienTieneQue.size();
-        if (_posicion < tamLista-1){//No hemos superado al último
-            _posicion ++;//Actualizamos posición para obtener el siguiente
-        } else {//Acabamos de superar al último
-            _posicion = 0;//El siguiente por tanto será el primero
+    public void eliminarCliente(String IP){
+        
+        ArrayList<Par> tmp = new ArrayList<Par>();
+        for (Par quien:_listaQuienTieneQue) {
+            if (quien.getCliente().getIP().equals(IP))
+                tmp.add(quien);
         }
-        return _listaQuienTieneQue.get(_posicion);
+        for (Par par : tmp) {
+            _listaQuienTieneQue.remove(par);
+        }
+        
+        ArrayList<DatosCliente> tmp2 = new ArrayList<DatosCliente>();
+        for (DatosCliente quien:_propietarios) {
+            if (quien.getIP().equals(IP))
+                tmp2.add(quien);
+        }
+        for (DatosCliente dat : tmp2) {
+            _propietarios.remove(dat);
+        }
     }
 
     public int getEstado(){
@@ -116,7 +130,14 @@ public class Descarga {
     }
 
     public void decrementaEstado(){
-        _estado --;
+        _estado_aux--;
+        if(_estado_aux == PIDEASERVIDOR){
+            _estado=PIDEASERVIDOR;
+        }else if(_estado_aux == PIDEALOSPROPIETARIOS){
+            _estado = PIDEALOSPROPIETARIOS;
+        }else{
+            _estado = DESCARGA;
+        }
     }
 
     //---------- CLASES AUXILIARES

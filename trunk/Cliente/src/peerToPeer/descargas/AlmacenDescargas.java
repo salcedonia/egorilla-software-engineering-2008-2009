@@ -60,7 +60,10 @@ public class AlmacenDescargas {
      * @param ip el host con el que no es posible establecer comunicación
      */
     public void perdidaConexion(String ip) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //notificamos a las descargas que el cliente se ha perdido
+        for(Descarga d:_listaDescargas){
+            d.eliminarCliente(ip);
+        }
     }
     
     /**
