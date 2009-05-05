@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 /**
- *
+ * @see ModuloTrafico.
  * @author Qiang
  */
 class AdministradorDescarga extends ModuloTrafico {

@@ -23,8 +23,10 @@ public class DataServerTest  extends Thread implements ObservadorAlmacenDescarga
     public void run() {
         
         while (true) {
+            int cont = 0;
             try {
                 fragmentoDescargado("");
+                descargaCompleta("");
                 Thread.sleep(15000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(DataServerTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,7 +51,7 @@ public class DataServerTest  extends Thread implements ObservadorAlmacenDescarga
 
     @Override
     public void descargaCompleta(String hash) {
-        //TODO DESCARGADO
+        gestor.descargaCompleta("");
     }
 
 }
