@@ -83,10 +83,8 @@ public class Descargador extends Thread{
                             _gestor.descargaCompletada(d.getArchivo());
                         }
                         break;
-                    default:
-                         d.decrementaEstado();
                 }
-
+                d.decrementaEstado();
             }
         } catch (InterruptedException ex) {
             //  donothing
