@@ -23,7 +23,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     /**
      * Log para recopilar la información en un fichero de log.
      */
-    private static final Logger _log = Logger.getLogger(GUIConsola.class.getName());
+    private static final Logger _logger = Logger.getLogger(GUIConsola.class.getName());
     /**
      * Controlador de la aplicación en modo consola.
      */

@@ -28,6 +28,11 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      */
     private JButton _btnAñadir;
     /**
+     * Limpia los datos del formulario en el que el usuario introduce los 
+     * datos del servidor que quiere añadir a la lista.
+     */
+    private JButton _btnLimpiarDatos;
+    /**
      * Etiqueta de direccion IP del servidor a aniadir.
      */
     private JLabel _lblDireccionIP;
@@ -60,13 +65,17 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
     /**
      * Campo de texto donde el usuario introduce el nombre del servidor
      * a aniadir.
-     */    
+     */
     private JTextField _txtNombre;
     /**
      * Campo de texto donde el usuario introduce la descripcion del servidor
      * a aniadir.
      */
     private JTextField _txtDescripcion;
+    /**
+     * Separador.
+     */
+    private JSeparator _separador;
     /**
      * Controlador del panel de servidores.
      */
@@ -106,6 +115,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
 
         _btnConectar = new JButton();
         _btnAñadir = new JButton();
+        _btnLimpiarDatos = new JButton();
         _lblNombre = new JLabel();
         _lblDireccionIP = new JLabel();
         _lblPuerto = new JLabel();
@@ -115,15 +125,16 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _txtPuerto = new JTextField();
         _txtDescripcion = new JTextField();
         _scrollPaneListaServidores = new JScrollPane();
-        
+        _separador = new JSeparator();
+
         setBorder(BorderFactory.createTitledBorder("Servidores"));
         setLayout(new GridBagLayout());
 
         // ETIQUETA DIRECCION IP
         _lblDireccionIP.setText("IP Servidor");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 10, 0, 0);
         add(_lblDireccionIP, gridBagConstraints);
@@ -132,8 +143,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _txtDireccionIP.setText("");
         _txtDireccionIP.setColumns(15);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_txtDireccionIP, gridBagConstraints);
@@ -141,8 +152,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         // ETIQUETA PUERTO
         _lblPuerto.setText("Puerto Servidor");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 10, 0, 0);
         add(_lblPuerto, gridBagConstraints);
@@ -151,8 +162,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _txtPuerto.setText("");
         _txtPuerto.setColumns(4);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_txtPuerto, gridBagConstraints);
@@ -160,8 +171,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         // ETIQUETA NOMBRE
         _lblNombre.setText("Nombre Servidor");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 10, 0, 0);
         add(_lblNombre, gridBagConstraints);
@@ -170,8 +181,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _txtNombre.setText("");
         _txtNombre.setColumns(20);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_txtNombre, gridBagConstraints);
@@ -179,8 +190,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         // ETIQUETA DESCRIPCION
         _lblDescripcion.setText("Descripcion Servidor");
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 10, 0, 0);
         add(_lblDescripcion, gridBagConstraints);
@@ -189,8 +200,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _txtDescripcion.setText("");
         _txtDescripcion.setColumns(20);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new Insets(6, 140, 0, 0);
         add(_txtDescripcion, gridBagConstraints);
@@ -206,10 +217,41 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         });
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(6, 50, 0, 0);
         add(_btnAñadir, gridBagConstraints);
+
+        // BOTON LIMPIAR DATOS
+        _btnLimpiarDatos.setText("Limpiar Datos del Servidor");
+        _btnLimpiarDatos.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                pulsacionBotonLimpiarDatosServidor(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 1;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(6, 50, 0, 0);
+        add(_btnLimpiarDatos, gridBagConstraints);
+
+        // SEPARADOR
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.ipadx = 650;
+        gridBagConstraints.ipady = 5;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(20, 10, 0, 0);
+        add(_separador, gridBagConstraints);
 
         // PANEL DE SERVIDORES
         _panelServidores = new PanelServidores(_controlador);
@@ -217,12 +259,14 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         _scrollPaneListaServidores.add(_panelServidores);
         _scrollPaneListaServidores.setViewportView(_panelServidores);
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.gridheight = 1;
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(20, 10, 0, 0);
         add(_scrollPaneListaServidores, gridBagConstraints);
 
         // BOTON CONECTAR
@@ -235,10 +279,10 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
             }
         });
         gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(20, 10, 0, 0);
         add(_btnConectar, gridBagConstraints);
     }
 
@@ -272,6 +316,20 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
                 mostrarMensajeError("El Puerto Servidor no es un valor numérico");
             }
         }
+    }
+
+    /**
+     * Limpia el contenido de los JField donde el usuario introduce los datos
+     * del nuevo servidor que quiere añadir.
+     * 
+     * @param evt Evento del raton.
+     */
+    private void pulsacionBotonLimpiarDatosServidor(ActionEvent evt) {
+
+        _txtDescripcion.setText("");
+        _txtDireccionIP.setText("");
+        _txtNombre.setText("");
+        _txtPuerto.setText("");
     }
 
     /**
@@ -314,7 +372,6 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
     //------------------------------------------------\\
     //      INTERFACE OBSERVADORPANELSERVIDORES       \\
     //------------------------------------------------\\
-    
     @Override
     public void servidorSeleccionado(String direccionIP, Integer puerto) {
 
