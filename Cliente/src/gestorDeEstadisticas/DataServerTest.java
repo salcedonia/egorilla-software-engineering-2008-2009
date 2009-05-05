@@ -42,4 +42,9 @@ public class DataServerTest  extends Thread implements ObservadorAlmacenDescarga
         gestor.llegadaDatosDescarga(512);
     }
 
+    @Override
+    public void eliminarDescarga(String _hash) {
+      // descargado
+    }
+
 }

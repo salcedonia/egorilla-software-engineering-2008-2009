@@ -335,7 +335,10 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param obj GestorEGorilla de la aplicación.
      */
     @Override
-    public void finDescarga(GestorEgorilla obj) {
+    public void finDescarga(GestorEgorilla obj, Archivo arch){
+        
+        // TODO: descarga completada
+        
     }
 
     /**

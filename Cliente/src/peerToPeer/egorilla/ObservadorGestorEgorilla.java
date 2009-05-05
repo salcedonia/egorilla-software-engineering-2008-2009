@@ -41,8 +41,9 @@ public interface ObservadorGestorEgorilla {
      * Para notificar que la descarga ha sido completada.
      * 
      * @param gestorEGorilla GestorEGorilla de la aplicación.
+     * @param arch el archivo finalizado
      */
-    public void finDescarga(GestorEgorilla GestorEGorilla);
+    public void finDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
     
     /**
      * Para notificar que la conexion se ha perdido.

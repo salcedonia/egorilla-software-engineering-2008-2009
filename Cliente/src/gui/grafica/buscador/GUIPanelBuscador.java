@@ -400,7 +400,8 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     }
 
     @Override
-    public void finDescarga(GestorEgorilla gestorEGorilla) {
+    public void finDescarga(GestorEgorilla gestorEGorilla, Archivo arch) {
+        // TODO: descarga complet
     }
 
     @Override

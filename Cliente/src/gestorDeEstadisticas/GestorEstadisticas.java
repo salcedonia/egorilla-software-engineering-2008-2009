@@ -25,9 +25,9 @@ import peerToPeer.descargas.ObservadorAlmacenDescargas;
  * ejemplo la GUI. </p>
  * Datos almacenados:
  * <ul>
- *   <li>Se dispondras la información de los datos enviados y los datos descargados así como 
+ *   <li>Se dispondras la informacin de los datos enviados y los datos descargados as como 
  *      la velocidades de subida y descarga.</li>
- *   <li>Para las velocidades se ofrecera los datos de la última hora en periodos de medio minuto
+ *   <li>Para las velocidades se ofrecera los datos de la ltima hora en periodos de medio minuto
  *       por lo tanto estas variables se mostraran de forma discreta aunque se tendra en cuenta todo
  *       el rango de tiempo. La media de velocidades se calculara por defecto para periodos de 5 minutos;
  *   </li>   
@@ -44,7 +44,7 @@ import peerToPeer.descargas.ObservadorAlmacenDescargas;
  *       Al finalizar cerramos: instancia.cerrar() 
  *   <li>   
  *  </ul>
- *   Es importante realizar el último paso de cerrar las estadisticas ya que con ello liberamos
+ *   Es importante realizar el ltimo paso de cerrar las estadisticas ya que con ello liberamos
  *   los recursos y hacemos persistente los datos,
  * @author Qiang
  */
@@ -239,5 +239,11 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
     
     public Date getFechaInicio() {
         return descarga.getFechaInicio();
+    }
+
+    @Override
+    public void eliminarDescarga(String _hash) {
+        // TODO: mira si te interesa hacer algo aqui, si no:
+        // do nothing
     }
 }
