@@ -52,31 +52,28 @@ public class ConexionCliente extends Thread {
     @Override
     public void run() {
         Bienvenido b;
-        
-        // si ya esta de alta, se dumpea el mensaje
-        if (!_listaClientes.estaDeAlta(_datosCliente.getIP())){
+     
+        _listaClientes.altaCliente(_datosCliente.getIP(),
+                _datosCliente.getPuertoEscucha(),
+                _datosCliente);
 
-            _listaClientes.altaCliente(_datosCliente.getIP(), 
-                                       _datosCliente.getPuertoEscucha(), 
-                                       _datosCliente);
-            
-            b = new Bienvenido();
-            b.numeroDePeers = _listaClientes.getClientes().size();
-            // TODO: sacar esta info de algún sitio
-            //b.numeroDeArchivos
-            
-            b.setDestino(_datosCliente.getIP(), _datosCliente.getPuertoEscucha());
+        b = new Bienvenido();
+        b.numeroDePeers = _listaClientes.getClientes().size();
+        // TODO: sacar esta info de algún sitio
+        //b.numeroDeArchivos
 
-             //TODO: logger
-             System.out.println("conectando " + _datosCliente.getIP());
+        b.setDestino(_datosCliente.getIP(), _datosCliente.getPuertoEscucha());
 
-            try {
-                _red.envia(b, _datosCliente.getIP(), _datosCliente.getPuertoEscucha());
-            } catch (NetError ex) {
-               _red.eliminaConexion( _datosCliente.getIP());
-               //TODO: logger
-                System.out.println("error de comunicacion con " + _datosCliente.getIP());
-            }
-        }      
+        //TODO: logger
+        System.out.println("conectando " + _datosCliente.getIP());
+
+        try {
+            _red.envia(b, _datosCliente.getIP(), _datosCliente.getPuertoEscucha());
+        } catch (NetError ex) {
+            _red.eliminaConexion(_datosCliente.getIP());
+            //TODO: logger
+            System.out.println("error de comunicacion con " + _datosCliente.getIP());
+        }
+ 
     }
 }
