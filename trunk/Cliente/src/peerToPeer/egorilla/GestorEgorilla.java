@@ -20,6 +20,7 @@ import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.PeticionConsulta;
 import mensajes.serverclient.PeticionDescarga;
 import gestorDeFicheros.*;
+import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -54,16 +55,17 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     * Estructura de datos para almacenar los observadores sobre este objeto.
     */
     private ArrayList<ObservadorGestorEgorilla> _listaObservadores;
+    private int _puerto;
 
     /**
      * Constructor de la clase GestorEgorilla.
      * 
      * @param gestorDeRed Gestor de Red de la aplicación.
      */
-    public GestorEgorilla(GestorDeRed<Mensaje> gestorDeRed, GestorDisco disco) {
+    public GestorEgorilla(int puertocliente, GestorDisco disco) {
         
         _colaSalida = new LinkedList<Mensaje>();
-        _gestorDeRed = gestorDeRed; 
+        _puerto = puertocliente;
         _listaObservadores= new ArrayList<ObservadorGestorEgorilla>();
 
         //En donde se instancia gestorSubidas? No lo veo
@@ -88,6 +90,9 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      */
     public void conectaServidor(String ipServidor, int puertoServidor) throws ControlConfiguracionClienteException{
         log.info("IP : "+ ipServidor+ " Puerto: "+puertoServidor);
+        
+        _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(_puerto);
+        
         // realiza la conexion. Envia los datos al servidor
         DatosCliente misDatos = new DatosCliente();
         
@@ -113,8 +118,6 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         
         // envia mis datos
         addMensajeParaEnviar(misDatos);
-
-
 
         // ademas, comenzamos la escucha
         comienzaP2P();       

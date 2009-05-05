@@ -85,11 +85,10 @@ public class Main {
      */
     private static void crearModulosCliente(int puertoDeEscuchaCliente, String modo) throws Exception {
 
-        _gestorDeRed = new GestorDeRedTCPimpl<Mensaje>(puertoDeEscuchaCliente);
         _gestorDeDisco = new GestorDisco();
         _gestorDeCompartidos = GestorCompartidos.getInstancia();
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
-        _gestorEGorilla = new GestorEgorilla(_gestorDeRed,_gestorDeDisco);
+        _gestorEGorilla = new GestorEgorilla(puertoDeEscuchaCliente,_gestorDeDisco);
         _gestorDeErrores = ControlDeErrores.getInstancia();
 //        DataServerTest server = new DataServerTest();
 //        server.start();
