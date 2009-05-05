@@ -106,7 +106,7 @@ public class AlmacenDescargas {
             des = new Descarga(arch);
             _listaDescargas.add(des);
             for (ObservadorAlmacenDescargas obs : _listaObservadores) {
-                int cantidadFragmentos=GestorCompartidos.getInstancia().cantidadFragmentosArchivo( arch );
+                int cantidadFragmentos=GestorCompartidos.getInstancia().queFragmentosTienesPendientes( arch.getHash() ).size();
                 obs.nuevaDescarga(arch.getNombre(), arch.getHash(), cantidadFragmentos);
             }
         }
@@ -129,6 +129,16 @@ public class AlmacenDescargas {
         
         for (ObservadorAlmacenDescargas obs: _listaObservadores) {
             obs.eliminarDescarga(arch._hash);
+        }
+    }
+    
+    public void descargaCompletada (Archivo arch){
+        Descarga des = this.buscaDescarga(arch);
+        if (des != null){
+            _listaDescargas.remove(des);
+        }        
+        for (ObservadorAlmacenDescargas obs: _listaObservadores) {
+            obs.descargaCompleta(arch._hash);
         }
     }
     

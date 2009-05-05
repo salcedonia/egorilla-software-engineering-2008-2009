@@ -6,8 +6,6 @@
 package peerToPeer.descargas;
 
 import datos.Fragmento;
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Vector;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
@@ -86,7 +84,7 @@ public class Descargador extends Thread{
                         }
                         break;
                     default:
-                               d.decrementaEstado();
+                         d.decrementaEstado();
                 }
 
             }

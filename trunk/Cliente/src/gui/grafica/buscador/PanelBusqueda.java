@@ -401,4 +401,9 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas{
     public void eliminarDescarga(String _hash) {
         // TODO: mirar si conviene hacer algo
     }
+
+    @Override
+    public void descargaCompleta(String hash) {
+        //TODO DESCARGADO
+    }
 }

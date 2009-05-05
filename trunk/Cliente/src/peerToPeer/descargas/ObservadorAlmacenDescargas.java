@@ -25,4 +25,6 @@ public interface ObservadorAlmacenDescargas {
      * @param hash Hash del archivo al que corresponde el fragmento descargado
      */
     public void fragmentoDescargado(String hash); 
+    
+    public void descargaCompleta(String hash) ;
 }

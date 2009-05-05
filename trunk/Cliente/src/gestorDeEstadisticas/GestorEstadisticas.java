@@ -246,4 +246,9 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
         // TODO: mira si te interesa hacer algo aqui, si no:
         // do nothing
     }
+
+    @Override
+    public void descargaCompleta(String hash) {
+        //TODO DESCARGADO
+    }
 }

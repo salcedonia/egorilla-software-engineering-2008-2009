@@ -285,7 +285,7 @@ public class Fragmentador{
     //Debo buscar por hash y no por nombre, yaq el nombre no tiene xq coincidir 
     //buscar en las listas
     archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, hash );
-    if( archivoRequerido == null ){
+    if( archivoRequerido == null && hash !=null){
       //Debo buscarlo en los temporales
       //No esta en los completos, asi que miramos en los incompletos
       archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
