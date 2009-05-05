@@ -127,6 +127,9 @@ public class AlmacenDescargas {
             _listaDescargas.remove(des);
         }
         
+        for (ObservadorAlmacenDescargas obs: _listaObservadores) {
+            obs.eliminarDescarga(arch._hash);
+        }
     }
     
     /**

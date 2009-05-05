@@ -612,7 +612,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     }
 
     @Override
-    public void finDescarga(GestorEgorilla gestorEGorilla) {
+    public void finDescarga(GestorEgorilla gestorEGorilla, Archivo arch) {
+        // TODO: completa la descarga
     }
 
     @Override

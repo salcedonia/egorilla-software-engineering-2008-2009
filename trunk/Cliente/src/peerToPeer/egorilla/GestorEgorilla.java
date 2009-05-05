@@ -121,6 +121,20 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     }
 
     /**
+     * notificamos el fin de una descarga y eliminamos esta.
+     * 
+     * @param archivo
+     */
+    public void descargaCompletada(Archivo archivo) {
+        // esta descarga no se continuará
+       _almacenDescargas.eliminaDescarga(archivo);
+       
+        for (ObservadorGestorEgorilla obs: _listaObservadores) {
+            obs.finDescarga(this, archivo);
+        }
+    }
+
+    /**
      * Devuelve la IP del servidor al que estamos conectados.
      * 
      * @return La IP del servidor al que se conecta.

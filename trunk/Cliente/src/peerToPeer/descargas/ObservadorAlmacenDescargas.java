@@ -7,6 +7,8 @@ package peerToPeer.descargas;
  * @author Jose Miguel Guerrero
  */
 public interface ObservadorAlmacenDescargas {
+
+    public void eliminarDescarga(String _hash);
     
     /**
      * Notifica una nueva descarga
@@ -22,5 +24,5 @@ public interface ObservadorAlmacenDescargas {
      * 
      * @param hash Hash del archivo al que corresponde el fragmento descargado
      */
-    public void fragmentoDescargado(String hash);
+    public void fragmentoDescargado(String hash); 
 }

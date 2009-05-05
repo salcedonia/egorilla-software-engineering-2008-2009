@@ -82,9 +82,14 @@ public class Descargador extends Thread{
 
                             _gestor.addMensajeParaEnviar(msj);
                         }
+                        else {// hemos acabado
+                            _gestor.descargaCompletada(d.getArchivo());
+                        }
                         break;
+                    default:
+                               d.decrementaEstado();
                 }
-                d.decrementaEstado();
+
             }
         } catch (InterruptedException ex) {
             //  donothing
