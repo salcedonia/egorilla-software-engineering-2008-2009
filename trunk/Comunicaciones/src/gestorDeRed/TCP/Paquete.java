@@ -22,11 +22,13 @@ class Paquete<E> implements Serializable{
     
     private boolean _esAck;
     private int     _ackTimeout;
+    private boolean _bomba;
     
     public Paquete(E data, String ipRemite, int puertoRemite) {
         this._data = data;
         this._ipRemite = ipRemite;
         this._puertoRemite = puertoRemite;
+        this._bomba = false;
     }
     
     public E getDatos(){
@@ -47,5 +49,13 @@ class Paquete<E> implements Serializable{
     
     public int getAckTimeOut(){
         return _ackTimeout;
+    }
+
+    void creaBomba(){
+        _bomba  =true;
+    }
+    
+    boolean esBomba() {
+        return _bomba;
     }
 }
