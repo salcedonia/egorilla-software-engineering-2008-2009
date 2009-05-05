@@ -329,6 +329,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
                     repintar();
                     // Solo se queda marcado el que ha sido seleccionado
                     _panelPrincipal.setBackground(_colorSeleccion);
+                    _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorSeleccion));
                     setBorder(BorderFactory.createLineBorder(_colorBorde));
                     _panelPrincipal.repaint();
 
@@ -348,6 +349,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
 
                 b._panelPrincipal.setBackground(_colorFondo);
                 b.setBorder(BorderFactory.createLineBorder(_colorFondo));
+                b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
                 b._panelPrincipal.repaint();
             }
         }
@@ -444,6 +446,9 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
             if (b._lblHash.getText().matches(hash)) {
 
                 b._panelPrincipal.setBackground(_colorFondo);
+                b._panelPrincipal.setBackground(_colorFondo);
+                b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
+                b.setBorder(BorderFactory.createLineBorder(_colorFondo));
                 b._lblNombre.setForeground(_colorDescargado);
                 b._lblTamanio.setForeground(_colorDescargado);
                 b._lblTipoArchivo.setForeground(_colorDescargado);

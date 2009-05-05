@@ -389,7 +389,8 @@ public class PanelServidores extends JPanel {
                     
                     // Solo se queda marcado el que ha sido seleccionado
                     _panelPrincipal.setBackground(_colorSeleccion);
-                    _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorBorde));
+                    _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorSeleccion));
+                    setBorder(BorderFactory.createLineBorder(_colorBorde));
                     _panelPrincipal.repaint();
                     repaint();
                     
@@ -407,6 +408,7 @@ public class PanelServidores extends JPanel {
                 for (ServidorIndividual b : _listaServidores) {
 
                     b._panelPrincipal.setBackground(_colorFondo);
+                    b.setBorder(BorderFactory.createLineBorder(_colorFondo));
                     b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
                     b._panelPrincipal.repaint();
                     repaint();

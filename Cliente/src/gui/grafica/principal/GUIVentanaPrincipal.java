@@ -35,7 +35,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
      * Ruta donde se encuentran los recursos necesarios para la ventana principal
      * de la interfaz grafica.
      */
-    private static final String RUTA_RECURSOS = "/recursos/interfaz/principal/";    // ATRIBUTOS
+    private static final String RUTA_RECURSOS = "/recursos/interfaz/principal/";    
     /**
      * Boton que muestra el panel buscador.
      */
@@ -191,7 +191,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
 
         // PANEL DE TRAFICO
-        _panelPrincipal.add("Descargas", new JScrollPane(new GUIPanelTrafico(new ControladorPanelTrafico(_controlador.getGestorEGorilla()))));
+        _panelPrincipal.add("Descargas", new GUIPanelTrafico(new ControladorPanelTrafico(_controlador.getGestorEGorilla())));
         
         // PANEL DE COMPARTIDOS
         _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
