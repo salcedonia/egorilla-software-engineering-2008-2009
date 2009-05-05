@@ -26,7 +26,7 @@ public class GUIPanelTrafico extends JPanel{
     /**
      * Panel que muestra las descargas de la aplicacion.
      */
-    private PanelDescargas _panelDescargas;
+    //private PanelDescargas _panelDescargas;
 
     /**
      * Constructor de la clase GUIPanelTrafico.
@@ -56,10 +56,10 @@ public class GUIPanelTrafico extends JPanel{
         _scrollPaneDescargas = new JScrollPane();
         
         // PANEL DESCARGAS
-        _panelDescargas = new PanelDescargas(_controlador);
-        _panelDescargas.setMaximumSize(new Dimension(450, 20));
-        _panelDescargas.setMinimumSize(new Dimension(450, 20));
-        _panelDescargas.setPreferredSize(new Dimension(450, 450));
+//        _panelDescargas = new PanelDescargas(_controlador);
+//        _panelDescargas.setMaximumSize(new Dimension(450, 20));
+//        _panelDescargas.setMinimumSize(new Dimension(450, 20));
+//        _panelDescargas.setPreferredSize(new Dimension(450, 450));
         gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -71,8 +71,8 @@ public class GUIPanelTrafico extends JPanel{
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new Insets(17, 10, 0, 21);
         
-        _scrollPaneDescargas.add(_panelDescargas);
-        _scrollPaneDescargas.setViewportView(_panelDescargas);
+//        _scrollPaneDescargas.add(_panelDescargas);
+//        _scrollPaneDescargas.setViewportView(_panelDescargas);
         add(_scrollPaneDescargas, gridBagConstraints);
     }
 }

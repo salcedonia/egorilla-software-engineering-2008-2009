@@ -147,7 +147,7 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
      * Lista de velocidades medias recibidos durante la sesion.
      * @return
      */
-   public  List<Double> getListaVelocidadMediaSubidaSesion() {
+   public  ArrayList<Double> getListaVelocidadMediaSubidaSesion() {
         return subida.getListaVelocidadMediaSesion();
     }
 
@@ -215,10 +215,6 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
         return subida.getTotalDatosGlobal();
     }
 
-    public void llegadaFichero(int cantidad) {
-        descarga.llegadaFichero(cantidad);
-    }
-
     public void llegadaDatosDescarga(double longitud) {
         descarga.llegadaDatos(longitud);
     }
@@ -243,12 +239,11 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
 
     @Override
     public void eliminarDescarga(String _hash) {
-        // TODO: mira si te interesa hacer algo aqui, si no:
         // do nothing
     }
 
     @Override
     public void descargaCompleta(String hash) {
-        //TODO DESCARGADO
+         descarga.llegadaFichero(1);
     }
 }

@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -28,28 +29,31 @@ import org.jfree.ui.RectangleInsets;
  * Panel donde se dibujan las graficas que muestran las velocidades medias.
  * @author Qiang
  */
-public class PanelGrafica extends ChartPanel {
+public class PanelGrafica {
 
     private final static String LEYENDA_X = "TIEMPO";
     private final static String LEYENDA_Y = "VELOCIDAD";
     private String title;
     private Date fechaInicio;
     private ArrayList<Double> listaVelocidad;
-    private static JFreeChart chartSet;
-    private static TimeSeriesCollection dataset = new TimeSeriesCollection();
+    private  JFreeChart chartSet;
+    private  TimeSeriesCollection dataset = new TimeSeriesCollection();
     private static final Logger log = Logger.getLogger(PanelGrafica.class);
-    
+    ChartPanel panel;
     /**
      * Constructor.
      * @param titulo. Título de la grafica
      */
     public PanelGrafica(String titulo) {
         //JFreeChart chart = ;
-        super(createChart(titulo));
+        //super(createChart(titulo));
+        title = titulo;
+        chartSet = createChart();
+        panel = new ChartPanel(chartSet);
         title = titulo;
         listaVelocidad = new ArrayList<Double>();
-        setFillZoomRectangle(true);
-        setMouseWheelEnabled(true);
+        panel.setFillZoomRectangle(true);
+        panel.setMouseWheelEnabled(true);
     }
 
     /**
@@ -61,7 +65,7 @@ public class PanelGrafica extends ChartPanel {
      *
      * @return A chart.
      */
-    private static JFreeChart createChart(String title) {
+    private  JFreeChart createChart() {
 
         JFreeChart chart = ChartFactory.createTimeSeriesChart(
                 title, // title
@@ -92,7 +96,7 @@ public class PanelGrafica extends ChartPanel {
         }
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setDateFormatOverride(new SimpleDateFormat("h:mm a"));
+        axis.setDateFormatOverride(new SimpleDateFormat("h:mm"));
         chartSet = chart;
         return chart;
 
@@ -156,4 +160,7 @@ public class PanelGrafica extends ChartPanel {
         createDataset();
     }
     
+    public JPanel getPanel() {
+        return panel;
+    }
 }
