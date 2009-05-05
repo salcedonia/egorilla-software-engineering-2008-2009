@@ -39,6 +39,8 @@ public class Descarga {
         _listaFragmentosPendientes = new Vector<Fragmento>();
         _propietarios = new ArrayList<DatosCliente>();
         _listaQuienTieneQue = new ArrayList<Par>();
+        
+        _posicion = 0;
     }
 
     public Archivo getArchivo(){
@@ -68,22 +70,28 @@ public class Descarga {
     }
 
     public Cliente dameClienteQueTiene(Fragmento frag){
-        Cliente cliente=null;
-        Random aleatorio=new Random();
+        Cliente cliente=null;        
         //nos posicionamos de forma aleatoria en un cliente
-        _posicion=((int)(aleatorio.nextDouble() * _listaQuienTieneQue.size()));
-        //registramos el cliente por el que empezamos a mirar
-        int inicial=_posicion++;
-        boolean encontrado=false;
-        //mientras no demos la vuelta a todos los clientes y no tengamos cliente
-        while(!encontrado && inicial!=_posicion){
-            Par par=dameSiguienteCliente();
-            //TODO Comprobar si se obtiene el indice o no
+        if(_listaQuienTieneQue.size()>0){
+            //_posicion = (int)(Math.random()*((_listaQuienTieneQue.size()-1)));
+            int max = _listaQuienTieneQue.size()-1;
+            int min = 0;
+            _posicion = (int)Math.floor(Math.random()*(max-min+1)+min);
+            int posicionNueva = (int)Math.floor(Math.random()*(max-min+1)+min);
+            if( _posicion == posicionNueva ){
+                if (_posicion < posicionNueva){//No hemos superado al último
+                    _posicion ++;//Actualizamos posición para obtener el siguiente
+                }else if(_posicion > posicionNueva){//Acabamos de superar al último
+                    _posicion--;//El siguiente por tanto será el primero
+                }else{
+                    _posicion=0;
+                }
+            }
+
+            Par par=_listaQuienTieneQue.get(_posicion);
             int fragmento=par.getfragmentos().indexOf(frag);
-            //si obtenemos un fragmento es que hemos encontrado un cliente que lo tiene
             if(fragmento!=-1){
                 cliente=par.getCliente();
-                encontrado=true;
             }
         }
         return cliente;

@@ -340,9 +340,9 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
             System.out.println("ERROR GUARDAR FRAGMENTO");
         }
         //informamos al almacen del fragmento descargado
-        if(!_almacenDescargas.fragmentoDescargado(f)){
-            //TODO LANZAR ERROR
-            System.out.println("ERROR FRAGMENTO DECARGADO ALMACEN");
+        if(_almacenDescargas.fragmentoDescargado(f)){
+            //TODO MIRAR QUE HACER
+            
         }
     }
 

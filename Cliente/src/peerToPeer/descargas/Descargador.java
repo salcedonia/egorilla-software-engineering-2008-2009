@@ -21,17 +21,12 @@ import peerToPeer.egorilla.GestorEgorilla;
  */
 public class Descargador extends Thread{
 
-        private final int MAX_PEDIDOS=5;
-        private final int MAX_INTENTOS=30;
-        private Descarga _descargaActual=null;
         private GestorEgorilla _gestor=null;
         private AlmacenDescargas _almacen = null;
-    private ArrayList<Integer> _fragmentosPedidos = null;
 
     public Descargador(GestorEgorilla gestor, AlmacenDescargas almacen) {
         _gestor = gestor;
         _almacen = almacen;
-        _fragmentosPedidos = new ArrayList<Integer>();
         _almacen.registraDescargador(this);
     }
 
@@ -43,7 +38,7 @@ public class Descargador extends Thread{
                 if (_almacen.getListaDescargas().isEmpty())
                     wait();
                 else 
-                    wait(1000);
+                    wait(100);
                 
                 // 3 casos:
                 // no se nada -> espero al servidor
@@ -69,18 +64,22 @@ public class Descargador extends Thread{
                         break;
                     case Descarga.DESCARGA:
                         // envia DAME a los propietarios
-                        Random r = new Random();
 
                         Fragmento chunk = null;
                         Vector<Fragmento> listado=d.getListaFragmentosPendientes();
                         int i = (int)(Math.random()*((listado.size()-1)));
                         if (listado.size() != 0){                           
-                            chunk = listado.get(0);
+                            chunk = listado.get(i);
                             Cliente propietario = d.dameClienteQueTiene(chunk);
-                            Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
-                                            chunk, propietario.getIP(), propietario.getPuerto());
+                            
+                            if(propietario!=null){
+                                System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
+                    
+                                Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
+                                                chunk, propietario.getIP(), propietario.getPuerto());
 
-                            _gestor.addMensajeParaEnviar(msj);
+                                _gestor.addMensajeParaEnviar(msj);
+                            }
                         }
                         else {// hemos acabado
                             _gestor.descargaCompletada(d.getArchivo());

@@ -70,7 +70,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         for (int i = 0; i < _listaDescargas.size(); i++) {
             if (_listaDescargas.get(i).getHash().equals(hash)) {
                 _listaDescargas.get(i).incrementaProgressBar();
-                repintar();
+                //repintar();
                 break;
             }
         }
