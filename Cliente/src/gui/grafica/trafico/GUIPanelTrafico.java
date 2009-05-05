@@ -35,6 +35,8 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         
         _listaDescargas = new ArrayList<DescargaIndividual>();
         _panelPrincipal = new JPanel();
+        _panelPrincipal.setBackground(Color.WHITE);
+        setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
         iniciarComponentes();
@@ -52,6 +54,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _panelPrincipal.add(_listaDescargas.get(i));
         }
         repaint();
+        _panelPrincipal.setBackground(Color.WHITE);
         _panelPrincipal.repaint();
         _panelPrincipal.setVisible(true);
     }
@@ -86,7 +89,28 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             }
         }
     }
+    
+    public void borrarCompletos() {
+       for (int i = _listaDescargas.size()-1; i >= 0; i--) {
+            if (_listaDescargas.get(i).getEstado().equalsIgnoreCase("COMPLETADO")) {
+                _listaDescargas.remove(i);
+                _panelPrincipal.setVisible(false);
+            }
+        }
+        repintar();
+    }
 
+    @Override
+    public void descargaCompleta(String hash) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.get(i).cambiarColorBarra(new Color(61,194,106));
+                _listaDescargas.get(i).setEstado("COMPLETADO");
+                break;
+            }
+        }
+    }
+    
     private class Cabecera extends JPanel {
 
         private JLabel _labelnombre,  _labelestado,  _labelprogreso,  _labelhash;
@@ -127,7 +151,7 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         private JProgressBar _barra;
         private String _hash;
         private int _progreso;
-        private JMenuItem _menuItem,  _menuItem2;
+        private JMenuItem _menuItem,  _menuItem2, _menuItem3;
         private OyenteBoton _oyenteBoton;
         private OyenteRaton _oyenteRaton;
         private JPanel _panelPrincipal;
@@ -180,6 +204,10 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
             _menuItem2 = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
             _menuItem2.addActionListener(_oyenteBoton);
             popup.add(_menuItem2);
+            
+            _menuItem3 = new JMenuItem("Limpiar completos"/*,new ImageIcon("img/cross.gif")*/);
+            _menuItem3.addActionListener(_oyenteBoton);
+            popup.add(_menuItem3);
 
             
             _oyenteRaton=new OyenteRaton(popup);
@@ -192,14 +220,24 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
         }
 
         public void cambiarColor(Color c){
-            /*_labelnombre.setBackground(c);
-            _labelestado.setBackground(c);
-            _labelhash.setBackground(c);*/
             _panelPrincipal.setBackground(c);
+        }
+        
+        public void cambiarColorBarra(Color c){
+            _barra.setBackground(c);
+            _barra.setForeground(c);
         }
 
         public void crearBorde(Color c){
             this.setBorder(BorderFactory.createLineBorder(c));
+        }
+        
+        public void setEstado(String texto){
+            _labelestado.setText(texto);
+        }
+        
+        public String getEstado(){
+            return _labelestado.getText();
         }
 
         class OyenteBoton implements ActionListener {
@@ -219,6 +257,10 @@ public class GUIPanelTrafico extends JPanel implements ObservadorAlmacenDescarga
                 if (event.getActionCommand().equals("Eliminar")) {
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
                     eliminarDescarga(_hash);
+                }
+                if (event.getActionCommand().equals("Limpiar completos")) {
+                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
+                    borrarCompletos();
                 }
             }
         }

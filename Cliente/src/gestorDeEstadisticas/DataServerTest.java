@@ -44,7 +44,12 @@ public class DataServerTest  extends Thread implements ObservadorAlmacenDescarga
 
     @Override
     public void eliminarDescarga(String _hash) {
-      // descargado
+      // TODO ELIMINADO
+    }
+
+    @Override
+    public void descargaCompleta(String hash) {
+        //TODO DESCARGADO
     }
 
 }
