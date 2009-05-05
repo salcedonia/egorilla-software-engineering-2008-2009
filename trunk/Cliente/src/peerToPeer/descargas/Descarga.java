@@ -19,8 +19,8 @@ import mensajes.serverclient.DatosCliente;
  */
 public class Descarga {
 
-    public static final int PIDEASERVIDOR = 0;
-    public static final int PIDEALOSPROPIETARIOS = 13;
+    public static final int PIDEASERVIDOR = 13;
+    public static final int PIDEALOSPROPIETARIOS = 1;
     public static final int DESCARGA = 70;
 
     private int _estado, _estado_aux;
@@ -60,16 +60,16 @@ public class Descarga {
         for(int i=0;i<datos.length;i++){
              _propietarios.add(datos[i]);
         }
+        _estado_aux = PIDEALOSPROPIETARIOS;
         _estado = PIDEALOSPROPIETARIOS;
-        decrementaEstado();
     }
 
     public void actualizaQuienTieneQue(Tengo mensaje){
         Cliente cliente=new Cliente(mensaje.ipDestino(),mensaje.puertoDestino());
         Par par=new Par(cliente,mensaje.getFragmentos());
         _listaQuienTieneQue.add(par);
-        _estado = DESCARGA;
-        decrementaEstado();
+        _estado_aux = DESCARGA;
+        _estado=DESCARGA;
     }
 
     public Cliente dameClienteQueTiene(Fragmento frag){
@@ -133,8 +133,13 @@ public class Descarga {
         _estado_aux--;
         if(_estado_aux == PIDEASERVIDOR){
             _estado=PIDEASERVIDOR;
+            _estado_aux=PIDEALOSPROPIETARIOS+1;
         }else if(_estado_aux == PIDEALOSPROPIETARIOS){
             _estado = PIDEALOSPROPIETARIOS;
+            _estado_aux=PIDEASERVIDOR+1;
+        }else if(_estado_aux == -100){
+            _estado=PIDEASERVIDOR;
+            _estado_aux=PIDEALOSPROPIETARIOS+1;
         }else{
             _estado = DESCARGA;
         }
