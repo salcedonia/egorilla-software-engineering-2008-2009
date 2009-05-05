@@ -107,6 +107,8 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 _red.eliminaConexion(ip);
 
                 // lo eliminaremos de todos los lugares dnd aparezca
+                this.perdidaDeConexion(ip);
+                
                 break;
                 
             default:

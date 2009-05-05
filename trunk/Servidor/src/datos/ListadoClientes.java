@@ -30,11 +30,15 @@ public class ListadoClientes {
     
     public void altaCliente(String ip, int puerto, DatosCliente datos){
         
-        if (!_listaIPs.contains(ip)){
-            _listaIPs.add(ip);
-            _puertos.put(ip, puerto);
-            _datosClientes.put(ip, datos);
+        if (_listaIPs.contains(ip)){
+            _listaIPs.remove(ip);
+            _puertos.remove(ip);
+            _datosClientes.remove(ip);
         }
+        
+        _listaIPs.add(ip);
+        _puertos.put(ip, puerto);
+        _datosClientes.put(ip, datos);
     }
     
     /**
