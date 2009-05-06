@@ -47,7 +47,7 @@ import peerToPeer.descargas.ObservadorAlmacenDescargas;
  *   los recursos y hacemos persistente los datos,
  * @author Qiang
  */
-public class GestorEstadisticas implements ObservadorAlmacenDescargas {
+public class GestorEstadisticas implements ObservadorAlmacenDescargas, ObservadorDatos {
 
     protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;

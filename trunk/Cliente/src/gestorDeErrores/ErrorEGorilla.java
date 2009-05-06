@@ -36,13 +36,13 @@ public class ErrorEGorilla {
     public static String dameMensaje(int codigo) {
         switch (codigo) {
             case ERROR_NO_INDENTIFICADO:
-                return "Error no identificado";
+                return "Error no identificado. ";
             case ERROR_RED:
-                return "Error en la red del sistema";
+                return "Error en la red del sistema. ";
             case ERROR_DISCO:
-                return "Error en disco";
+                return "Error en disco. ";
             case ERROR_CONEXION_SERVIDOR:
-                return "Error de perdida de conexión con servidor";
+                return "Error de perdida de conexión con servidor. ";
         }
         return "Error no identificado";
     }

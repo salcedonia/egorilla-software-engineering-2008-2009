@@ -30,7 +30,7 @@ package gestorDeEstadisticas;
 public interface NotificadorDatos {
 
     void addSubidaDatos(double longitud);
-    void addDescargaDatos(double longitud);
-    void addFichero();
+    //void addDescargaDatos(double longitud);
+    //void addFichero();
     void addObservador(ObservadorDatos observador);
  }
