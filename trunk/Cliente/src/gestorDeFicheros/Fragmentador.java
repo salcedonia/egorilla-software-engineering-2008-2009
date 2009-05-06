@@ -205,9 +205,17 @@ public class Fragmentador{
    * @return .
    */
   public int cantidadFragmentosArchivo( String hash ){
+    int cantidadFragmentos;
     //Busco en las listas el archivo y llamo a la otra
-    //int cantidadFragmentosArchivo( Archivo archivo )
-    return 0;
+    ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
+    ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
+    Archivo archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
+    if( archivoRequerido == null ){
+        cantidadFragmentos = 0;
+    }else{
+      cantidadFragmentos = cantidadFragmentosArchivo( archivoRequerido );
+    }
+    return cantidadFragmentos;
   }
 
 
