@@ -14,6 +14,8 @@ import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
 import gui.grafica.trafico.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -630,6 +632,16 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
       @Override
       public void windowClosing(WindowEvent e){
           GestorCompartidos.getInstancia().getGestorDisco().detenerEscrituraEnDisco();
+            try {
+                //Espero un poquito a que no se permita realizar mas escrituras... no mola nada
+                Thread.sleep(200);
+                while( GestorCompartidos.getInstancia().getGestorDisco().getEstadoEscrituraEnDisco() != 2 ){
+                    Thread.sleep(200);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GUIVentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          System.exit(0);
       }
     }
 

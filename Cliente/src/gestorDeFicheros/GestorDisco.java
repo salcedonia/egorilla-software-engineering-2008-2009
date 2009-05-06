@@ -99,7 +99,7 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
    */
   private ManejarListaArchivos _manejarListaArchivos;
   
-  private boolean _detenido;
+  private int _detenido;
 
 
   /**
@@ -169,17 +169,21 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     //incluso, como son atributos de clase no hace falta pasarlos como parametros
     
     //Por defecto se tiene acceso a escritura sobre el disco
-    _detenido = false;
+    _detenido = 0;
     
     _fragmentador = new Fragmentador( this );
     _ensamblador = new Ensamblador( this );
   }
-  
+  //0 se puede, 1 detenido, 2 - ya se puede cerrar, xq no va a ver mas escrituras
   public void detenerEscrituraEnDisco( ){
-      _detenido = true;
+      _detenido = 0;
   }
   
-  public boolean getEstadoEscrituraEnDisco( ){
+  public void setDiscoLiberado(){
+      _detenido = 2;
+  }
+  
+  public int getEstadoEscrituraEnDisco( ){
       return _detenido;
   }
 
