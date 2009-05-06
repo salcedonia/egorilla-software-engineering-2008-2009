@@ -97,7 +97,10 @@ public class ArchivoClientes {
             for (int i = 0; i < listaArchivos.size(); i++) {
                 if (_relacion.containsKey(listaArchivos.get(i)._hash)){
                     // ya lo tenemos, actualizamos su lista
-                    _relacion.get (listaArchivos.get(i)._hash).add(cliente);
+                    //si no esta ya el cliente registrado con el archivo
+                    if(!_relacion.get (listaArchivos.get(i)._hash).contains(cliente)){
+                        _relacion.get (listaArchivos.get(i)._hash).add(cliente);
+                    }
                 }
                 else{
                     // es nuevo, nueva entrada

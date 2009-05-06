@@ -399,7 +399,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                 }
                 if (event.getActionCommand().equals("Eliminar")) {
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
-                    eliminarDescarga(_hash);
+                    Archivo arch=new Archivo(_lblNombre.getText(),_hash);
+                    _controlador.getGestorEGorilla().eliminarDescarga(arch);
                 }
                 if (event.getActionCommand().equals("Limpiar completos")) {
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
