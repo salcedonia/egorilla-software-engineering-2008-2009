@@ -91,8 +91,8 @@ public class GestorEstadisticasTest {
     public void testGetFicherosDescargadosSesion() {
         System.out.println("getFicherosDescargadosSesion");
         GestorEstadisticas instance = GestorEstadisticas.getInstacia();
-        instance.llegadaFichero(25);
-        instance.llegadaFichero(-5);
+        instance.descargaCompleta("");
+        instance.descargaCompleta("");
         int num = instance.getFicherosDescargadosSesion();
         instance.cerrar();
         assertEquals(25, num);
