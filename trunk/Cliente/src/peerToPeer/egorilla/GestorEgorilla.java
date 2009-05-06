@@ -25,6 +25,7 @@ import java.net.*;
 import java.util.Enumeration;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
+import mensajes.serverclient.Bienvenido;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import org.apache.log4j.Logger;
 import peerToPeer.descargas.AlmacenDescargas;
@@ -280,7 +281,8 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         //si no lo tengo en los completos inicio la descarga
         if(_gestorDisco.getEnsamblador().nuevoArchivoTemporal(a)){
             _almacenDescargas.nuevaDescarga(a);
-            this.pedirPropietariosaServidor(a);
+            pedirPropietariosaServidor(a);
+            enviaListaArchivos();
         }
     }
 
