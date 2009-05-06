@@ -8,6 +8,7 @@ import gestorDeConfiguracion.PropiedadCliente;
 import gestorDeFicheros.GestorCompartidos;
 import gui.grafica.buscador.ControladorPanelBuscador;
 import gui.grafica.buscador.GUIPanelBuscador;
+import gui.grafica.compartidos.ControladorPanelCompartidos;
 import gui.grafica.compartidos.GUIPanelCompartidos;
 import gui.grafica.configuracion.GUIPanelConfiguracion;
 import gui.grafica.estadisticas.GUIPanelEstadisticas;
@@ -199,7 +200,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelPrincipal.add("Descargas", new GUIPanelTrafico(new ControladorPanelTrafico(_controlador.getGestorEGorilla())));
         
         // PANEL DE COMPARTIDOS
-        _panelPrincipal.add("Compartidos", new GUIPanelCompartidos());
+        _panelPrincipal.add("Compartidos", new GUIPanelCompartidos(new ControladorPanelCompartidos(_controlador.getGestorEGorilla())));
         
         // PANEL DE ESTADISTICAS
         _panelPrincipal.add("Estadisticas", new GUIPanelEstadisticas());

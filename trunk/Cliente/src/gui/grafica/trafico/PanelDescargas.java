@@ -20,13 +20,23 @@ import javax.swing.border.BevelBorder;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
- *
- * @author José Miguel Guerrero
+ * Panel que gestiona las distintas descargas del cliente.
+ * 
+ * @author José Miguel Guerrero, Javier Salcedo
  */
 public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas {
 
+    /**
+     * Lista de descargas del cliente.
+     */
     private ArrayList<DescargaIndividual> _listaDescargas;
+    /**
+     * Controlador del panel de trafico.
+     */
     private ControladorPanelTrafico _controlador;
+    /**
+     * Panel principal que contiene todos los elementos del panel.
+     */
     private JPanel _panelPrincipal;
     /**
      * Color de selección.
@@ -41,6 +51,11 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
      */
     private Color _colorBorde = Color.BLACK;
 
+    /**
+     * Constructor de la clase PanelDescargas.
+     * 
+     * @param controlador Controlador del panel de trafico.
+     */
     public PanelDescargas(ControladorPanelTrafico controlador) {
 
         _controlador = controlador;
@@ -54,7 +69,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
-        
+
         iniciarComponentes();
     }
 
@@ -66,6 +81,9 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         _panelPrincipal.add(new Cabecera());
     }
 
+    /**
+     * Repinta el panel de trafico.
+     */
     public void repintar() {
         _panelPrincipal.removeAll();
         _panelPrincipal.add(new Cabecera());
@@ -78,6 +96,9 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         _panelPrincipal.setVisible(true);
     }
 
+    /**
+     * Borra los archivos competados.
+     */
     public void borrarCompletos() {
         for (int i = _listaDescargas.size() - 1; i >= 0; i--) {
             if (_listaDescargas.get(i).getEstado().equalsIgnoreCase("COMPLETADO")) {
@@ -88,9 +109,30 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         repintar();
     }
 
+    /**
+     * Cabecera de la tabla donde van a representarse las descargas.
+     */
     private class Cabecera extends JPanel {
 
-        private JLabel _labelnombre,  _labelestado,  _labelprogreso,  _labelhash;
+        /**
+         * Etiqueta del nombre del archivo asociado a la descarga.
+         */
+        private JLabel _labelnombre;
+        /**
+         * Etiqueta del estado de la descarga.
+         */
+        private JLabel _labelestado;  
+        /**
+         * Etiqueta del progreso de la descarga.
+         */
+        private JLabel _labelprogreso;  
+        /**
+         * Etiqueta del hash del archivo de la descarga.
+         */
+        private JLabel _labelhash;
+        /**
+         * Panel principal que contiene al resto.
+         */
         private JPanel _panelPrincipal;
         /**
          * Color de fuente de la cabecera.
@@ -101,10 +143,17 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          */
         private Color _colorFondo = Color.BLUE;
 
+        /**
+         * Constructor de la clase Cabecera.
+         */
         private Cabecera() {
+
             iniciarComponentes();
         }
 
+        /**
+         * Inicia los componentes de la cabecera.
+         */
         private void iniciarComponentes() {
             setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
                     new Color(102, 204, 255),
@@ -134,56 +183,120 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         }
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Clase que representa una descarga individual del cliente.
+     */
     private class DescargaIndividual extends JPanel {
 
-        private JLabel _labelnombre,  _labelestado,  _labelhash;
-        private JProgressBar _barra;
+        /**
+         * Etiqueta que muestra el nombre de la descarga.
+         */
+        private JLabel _lblNombre;
+        /**
+         * Etiqueta que muestra el estado de la descarga.
+         */
+        private JLabel _lblEstado;
+        /**
+         * Etiqueta que muestra el hash de la descarga.
+         */
+        private JLabel _lblHash;
+        /**
+         * Muestra el progreso de la descarga.
+         */
+        private JProgressBar _barraProgreso;
+        /**
+         * Hash del archivo asociado a la descarga.
+         */
         private String _hash;
+        /**
+         * Progreso de la descarga.
+         */
         private int _progreso;
-        private JMenuItem _menuItem,  _menuItem2,  _menuItem3;
+        /**
+         * Opcion de pausar la descarga del menu contextual.
+         */
+        private JMenuItem _opcionPausar;
+        /**
+         * Opcion de eliminar la descarga del menu contextual.
+         */
+        private JMenuItem _opcionEliminar;
+        /**
+         * Opcion limpiar todo del menu contextual.
+         */
+        private JMenuItem _opcionLimpiarTodo;
+        /**
+         * Oyente para los eventos de pulsacion de las opciones del menu contextual.
+         */
         private OyenteBoton _oyenteBoton;
+        /**
+         * Oyente para los eventos del raton sobre las descargas.
+         */
         private OyenteRaton _oyenteRaton;
+        /**
+         * Panel principal que contiene a todos los elementos anteriores.
+         */
         private JPanel _panelPrincipal;
 
+        /**
+         * Constructor de la clase DescargaIndividual.
+         * 
+         * @param nombre Nombre del archivo de la descarga.
+         * @param hash Hash del archivo de la descarga.
+         * @param maximo Tamanio del archivo de la descarga.
+         */
         private DescargaIndividual(String nombre, String hash, int maximo) {
-            _barra = new JProgressBar(0, maximo);
-            _barra.setValue(0);
-            _barra.setStringPainted(true);
+
+            _barraProgreso = new JProgressBar(0, maximo);
+            _barraProgreso.setValue(0);
+            _barraProgreso.setStringPainted(true);
             cambiarColorBarra(new Color(19, 6, 255));
             _hash = hash;
             _panelPrincipal = new JPanel();
             _oyenteBoton = new OyenteBoton();
-            _labelnombre = new JLabel(nombre);
-            _labelhash = new JLabel(hash);
-            _labelestado = new JLabel("Descargando");
-            initComponent();
+            _lblNombre = new JLabel(nombre);
+            _lblHash = new JLabel(hash);
+            _lblEstado = new JLabel("Descargando");
+            iniciarComponentes();
             createPopupMenu();
         }
 
-        private void initComponent() {
+        /**
+         * Inicia los componentes del panel de descargas.
+         */
+        private void iniciarComponentes() {
+
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 5));
-            _panelPrincipal.add(_labelnombre);
-            _panelPrincipal.add(_labelhash);
-            _panelPrincipal.add(_barra);
-            _panelPrincipal.add(_labelestado);
+            _panelPrincipal.add(_lblNombre);
+            _panelPrincipal.add(_lblHash);
+            _panelPrincipal.add(_barraProgreso);
+            _panelPrincipal.add(_lblEstado);
             _panelPrincipal.setBackground(_colorFondo);
             setLayout(new BorderLayout());
             add(_panelPrincipal, BorderLayout.NORTH);
         }
 
+        /**
+         * Devuelve el hash del archivo asociado a una descarga.
+         * 
+         * @return El hash del archivo asociado a una descarga.
+         */
         private String getHash() {
+
             return _hash;
         }
 
+        /**
+         * Incrementa el valor y el dibujo de la barra de progreso.
+         */
         private void incrementaProgressBar() {
+
             _progreso++;
-            _barra.setValue(_progreso);
+            _barraProgreso.setValue(_progreso);
         }
         
         private void setValorProgressBar(int numero) {
             _progreso=numero;
-            _barra.setValue(numero);
+            _barraProgreso.setValue(numero);
         }
         
 
@@ -194,61 +307,97 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         private void createPopupMenu() {
             JPopupMenu popup = new JPopupMenu();
 
-            _menuItem = new JMenuItem("Pausar"/*,new ImageIcon("img/pause.gif")*/);
-            _menuItem.addActionListener(_oyenteBoton);
-            popup.add(_menuItem);
+            _opcionPausar = new JMenuItem("Pausar"/*,new ImageIcon("img/pause.gif")*/);
+            _opcionPausar.addActionListener(_oyenteBoton);
+            popup.add(_opcionPausar);
 
-            _menuItem2 = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
-            _menuItem2.addActionListener(_oyenteBoton);
-            popup.add(_menuItem2);
+            _opcionEliminar = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
+            _opcionEliminar.addActionListener(_oyenteBoton);
+            popup.add(_opcionEliminar);
 
-            _menuItem3 = new JMenuItem("Limpiar completos"/*,new ImageIcon("img/cross.gif")*/);
-            _menuItem3.addActionListener(_oyenteBoton);
-            popup.add(_menuItem3);
+            _opcionLimpiarTodo = new JMenuItem("Limpiar completos"/*,new ImageIcon("img/cross.gif")*/);
+            _opcionLimpiarTodo.addActionListener(_oyenteBoton);
+            popup.add(_opcionLimpiarTodo);
 
             _oyenteRaton = new OyenteRaton(popup);
 
-            _labelnombre.addMouseListener(_oyenteRaton);
-            _labelestado.addMouseListener(_oyenteRaton);
-            _labelhash.addMouseListener(_oyenteRaton);
-            _barra.addMouseListener(_oyenteRaton);
-            this.addMouseListener(_oyenteRaton);
+            _lblNombre.addMouseListener(_oyenteRaton);
+            _lblEstado.addMouseListener(_oyenteRaton);
+            _lblHash.addMouseListener(_oyenteRaton);
+            _barraProgreso.addMouseListener(_oyenteRaton);
+            addMouseListener(_oyenteRaton);
         }
 
+        /**
+         * Cambia el color de fondo de la descarga.
+         * 
+         * @param c Nuevo color a establecer.
+         */
         public void cambiarColor(Color c) {
+
             _panelPrincipal.setBackground(c);
         }
 
+        /**
+         * Cambia el color de la barra.
+         * 
+         * @param c Nuevo color a establecer.
+         */
         public void cambiarColorBarra(Color c) {
-            _barra.setForeground(c);
+
+            _barraProgreso.setBackground(c);
+            _barraProgreso.setForeground(c);
         }
 
+        /**
+         * Dibuja el borde para la descarga.
+         * 
+         * @param c Color del borde.
+         */
         public void crearBorde(Color c) {
-            this.setBorder(BorderFactory.createLineBorder(c));
+
+            setBorder(BorderFactory.createLineBorder(c));
         }
 
+        /**
+         * Establece el estado de la descarga a valor <b>texto</b>.
+         * 
+         * @param texto Nuevo valor a establecer.
+         */
         public void setEstado(String texto) {
-            _labelestado.setText(texto);
+
+            _lblEstado.setText(texto);
         }
 
+        /**
+         * Devuelve el estado de una descarga.
+         * 
+         * @return El estado de una descarga.
+         */
         public String getEstado() {
-            return _labelestado.getText();
+
+            return _lblEstado.getText();
         }
 
+        /**
+         * Clase que gestiona los eventos de pulsación sobre los elementos
+         * del menu contextual de cada descarga.
+         */
         class OyenteBoton implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Pausar")) {
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
-                    _menuItem.setText("Continuar");                    
-                    Archivo arch=new Archivo(_labelnombre.getText(),_hash);
+                    _opcionPausar.setText("Continuar");                    
+                    Archivo arch=new Archivo(_lblNombre.getText(),_hash);
                     _controlador.getGestorEGorilla().descargaPausada(arch);
                 }
                 if (event.getActionCommand().equals("Continuar")) {
+                    _lblEstado.setText("Descargando");
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
-                    _menuItem.setText("Pausar");
-                    Archivo arch=new Archivo(_labelnombre.getText(),_hash);
+                    _opcionPausar.setText("Pausar");
+                    Archivo arch=new Archivo(_lblNombre.getText(),_hash);
                     _controlador.getGestorEGorilla().nuevaDescarga(arch);
                 }
                 if (event.getActionCommand().equals("Eliminar")) {
@@ -262,11 +411,24 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             }
         }
 
+        /**
+         * Clase que gestiona los eventos del raton producidos sobre 
+         * cada descarga.
+         */
         class OyenteRaton implements MouseListener {
 
+            /**
+             * Popup menu asociado a cada descarga.
+             */
             private JPopupMenu popup;
 
+            /**
+             * Constructor de la clase OyenteRaton.
+             * 
+             * @param pop Popup asociado.
+             */
             public OyenteRaton(JPopupMenu pop) {
+
                 popup = pop;
             }
 
