@@ -248,7 +248,7 @@ public class Fragmentador{
       //No esta en los completos, asi que miramos en los incompletos
       System.out.println("El archivo <"+archivoRequerido.getNombre()+"> NO esta en los completos");
       archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
-      if( archivoRequerido == null hash != null){
+      if( archivoRequerido == null && hash != null){
         System.out.println("El archivo <"+archivoRequerido.getNombre()+"> TAMPOCO esta en los temporales - ERROR");
         //El fichero no EXISTE - devuelvo un null - ERROR
       }else{
