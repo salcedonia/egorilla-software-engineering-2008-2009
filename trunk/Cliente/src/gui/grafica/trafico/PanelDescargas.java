@@ -1,6 +1,7 @@
 package gui.grafica.trafico;
 
 import datos.Archivo;
+import gestorDeFicheros.GestorCompartidos;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -179,6 +180,12 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             _progreso++;
             _barra.setValue(_progreso);
         }
+        
+        private void setValorProgressBar(int numero) {
+            _progreso=numero;
+            _barra.setValue(numero);
+        }
+        
 
         /**
          * Crea el menu que aparecera al hacer click con el boton derecho del raton
@@ -322,6 +329,9 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             }
         }
         DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
+        int tamanioAux = GestorCompartidos.getInstancia().getGestorDisco().getFragmentador().cantidadFragmentosArchivo(hash);
+        System.out.println("TAMAÑOOOOOOOOOO "+ tamanioAux + " - " + (tamanioAux-tamanio));
+        descarga.setValorProgressBar((tamanioAux-tamanio));
         _panelPrincipal.add(descarga);
         _listaDescargas.add(descarga);
         _panelPrincipal.repaint();
