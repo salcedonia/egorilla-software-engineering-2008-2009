@@ -277,10 +277,10 @@ public class Fragmentador{
       //TODO: metodo ya creado por ahi
       listaFragmento = new Vector<Fragmento>();
       Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
-          archivoRequerido.getHash(), archivoRequerido.getSize(), 0 ); //0 por ser el primero
+          archivoRequerido.getHash(), _tamanioBytesFragmento, 0 ); //0 por ser el primero
       listaFragmento.add( fragmento );
       for( int i = 1;  fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama();  i++ ){
-        fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
+        fragmento = new Fragmento( archivoRequerido.getNombre(), archivoRequerido.getHash(), 
             _tamanioBytesFragmento, i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
