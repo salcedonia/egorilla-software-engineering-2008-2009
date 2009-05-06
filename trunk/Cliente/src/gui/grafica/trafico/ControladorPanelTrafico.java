@@ -30,7 +30,6 @@ public class ControladorPanelTrafico {
      * @return El GestorEGorilla de la aplicación.
      */
     public GestorEgorilla getGestorEGorilla() {
-
         return _gestorEGorilla;
     }
 }

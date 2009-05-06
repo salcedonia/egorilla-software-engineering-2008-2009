@@ -43,7 +43,7 @@ public class GUIPanelCompartidos extends JPanel {
     /**
      * Contiene el resultado de una lista de archivos compartidos.
      */
-    private PanelCompartidos _panelCompartidos;
+    //private PanelCompartidos _panelCompartidos;
     
     /** 
      * Constructor de la clase PanelCompartidos. 

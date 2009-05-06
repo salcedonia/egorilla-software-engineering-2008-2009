@@ -54,4 +54,9 @@ public class DataServerTest  extends Thread implements ObservadorAlmacenDescarga
         gestor.descargaCompleta("");
     }
 
+    @Override
+    public void descargaPausada(String hash) {
+        //TODO PAUSA DESCARGA
+    }
+
 }

@@ -619,4 +619,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     @Override
     public void perdidaConexion(GestorEgorilla gestorEGorilla) {
     }
+
+    @Override
+    public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
+        //TODO PAUSA DESCARGA
+    }
 }

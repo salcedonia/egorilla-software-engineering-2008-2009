@@ -51,4 +51,12 @@ public interface ObservadorGestorEgorilla {
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
     public void perdidaConexion(GestorEgorilla GestorEGorilla);
+    
+    /**
+     * Para notificar que la descarga ha sido pausada.
+     * 
+     * @param gestorEGorilla GestorEGorilla de la aplicación.
+     * @param arch el archivo finalizado
+     */
+    public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
 }

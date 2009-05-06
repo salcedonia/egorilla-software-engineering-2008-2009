@@ -349,4 +349,9 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     @Override
     public void perdidaConexion(GestorEgorilla obj) {
     }
+
+    @Override
+    public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
+        //TODO PAUSA DESCARGA
+    }
 }
