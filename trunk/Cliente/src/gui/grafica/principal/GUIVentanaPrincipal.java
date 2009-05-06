@@ -5,6 +5,7 @@ import gestorDeEstadisticas.GestorEstadisticas;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
+import gestorDeFicheros.GestorCompartidos;
 import gui.grafica.buscador.ControladorPanelBuscador;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.GUIPanelCompartidos;
@@ -17,6 +18,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -480,7 +483,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         pack();
         
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener( new GestorEventoVentana() );
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
     }
@@ -619,9 +623,18 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     @Override
     public void perdidaConexion(GestorEgorilla gestorEGorilla) {
     }
+    
+    
+    class GestorEventoVentana extends WindowAdapter{
+        
+      @Override
+      public void windowClosing(WindowEvent e){
+          GestorCompartidos.getInstancia().getGestorDisco().detenerEscrituraEnDisco();
+      }
+    }
 
     @Override
     public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
-        //TODO PAUSA DESCARGA
+        //TODO: descarga pausada
     }
 }
