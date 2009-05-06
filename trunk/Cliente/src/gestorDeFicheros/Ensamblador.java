@@ -141,13 +141,13 @@ public class Ensamblador{
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
         hashFragmento );
     if( archivoExistencia == null ){
-      System.out.println( "No esta en la lista de temporales" );
+      System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de temporales" );
       //Entonces miro tambien en los completos
       archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, 
           hashFragmento );
       if( archivoExistencia == null ){
-        System.out.println( "No esta en la lista de completos" );
-        System.out.println( "Asi que creo el fichero temporal y el indice" );
+        System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de completos" );
+        System.out.println( "Asi que creo el fichero temporal y su indice" );
         //El archivo no se encuentra, es nuevo! Lo creo en los temporales
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
             + _extesionIndices );
@@ -165,11 +165,11 @@ public class Ensamblador{
         manejarListaArchivos.includirArchivoEnLista( archivoNuevo, listaTodos );
         creado = true;
       }else{
-        System.out.println( "Esta en los archivos completos, ya ha sido descargado" );
+        System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> esta en los archivos completos, ya ha sido descargado!" );
         //Esta en los archivos completos, ya ha sido descargado.
       }
     }else{
-      System.out.println( "Ya se encuentra en los temporales, actualmente en descarga" );
+      System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> ya se encuentra en los temporales, actualmente en descarga" );
       //Ya se encuentra en los temporales, actualmente en descarga.
     }
     //Se puede dejar en un simple if-else sino me interesa diferenciar esos dos problemas
@@ -283,13 +283,13 @@ public class Ensamblador{
         hashFragmento );
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
-      System.out.println( "No esta en la lista temporales, posiblemente fragmento corrupto o"+
+      System.out.println( "El archivo <"+fragmento.getNombre()+"> no esta en la lista temporales, posiblemente fragmento corrupto o"+
           "tardio (ver completos)" );
       //guardado = false;
     }else{
       //Guardo la parte donde toque
       try{
-        System.out.println( "Esta en los temporales, guardamos par Fragmento-Byte's" );
+        System.out.println( "El archivo <"+fragmento.getNombre()+"> esta en los temporales, guardamos par Fragmento-Byte's" );
       fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
           _extesionFicheroTemporal );
       RandomAccessFile punteroFichero = new RandomAccessFile( fichero, "rw" );
@@ -333,7 +333,7 @@ public class Ensamblador{
 
       //Si era el ultimo fragmento que quedaba, el archivo se ha completado
       if( indices.getIndicesFaltan().size() == 0 ){
-        System.out.println( "Acabo de completar el fichero, lo muevo a los completos" );
+        System.out.println( "Acabo de completar el fichero <"+fragmento.getNombre()+"> lo muevo a los completos" );
         manejarListaArchivos.eliminarArchivoDeLista( indices.getArchivo(), listaTemporales );
         manejarListaArchivos.includirArchivoEnLista( indices.getArchivo(), listaCompletos );
 
