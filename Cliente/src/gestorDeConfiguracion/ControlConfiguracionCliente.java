@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.Properties;
 
 /**
-
  * Clase que controla la gestion de la configuracion de la aplicacion Cliente eGorilla mediante 
- * 2 archivos de properties: uno que contiene la configuracion del usuario y otro que contiene
- * la configuracion por defecto.
+ * 2 archivos de properties(uno que contiene la configuracion del usuario y otro que contiene
+ * la configuracion por defecto) y 2 archivos de informacion general (uno para los servidores y otro 
+ * para las descargas).
  * La clase esta disenada siguiendo el patron Singleton, y ademas implementa la interfaz Sujeto,
  * que permite informar a los Observadores cuando se producen cambios en su estado interno.
  * @author F. Javier Sanchez Pardo
@@ -17,10 +17,13 @@ public class ControlConfiguracionCliente{
 
     //Variable estatica que contiene la instancia unica de la clase.
     private static ControlConfiguracionCliente _instancia = null;
-    //Variables con el nombre del fichero de propiedades principal y el de propiedades
+    //Variables con el fichero de propiedades principal y el de propiedades
     //por defecto.
     private FicheroPropiedades _oFicheroPropsPpal;
     private FicheroPropiedades _oFicheroPropsPorDefecto;
+    //Variables con el fichero de info de servidores y el de info de descargas.
+    private FicheroInfo <InfoServidor> _oFicheroInfoServidores;
+    private FicheroInfo <InfoDescarga> _oFicheroInfoDescargas;
 
     //Estructura de datos para almacenar los observadores sobre este objeto.
     private ArrayList <ObservadorControlConfiguracionCliente> _listaObservadores = 
@@ -66,12 +69,19 @@ public class ControlConfiguracionCliente{
      *        configuracion principal (valores de propiedades).
      * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
      *        por defecto (valores de propiedades).
+     * @param sNomFichInfoServidores: Nombre del fichero que contiene la info
+     *        de servidores.
+     * @param sNomFichInfoDescargas: Nombre del fichero que contiene la info
+     *        de las descargas.
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */   
-    protected ControlConfiguracionCliente(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto) throws ControlConfiguracionClienteException {
+    protected ControlConfiguracionCliente(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto,
+                                        String sNomFichInfoServidores, String sNomFichInfoDescargas) throws ControlConfiguracionClienteException {
         super();
         _oFicheroPropsPpal = new FicheroPropiedades(sNomFicheroPropsPpal);
         _oFicheroPropsPorDefecto = new FicheroPropiedades(sNomFicheroPropsxDefecto);
+        _oFicheroInfoServidores = new FicheroInfo<InfoServidor>(sNomFichInfoServidores);
+        _oFicheroInfoDescargas = new FicheroInfo<InfoDescarga>(sNomFichInfoDescargas);        
     }
 
     /**
@@ -81,12 +91,25 @@ public class ControlConfiguracionCliente{
      *        configuracion principal (valores de propiedades).
      * @param sNomFicheroPropsxDefecto: Nombre del fichero que contiene la configuracion
      *        por defecto (valores de propiedades).
+     * @param sNomFichInfoServidores: Nombre del fichero que contiene la info
+     *        de servidores.
+     * @param sNomFichInfoDescargas: Nombre del fichero que contiene la info
+     *        de las descargas.
      * @return Unica instancia de esta clase
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      */
-    public static ControlConfiguracionCliente obtenerInstancia(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto) throws ControlConfiguracionClienteException {
+    public static ControlConfiguracionCliente obtenerInstancia(String sNomFicheroPropsPpal, String sNomFicheroPropsxDefecto,
+                                        String sNomFichInfoServidores, String sNomFichInfoDescargas) throws ControlConfiguracionClienteException {
         if (_instancia == null) {
-            _instancia = new ControlConfiguracionCliente(sNomFicheroPropsPpal, sNomFicheroPropsxDefecto);
+            _instancia = new ControlConfiguracionCliente(sNomFicheroPropsPpal, sNomFicheroPropsxDefecto,
+                                                        sNomFichInfoServidores, sNomFichInfoDescargas);
+            
+            //Se realiza la carga de los ficheros de Configuracion principal y por defecto.
+            _instancia._oFicheroPropsPpal.cargarFicheroPropiedades();            
+            _instancia._oFicheroPropsPorDefecto.cargarFicheroPropiedades();
+            //Se realiza la carga de los ficheros de Descargas y de Servidores.
+            _instancia._oFicheroInfoDescargas.cargarFicheroInfo();
+            _instancia._oFicheroInfoServidores.cargarFicheroInfo();
         }
         return _instancia;
     }
@@ -102,7 +125,11 @@ public class ControlConfiguracionCliente{
         return _instancia;
     }
 
-    /**
+    //
+    // METODOS PARA EL MANEJO DE LOS FICHEROS DE PROPERTIES.
+    //
+     
+     /**
      * Busca el valor de una propiedad en el archivo de propiedades actual y lo devuelve.
      * @param sClave: clave a buscar
      */
@@ -159,6 +186,47 @@ public class ControlConfiguracionCliente{
         _oFicheroPropsPpal.establecerConjuntoPropiedades(propiedades);
         notificarCambioEnPropiedades (propiedades);
     }
+    
+    //
+    // METODOS PARA EL MANEJO DEL FICHERO CON INFORMACION DE SERVIDORES.
+    //
 
- 
+    /**
+     * Devuelve un ArrayList de objetos InfoServidor con toda la info actual.
+     */
+    public ArrayList <InfoServidor> obtenerInfoServidores() {
+        return this._oFicheroInfoServidores.obtenerConjuntoInfo();
+    }    
+    
+    /**
+     * Actualiza en memoria y en el disco la Informacion de los servidores.
+     * EN PRINCIPIO NO ES NECESARIO NOTIFICAR A LOS OBSERVADORES DE LOS CAMBIOS EN ESTOS VALORES.
+     * @param alOBjetos: ArrayList de objetos InfoServidor
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     */
+    public void establecerInfoServidores(ArrayList<InfoServidor> alObjetos) throws ControlConfiguracionClienteException {
+        _oFicheroInfoServidores.establecerConjuntoInfo(alObjetos);
+    }
+
+    //
+    // METODOS PARA EL MANEJO DEL FICHERO CON INFORMACION DE DESCARGAS.
+    //
+    
+    /**
+     * Devuelve un ArrayList de objetos InfoDescarga con toda la info actual.
+     */
+    public ArrayList <InfoDescarga> obtenerInfoDescargas() {
+        return this._oFicheroInfoDescargas.obtenerConjuntoInfo();
+    }    
+    
+    /**
+     * Actualiza en memoria y en el disco la Informacion de las descargas.
+     * EN PRINCIPIO NO ES NECESARIO NOTIFICAR A LOS OBSERVADORES DE LOS CAMBIOS EN ESTOS VALORES.
+     * @param alOBjetos: ArrayList de objetos InfoDescarga
+     * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
+     */
+    public void establecerInfoDescargas(ArrayList<InfoDescarga> alObjetos) throws ControlConfiguracionClienteException {
+        _oFicheroInfoDescargas.establecerConjuntoInfo(alObjetos);
+    }
+    
 }

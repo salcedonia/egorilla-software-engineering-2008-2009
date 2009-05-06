@@ -21,12 +21,10 @@ public class FicheroPropiedades {
 
     /**
      * Se inicializa el objeto con el nombre del fichero de _propiedades especificado. 
-     * Además se intenta leer dicho fichero y cargar las _propiedades que contiene dentro del objeto (en la variable _propiedades)
      */
     public FicheroPropiedades(String sNomFicheroProps) throws ControlConfiguracionClienteException {
         this._sNombreFicheroProp = sNomFicheroProps;
         this._propiedades = new Properties();
-        cargarFicheroPropiedades();
     }
 
     /**
