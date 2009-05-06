@@ -631,6 +631,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         
       @Override
       public void windowClosing(WindowEvent e){
+          System.out.println("Exit ordenado!");
+          if( GestorCompartidos.getInstancia().getGestorDisco().getEstadoEscrituraEnDisco() != -1 ){
           GestorCompartidos.getInstancia().getGestorDisco().detenerEscrituraEnDisco();
             try {
                 //Espero un poquito a que no se permita realizar mas escrituras... no mola nada
@@ -641,6 +643,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
             } catch (InterruptedException ex) {
                 Logger.getLogger(GUIVentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
             }
+          }
+          System.out.println("Saliendo...");
           System.exit(0);
       }
     }
