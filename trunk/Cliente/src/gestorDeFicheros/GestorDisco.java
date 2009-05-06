@@ -101,7 +101,11 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
 
 
   /**
-   * Constructor por defecto del Gestor de Disco, el cual realiza todas una serie de operaciones   * iniciales sobre el disco.
+   * Constructor por defecto del Gestor de Disco, el cual realiza todas una serie de operaciones 
+   * iniciales sobre el disco. Se encarga de crear las listas de los archivos del usuario, tanto la
+   * de los archivos temporales como la de completos y la union de las dos, establece el tamano maximo
+   * del fragmento, los directorios de temporales y completos e incluso las extensiones que se usaran 
+   * para los archivos creados para los archivos temporales.
    */
   public GestorDisco(){  
 
@@ -143,13 +147,6 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
 
     if( fDirectorioTemporales.isDirectory() == false ||
         fDirectorioCompletos.isDirectory() == false) {
-      //throw new IOException("Algun directorio no es un directorio valido");
-    }
-
-    //Cuando haya multiples directorio, hacer un for para comprobar todos
-
-    if( fDirectorioTemporales.isDirectory() == false ||
-        fDirectorioCompletos.isDirectory() == false) {
       System.out.println("Directorio de temporales o de completos no valido");
       //throw new IOException("Algun directorio no es un directorio valido");
     }
@@ -174,7 +171,11 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
   }
 
   /**
-   * .
+   * Procesa el directorio donde se encuentra los archivos temporales, filtrando a partir de los archivos
+   * de indice de cada fichero temporal. Al filtrar por extension, debemos asegurarnos de usar una comun
+   * para todos los archivos de indices y de no borrarlos, ya que en tal caso perderemos todo lo que 
+   * llevabamos descargado, pese a mantener el fichero temporal de byte's.
+   * @param fDirectorioTemporales directorio donde se encuentran los archivos temporales.
    */
   private void listarArchivosTemporalesIniciales( File fDirectorioTemporales ){
     //Debo filtrar los ficheros y leer solo los .part.met
@@ -198,7 +199,8 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
   }
 
   /**
-   * .
+   * Procesa el directorio donde se encuentra los archivos completos.
+   * @param fDirectorioCompletos directorio donde se encuentran los archivos completos.
    */
   private void listarArchivosCompletosIniciales( File fDirectorioCompletos ){
     File[] ficherosCompletos = fDirectorioCompletos.listFiles();
@@ -319,11 +321,22 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     return _manejarIndices;
   }
 
+  /**
+   * Obtiene la instancia adecuada que ofrece la funcionalidad para tratar adecuadamente las listas de 
+   * archivos del usuario.
+   * @return Devuelve la instancia del manejador de las listas de archivos.
+   */
   public ManejarListaArchivos getManejarListaArchivos(){
     return _manejarListaArchivos;
   }
 
-  public Archivo procesarArchivoCompartido(File f) /*throws IOException*/ {
+  /**
+   * Proceso el fichero recibido, obteniendo del mismo ciertos metadatos, utilizados para crear un tipo
+   * Archivo.
+   * @param f fichero del que obtendremos ciertos metadatos.
+   * @return Devuelve un objeto Archivo con los metadatos del fichero.
+   */
+  private Archivo procesarArchivoCompartido(File f) /*throws IOException*/ {
 
         String nombre = null;
 
@@ -341,7 +354,12 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
         return new Archivo(nombre, MD5Sum.getFileMD5Sum(f), f.length(), _tipo);
     }
 
-  
+  /**
+   * Proceso un fichero de indices, obteniendo del mismo el objeto Archivo, con los metadatos 
+   * correspondientes.
+   * @param f fichero de indices del que obtendremos el Archivo.
+   * @return Devuelve un objeto Archivo con los metadatos del fichero.
+   */
   public Archivo procesarArchivoIndices(File f) /*throws IOException*/ {
       Indices indices = getManejarIndices().leeFicheroIndices( f );
       return indices.getArchivo();
@@ -352,7 +370,6 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
      * @param obj Objeto ControlConfiguracionCliente.
      * @param propiedades Conjunto de propiedades que ha cambiado.
      */
-    @Override
     public void cambioEnPropiedades(ControlConfiguracionCliente obj, Properties propiedades) {
         String sNuevoValor;
         for (Enumeration e = propiedades.propertyNames(); e.hasMoreElements() ; ) {
@@ -369,20 +386,39 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     }
 
 }
+/**
+ * Clase que filtra los archivos de un directorio, haciendo validos solo aquellos que tengan la extension
+ * adecuada.
+ */
 class IndicesFileFilter implements FileFilter {
 
+  /**
+   * Contiene el valor de la extension de los archivos de indices.
+   */
   private String _extesionIndices;
 
+  /**
+   * Constructor que establece el valor de la extension de los archivos de indices para el filtro.
+   * @param extensionIndices contiene el valor de la extension de los archivos de indices.
+   */
   public IndicesFileFilter( String extesionIndices ){
     _extesionIndices = extesionIndices;
   }
   
+  /**
+   * Evalua si acepta o no el fichero en funcion de la extension que tenga.
+   * @param f fichero a analizar.
+   * @return Devuelve un booleando indicando si se acepto o no el fichero.
+   */
   public boolean accept(File f) {
     return f.getName().toLowerCase().endsWith( _extesionIndices );
     //return f.isDirectory() || f.getName().toLowerCase().endsWith(".part.met");
   }
   
-  
+  /**
+   * Obtiene informacion sobre que extensiones acepta el filtro.
+   * @return Devuelve una cadena con informacion sobre la extesion de los ficheros que filtra.
+   */
   public String getDescription() {
     return _extesionIndices+" files";
   }
