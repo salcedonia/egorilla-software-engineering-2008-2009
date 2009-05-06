@@ -116,7 +116,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     /**
      * Icono de la ventana principal.
      */
-    private ImageIcon _iconoVentana = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/icono.png"));
+    private ImageIcon _iconoVentana = new ImageIcon( getClass().getResource(RUTA_RECURSOS + "iconos/icono.png") );
     /**
      * Icono del boton de conexion cuando la aplicacion se encuentra desconectada
      * a un servidor.
