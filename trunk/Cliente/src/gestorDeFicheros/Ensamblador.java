@@ -277,7 +277,7 @@ public class Ensamblador{
     ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
     ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
 
-    if( _gestorDisco.getEstadoEscrituraEnDisco() == false ){
+    if( _gestorDisco.getEstadoEscrituraEnDisco() == 0 ){
     //Tengo qcomprobar cuando completo un archivo, para moverlo a completos
 
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
@@ -354,8 +354,10 @@ public class Ensamblador{
       
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
     }
-    }else{
+    }else
+    if( _gestorDisco.getEstadoEscrituraEnDisco() == 1 ){
         System.out.println("Escritura en disco detenida, no se grabara mas en disco.");
+        _gestorDisco.setDiscoLiberado();
     }
     return guardado;
   }
