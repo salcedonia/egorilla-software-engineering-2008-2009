@@ -168,9 +168,6 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     //Cuando haya varios directorio por cada una se hara la union , usando un for
     //incluso, como son atributos de clase no hace falta pasarlos como parametros
     
-    //Por defecto se tiene acceso a escritura sobre el disco
-    _detenido = -1;
-    
     _fragmentador = new Fragmentador( this );
     _ensamblador = new Ensamblador( this );
   }
