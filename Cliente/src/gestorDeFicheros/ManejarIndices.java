@@ -15,21 +15,36 @@ public class ManejarIndices {
     Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
       fragFaltan = fragmentos;
     Indices indices = new Indices( archivo, fragTengo, fragFaltan );
+    ByteArrayOutputStream bs = new ByteArrayOutputStream();
     try{      
-      ByteArrayOutputStream bs = new ByteArrayOutputStream();
       ObjectOutputStream os = new ObjectOutputStream( bs );
       os.writeObject( indices );
       os.close();
-      byte[] bytes = bs.toByteArray(); // devuelve byte[]
+      
+    }catch( IOException e ){
+        System.out.println("Error -> posibles causas: ");
+        System.out.println( "\tProblemas al crear un flujo de bytes serializable" );
+        System.out.println( "\tProblemas al serializar el objeto indice" );
+        System.out.println( "\tProblemas al cerrar el flujo serializable" );
+        //e.printStackTrace();
+    }
 
+    byte[] bytes = bs.toByteArray(); // devuelve byte[]
+
+    try{
       FileOutputStream ficheroIndices = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
       bufferedOutput.write( bytes, 0, bytes.length );
       bufferedOutput.close();
       //creo que tambien hace falta cerrar el otro
       ficheroIndices.close();
-    }catch( Exception e ){
-      e.printStackTrace();
+    }catch( FileNotFoundException e ){
+        System.out.println( "No existe el fichero <"+fichero.getName()+">" );
+    }catch( IOException e ){
+        System.out.println("Error -> posibles causas: ");
+        System.out.println( "\tProblemas al escribir en el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el flujo o el fichero <"+fichero.getName()+">" );
+        //e.printStackTrace();
     }
   }
 

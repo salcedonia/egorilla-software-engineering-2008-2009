@@ -9,8 +9,9 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Guarda los fragmentos en el lugar correspondiente, ademas crea y mantiene actualizados los
- * indices de los temporales. Cuando se completo un archivo, lo manda al direc de completos
+ * Se encarga principalmente de guardar el par fragmento-byte's en su lugar correspondiente, 
+ * ademas crea y mantiene actualizados los indices de los temporales. Cuando se completo un 
+ * archivo, lo manda al directorio de completos.
  *
  * @author Ivan Munsuri Ibanez
  */
@@ -71,7 +72,7 @@ public class Ensamblador{
    * @param fichero indica la ruta y nombre del fichero nuevo que sera creado.
    * @param size cantidad de bytes que seran reservados en el disco para el fichero.
    */
-  public void reservarEspacioFicheroNuevo( File fichero, long size ){
+  private void reservarEspacioFicheroNuevo( File fichero, long size ){
     byte[] bytes;
     int tamBuf = 9000;
     try{
@@ -100,8 +101,13 @@ public class Ensamblador{
       }else{
         System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );
       }
-    }catch( Exception e ){
-      e.printStackTrace();
+    }catch( FileNotFoundException e ){
+        System.out.println( "No existe el fichero <"+fichero.getName()+">" );
+    }catch( IOException e ){
+        System.out.println("Error -> posibles causas: ");
+        System.out.println( "\tProblemas al crear el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al reservar <"+size+"> bytes de espacio para el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );
     }
   }
 
@@ -177,7 +183,7 @@ public class Ensamblador{
    * @return Devuelve un booleano que indica si se ha eliminado correctamente el fichero 
    *         temporal y el de indices correspondientes.
    */
-  public boolean eliminarArchivoTemporal( String hash ){
+  private boolean eliminarArchivoTemporal( String hash ){
     boolean eliminado = false;
     Archivo archivoExistencia;
     ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
@@ -215,7 +221,7 @@ public class Ensamblador{
    *                necesito.
    * @return Devuelve todos los fragmentos de los que se compone el archivo nuevo.
    */
-  public Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
+  private Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
     Vector<Fragmento> listaFragmento = new Vector<Fragmento>();
    
     Fragmento fragmento = new Fragmento( archivo.getNombre(), 
@@ -263,7 +269,7 @@ public class Ensamblador{
   {
     boolean guardado = false;
     Archivo archivoExistencia;
-    int off, len = 0;
+    int off = 0, len = 0;
     File fichero = null;
     String hashFragmento = fragmento.getHash();
     ManejarIndices manejarIndices = _gestorDisco.getManejarIndices();
@@ -306,8 +312,15 @@ public class Ensamblador{
       //creo que tambien hace falta cerrar el otro
       //archivo.close();
       punteroFichero.close();
-      }catch( Exception e ){
-        e.printStackTrace();
+      }catch( FileNotFoundException e ){
+        System.out.println( "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
+        //e.printStackTrace();
+        return false;
+      }catch( IOException e ){
+        System.out.println("Error -> posibles causas: ");
+        System.out.println( "\tProblemas al movernos a la posicion <"+off+"> del fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al escribir en el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );
         return false;
       }
 
@@ -318,6 +331,7 @@ public class Ensamblador{
       indices.addTengo( fragmento );
       manejarIndices.guardarFicheroIndices( ficheroIndices, indices );
 
+      //Si era el ultimo fragmento que quedaba, el archivo se ha completado
       if( indices.getIndicesFaltan().size() == 0 ){
         System.out.println( "Acabo de completar el fichero, lo muevo a los completos" );
         manejarListaArchivos.eliminarArchivoDeLista( indices.getArchivo(), listaTemporales );
@@ -326,6 +340,7 @@ public class Ensamblador{
         File ficheroCompleto = new File( _directorioCompletos+"//"+
             indices.getArchivo().getNombre() );
         mover( fichero, ficheroCompleto );
+        //TODO: comprobar realmente que el fichero se ha completado correctamente.
         
         if( manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
           System.out.println( "Problemas al borrar el archivo de indices" );      
@@ -350,7 +365,7 @@ public class Ensamblador{
    * @return Devuelve un booleano en funcion de si puedo mover o no el fichero, o en caso de no 
    *         poder mover si pueod copiar o no el fichero.
    */
-  public boolean mover(File source, File destination) {
+  private boolean mover(File source, File destination) {
     if( !destination.exists() ) {
       // intentamos con renameTo
       boolean result = source.renameTo(destination);
@@ -374,7 +389,7 @@ public class Ensamblador{
    * @param destination representa el fichero donde queremos copiar el fichero origen.
    * @return Devuelve un booleano en funcion de si puedo copiar o no el fichero.
    */
-  public boolean copiar( File source, File destination ){
+  private boolean copiar( File source, File destination ){
     boolean resultado = false;
     // declaracion del flujo
     FileInputStream sourceFile = null;
@@ -396,20 +411,26 @@ public class Ensamblador{
       resultado = true;
       }
     } catch( FileNotFoundException f ) {
-        f.printStackTrace();
+      System.out.println("No existe el fichero origen o no se ha podido crear el fichero "+
+          "destino");
+        //f.printStackTrace();
     } catch( IOException e ) {
-        e.printStackTrace();
+      System.out.println("Problemas al leer del fichero origen o al escribir en el fichero "+
+          "destino");
+        //e.printStackTrace();
     } finally {
       // pase lo que pase, cerramos flujo
       try {
         sourceFile.close();
       } catch(Exception e) {
-          e.printStackTrace();
+        System.out.println("Problemas al cerrar el fichero origen");
+        //e.printStackTrace();
       }
       try {
         destinationFile.close();
       } catch(Exception e) {
-          e.printStackTrace();
+          System.out.println("Problemas al cerrar el fichero destino");
+          //e.printStackTrace();
       }
     } 
     return resultado;
