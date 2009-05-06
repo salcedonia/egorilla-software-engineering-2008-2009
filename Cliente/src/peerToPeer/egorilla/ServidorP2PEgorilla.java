@@ -2,6 +2,9 @@ package peerToPeer.egorilla;
 
 import datos.Archivo;
 import datos.Fragmento;
+import gestorDeEstadisticas.GestorEstadisticas;
+import gestorDeEstadisticas.NotificadorDatos;
+import gestorDeEstadisticas.ObservadorDatos;
 import gestorDeRed.Receptor;
 import java.util.*;
 import mensajes.Mensaje;
@@ -22,9 +25,12 @@ import mensajes.serverclient.RespuestaPeticionConsulta;
  * 
  * @author Luis Ayuso, José Miguel Guerrero
  */
-public class ServidorP2PEgorilla implements Receptor<Mensaje>{
+public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
 
     private GestorEgorilla _gestor;
+    
+    private List<ObservadorDatos> listaDeObservadores;
+   
     //private GestorDescargas _descargas;
 
     //private GestorDisco _gestorDisco; pasado al GestorEgorilla
@@ -44,6 +50,8 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
      */
     public ServidorP2PEgorilla(GestorEgorilla gE) {
        _gestor = gE;
+       listaDeObservadores = new ArrayList<ObservadorDatos>();
+       addObservador(GestorEstadisticas.getInstacia());
        //_descargas = gD;
        //Tal vez no sea el mejor sitio para iniciar el gestorDisco, mejor antes para que se pueda
        //ver los temporales y compartidos sin tener q instanciar el servidor.
@@ -167,6 +175,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 Fragmento f = new Fragmento( paquete.getNombre(), paquete.getHash(),
                     paquete.getParte().length, paquete.getOffset() );
                 _gestor.fragmentoDescargado(f,paquete.getParte());
+                addSubidaDatos(f.getTama());
                 /*f.hash   = paquete.hash;
                 f.nombre = paquete.nombre;
                 f.offset = paquete.offset;
@@ -208,5 +217,19 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
     public void perdidaDeConexion(String ip) {
        _gestor.perdidaDeConexion(ip);
     }
+/* Estas funciones avisa al gestor de estadisticas que los datos que enviamos.
+ 
+ */
+    @Override
+    public void addSubidaDatos(double longitud) {
+          for (ObservadorDatos obs : listaDeObservadores)
+               obs.llegadaDatosSubida(longitud);
+    }
+
+    @Override
+    public  void addObservador(ObservadorDatos observador){
+           listaDeObservadores.add(observador);
+    }   
+    
 
 }

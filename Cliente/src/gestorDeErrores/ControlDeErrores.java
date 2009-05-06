@@ -22,7 +22,7 @@ public class ControlDeErrores {
     /**
      * Mensaje de errores.
      */
-    private final String _mensaje = "Mensaje de sucesos: ";
+    private final String _mensaje = "Error: ";
 
     /**
      * Constructor por defecto de la clase ControlDeErrores.

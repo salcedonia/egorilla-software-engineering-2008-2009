@@ -10,8 +10,8 @@ package gestorDeEstadisticas;
  * @author Qiang
  */
 public interface ObservadorDatos {
-     void llegadaDatosDescarga(double longitud);
+     //void llegadaDatosDescarga(double longitud);
      void llegadaDatosSubida(double longitud);
-     void llegadaFichero(int cantidad);
+     //void llegadaFichero(int cantidad);
 
 }
