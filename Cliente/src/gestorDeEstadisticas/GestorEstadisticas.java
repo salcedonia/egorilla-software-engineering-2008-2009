@@ -247,4 +247,9 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas {
     public void descargaCompleta(String hash) {
          descarga.llegadaFichero(1);
     }
+
+    @Override
+    public void descargaPausada(String hash) {
+        //TODO PAUSA DESCARGA
+    }
 }

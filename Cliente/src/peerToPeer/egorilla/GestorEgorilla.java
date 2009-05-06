@@ -136,6 +136,16 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
             obs.finDescarga(this, archivo);
         }
     }
+    
+    public void descargaPausada(Archivo archivo) {
+        // esta descarga no se continuará
+       _almacenDescargas.pausaDescarga(archivo);
+       
+        for (ObservadorGestorEgorilla obs: _listaObservadores) {
+            obs.pausaDescarga(this, archivo);
+        }
+    }
+    
 
     /**
      * Devuelve la IP del servidor al que estamos conectados.

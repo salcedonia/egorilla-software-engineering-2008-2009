@@ -437,4 +437,9 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
             }
         }
     }
+
+    @Override
+    public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
+        //TODO PAUSA DESCARGA
+    }
 }

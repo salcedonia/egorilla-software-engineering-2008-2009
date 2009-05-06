@@ -282,7 +282,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(20, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(_btnConectar, gridBagConstraints);
     }
 

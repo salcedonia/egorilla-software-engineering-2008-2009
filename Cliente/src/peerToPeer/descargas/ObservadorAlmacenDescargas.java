@@ -8,7 +8,6 @@ package peerToPeer.descargas;
  */
 public interface ObservadorAlmacenDescargas {
 
-    public void eliminarDescarga(String _hash);
     
     /**
      * Notifica una nueva descarga
@@ -27,4 +26,8 @@ public interface ObservadorAlmacenDescargas {
     public void fragmentoDescargado(String hash); 
     
     public void descargaCompleta(String hash) ;
+    
+    public void descargaPausada(String hash) ;
+    
+    public void eliminarDescarga(String hash);
 }

@@ -124,7 +124,6 @@ public class AlmacenDescargas {
      */
     
     public void eliminaDescarga (Archivo arch){
-        
         Descarga des = this.buscaDescarga(arch);
         if (des != null){
             _listaDescargas.remove(des);
@@ -134,6 +133,18 @@ public class AlmacenDescargas {
             obs.eliminarDescarga(arch._hash);
         }
     }
+    
+    public void pausaDescarga (Archivo arch){
+        Descarga des = this.buscaDescarga(arch);
+        if (des != null){
+            _listaDescargas.remove(des);
+        }
+        
+        for (ObservadorAlmacenDescargas obs: _listaObservadores) {
+            obs.descargaPausada(arch._hash);
+        }
+    }
+    
     
     public void descargaCompletada (Archivo arch){
         Descarga des = this.buscaDescarga(arch);

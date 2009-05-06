@@ -472,5 +472,10 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
     public void descargaCompleta(String hash) {
         //TODO DESCARGADO
     }
+
+    @Override
+    public void descargaPausada(String hash) {
+        //TODO PAUSA DESCARGA
+    }
 }
 

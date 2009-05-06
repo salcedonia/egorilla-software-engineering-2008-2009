@@ -1,8 +1,8 @@
 package gui.grafica.trafico;
 
+import datos.Archivo;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,10 +36,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
      */
     private Color _colorFondo = Color.WHITE;
     /**
-     * Color archivo descargado.
-     */
-    private Color _colorDescargado = Color.RED;
-    /**
      * Color del borde del panel.
      */
     private Color _colorBorde = Color.BLACK;
@@ -57,9 +53,13 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         setBackground(Color.WHITE);
         setLayout(new BorderLayout());
         add(_panelPrincipal, BorderLayout.NORTH);
+        
         iniciarComponentes();
     }
 
+    /**
+     * Inicia los componentes del panel de descargas.
+     */
     public void iniciarComponentes() {
         _panelPrincipal.setLayout(new GridLayout(0, 1, 0, 0));
         _panelPrincipal.add(new Cabecera());
@@ -77,39 +77,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         _panelPrincipal.setVisible(true);
     }
 
-    @Override
-    public void nuevaDescarga(String nombre, String hash, int tamanio) {
-        DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
-        _panelPrincipal.add(descarga);
-        _listaDescargas.add(descarga);
-        _panelPrincipal.repaint();
-        repaint();
-    }
-
-    @Override
-    public void fragmentoDescargado(String hash) {
-        for (int i = 0; i < _listaDescargas.size(); i++) {
-            if (_listaDescargas.get(i).getHash().equals(hash)) {
-                _listaDescargas.get(i).incrementaProgressBar();
-                //repintar();
-                break;
-            }
-        }
-    }
-
-    public void eliminarDescarga(String hash) {
-        for (int i = 0; i < _listaDescargas.size(); i++) {
-            if (_listaDescargas.get(i).getHash().equals(hash)) {
-                _listaDescargas.remove(i);
-                _panelPrincipal.setVisible(false);
-                repintar();
-                break;
-            }
-        }
-    }
-    
     public void borrarCompletos() {
-       for (int i = _listaDescargas.size()-1; i >= 0; i--) {
+        for (int i = _listaDescargas.size() - 1; i >= 0; i--) {
             if (_listaDescargas.get(i).getEstado().equalsIgnoreCase("COMPLETADO")) {
                 _listaDescargas.remove(i);
                 _panelPrincipal.setVisible(false);
@@ -118,17 +87,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         repintar();
     }
 
-    @Override
-    public void descargaCompleta(String hash) {
-        for (int i = 0; i < _listaDescargas.size(); i++) {
-            if (_listaDescargas.get(i).getHash().equals(hash)) {
-                _listaDescargas.get(i).cambiarColorBarra(new Color(61,194,106));
-                _listaDescargas.get(i).setEstado("COMPLETADO");
-                break;
-            }
-        }
-    }
-    
     private class Cabecera extends JPanel {
 
         private JLabel _labelnombre,  _labelestado,  _labelprogreso,  _labelhash;
@@ -147,10 +105,10 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         }
 
         private void iniciarComponentes() {
-            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, 
-                    new Color(102, 204, 255), 
-                    new Color(51, 153, 255), 
-                    new Color(0, 0, 102), 
+            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
+                    new Color(102, 204, 255),
+                    new Color(51, 153, 255),
+                    new Color(0, 0, 102),
                     new Color(0, 0, 153)));
 
             _panelPrincipal = new JPanel();
@@ -182,7 +140,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         private JProgressBar _barra;
         private String _hash;
         private int _progreso;
-        private JMenuItem _menuItem,  _menuItem2, _menuItem3;
+        private JMenuItem _menuItem,  _menuItem2,  _menuItem3;
         private OyenteBoton _oyenteBoton;
         private OyenteRaton _oyenteRaton;
         private JPanel _panelPrincipal;
@@ -235,7 +193,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             _menuItem2 = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
             _menuItem2.addActionListener(_oyenteBoton);
             popup.add(_menuItem2);
-            
+
             _menuItem3 = new JMenuItem("Limpiar completos"/*,new ImageIcon("img/cross.gif")*/);
             _menuItem3.addActionListener(_oyenteBoton);
             popup.add(_menuItem3);
@@ -252,8 +210,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         public void cambiarColor(Color c) {
             _panelPrincipal.setBackground(c);
         }
-        
-        public void cambiarColorBarra(Color c){
+
+        public void cambiarColorBarra(Color c) {
             _barra.setBackground(c);
             _barra.setForeground(c);
         }
@@ -261,12 +219,12 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         public void crearBorde(Color c) {
             this.setBorder(BorderFactory.createLineBorder(c));
         }
-        
-        public void setEstado(String texto){
+
+        public void setEstado(String texto) {
             _labelestado.setText(texto);
         }
-        
-        public String getEstado(){
+
+        public String getEstado() {
             return _labelestado.getText();
         }
 
@@ -275,14 +233,16 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             @Override
             public void actionPerformed(ActionEvent event) {
                 if (event.getActionCommand().equals("Pausar")) {
-                    _labelestado.setText("En pausa");
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
-                    _menuItem.setText("Continuar");
+                    _menuItem.setText("Continuar");                    
+                    Archivo arch=new Archivo(_labelnombre.getText(),_hash);
+                    _controlador.getGestorEGorilla().descargaPausada(arch);
                 }
                 if (event.getActionCommand().equals("Continuar")) {
-                    _labelestado.setText("Descargando");
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
                     _menuItem.setText("Pausar");
+                    Archivo arch=new Archivo(_labelnombre.getText(),_hash);
+                    _controlador.getGestorEGorilla().nuevaDescarga(arch);
                 }
                 if (event.getActionCommand().equals("Eliminar")) {
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
@@ -344,6 +304,70 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                 if (e.isPopupTrigger()) {
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
+            }
+        }
+    }
+
+    //--------------------------------------\\
+    //      INTERFACE ALMACEN DESCARGAS     \\
+    //--------------------------------------\\
+    
+    @Override
+    public void nuevaDescarga(String nombre, String hash, int tamanio) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.get(i).setEstado("Descargando");
+                return;
+            }
+        }
+        DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
+        _panelPrincipal.add(descarga);
+        _listaDescargas.add(descarga);
+        _panelPrincipal.repaint();
+        repaint();
+    }
+
+    @Override
+    public void fragmentoDescargado(String hash) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.get(i).incrementaProgressBar();
+                //repintar();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void eliminarDescarga(String hash) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.remove(i);
+                _panelPrincipal.setVisible(false);
+                repintar();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void descargaCompleta(String hash) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.get(i).cambiarColorBarra(new Color(61, 194, 106));
+                _listaDescargas.get(i).setEstado("COMPLETADO");
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void descargaPausada(String hash) {
+        for (int i = 0; i < _listaDescargas.size(); i++) {
+            if (_listaDescargas.get(i).getHash().equals(hash)) {
+                _listaDescargas.get(i).cambiarColorBarra(new Color(61, 194, 106));
+                _listaDescargas.get(i).setEstado("En pausa");
+                break;
             }
         }
     }
