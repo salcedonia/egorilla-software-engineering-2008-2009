@@ -1,7 +1,5 @@
 package gui.consola;
 
-
-import control.ControladorConsola;
 import datos.Archivo;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
@@ -10,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
+import mensajes.serverclient.ListaArchivos;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
@@ -54,12 +53,12 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     public GUIConsola(ControladorConsola controlador) throws IOException, Exception {
 
         _controlador = controlador;
-        
+
         // Registramos la vista como observador del GestorEGorilla
         _controlador.getGestorEGorilla().agregarObservador(this);
-        
+
         _busqueda = new GUIBusqueda();
-        
+
         run();
     }
 
@@ -72,7 +71,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
 
         System.out.println(mensaje);
     }
-    
+
     /**
      * Muestra el menú de la aplicación en modo consola e invoca a los métodos 
      * correspondientes del ControladorConsola en función de la opción elegida
@@ -81,12 +80,12 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @throws java.io.IOException Se lanza cuando se produce algún error de IO.
      */
     public void run() throws Exception {
-        
+
         char op;
         do {
-            
+
             mostrarMenu();
-            
+
             op = elegirOpcion();
             switch (op) {
                 case '1':
@@ -104,7 +103,10 @@ public class GUIConsola implements ObservadorGestorEgorilla {
                 case '5':
                     opcionDescargarFichero();
                     break;
-                case '0': 
+                case '6':
+                    opcionMostrarCompartidos();
+                    break;
+                case '0':
                     opcionSalir();
                     break;
                 default:
@@ -123,7 +125,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
 
         String op;
         do {
-            
+
             op = _bufferedReader.readLine();
         } while (op.length() == 0);
 
@@ -154,7 +156,7 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * contrario.
      */
     public boolean conectado() {
-        
+
         return _conectado;
     }
 
@@ -172,24 +174,27 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         mostrarMensaje("\nResultados de la búsqueda de " + nombre);
         mostrarMensaje("================================================");
 
-        if (lista.length > 0)
-            for (Archivo archivo : lista)
+        if (lista.length > 0) {
+            for (Archivo archivo : lista) {
                 mostrarMensaje(archivo.toString());
-        else 
+            }
+        } else {
             mostrarMensaje("La búsqueda finalizó sin resultados. \n");
+        }
     }
 
     /**
      * Muestra el menú de opciones al usuario.
      */
     private void mostrarMenu() {
-        
+
         System.out.print("\n\n\t************** :::: M e n u :::: **************\n\n");
         System.out.print("\t1. Conexión a Servidor.\n");
         System.out.print("\t2. Conexión a Servidor por defecto.\n");
         System.out.print("\t3. Desconexión de Servidor.\n");
         System.out.print("\t4. Búsqueda de un Fichero.\n");
         System.out.print("\t5. Descarga de un Fichero.\n");
+        System.out.print("\t6. Mostrar Archivos Compartidos.\n");
         System.out.print("\t0. Salir de la Aplicación.\n");
         System.out.print("\n\tElige la Opción: ");
     }
@@ -224,11 +229,12 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         int puerto = Integer.parseInt(sPuerto);
 
         mostrarMensaje("\nConectando a servidor....");
-        
-        if ( !_controlador.getGestorEGorilla().estaConectadoAServidor() )
+
+        if (!_controlador.getGestorEGorilla().estaConectadoAServidor()) {
             _controlador.peticionConexionAServidor(sIP, puerto);
-        else 
-            mostrarMensaje("Ya estás conectado a un Servidor.\n");    
+        } else {
+            mostrarMensaje("Ya estás conectado a un Servidor.\n");
+        }
     }
 
     /**
@@ -244,11 +250,12 @@ public class GUIConsola implements ObservadorGestorEgorilla {
         String IPServidor = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
         int puertoServidor = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
 
-        mostrarMensaje("\nConectando a servidor....");     
-        if ( !_controlador.getGestorEGorilla().estaConectadoAServidor() )
+        mostrarMensaje("\nConectando a servidor....");
+        if (!_controlador.getGestorEGorilla().estaConectadoAServidor()) {
             _controlador.peticionConexionAServidor(IPServidor, puertoServidor);
-        else 
-            mostrarMensaje("Ya estas conectado a un servidor.\n");    
+        } else {
+            mostrarMensaje("Ya estas conectado a un servidor.\n");
+        }
     }
 
     /**
@@ -277,15 +284,60 @@ public class GUIConsola implements ObservadorGestorEgorilla {
     }
 
     /**
+     * Muestra los archivos compartidos del cliente. Para ello muestra al usuario
+     * otro submenu con las opciones de listar todos, solo los completos o 
+     * solo los incompletos
+     */
+    private void opcionMostrarCompartidos() throws IOException, Exception {
+
+        char op;
+        do {
+
+            System.out.print("\n\n\t************** :::: M e n u de Compartidos :::: **************\n\n");
+            System.out.print("\t1. Listar todos los Archivos Compartidos.\n");
+            System.out.print("\t2. Listar todos los Archivos Compartidos Completos.\n");
+            System.out.print("\t3. Listar todos los Archivos Compartidos Incompletos.\n");
+            System.out.print("\t0. Volver al menu principal.\n");
+            System.out.print("\n\tElige la Opción: ");
+
+            op = elegirOpcion();
+
+            switch (op) {
+                case '1':
+                    ListaArchivos listaTodos = _controlador.peticionListarTodosCompartidos();
+
+                    // PINTAR LOS ARCHIVOS
+                    break;
+                case '2':
+                    ListaArchivos listaCompletos = _controlador.peticionListarCompartidosCompletos();
+                    
+                    // PINTAR LOS ARCHIVOS
+                    break;
+                case '3':
+                    ListaArchivos listaIncompletos = _controlador.peticionListarCompartidosIncompletos();
+                    
+                    // PINTAR LOS ARCHIVOS
+                    break;
+                case '0':
+                    // Volvemos al menu anterior
+                    run();
+                    break;
+                default:
+                    mostrarMensaje("ERROR, La opción introducida no es válida!!\n");
+            }
+        } while (op != '0');
+    }
+
+    /**
      * Muestra un mensaje de despedida cuando el usuario decide
      * salir de la aplicación.
      */
     private void opcionSalir() {
-        
+
         mostrarMensaje("\n\t\t\t\t\t\t\t\t\tAdiós!\n");
         System.exit(-1);
     }
-    
+
     //------------------------------------------\\
     //      INTERFACE OBSERVADOREGORILLA        \\
     //------------------------------------------\\
@@ -335,10 +387,8 @@ public class GUIConsola implements ObservadorGestorEgorilla {
      * @param obj GestorEGorilla de la aplicación.
      */
     @Override
-    public void finDescarga(GestorEgorilla obj, Archivo arch){
-        
-        // TODO: descarga completada
-        
+    public void finDescarga(GestorEgorilla obj, Archivo arch) {
+        // TODO: descarga completada    
     }
 
     /**

@@ -168,6 +168,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             _labelprogreso = new JLabel("Progreso");
             _panelPrincipal.setLayout(new GridLayout(0, 4, 25, 25));
             _panelPrincipal.setBackground(_colorFondo);
+            setBackground(_colorFondo);
 
             _labelnombre.setForeground(_colorFuente);
             _labelhash.setForeground(_colorFuente);

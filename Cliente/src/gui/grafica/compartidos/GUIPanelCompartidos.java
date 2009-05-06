@@ -33,6 +33,14 @@ public class GUIPanelCompartidos extends JPanel {
      */
     private DefaultMutableTreeNode _nodoTodosLosCompartidos;
     /**
+     * Nodo que muestra todos los archivos compartidos completos.
+     */
+    private DefaultMutableTreeNode _nodoCompletos;
+    /**
+     * Nodo que muestra todos los archivos compartidos incompletos.
+     */
+    private DefaultMutableTreeNode _nodoIncompletos;
+    /**
      * Panel que contiene el arbol de exploracion.
      */
     private JPanel _panelArbol;
@@ -93,6 +101,13 @@ public class GUIPanelCompartidos extends JPanel {
         _nodoCompartidos = new DefaultMutableTreeNode("Compartidos");
         _nodoTodosLosCompartidos = new DefaultMutableTreeNode("Todos los Compartidos");
         _nodoCompartidos.add(_nodoTodosLosCompartidos);
+        
+        _nodoCompletos = new DefaultMutableTreeNode("Completos");
+        _nodoCompartidos.add(_nodoCompletos);
+        
+        _nodoIncompletos = new DefaultMutableTreeNode("Incompletos");
+        _nodoCompartidos.add(_nodoIncompletos);
+        
         _explorador.setModel(new DefaultTreeModel(_nodoCompartidos));
         _scrollPaneArbol.setViewportView(_explorador);
         _explorador.addTreeSelectionListener(new TreeSelectionListener() {
@@ -114,18 +129,38 @@ public class GUIPanelCompartidos extends JPanel {
 
                     if (carpeta.matches("Todos los Compartidos")) {
 
-                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarArchivosCompartidos());
-                        _panelCompartidos.setPreferredSize(new Dimension(450,500));
-                        _scrollPaneContenido.setAutoscrolls(true);
-                        _scrollPaneContenido.setViewportView(_panelCompartidos);
-                        _panelContenido.add(_scrollPaneContenido);
-                        _splitPanel.setDividerLocation(_splitPanel.getDividerLocation());
-                        _splitPanel.setRightComponent(_panelContenido);
-                        repaint();
+                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
+                        actualizarPanelDerecha();
+                    }
+                    
+                    if (carpeta.matches("Completos")) {
+
+                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosCompletos());
+                        actualizarPanelDerecha();
+                    }
+                    
+                    if (carpeta.matches("Incompletos")) {
+
+                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosIncompletos());
+                        actualizarPanelDerecha();
                     }
                     
                     // Si hay mas opciones se pondrian aqui
                 }
+            }
+
+            /**
+             * Configura todos los elementos 
+             */
+            private void actualizarPanelDerecha() {
+                
+                _panelCompartidos.setPreferredSize(new Dimension(450, 500));
+                _scrollPaneContenido.setAutoscrolls(true);
+                _scrollPaneContenido.setViewportView(_panelCompartidos);
+                _panelContenido.add(_scrollPaneContenido);
+                _splitPanel.setDividerLocation(_splitPanel.getDividerLocation());
+                _splitPanel.setRightComponent(_panelContenido);
+                repaint();
             }
         });
 
@@ -138,7 +173,7 @@ public class GUIPanelCompartidos extends JPanel {
                 new BorderLayout());
 
         // Cargamos los compartidos por defecto
-        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarArchivosCompartidos());
+        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
         _panelCompartidos.setPreferredSize(new Dimension(450,500));                
         _scrollPaneContenido.setAutoscrolls(true);
         _scrollPaneContenido.setViewportView(_panelCompartidos);

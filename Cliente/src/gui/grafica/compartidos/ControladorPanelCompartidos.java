@@ -28,13 +28,37 @@ public class ControladorPanelCompartidos {
     }
     
     /**
-     * Devuelve la lista de archivos compartidos del cliente. Para ello pregunta
+     * Devuelve la lista de todos los archivos compartidos del cliente. Para ello pregunta
      * al Gestor de compartidos que es el que tiene toda la informacion necesaria.
      * 
      * @return La lista de archivos compartidos del cliente.
      */
-    public ListaArchivos peticionListarArchivosCompartidos(){
+    public ListaArchivos peticionListarTodosCompartidos(){
     
         return GestorCompartidos.getInstancia().getArchivosCompartidos();       
+    }
+
+    /**
+     * Devuelve la lista de archivos compartidos completos del cliente. Para ello pregunta
+     * al Gestor de compartidos y este a su vez llama al gestor de disco para 
+     * preguntarle todo lo necesario.
+     * 
+     * @return La lista de archivos compartidos completos del cliente.
+     */
+    ListaArchivos peticionListarCompartidosCompletos() {
+        
+        return GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosCompletos();   
+    }
+    
+    /**
+     * Devuelve la lista de archivos compartidos incompletos del cliente. Para ello pregunta
+     * al Gestor de compartidos y este a su vez llama al gestor de disco para 
+     * preguntarle todo lo necesario.
+     * 
+     * @return La lista de archivos compartidos incompletos del cliente.
+     */
+    ListaArchivos peticionListarCompartidosIncompletos() {
+        
+        return GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales();   
     }
 }

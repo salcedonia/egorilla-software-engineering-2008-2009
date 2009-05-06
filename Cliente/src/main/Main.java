@@ -1,6 +1,6 @@
 package main;
 
-import control.ControladorConsola;
+import gui.consola.ControladorConsola;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
@@ -8,7 +8,6 @@ import gestorDeErrores.ControlDeErrores;
 import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
-import gestorDeRed.TCP.GestorDeRedTCPimpl;
 import gui.consola.GUIConsola;
 import gui.grafica.GUIGrafica;
 import gui.grafica.principal.ControladorVentanaPrincipal;
