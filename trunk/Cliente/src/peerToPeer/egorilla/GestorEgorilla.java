@@ -277,9 +277,11 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      * @param a archivo a descargar
      */
     public void nuevaDescarga(Archivo a) {
-        _gestorDisco.getEnsamblador().nuevoArchivoTemporal(a);
-        _almacenDescargas.nuevaDescarga(a);
-        this.pedirPropietariosaServidor(a);
+        //si no lo tengo en los completos inicio la descarga
+        if(_gestorDisco.getEnsamblador().nuevoArchivoTemporal(a)){
+            _almacenDescargas.nuevaDescarga(a);
+            this.pedirPropietariosaServidor(a);
+        }
     }
 
     /**

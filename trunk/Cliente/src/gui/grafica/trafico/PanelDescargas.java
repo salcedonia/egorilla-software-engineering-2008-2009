@@ -149,6 +149,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             _barra = new JProgressBar(0, maximo);
             _barra.setValue(0);
             _barra.setStringPainted(true);
+            cambiarColorBarra(new Color(19, 6, 255));
             _hash = hash;
             _panelPrincipal = new JPanel();
             _oyenteBoton = new OyenteBoton();
@@ -316,6 +317,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         for (int i = 0; i < _listaDescargas.size(); i++) {
             if (_listaDescargas.get(i).getHash().equals(hash)) {
                 _listaDescargas.get(i).setEstado("Descargando");
+                _listaDescargas.get(i).cambiarColorBarra(new Color(19, 6, 255));
                 return;
             }
         }
