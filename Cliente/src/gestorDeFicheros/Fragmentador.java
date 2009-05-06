@@ -281,7 +281,7 @@ public class Fragmentador{
       listaFragmento.add( fragmento );
       for( int i = 1;  fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama();  i++ ){
         fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
-            archivoRequerido.getSize(), i*_tamanioBytesFragmento );
+            _tamanioBytesFragmento, i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
       }
       //Esto ultimo sobra, simplemente que el ultimo fragmento tiene
