@@ -59,4 +59,12 @@ public interface ObservadorGestorEgorilla {
      * @param arch el archivo finalizado
      */
     public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
+    
+    /**
+     * Para notificar que la descarga ha sido pausada.
+     * 
+     * @param gestorEGorilla GestorEGorilla de la aplicación.
+     * @param arch el archivo finalizado
+     */
+    public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
 }

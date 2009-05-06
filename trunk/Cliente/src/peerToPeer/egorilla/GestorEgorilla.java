@@ -146,6 +146,17 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
             obs.pausaDescarga(this, archivo);
         }
     }
+    public void eliminarDescarga(Archivo archivo) {
+        if(_gestorDisco.getEnsamblador().eliminarArchivoTemporal(archivo.getHash())){
+            // esta descarga se elimina
+            _almacenDescargas.eliminaDescarga(archivo);
+
+            for (ObservadorGestorEgorilla obs: _listaObservadores) {
+                obs.eliminarDescarga(this, archivo);
+            }
+        }
+    }
+    
     
 
     /**

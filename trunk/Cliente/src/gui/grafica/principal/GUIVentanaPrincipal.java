@@ -647,4 +647,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
     public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
         //TODO: descarga pausada
     }
+
+    @Override
+    public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
+        //TODO DESCARGA ELIMINADA
+    }
 }
