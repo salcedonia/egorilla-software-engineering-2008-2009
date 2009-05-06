@@ -168,11 +168,7 @@ public class Fragmentador{
       fichero = new File( _directorioCompletos+"//"+ archivoRequerido.getNombre() );
       punteroFichero = new RandomAccessFile( fichero, "r" );
       off = (int)fragmento.getOffset();
-      int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
-      if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
-        len = tamanioBytesFragmentoAux;
-      else
-        len = _tamanioBytesFragmento;
+      len = (int)fragmento.getTama();
       bytesFragmento = new byte[ len ];
       //System.out.println("offset "+off +" len "+len+" point "+
       //punteroFichero.getFilePointer() );
@@ -226,8 +222,11 @@ public class Fragmentador{
    */
   public int cantidadFragmentosArchivo( Archivo archivo ){
     long tamanio = archivo.getSize();
-    int cantidadFragmentos;
+    return calcularCuantasPartes( tamanio );
+  }
 
+  public int calcularCuantasPartes( long tamanio ){
+    int cantidadFragmentos;
     cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
     if( tamanio % _tamanioBytesFragmento == 0 ){
@@ -235,7 +234,6 @@ public class Fragmentador{
     }else{
       cantidadFragmentos+=1;
     }
-
     return cantidadFragmentos;
   }
 
@@ -275,24 +273,35 @@ public class Fragmentador{
       //Puedo calcular la cantidad de partes si los bytes del mismo sin fijos
       //Si es variable mejor con un while
       //TODO: metodo ya creado por ahi
-      listaFragmento = new Vector<Fragmento>();
-      Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
-          archivoRequerido.getHash(), _tamanioBytesFragmento, 0 ); //0 por ser el primero
-      listaFragmento.add( fragmento );
-      for( int i = 1;  fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama();  i++ ){
-        fragmento = new Fragmento( archivoRequerido.getNombre(), archivoRequerido.getHash(), 
+
+
+      Fragmento fragmento = null;      
+      int tamBytes;
+      int cantidadFragmentos = calcularCuantasPartes( archivoRequerido.getSize() );
+      listaFragmento = new Vector<Fragmento>( cantidadFragmentos );
+
+      System.out.println("Capacidad "+listaFragmento.capacity());
+
+      //Se supone que nunca va decir 0 cantidadFragmentos
+      if( cantidadFragmentos == 1 ){
+        tamBytes = (int)archivoRequerido.getSize();
+        fragmento = new Fragmento( archivoRequerido.getNombre(), 
+          archivoRequerido.getHash(), tamBytes, 0 ); //0 por ser el primero
+        listaFragmento.add( fragmento );
+      }else{
+        //Empiezo por el ultimo fragmento q es el unico que puede tener diferente tamanio
+        int i;
+        for( i = 0;  i < cantidadFragmentos - 1;  i++ ){
+          fragmento = new Fragmento( archivoRequerido.getNombre(), archivoRequerido.getHash(), 
             _tamanioBytesFragmento, i*_tamanioBytesFragmento );
+          listaFragmento.add( fragmento );
+        }
+        tamBytes = (int)(cantidadFragmentos*_tamanioBytesFragmento-archivoRequerido.getSize() ); 
+        fragmento = new Fragmento( archivoRequerido.getNombre(), //tam - offset
+          archivoRequerido.getHash(), tamBytes, i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
+
       }
-      //Esto ultimo sobra, simplemente que el ultimo fragmento tiene
-      //un tamano de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
-      /*if( fragmento.getOffset() < fragmento.getTama() ){
-        long diferencia = fragmento.getTama() - fragmento.getOffset();
-        long offsetDiff = fragmento.getOffset()+diferencia;
-        fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
-            archivoRequerido.getSize(), offsetDiff );
-        listaFragmento.add( fragmento );
-      }*/
     }
     return listaFragmento;
   }

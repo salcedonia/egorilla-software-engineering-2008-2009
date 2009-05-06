@@ -12,7 +12,7 @@ import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.egorilla.ObservadorGestorEgorilla;
 
 /**
- * Panel de búsquedas de la aplicación.
+ * Panel de busquedas de la aplicación.
  * 
  * @author  Javier Salcedo
  */
@@ -68,7 +68,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
     /**
      * Número de pestañas abiertas.
      */
-    private int _numeroPestañas = 0;
+    private int _numeroPestanas = 0;
     /**
      * Controlador del panel buscador.
      */
@@ -362,7 +362,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      */
     public int getNumeroNuevos() {
 
-        return _numeroPestañas;
+        return _numeroPestanas;
     }
 
     /**
@@ -372,7 +372,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
      */
     public void setNumeroNuevos(int numeroNuevos) {
 
-        _numeroPestañas = numeroNuevos;
+        _numeroPestanas = numeroNuevos;
     }
 
     //------------------------------------------\\

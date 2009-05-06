@@ -72,11 +72,12 @@ public class Fragmento implements Serializable{
         Fragmento f = (Fragmento) o;
 
         boolean offset = _offset == f.getOffset(), 
-                tama = _tama == f.getTama(), 
-                hash = _hash.compareTo( f.getHash() ) == 0,
-                nombre = _nombre.compareTo( f.getNombre() ) == 0;
+                //tama = _tama == f.getTama(), 
+                hash = _hash.compareTo( f.getHash() ) == 0;
+                //nombre = _nombre.compareTo( f.getNombre() ) == 0;
 
-        return offset && tama && hash && nombre;
+        //return offset && tama && hash && nombre;
+        return offset && hash;
 
       }catch( Exception e ){
         //Si salta la excepcion en el casting es que no era una instacia de.        
