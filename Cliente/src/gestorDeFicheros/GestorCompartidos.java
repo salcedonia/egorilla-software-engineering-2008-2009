@@ -39,6 +39,11 @@ public class GestorCompartidos {
         _gestorDisco=disco;
         //_fragmentador=disco.getFragmentador();
     }
+    
+    public GestorDisco getGestorDisco(){
+        return _gestorDisco;
+        //_fragmentador=disco.getFragmentador();
+    }
 
     /**
      * Metodo para la peticion de la lista de archivos compartidos.

@@ -98,6 +98,8 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
    * Es la clase que contiene la funcionalidad para tratar adecuadamente las listas de archivos.
    */
   private ManejarListaArchivos _manejarListaArchivos;
+  
+  private boolean _detenido;
 
 
   /**
@@ -166,8 +168,19 @@ public class GestorDisco  implements ObservadorControlConfiguracionCliente {
     //Cuando haya varios directorio por cada una se hara la union , usando un for
     //incluso, como son atributos de clase no hace falta pasarlos como parametros
     
+    //Por defecto se tiene acceso a escritura sobre el disco
+    _detenido = false;
+    
     _fragmentador = new Fragmentador( this );
     _ensamblador = new Ensamblador( this );
+  }
+  
+  public void detenerEscrituraEnDisco( ){
+      _detenido = true;
+  }
+  
+  public boolean getEstadoEscrituraEnDisco( ){
+      return _detenido;
   }
 
   /**
