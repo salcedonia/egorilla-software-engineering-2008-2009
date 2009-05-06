@@ -157,6 +157,15 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         }
     }
     
+    /**
+     * Reanuda las descargas pendientes
+     */
+    public void reanudarDescargas(){
+        ListaArchivos l = GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales();
+        for(int i=0;i<l.size();i++){
+            nuevaDescarga(l.get(i));
+        }
+    }
     
 
     /**

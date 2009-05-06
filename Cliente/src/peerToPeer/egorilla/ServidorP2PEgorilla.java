@@ -200,6 +200,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>{
                 // esto indica que estamos conectados
                 _gestor.conectado();
                 _gestor.enviaListaArchivos();
+                _gestor.reanudarDescargas();
         }
     }
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.ListaArchivos;
 
 /**
  * Esta clase implementa el almacén de descargas que contiene todas las descargas
@@ -100,8 +101,7 @@ public class AlmacenDescargas {
      * Método que crea una nueva descarga y la añade a la lista
      * @param arch es el Archivo de esta nueva descarga
      */
-    public void nuevaDescarga (Archivo arch){
-        
+    public void nuevaDescarga (Archivo arch){        
         Descarga des = this.buscaDescarga(arch);
         /*Sólo la añade a la lista si no existe ya la descarga para ese archivo
          * identificado por su hash */

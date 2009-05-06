@@ -6,10 +6,12 @@
 package peerToPeer.descargas;
 
 import datos.Fragmento;
+import gestorDeFicheros.GestorCompartidos;
 import java.util.Vector;
 import mensajes.p2p.Dame;
 import mensajes.p2p.HolaQuiero;
 import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.ListaArchivos;
 import peerToPeer.descargas.Descarga.Cliente;
 import peerToPeer.egorilla.GestorEgorilla;
 
