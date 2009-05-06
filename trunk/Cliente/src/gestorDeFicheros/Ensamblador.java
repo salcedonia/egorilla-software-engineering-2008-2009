@@ -279,10 +279,8 @@ public class Ensamblador{
     ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
     ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
 
-    if( _gestorDisco.getEstadoEscrituraEnDisco() == 0 || _gestorDisco.getEstadoEscrituraEnDisco() == -1 ){
-    //Tengo qcomprobar cuando completo un archivo, para moverlo a completos
-    if(_gestorDisco.getEstadoEscrituraEnDisco() == -1)
-        _gestorDisco.setActivarEscrituraDisco();
+    if( _gestorDisco.getEstadoEscrituraEnDisco() != 1  ){
+    _gestorDisco.detenerEscrituraEnDisco();
 
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
         hashFragmento );
@@ -317,7 +315,7 @@ public class Ensamblador{
       //creo que tambien hace falta cerrar el otro
       //archivo.close();
       punteroFichero.close();
-      _gestorDisco.detenerEscrituraEnDisco();
+      _gestorDisco.setActivarEscrituraDisco();
       }catch( FileNotFoundException e ){
         System.out.println( "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
         //e.printStackTrace();
@@ -359,16 +357,8 @@ public class Ensamblador{
       
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
     }
-    }else
-    if( _gestorDisco.getEstadoEscrituraEnDisco() == 1 ){
-        System.out.println("Escritura en disco detenida, no se grabara mas en disco.");
-        _gestorDisco.setDiscoLiberado();
-    }else
-        if( _gestorDisco.getEstadoEscrituraEnDisco() == 2 ){
-        System.out.println("Estado disco detenido");
-    }else{
-        System.out.println("Estado disco desconocido <"+_gestorDisco.getEstadoEscrituraEnDisco()+">");
     }
+    
     return guardado;
   }
 
