@@ -62,7 +62,8 @@ public class Main {
             
                 String modo = (String) parser.getOptionValue(gui);
 
-                ControlConfiguracionCliente controlConfiguracionCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties");
+                ControlConfiguracionCliente controlConfiguracionCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties",
+                                                                           "cliente_default.properties", "servidores.info", "descargas.info");
                 int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
 
                 crearModulosCliente(puertoDeEscuchaCliente, modo);
