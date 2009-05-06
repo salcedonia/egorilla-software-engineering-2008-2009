@@ -360,7 +360,10 @@ public class Ensamblador{
     if( _gestorDisco.getEstadoEscrituraEnDisco() == 1 ){
         System.out.println("Escritura en disco detenida, no se grabara mas en disco.");
         _gestorDisco.setDiscoLiberado();
-    }else{
+    }else
+        if( _gestorDisco.getEstadoEscrituraEnDisco() == -1 ){
+            _gestorDisco.setActivarEscrituraDisco();
+        }else{
         System.out.println("Estado disco desconocido <"+_gestorDisco.getEstadoEscrituraEnDisco()+">");
     }
     return guardado;
