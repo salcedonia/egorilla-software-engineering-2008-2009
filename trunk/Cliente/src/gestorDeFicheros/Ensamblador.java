@@ -185,7 +185,7 @@ public class Ensamblador{
    * @return Devuelve un booleano que indica si se ha eliminado correctamente el fichero 
    *         temporal y el de indices correspondientes.
    */
-  private boolean eliminarArchivoTemporal( String hash ){
+  public boolean eliminarArchivoTemporal( String hash ){
     boolean eliminado = false;
     Archivo archivoExistencia;
     ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
@@ -363,6 +363,9 @@ public class Ensamblador{
     if( _gestorDisco.getEstadoEscrituraEnDisco() == 1 ){
         System.out.println("Escritura en disco detenida, no se grabara mas en disco.");
         _gestorDisco.setDiscoLiberado();
+    }else
+        if( _gestorDisco.getEstadoEscrituraEnDisco() == 2 ){
+        System.out.println("Estado disco detenido");
     }else{
         System.out.println("Estado disco desconocido <"+_gestorDisco.getEstadoEscrituraEnDisco()+">");
     }
