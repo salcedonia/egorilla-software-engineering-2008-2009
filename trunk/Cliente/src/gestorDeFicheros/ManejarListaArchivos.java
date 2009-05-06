@@ -9,7 +9,7 @@ import datos.*;
  *
  * @author Ivan Munsuri Ibanez
  */
-class ManejarListaArchivos {
+public class ManejarListaArchivos {
   
   /**
    * Busca un archivo a traves de su hash en la lista de archivos especificada por parametro.
