@@ -44,47 +44,48 @@ public class Descargador extends Thread{
                 // se quien tiene que -> envio Dame
 
                 Descarga d = _almacen.dameSiguiente();
+                if(d!=null){
+                    switch (d.getEstado()) {
+                        case Descarga.PIDEASERVIDOR:
+                            //envia consulta a servidor
+                            _gestor.pedirPropietariosaServidor(d.getArchivo());
+                            break;
+                        case Descarga.PIDEALOSPROPIETARIOS:
+                            if (d.getListaPropietarios().size() != 0) {
+                                for (DatosCliente propietario : d.getListaPropietarios()) {
+                                    HolaQuiero msg = new HolaQuiero(d.getArchivo());
+                                    msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
 
-                switch (d.getEstado()) {
-                    case Descarga.PIDEASERVIDOR:
-                        //envia consulta a servidor
-                        _gestor.pedirPropietariosaServidor(d.getArchivo());
-                        break;
-                    case Descarga.PIDEALOSPROPIETARIOS:
-                        if (d.getListaPropietarios().size() != 0) {
-                            for (DatosCliente propietario : d.getListaPropietarios()) {
-                                HolaQuiero msg = new HolaQuiero(d.getArchivo());
-                                msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
-
-                                _gestor.addMensajeParaEnviar(msg);
+                                    _gestor.addMensajeParaEnviar(msg);
+                                }
                             }
-                        }
-                        break;
-                    case Descarga.DESCARGA:
-                        // envia DAME a los propietarios
+                            break;
+                        case Descarga.DESCARGA:
+                            // envia DAME a los propietarios
 
-                        Fragmento chunk = null;
-                        Vector<Fragmento> listado=d.getListaFragmentosPendientes();
-                        int i = (int)(Math.random()*((listado.size()-1)));
-                        if (listado.size() != 0){                           
-                            chunk = listado.get(i);
-                            Cliente propietario = d.dameClienteQueTiene(chunk);
-                            
-                            if(propietario!=null){
-                                System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
-                    
-                                Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
-                                                chunk, propietario.getIP(), propietario.getPuerto());
+                            Fragmento chunk = null;
+                            Vector<Fragmento> listado=d.getListaFragmentosPendientes();
+                            int i = (int)(Math.random()*((listado.size()-1)));
+                            if (listado.size() != 0){                           
+                                chunk = listado.get(i);
+                                Cliente propietario = d.dameClienteQueTiene(chunk);
 
-                                _gestor.addMensajeParaEnviar(msj);
+                                if(propietario!=null){
+                                    System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
+
+                                    Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
+                                                    chunk, propietario.getIP(), propietario.getPuerto());
+
+                                    _gestor.addMensajeParaEnviar(msj);
+                                }
                             }
-                        }
-                        else {// hemos acabado
-                            _gestor.descargaCompletada(d.getArchivo());
-                        }
-                        break;
+                            else {// hemos acabado
+                                _gestor.descargaCompletada(d.getArchivo());
+                            }
+                            break;
+                    }
+                    d.decrementaEstado();
                 }
-                d.decrementaEstado();
             }
         } catch (InterruptedException ex) {
             //  donothing

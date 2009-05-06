@@ -212,7 +212,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         }
 
         public void cambiarColorBarra(Color c) {
-            _barra.setBackground(c);
             _barra.setForeground(c);
         }
 
@@ -365,7 +364,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
     public void descargaPausada(String hash) {
         for (int i = 0; i < _listaDescargas.size(); i++) {
             if (_listaDescargas.get(i).getHash().equals(hash)) {
-                _listaDescargas.get(i).cambiarColorBarra(new Color(61, 194, 106));
+                _listaDescargas.get(i).cambiarColorBarra(new Color(210, 205, 13));
                 _listaDescargas.get(i).setEstado("En pausa");
                 break;
             }
