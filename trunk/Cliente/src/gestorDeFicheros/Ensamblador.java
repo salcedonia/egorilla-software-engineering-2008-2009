@@ -121,7 +121,7 @@ public class Ensamblador{
    * @return Devuelve un booleano que indica si se ha creado correctamente el nuevo temporal. 
    */
   public synchronized boolean nuevoArchivoTemporal( Archivo archivoNuevo ){
-    boolean creado = false;
+    boolean creado = true;
     Archivo archivoExistencia;
     ManejarIndices manejarIndices = _gestorDisco.getManejarIndices();
     ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
@@ -163,14 +163,16 @@ public class Ensamblador{
         System.out.println( "Actualizo las listas de los archivos" );
         manejarListaArchivos.includirArchivoEnLista( archivoNuevo, listaTemporales );
         manejarListaArchivos.includirArchivoEnLista( archivoNuevo, listaTodos );
-        creado = true;
+        //creado = true;
       }else{
         System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> esta en los archivos completos, ya ha sido descargado!" );
         //Esta en los archivos completos, ya ha sido descargado.
+        creado = false;
       }
     }else{
       System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> ya se encuentra en los temporales, actualmente en descarga" );
       //Ya se encuentra en los temporales, actualmente en descarga.
+      
     }
     //Se puede dejar en un simple if-else sino me interesa diferenciar esos dos problemas
     return creado;
@@ -358,6 +360,8 @@ public class Ensamblador{
     if( _gestorDisco.getEstadoEscrituraEnDisco() == 1 ){
         System.out.println("Escritura en disco detenida, no se grabara mas en disco.");
         _gestorDisco.setDiscoLiberado();
+    }else{
+        System.out.println("Estado disco desconocido <"+_gestorDisco.getEstadoEscrituraEnDisco()+">");
     }
     return guardado;
   }
