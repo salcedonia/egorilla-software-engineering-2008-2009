@@ -1,25 +1,18 @@
 package gui.grafica.compartidos;
 
-import datos.Archivo;
-import gestorDeFicheros.GestorCompartidos;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import mensajes.serverclient.ListaArchivos;
-import org.jfree.data.xy.Vector;
 
 /**
  * Clase que gestiona el panel de compartidos en la ventana principal de la
  * aplicación.
  * 
- * @author Mercedes Bernal
+ * @author Mercedes Bernal, Javier Salcedo
  */
 public class GUIPanelCompartidos extends JPanel {
 
@@ -31,24 +24,49 @@ public class GUIPanelCompartidos extends JPanel {
      * Arbol de exploración de carpetas.
      */
     private JTree _explorador;
-    
+    /**
+     * Nodo principal del arbol de exploracion.
+     */
+    private DefaultMutableTreeNode _nodoCompartidos;
+    /**
+     * Nodo que muestra todos los archivos compartidos.
+     */
+    private DefaultMutableTreeNode _nodoTodosLosCompartidos;
+    /**
+     * Panel que contiene el arbol de exploracion.
+     */
     private JPanel _panelArbol;
+    /**
+     * Panel que contiene a la tabla del contenido.
+     */
     private JPanel _panelContenido;
+    /**
+     * Scroll panel que contiene al panel del arbol de exploracion.
+     */
     private JScrollPane _scrollPaneArbol;
+    /**
+     * Scroll panel que contiene al panel del contenido
+     */
     private JScrollPane _scrollPaneContenido;
+    /**
+     * Split panel que separa al panel de contenido y al del arbol.
+     */
     private JSplitPane _splitPanel;
-    private JTable _tablaContenido;
-    
-    private GestorCompartidos _gestorDeCompartidos;
+    /**
+     * Controlador del panel de compartidos.
+     */
+    private ControladorPanelCompartidos _controlador;
     /**
      * Contiene el resultado de una lista de archivos compartidos.
      */
-    //private PanelCompartidos _panelCompartidos;
-    
+    private PanelCompartidos _panelCompartidos;
+
     /** 
      * Constructor de la clase PanelCompartidos. 
      */
-    public GUIPanelCompartidos() {
+    public GUIPanelCompartidos(ControladorPanelCompartidos controlador) {
+
+        _controlador = controlador;
 
         iniciarComponentes();
     }
@@ -63,85 +81,73 @@ public class GUIPanelCompartidos extends JPanel {
         _scrollPaneContenido = new JScrollPane();
         _panelArbol = new JPanel();
         _panelContenido = new JPanel();
-        _tablaContenido = new JTable();
         _explorador = new JTree();
 
         setBorder(BorderFactory.createTitledBorder("Archivos Compartidos"));
-        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setLayout(new BorderLayout());
 
-        _splitPanel.setDividerLocation(200);
-        
-        _panelArbol.setLayout(new BoxLayout(_panelArbol, BoxLayout.LINE_AXIS));
-        
-        DefaultMutableTreeNode treeNode1 = new DefaultMutableTreeNode("Compartidos");      
-        /*DefaultMutableTreeNode treeNode2 = new DefaultMutableTreeNode("Todos los archivos compartidos");
-        treeNode1.add(treeNode2);
-        treeNode2 = new DefaultMutableTreeNode("Archivos completados");
-        treeNode1.add(treeNode2);
-        treeNode2 = new DefaultMutableTreeNode("Archivos incompletos");
-        treeNode1.add(treeNode2);
-        treeNode2 = new DefaultMutableTreeNode("Directorios compartidos");
-        treeNode1.add(treeNode2);*/
-        
-        _explorador.setModel(new DefaultTreeModel(treeNode1));
+        // SPLIT IZQUIERDO
+        _panelArbol.setLayout(new BorderLayout());
+
+        // JTREE
+        _nodoCompartidos = new DefaultMutableTreeNode("Compartidos");
+        _nodoTodosLosCompartidos = new DefaultMutableTreeNode("Todos los Compartidos");
+        _nodoCompartidos.add(_nodoTodosLosCompartidos);
+        _explorador.setModel(new DefaultTreeModel(_nodoCompartidos));
         _scrollPaneArbol.setViewportView(_explorador);
-        
-        
-        _explorador.addMouseListener(new MouseListener() {
-
+        _explorador.addTreeSelectionListener(new TreeSelectionListener() {
+            
             @Override
-            public void mousePressed(MouseEvent arg0) {
-                System.out.println("mousePressed");
-            }
+            public void valueChanged(TreeSelectionEvent e) {
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                System.out.println("mouseClicked");
-            }
+                // Devuelve la ruta del ultimo elemento seleccionado del arbol.
+                DefaultMutableTreeNode nodo = (DefaultMutableTreeNode) _explorador.getLastSelectedPathComponent();
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                System.out.println("mouseReleased");
-            }
+                // Si no se ha seleccionado nada
+                if (nodo == null) {
+                    return;
+                }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                System.out.println("mouseEntered");
-            }
+                Object infoDelNodo = nodo.getUserObject();
+                if (nodo.isLeaf()) {
+                    String carpeta = (String) infoDelNodo;
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                System.out.println("mouseExited");
-            }
+                    if (carpeta.matches("Todos los Compartidos")) {
 
+                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarArchivosCompartidos());
+                        _panelCompartidos.setPreferredSize(new Dimension(450,500));
+                        _scrollPaneContenido.setAutoscrolls(true);
+                        _scrollPaneContenido.setViewportView(_panelCompartidos);
+                        _panelContenido.add(_scrollPaneContenido);
+                        _splitPanel.setDividerLocation(_splitPanel.getDividerLocation());
+                        _splitPanel.setRightComponent(_panelContenido);
+                        repaint();
+                    }
+                    
+                    // Si hay mas opciones se pondrian aqui
+                }
+            }
         });
 
         _panelArbol.add(_scrollPaneArbol);
+
         _splitPanel.setLeftComponent(_panelArbol);
 
-        _panelContenido.setLayout(new BoxLayout(_panelContenido, BoxLayout.LINE_AXIS));
+        // SPLIT DERECHO
+        _panelContenido.setLayout(
+                new BorderLayout());
+
+        // Cargamos los compartidos por defecto
+        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarArchivosCompartidos());
+        _panelCompartidos.setPreferredSize(new Dimension(450,500));                
         _scrollPaneContenido.setAutoscrolls(true);
-        
-        DefaultTableModel modelo = new DefaultTableModel(new Object[][]{}, new String[]{"Nombre", "Tamaño", "Tipo", "Identificador"});
-        listarArchivosCompartidos(modelo);
-        
-        _tablaContenido.setModel(modelo);
-        //_tablaContenido.setPreferredSize(new Dimension(300, 140));
-        _scrollPaneContenido.setViewportView(_tablaContenido);
+        _scrollPaneContenido.setViewportView(_panelCompartidos);
+
         _panelContenido.add(_scrollPaneContenido);
         _splitPanel.setRightComponent(_panelContenido);
+        
+        _splitPanel.setDividerLocation(225);
+
         add(_splitPanel);
     }
-    
-    private void listarArchivosCompartidos(DefaultTableModel modelo){
-        ListaArchivos listacompartidos = _gestorDeCompartidos.getInstancia().getArchivosCompartidos();
-        
-        for(int i=0; i<listacompartidos.size();i++){
-            //_tablaContenido.add
-            Archivo archivo = listacompartidos.get(i);
-            Object[] objeto = {archivo.getNombre(), new Long(archivo.getSize()), archivo.getTipo().toString(), archivo.getHash().toString()};
-            modelo.addRow(objeto);
-        }
-    }
-    
 }
