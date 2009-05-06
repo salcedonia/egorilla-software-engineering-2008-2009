@@ -22,6 +22,7 @@ public class Descarga {
     public static final int PIDEASERVIDOR = 13;
     public static final int PIDEALOSPROPIETARIOS = 1;
     public static final int DESCARGA = 70;
+    public static final int MAX_ESPERA = -100;
 
     private int _estado, _estado_aux;
     private Archivo _archivo;
@@ -137,7 +138,7 @@ public class Descarga {
         }else if(_estado_aux == PIDEALOSPROPIETARIOS){
             _estado = PIDEALOSPROPIETARIOS;
             _estado_aux=PIDEASERVIDOR+1;
-        }else if(_estado_aux == -100){
+        }else if(_estado_aux == MAX_ESPERA){
             _estado=PIDEASERVIDOR;
             _estado_aux=PIDEALOSPROPIETARIOS+1;
         }else{
