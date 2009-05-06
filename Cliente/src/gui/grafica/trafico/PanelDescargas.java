@@ -334,7 +334,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @param c Nuevo color a establecer.
          */
         public void cambiarColor(Color c) {
-
             _panelPrincipal.setBackground(c);
         }
 
@@ -344,8 +343,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @param c Nuevo color a establecer.
          */
         public void cambiarColorBarra(Color c) {
-
-            _barraProgreso.setBackground(c);
             _barraProgreso.setForeground(c);
         }
 
