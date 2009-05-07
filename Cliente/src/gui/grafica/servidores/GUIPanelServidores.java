@@ -26,7 +26,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      * Boton que aniade el servidor a la lista de servidores disponibles
      * en la aplicacion.
      */
-    private JButton _btnAnadir;
+    private JButton _btnAñadir;
     /**
      * Limpia los datos del formulario en el que el usuario introduce los 
      * datos del servidor que quiere añadir a la lista.
@@ -114,7 +114,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         GridBagConstraints gridBagConstraints;
 
         _btnConectar = new JButton();
-        _btnAnadir = new JButton();
+        _btnAñadir = new JButton();
         _btnLimpiarDatos = new JButton();
         _lblNombre = new JLabel();
         _lblDireccionIP = new JLabel();
@@ -207,12 +207,12 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         add(_txtDescripcion, gridBagConstraints);
 
         // BOTON AÑADIR
-        _btnAnadir.setText("Añadir a la Lista de Servidores");
-        _btnAnadir.addActionListener(new ActionListener() {
+        _btnAñadir.setText("Añadir a la Lista de Servidores");
+        _btnAñadir.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                pulsacionBotonAnadirServidor(evt);
+                pulsacionBotonAñadirServidor(evt);
             }
         });
         gridBagConstraints = new GridBagConstraints();
@@ -222,7 +222,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(6, 50, 0, 0);
-        add(_btnAnadir, gridBagConstraints);
+        add(_btnAñadir, gridBagConstraints);
 
         // BOTON LIMPIAR DATOS
         _btnLimpiarDatos.setText("Limpiar Datos del Servidor");
@@ -292,7 +292,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      * 
      * @param evt Evento de pulsacion.
      */
-    private void pulsacionBotonAnadirServidor(ActionEvent evt) {
+    private void pulsacionBotonAñadirServidor(ActionEvent evt) {
 
         // Añadimos el nuevo servidor al panel
         if (_txtDireccionIP.getText().matches("")) {

@@ -1,2 +1,0 @@
-- FALTA Cuando el usuario se desconecta, elimina las relaciones de pertenecia con los archivos existentes, y en caso de ser el único con dicho archivo, elimina el archivo.
-- FALTA Avisa al usuario cuando cierra la conexión el

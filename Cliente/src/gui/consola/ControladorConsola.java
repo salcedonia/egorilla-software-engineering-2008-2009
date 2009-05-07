@@ -99,9 +99,9 @@ public class ControladorConsola {
      * 
      * @return La lista de archivos compartidos del cliente.
      */
-    void peticionListarTodosCompartidos(){
+    public ListaArchivos peticionListarTodosCompartidos(){
     
-        GestorCompartidos.getInstancia().getGestorDisco().getManejarListaArchivos().recorrerListaArchivos(GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTodos());       
+        return GestorCompartidos.getInstancia().getArchivosCompartidos();       
     }
 
     /**
@@ -111,9 +111,9 @@ public class ControladorConsola {
      * 
      * @return La lista de archivos compartidos completos del cliente.
      */
-    void peticionListarCompartidosCompletos() {
+    ListaArchivos peticionListarCompartidosCompletos() {
         
-        GestorCompartidos.getInstancia().getGestorDisco().getManejarListaArchivos().recorrerListaArchivos(GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosCompletos());
+        return GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosCompletos();   
     }
     
     /**
@@ -123,8 +123,8 @@ public class ControladorConsola {
      * 
      * @return La lista de archivos compartidos incompletos del cliente.
      */
-    void peticionListarCompartidosIncompletos() {
+    ListaArchivos peticionListarCompartidosIncompletos() {
         
-        GestorCompartidos.getInstancia().getGestorDisco().getManejarListaArchivos().recorrerListaArchivos(GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales());
+        return GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales();   
     }
 }

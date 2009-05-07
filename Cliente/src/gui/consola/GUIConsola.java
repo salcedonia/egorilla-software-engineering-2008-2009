@@ -304,17 +304,17 @@ public class GUIConsola implements ObservadorGestorEgorilla {
 
             switch (op) {
                 case '1':
-                    _controlador.peticionListarTodosCompartidos();
+                    ListaArchivos listaTodos = _controlador.peticionListarTodosCompartidos();
 
                     // PINTAR LOS ARCHIVOS
                     break;
                 case '2':
-                    _controlador.peticionListarCompartidosCompletos();
+                    ListaArchivos listaCompletos = _controlador.peticionListarCompartidosCompletos();
                     
                     // PINTAR LOS ARCHIVOS
                     break;
                 case '3':
-                    _controlador.peticionListarCompartidosIncompletos();
+                    ListaArchivos listaIncompletos = _controlador.peticionListarCompartidosIncompletos();
                     
                     // PINTAR LOS ARCHIVOS
                     break;

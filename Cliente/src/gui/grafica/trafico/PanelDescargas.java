@@ -482,21 +482,24 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
     
     @Override
     public void nuevaDescarga(String nombre, String hash, int tamanio) {
-        for (int i = 0; i < _listaDescargas.size(); i++) {
+        boolean encontrado=false;
+        for (int i = 0; i < _listaDescargas.size() && !encontrado; i++) {
             if (_listaDescargas.get(i).getHash().equals(hash)) {
                 _listaDescargas.get(i).setEstado("Descargando");
                 _listaDescargas.get(i).cambiarColorBarra(new Color(19, 6, 255));
-                return;
+                encontrado=true;
             }
         }
-        DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
-        int tamanioAux = GestorCompartidos.getInstancia().getGestorDisco().getFragmentador().cantidadFragmentosArchivo(hash);
-        System.out.println("TAMAÑOOOOOOOOOO "+ tamanioAux + " - " + (tamanioAux-tamanio));
-        descarga.setValorProgressBar((tamanioAux-tamanio));
-        _panelPrincipal.add(descarga);
-        _listaDescargas.add(descarga);
-        _panelPrincipal.repaint();
-        repaint();
+        if(!encontrado){
+            int tamanioAux = GestorCompartidos.getInstancia().getGestorDisco().getFragmentador().cantidadFragmentosArchivo(hash);
+            DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanioAux);
+            System.out.println("TAMAÑOOOOOOOOOO "+ tamanioAux + " - " + (tamanioAux-tamanio));
+            descarga.setValorProgressBar((tamanioAux-tamanio));
+            _panelPrincipal.add(descarga);
+            _listaDescargas.add(descarga);
+            _panelPrincipal.repaint();
+            repaint();
+        }
     }
 
     @Override
