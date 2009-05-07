@@ -1,9 +1,15 @@
 package gui.grafica.servidores;
 
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.FicheroInfo;
+import gestorDeConfiguracion.InfoServidor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Panel que gestiona los distintos servidores disponibles
@@ -212,7 +218,10 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                pulsacionBotonAnadirServidor(evt);
+                try {
+                    pulsacionBotonAnadirServidor(evt);
+                } catch (ControlConfiguracionClienteException ex) {
+                }
             }
         });
         gridBagConstraints = new GridBagConstraints();
@@ -292,7 +301,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      * 
      * @param evt Evento de pulsacion.
      */
-    private void pulsacionBotonAnadirServidor(ActionEvent evt) {
+    private void pulsacionBotonAnadirServidor(ActionEvent evt) throws ControlConfiguracionClienteException {
 
         // Añadimos el nuevo servidor al panel
         if (_txtDireccionIP.getText().matches("")) {
@@ -306,7 +315,15 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         } else {
 
             try {
-                // Aniadimos el nuevo servidor
+                FicheroInfo <InfoServidor> _oFicheroInfoServidores  = new FicheroInfo <InfoServidor> ("servidores.info");   
+                //Cargo el fichero de servidores.
+                _oFicheroInfoServidores.cargarFicheroInfo();                
+                ArrayList <InfoServidor> alInfoServidores = _oFicheroInfoServidores.obtenerConjuntoInfo();
+                InfoServidor infoServidor = new InfoServidor (_txtNombre.getText().trim(), _txtDireccionIP.getText().trim(), _txtPuerto.getText().trim(), _txtDescripcion.getText().trim());
+                //Anado el nuevo elemento a la lista de servidores.
+                alInfoServidores.add(infoServidor);
+                //Actualizo el fichero de configuracion de servidores.
+                _oFicheroInfoServidores.establecerConjuntoInfo(alInfoServidores);
                 _panelServidores.addServidor(_txtDireccionIP.getText().trim(), Integer.parseInt(_txtPuerto.getText().trim()), _txtNombre.getText().trim(), _txtDescripcion.getText().trim());
                 _scrollPaneListaServidores.add(_panelServidores);
                 _scrollPaneListaServidores.setViewportView(_panelServidores);

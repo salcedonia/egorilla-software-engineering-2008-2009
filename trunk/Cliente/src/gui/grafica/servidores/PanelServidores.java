@@ -2,6 +2,8 @@ package gui.grafica.servidores;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
+import gestorDeConfiguracion.FicheroInfo;
+import gestorDeConfiguracion.InfoServidor;
 import gestorDeConfiguracion.PropiedadCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,6 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -117,14 +120,21 @@ public class PanelServidores extends JPanel {
     private void crearListaServidores() throws NumberFormatException {
 
         try {
-
-            Integer puerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
-            String direccionIP = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
-            String nombre = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral());
-            String descripcion = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral());
-            ServidorIndividual servidor = new ServidorIndividual(direccionIP, puerto, nombre, descripcion);
-            _listaServidores.add(servidor);
-            _panelPrincipal.add(servidor);
+            FicheroInfo <InfoServidor> _oFicheroInfoServidores;
+            
+            _oFicheroInfoServidores = new FicheroInfo <InfoServidor> ("servidores.info");
+            //Cargo el fichero de servidores.
+            _oFicheroInfoServidores.cargarFicheroInfo();
+            ArrayList <InfoServidor> alInfoServidores = _oFicheroInfoServidores.obtenerConjuntoInfo(); 
+            //Actualizo la interfaz con los servidores leídos del fichero.
+            for(Iterator <InfoServidor> iterador = alInfoServidores.iterator(); iterador.hasNext();){
+                InfoServidor infoServidorAux = iterador.next();
+                ServidorIndividual servidor = new ServidorIndividual(infoServidorAux._sIP, 
+                                                                    Integer.parseInt(infoServidorAux._sPuerto), 
+                                                                    infoServidorAux._sNombreServidor, infoServidorAux._sDescripcion);
+                _listaServidores.add(servidor);
+                _panelPrincipal.add(servidor);
+            }            
             _panelPrincipal.repaint();
             repaint();
         } catch (ControlConfiguracionClienteException ex) {
