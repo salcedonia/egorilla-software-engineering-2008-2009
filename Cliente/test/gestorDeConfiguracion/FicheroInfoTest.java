@@ -31,7 +31,9 @@ public class FicheroInfoTest {
     @Before
     public void setUp() throws ControlConfiguracionClienteException {
         _oFicheroInfoServidores = new FicheroInfo <InfoServidor> ("servidores.info");
+        _oFicheroInfoServidores.cargarFicheroInfo();
         _oFicheroInfoDescargas = new FicheroInfo <InfoDescarga> ("descargas.info");    
+        _oFicheroInfoDescargas.cargarFicheroInfo();
     }
 
     @Test
