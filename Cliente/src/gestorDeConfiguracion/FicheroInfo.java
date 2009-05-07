@@ -50,7 +50,7 @@ public class FicheroInfo <T>{
      * Carga en el ArrayList de objetos T toda la info existente en el fichero,
      * mediante deserializacion.
      */
-    protected void cargarFicheroInfo() throws ControlConfiguracionClienteException {
+    public void cargarFicheroInfo() throws ControlConfiguracionClienteException {
         try {
             this._info = (ArrayList<T>) Util.deserializar (_sNombreFicheroInfo);
         } catch (FileNotFoundException fnfe) {
