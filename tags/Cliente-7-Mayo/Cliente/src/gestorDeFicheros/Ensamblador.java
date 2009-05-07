@@ -279,9 +279,6 @@ public class Ensamblador{
     ListaArchivos listaCompletos = _gestorDisco.getListaArchivosCompletos();
     ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
 
-    if( _gestorDisco.getEstadoEscrituraEnDisco() != 1  ){
-    _gestorDisco.detenerEscrituraEnDisco();
-
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
         hashFragmento );
     if( archivoExistencia == null ){
@@ -315,7 +312,6 @@ public class Ensamblador{
       //creo que tambien hace falta cerrar el otro
       //archivo.close();
       punteroFichero.close();
-      _gestorDisco.setActivarEscrituraDisco();
       }catch( FileNotFoundException e ){
         System.out.println( "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
         //e.printStackTrace();
@@ -356,7 +352,6 @@ public class Ensamblador{
       }      
       
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
-    }
     }
     
     return guardado;
