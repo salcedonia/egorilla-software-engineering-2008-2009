@@ -165,6 +165,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                             if (paquete.esBomba())
                                 return;  // finaliza el hilo
                         }
+                        s.close();
                     } catch (ClassNotFoundException ex) {
                         ex.printStackTrace();
                      
