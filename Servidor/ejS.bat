@@ -1,1 +1,1 @@
-java -cp build servidoregorilla.Main
+java -cp build;lib/log4j-1.2.15.jar main.Main

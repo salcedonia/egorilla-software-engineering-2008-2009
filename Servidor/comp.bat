@@ -1,1 +1,1 @@
-javac -cp src src/servidoregorilla/Main.java -d build
+javac -cp src src/main/Main.java -d build
