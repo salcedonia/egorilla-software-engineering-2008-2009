@@ -91,7 +91,7 @@ public class Descarga {
         return cliente;
     }
 
-    public void eliminarCliente(String IP){
+    public synchronized void eliminarCliente(String IP){
         
         ArrayList<Par> tmp = new ArrayList<Par>();
         for (Par quien:_listaQuienTieneQue) {
