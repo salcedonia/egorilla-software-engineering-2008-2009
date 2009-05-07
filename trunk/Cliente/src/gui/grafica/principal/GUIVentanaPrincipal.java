@@ -15,8 +15,7 @@ import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
 import gui.grafica.trafico.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -558,7 +557,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
      * @param evt Evento de pulsación del ratón sobre el botón _btnAyuda.
      */
     private void pulsacionBotonAyuda(MouseEvent evt) {
-        // TODO: En pagina web, en otra ventana, se admiten sugerencias
+        
+        Util.lanzarVisualizadorDefecto("src/gui/grafica/ayuda/index.html");
     }
 
     /**

@@ -1,6 +1,7 @@
 
 package util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,5 +31,32 @@ public class Util {
         return objeto;
     }
 
-        
+    public static Process lanzarVisualizadorDefecto(String filepath) {
+        String url = new File(filepath).getAbsolutePath();
+
+        //En funcion del Sistema Operativo decidimos el programa de linea de comandos
+        //a ejecutar.
+        try {
+            if(System.getProperty("os.name").toUpperCase().indexOf("95") != -1) {
+                return Runtime.getRuntime().exec(new String[]{"command.com", "/C", "start", url});
+            }
+            if(System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1) {
+                return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", url});
+            }
+            if(System.getProperty("os.name").toUpperCase().indexOf("MAC") != -1) {
+                return Runtime.getRuntime().exec(new String[]{"open", url});
+            }
+            if (System.getProperty("os.name").toUpperCase().indexOf("LINUX") != -1 ) {
+                //Para Linux se lanza por defecto KDE. 
+                //TODO: determinar cual es el entorno
+//                if(getLinuxDesktop().equals("kde")) {
+                    return Runtime.getRuntime().exec(new String[]{"kfmclient", "exec", url});
+//                } else {
+//                    return Runtime.getRuntime().exec(new String[]{"gnome-open", url});
+//                }
+            }
+        } catch(IOException ioex) {
+        }
+        return null;
+    }
 }
