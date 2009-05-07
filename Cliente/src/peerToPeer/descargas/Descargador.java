@@ -54,9 +54,10 @@ public class Descargador extends Thread{
                             break;
                         case Descarga.PIDEALOSPROPIETARIOS:
                             if (d.getListaPropietarios().size() != 0) {
-                                for (DatosCliente propietario : d.getListaPropietarios()) {
+                                for (int i=0;i<d.getListaPropietarios().size();i++) {
                                     HolaQuiero msg = new HolaQuiero(d.getArchivo());
-                                    msg.setDestino(propietario.getIP(), propietario.getPuertoEscucha());
+                                    msg.setDestino(d.getListaPropietarios().get(i).getIP(), 
+                                                   d.getListaPropietarios().get(i).getPuertoEscucha());
 
                                     _gestor.addMensajeParaEnviar(msg);
                                 }
