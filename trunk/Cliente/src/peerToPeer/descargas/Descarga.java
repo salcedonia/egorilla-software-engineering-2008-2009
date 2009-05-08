@@ -55,7 +55,7 @@ public class Descarga {
         _listaFragmentosPendientes=GestorCompartidos.getInstancia().queFragmentosTienesPendientes(_archivo.getHash());
     }
 
-    public synchronized void actualizaPropietarios(DatosCliente[] datos){
+    public void actualizaPropietarios(DatosCliente[] datos){
         _propietarios = new ArrayList<DatosCliente>();
         _listaQuienTieneQue = new ArrayList<Par>();
         for(int i=0;i<datos.length;i++){
@@ -81,6 +81,16 @@ public class Descarga {
             int max = _listaQuienTieneQue.size()-1;
             int min = 0;
             _posicion = (int)Math.floor(Math.random()*(max-min+1)+min);
+            int posicionNueva = (int)Math.floor(Math.random()*(max-min+1)+min);
+            if( _posicion == posicionNueva ){
+                if (_posicion < posicionNueva){//No hemos superado al último
+                    _posicion ++;//Actualizamos posición para obtener el siguiente
+                }else if(_posicion > posicionNueva){//Acabamos de superar al último
+                    _posicion--;//El siguiente por tanto será el primero
+                }else{
+                    _posicion=0;
+                }
+            }
 
             Par par=_listaQuienTieneQue.get(_posicion);
             int fragmento=par.getfragmentos().indexOf(frag);
@@ -91,7 +101,7 @@ public class Descarga {
         return cliente;
     }
 
-    public synchronized void eliminarCliente(String IP){
+    public void eliminarCliente(String IP){
         
         ArrayList<Par> tmp = new ArrayList<Par>();
         for (Par quien:_listaQuienTieneQue) {
@@ -174,7 +184,7 @@ public class Descarga {
         }
     }
 
-    public synchronized ArrayList<DatosCliente> getListaPropietarios(){
+    public ArrayList<DatosCliente> getListaPropietarios(){
         return  _propietarios;
     }
 }
