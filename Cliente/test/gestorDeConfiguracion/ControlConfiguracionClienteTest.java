@@ -19,8 +19,7 @@ public class ControlConfiguracionClienteTest {
     
     @Before
     public void setUp() throws ControlConfiguracionClienteException {
-        oControlConfiguracion = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties",
-                                "servidores.info", "descargas.info");
+        oControlConfiguracion = ControlConfiguracionCliente.obtenerInstancia("cliente.properties", "cliente_default.properties", "servidores.info");
     }
 
     @Test

@@ -62,7 +62,7 @@ public class Main {
                 String modo = (String) parser.getOptionValue(gui);
 
                 ControlConfiguracionCliente controlConfiguracionCliente = ControlConfiguracionCliente.obtenerInstancia("cliente.properties",
-                                                                           "cliente_default.properties", "servidores.info", "descargas.info");
+                                                                           "cliente_default.properties", "servidores.info");
                 int puertoDeEscuchaCliente = Integer.parseInt(controlConfiguracionCliente.obtenerPropiedad(PropiedadCliente.PUERTO.obtenerLiteral()));
 
                 crearModulosCliente(puertoDeEscuchaCliente, modo);
@@ -90,8 +90,7 @@ public class Main {
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
         _gestorEGorilla = new GestorEgorilla(puertoDeEscuchaCliente,_gestorDeDisco);
         _gestorDeErrores = ControlDeErrores.getInstancia();
-//        DataServerTest server = new DataServerTest();
-//        server.start();
+
         //Registro a los observadores de la clase ControlConfiguracionCliente
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorEGorilla);
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);        
