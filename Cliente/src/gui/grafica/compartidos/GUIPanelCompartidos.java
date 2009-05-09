@@ -101,17 +101,17 @@ public class GUIPanelCompartidos extends JPanel {
         _nodoCompartidos = new DefaultMutableTreeNode("Compartidos");
         _nodoTodosLosCompartidos = new DefaultMutableTreeNode("Todos los Compartidos");
         _nodoCompartidos.add(_nodoTodosLosCompartidos);
-        
+
         _nodoCompletos = new DefaultMutableTreeNode("Completos");
         _nodoCompartidos.add(_nodoCompletos);
-        
+
         _nodoIncompletos = new DefaultMutableTreeNode("Incompletos");
         _nodoCompartidos.add(_nodoIncompletos);
-        
+
         _explorador.setModel(new DefaultTreeModel(_nodoCompartidos));
         _scrollPaneArbol.setViewportView(_explorador);
         _explorador.addTreeSelectionListener(new TreeSelectionListener() {
-            
+
             @Override
             public void valueChanged(TreeSelectionEvent e) {
 
@@ -128,24 +128,19 @@ public class GUIPanelCompartidos extends JPanel {
                     String carpeta = (String) infoDelNodo;
 
                     if (carpeta.matches("Todos los Compartidos")) {
-
                         _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
-                        actualizarPanelDerecha();
                     }
-                    
+
                     if (carpeta.matches("Completos")) {
-
                         _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosCompletos());
-                        actualizarPanelDerecha();
                     }
-                    
-                    if (carpeta.matches("Incompletos")) {
 
+                    if (carpeta.matches("Incompletos")) {
                         _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosIncompletos());
-                        actualizarPanelDerecha();
                     }
-                    
-                    // Si hay mas opciones se pondrian aqui
+                    actualizarPanelDerecha();
+
+                // Si hay mas opciones se pondrian aqui
                 }
             }
 
@@ -153,7 +148,7 @@ public class GUIPanelCompartidos extends JPanel {
              * Configura todos los elementos 
              */
             private void actualizarPanelDerecha() {
-                
+
                 _panelCompartidos.setPreferredSize(new Dimension(450, 500));
                 _scrollPaneContenido.setAutoscrolls(true);
                 _scrollPaneContenido.setViewportView(_panelCompartidos);
@@ -174,13 +169,13 @@ public class GUIPanelCompartidos extends JPanel {
 
         // Cargamos los compartidos por defecto
         _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
-        _panelCompartidos.setPreferredSize(new Dimension(450,500));                
+        _panelCompartidos.setPreferredSize(new Dimension(450, 500));
         _scrollPaneContenido.setAutoscrolls(true);
         _scrollPaneContenido.setViewportView(_panelCompartidos);
 
         _panelContenido.add(_scrollPaneContenido);
         _splitPanel.setRightComponent(_panelContenido);
-        
+
         _splitPanel.setDividerLocation(225);
 
         add(_splitPanel);

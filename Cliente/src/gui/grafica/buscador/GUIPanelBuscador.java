@@ -343,7 +343,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
         setNumeroNuevos(getNumeroNuevos() + 1);
 
         // Agregamos el panel de contenido, una nueva ficha
-        _panelPestanas.addTab(_txtBusqueda.getText(), _panelScroll);
+        _panelPestanas.addTab(_txtBusqueda.getText() + " (" + lista.length + ")", _panelScroll);
 
         // Trasladamos el enfoque a esta nueva ficha
         _panelPestanas.setSelectedIndex(_panelPestanas.getTabCount() - 1);

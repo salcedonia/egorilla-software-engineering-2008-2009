@@ -1,6 +1,7 @@
 package gui.grafica.buscador;
 
 import datos.Archivo;
+import gestorDeFicheros.GestorCompartidos;
 import gui.grafica.servidores.ObservadorPanelServidores;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,6 +19,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.BevelBorder;
+import mensajes.serverclient.ListaArchivos;
+import peerToPeer.descargas.Descarga;
 import peerToPeer.descargas.ObservadorAlmacenDescargas;
 
 /**
@@ -56,9 +59,13 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
      */
     private Color _colorFondo = Color.WHITE;
     /**
-     * Color archivo descargado.
+     * Color archivo descargado incompletado.
      */
-    private Color _colorDescargado = Color.RED;
+    private Color _colorDescargadoIncompleto = Color.RED;
+    /**
+     * Color archivo descargado completo.
+     */
+    private Color _colorDescargadoCompleto = Color.GREEN;
     /**
      * Color del borde del panel.
      */
@@ -102,6 +109,26 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
             // Creamos una nueva fila
             _panelPrincipal.add(b);
         }
+    }
+
+    /**
+     * Pinta el archivo del color correspondiente.
+     * 
+     * @param b Archivo asociado a la busqueda.
+     * @para color Color a colorear del archivo.
+     */
+    private void colorearArchivo(BusquedaIndividual b, Color color) {
+
+        b._panelPrincipal.setBackground(_colorFondo);
+        b._panelPrincipal.setBackground(_colorFondo);
+        b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
+        b.setBorder(BorderFactory.createLineBorder(_colorFondo));
+        b._lblNombre.setForeground(color);
+        b._lblTamanio.setForeground(color);
+        b._lblTipoArchivo.setForeground(color);
+        b._lblHash.setForeground(color);
+
+        b._panelPrincipal.repaint();
     }
 
     /**
@@ -257,6 +284,38 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
             createPopupMenu();
         }
 
+        private void comprobarSiEstaCompleto() {
+
+            // Compruebo si el archivo esta en mis compartidos y si estan completos para pintarlo en verde
+            ListaArchivos descargas = GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosCompletos();
+            for (int i = 0; i < descargas.size(); i++) {
+
+                // Si esta descargandose lo pinto en verde
+                if (descargas.get(i).getHash().matches(_archivo.getHash())) {
+
+                    colorearArchivo(this, _colorDescargadoCompleto);
+                }
+            }
+        }
+
+        /**
+         * Comprueba si el archivo esta descargandose actualmente para
+         * mostrarlo de color rojo.
+         */
+        private void comprobarSiEstaDescargandose() {
+
+            // Compruebo si esta descargandose para pintarlo en rojo
+            ArrayList<Descarga> descargas = _controlador.getGestorEGorilla().getAlmacenDescargas().getListaDescargas();
+            for (Descarga descarga : descargas) {
+
+                // Si esta descargandose lo pinto en rojo
+                if (descarga.getArchivo().getHash().matches(_archivo.getHash())) {
+
+                    colorearArchivo(this, _colorDescargadoIncompleto);
+                }
+            }
+        }
+
         /**
          * Inicia los componentes de una busqueda individual
          */
@@ -267,6 +326,8 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
             _panelPrincipal.add(_lblTamanio);
             _panelPrincipal.add(_lblTipoArchivo);
             _panelPrincipal.add(_lblHash);
+            comprobarSiEstaDescargandose();
+            comprobarSiEstaCompleto();  
             setLayout(new BorderLayout());
             add(_panelPrincipal, BorderLayout.CENTER);
             _panelPrincipal.repaint();
@@ -445,16 +506,7 @@ public class PanelBusqueda extends JPanel implements ObservadorAlmacenDescargas 
             // Ponemos en rojo esa fila cuando ha llegado esa descarga
             if (b._lblHash.getText().matches(hash)) {
 
-                b._panelPrincipal.setBackground(_colorFondo);
-                b._panelPrincipal.setBackground(_colorFondo);
-                b._panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
-                b.setBorder(BorderFactory.createLineBorder(_colorFondo));
-                b._lblNombre.setForeground(_colorDescargado);
-                b._lblTamanio.setForeground(_colorDescargado);
-                b._lblTipoArchivo.setForeground(_colorDescargado);
-                b._lblHash.setForeground(_colorDescargado);
-
-                b._panelPrincipal.repaint();
+                colorearArchivo(b, _colorDescargadoIncompleto);
             }
         }
     }
