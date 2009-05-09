@@ -139,7 +139,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 20, 0, 0);
         add(_lblDireccionIP, gridBagConstraints);
 
         // TEXTO DIRECCION IP
@@ -149,7 +149,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 150, 0, 0);
         add(_txtDireccionIP, gridBagConstraints);
 
         // ETIQUETA PUERTO
@@ -158,7 +158,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 20, 0, 0);
         add(_lblPuerto, gridBagConstraints);
 
         // TEXTO PUERTO
@@ -168,7 +168,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 150, 0, 0);
         add(_txtPuerto, gridBagConstraints);
 
         // ETIQUETA NOMBRE
@@ -177,7 +177,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 20, 0, 0);
         add(_lblNombre, gridBagConstraints);
 
         // TEXTO NOMBRE
@@ -187,7 +187,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 150, 0, 0);
         add(_txtNombre, gridBagConstraints);
 
         // ETIQUETA DESCRIPCION
@@ -196,7 +196,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 10, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 20, 0, 0);
         add(_lblDescripcion, gridBagConstraints);
 
         // TEXTO DESCRIPCION
@@ -206,7 +206,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new Insets(6, 140, 0, 0);
+        gridBagConstraints.insets = new Insets(10, 150, 0, 0);
         add(_txtDescripcion, gridBagConstraints);
 
         // BOTON AÑADIR
@@ -227,7 +227,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(6, 50, 0, 0);
+        gridBagConstraints.insets = new Insets(0, 0, 0, 0);
         add(_btnAnadir, gridBagConstraints);
 
         // BOTON LIMPIAR DATOS
@@ -245,7 +245,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridwidth = 1;
         gridBagConstraints.gridheight = 2;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
-        gridBagConstraints.insets = new Insets(6, 50, 0, 0);
+        gridBagConstraints.insets = new Insets(0, 0, 0, 0);
         add(_btnLimpiarDatos, gridBagConstraints);
 
         // SEPARADOR
@@ -253,7 +253,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = 5;
-        gridBagConstraints.ipadx = 650;
+        gridBagConstraints.ipadx = 700;
         gridBagConstraints.ipady = 5;
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(20, 10, 0, 0);

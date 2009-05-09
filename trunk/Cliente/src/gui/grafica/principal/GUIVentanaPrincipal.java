@@ -91,14 +91,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
      */
     private JPanel _panelConexion;
     /**
-     * Separador que separa el panel estado del principal.
-     */
-    private JSeparator _separador1;
-    /**
-     * Separador que separa el panel estado con el de conexion.
-     */
-    private JSeparator _separador2;
-    /**
      * Botonera superior que contiene los botones con las acciones principales
      * de la aplicacion.
      */
@@ -228,8 +220,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _btnAyuda = new JButton();
         _lblEstado = new JLabel();
         _lblConexion = new JLabel();
-        _separador1 = new JSeparator(); 
-        _separador2 = new JSeparator(); 
         _botonera = new JToolBar();
 
         setTitle("eGorilla");
@@ -242,17 +232,14 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
         _panelEstado.setName("panelEstado");
         _panelEstado.setLayout(new BorderLayout());
 
-        _separador1.setName("separador1");
-        _panelEstado.add(_separador1, BorderLayout.NORTH);
-
         _lblEstado.setText("Bienvenido a eGorilla");
         _panelEstado.add(_lblEstado, BorderLayout.CENTER);
 
         _panelConexion.setMinimumSize(new Dimension(40, 20));
         _panelConexion.setPreferredSize(new Dimension(100, 20));
 
-        _separador2.setOrientation(SwingConstants.VERTICAL);
         _lblConexion.setText("Desconectado");
+        _panelConexion.add(_lblConexion, BorderLayout.CENTER);
 
         _panelEstado.add(_panelConexion, BorderLayout.EAST);
         getContentPane().add(_panelEstado, BorderLayout.PAGE_END);
@@ -600,7 +587,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // Cambiamos las etiquetas de estado
         _lblConexion.setText("Conectado");
-        _lblEstado.setText("eGorilla conectado");
     }
 
     @Override
@@ -611,7 +597,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgori
 
         // Cambiamos las etiquetas de estado
         _lblConexion.setText("Desconectado");
-        _lblEstado.setText("eGorilla desconectado");
     }
 
     @Override
