@@ -1,21 +1,18 @@
 package gui.grafica.servidores;
 
-import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.FicheroInfo;
 import gestorDeConfiguracion.InfoServidor;
-import gestorDeConfiguracion.PropiedadCliente;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -31,7 +28,7 @@ import javax.swing.border.BevelBorder;
  * 
  * @author Javier Salcedo
  */
-public class PanelServidores extends JPanel {
+public class PanelServidores extends JPanel implements Serializable {
 
     /**
      * Lista de paneles de servidores (ServidorIndividual).
@@ -49,7 +46,7 @@ public class PanelServidores extends JPanel {
      * Panel de Servidores que contiene a esta clase.
      */
     private Vector<ObservadorPanelServidores> _observadores;
-        /**
+    /**
      * Color de selección.
      */
     private Color _colorSeleccion = new Color(102, 204, 255);
@@ -58,19 +55,15 @@ public class PanelServidores extends JPanel {
      */
     private Color _colorFondo = Color.WHITE;
     /**
-     * Color archivo descargado.
-     */
-    private Color _colorDescargado = Color.RED;
-    /**
      * Color del borde del panel.
      */
     private Color _colorBorde = Color.BLACK;
-    
+
     /**
      * Constructor de la clase PanelServidores.
      */
     public PanelServidores(ControladorPanelServidores controlador) {
-        
+
         _controlador = controlador;
         _listaServidores = new ArrayList<ServidorIndividual>();
         _observadores = new Vector<ObservadorPanelServidores>();
@@ -93,16 +86,13 @@ public class PanelServidores extends JPanel {
     }
 
     /**
-     * Añade un nuevo servidor a la lista de servidores.
+     * Anade un nuevo servidor a la lista de servidores.
      * 
-     * @param direccionIP Direccion IP del servidor.
-     * @param puerto Puerto de conexion del nuevo servidor.
-     * @param nombre Nombre del servidor.
-     * @param descripcion Descripcion del servidor.
+     * @param infoServidor Informacion del servidor.
      */
-    void addServidor(String direccionIP, Integer puerto, String nombre, String descripcion) {
+    public void anadirServidor(InfoServidor infoServidor) {
 
-        ServidorIndividual servidor = new ServidorIndividual(direccionIP, puerto, nombre, descripcion);
+        ServidorIndividual servidor = new ServidorIndividual(infoServidor);
         _listaServidores.add(servidor);
         _panelPrincipal.add(servidor);
         _panelPrincipal.repaint();
@@ -110,9 +100,31 @@ public class PanelServidores extends JPanel {
     }
 
     /**
+     * Elimina un servidor a la lista de servidores.
+     * 
+     * @param infoServidor Informacion del servidor.
+     */
+    public void eliminarServidor(InfoServidor infoServidor) {
+
+        for (int i = 0; i < _listaServidores.size(); i++) {
+            if (_listaServidores.get(i).getInfoServidor().equals(infoServidor)) {
+                _listaServidores.remove(i);
+                _panelPrincipal.setVisible(false);
+                repintar();
+                break;
+            }
+        }
+        ServidorIndividual servidor = new ServidorIndividual(infoServidor);
+        _listaServidores.remove(servidor);
+        _panelPrincipal.remove(servidor);
+        _panelPrincipal.repaint();
+        repaint();
+    }
+
+    /**
      * Crea la lista de servidores a mostrar.
      * TODO: 
-     * Solo se carga el servidor por defecto, por lo que habria que tener una lista
+     * Solo se carga el infoServidor por defecto, por lo que habria que tener una lista
      * de servidores a los que se pueda conectar guardados en algun archivo.
      * 
      * @throws java.lang.NumberFormatException
@@ -120,52 +132,64 @@ public class PanelServidores extends JPanel {
     private void crearListaServidores() throws NumberFormatException {
 
         try {
-            FicheroInfo <InfoServidor> _oFicheroInfoServidores;
-            
-            _oFicheroInfoServidores = new FicheroInfo <InfoServidor> ("servidores.info");
-            //Cargo el fichero de servidores.
-            _oFicheroInfoServidores.cargarFicheroInfo();
-            ArrayList <InfoServidor> alInfoServidores = _oFicheroInfoServidores.obtenerConjuntoInfo(); 
+
+            // Creo el objeto que contiene la lista de servidores
+            FicheroInfo<InfoServidor> ficheroServidores = new FicheroInfo<InfoServidor>("servidores.info");
+
+            //Cargo el fichero de servidores
+            ficheroServidores.cargarFicheroInfo();
+
+            // Obtengo la lista de servidores
+            ArrayList<InfoServidor> listaServidores = ficheroServidores.getInfoFichero();
+
             //Actualizo la interfaz con los servidores leídos del fichero.
-            for(Iterator <InfoServidor> iterador = alInfoServidores.iterator(); iterador.hasNext();){
-                InfoServidor infoServidorAux = iterador.next();
-                ServidorIndividual servidor = new ServidorIndividual(infoServidorAux._sIP, 
-                                                                    Integer.parseInt(infoServidorAux._sPuerto), 
-                                                                    infoServidorAux._sNombreServidor, infoServidorAux._sDescripcion);
+            for (InfoServidor infoServidor : listaServidores) {
+
+                ServidorIndividual servidor = new ServidorIndividual(infoServidor);
                 _listaServidores.add(servidor);
                 _panelPrincipal.add(servidor);
-            }            
+            }
             _panelPrincipal.repaint();
             repaint();
-        } catch (ControlConfiguracionClienteException ex) {
-
-            // Llamada al gestor de errores
-
-        } catch (NumberFormatException ex) {
-
-            // Llamada al gestor de errores
+        } catch (ControlConfiguracionClienteException ex) {            // Llamada al gestor de errores
+        } catch (NumberFormatException ex) {            // Llamada al gestor de errores
         }
     }
 
     /**
+     * Repinta el panel de servidores.
+     */
+    public void repintar() {
+        _panelPrincipal.removeAll();
+        _panelPrincipal.add(new Cabecera());
+        for (int i = 0; i < _listaServidores.size(); i++) {
+            _panelPrincipal.add(_listaServidores.get(i));
+        }
+        repaint();
+        _panelPrincipal.setBackground(_colorFondo);
+        _panelPrincipal.repaint();
+        _panelPrincipal.setVisible(true);
+    }
+    
+    /**
      * Cabecera de la tabla donde van a representarse los servidores.
      */
-    private class Cabecera extends JPanel {
+    private class Cabecera extends JPanel implements Serializable {
 
         /**
-         * Etiqueta de la direccion IP del servidor.
+         * Etiqueta de la direccion IP del infoServidor.
          */
         private JLabel _lblDireccionIP;
         /**
-         * Etiqueta del puerto del servidor.
+         * Etiqueta del puerto del infoServidor.
          */
         private JLabel _lblPuerto;
         /**
-         * Etiqueta del nombre del servidor.
+         * Etiqueta del nombre del infoServidor.
          */
         private JLabel _lblNombre;
         /**
-         * Etiqueta de la descripcion del servidor.
+         * Etiqueta de la descripcion del infoServidor.
          */
         private JLabel _lblDescripcion;
         /**
@@ -180,7 +204,7 @@ public class PanelServidores extends JPanel {
          * Color de fondo de la cabecera.
          */
         private Color _colorFondo = Color.BLUE;
-        
+
         /**
          * Constructor de la clase Cabecera.
          */
@@ -194,12 +218,12 @@ public class PanelServidores extends JPanel {
          */
         private void iniciarComponentes() {
 
-            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, 
-                    new Color(102, 204, 255), 
-                    new Color(51, 153, 255), 
-                    new Color(0, 0, 102), 
-                    new Color(0, 0, 153)));          
-            
+            setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
+                    new Color(102, 204, 255),
+                    new Color(51, 153, 255),
+                    new Color(0, 0, 102),
+                    new Color(0, 0, 153)));
+
             _panelPrincipal = new JPanel();
             _lblDireccionIP = new JLabel("IP Servidor");
             _lblPuerto = new JLabel("Puerto Servidor");
@@ -224,40 +248,28 @@ public class PanelServidores extends JPanel {
     }
 
     /**
-     * Representa un archivo de la lista devuelta por el servidor.
+     * Representa un archivo de la lista devuelta por el infoServidor.
      */
     private class ServidorIndividual extends JPanel {
 
         /**
-         * Direccion IP asociada al servidor.
+         * Informacion a representar del infoServidor.
          */
-        private String _direccionIP;
+        private InfoServidor _infoServidor;
         /**
-         * Puerto de conexion con el servidor.
-         */
-        private Integer _puerto;
-        /**
-         * Nombre del servidor.
-         */
-        private String _nombre;
-        /**
-         * Descripcion del servidor.
-         */
-        private String _descripcion;
-        /**
-         * Etiqueta que muestra el valor de la direccion IP del servidor.
+         * Etiqueta que muestra el valor de la direccion IP del infoServidor.
          */
         private JLabel _lblDireccionIP;
         /**
-         * Etiqueta que muestra el valor del puerto de conexion del servidor.
+         * Etiqueta que muestra el valor del puerto de conexion del infoServidor.
          */
         private JLabel _lblPuerto;
         /**
-         * Etiqueta que muestra el valor del nombre del servidor.
+         * Etiqueta que muestra el valor del nombre del infoServidor.
          */
         private JLabel _lblNombre;
         /**
-         * Etiqueta que muestra el valor de la descripcion del servidor.
+         * Etiqueta que muestra el valor de la descripcion del infoServidor.
          */
         private JLabel _lblDescripcion;
         /**
@@ -280,17 +292,11 @@ public class PanelServidores extends JPanel {
         /**
          * Constructor de la clase BusquedaIndividual.
          * 
-         * @param direccionIP Direccion IP del servidor.
-         * @param puerto Puerto de conexion al servidor.
-         * @param nombre Nombre del servidor.
-         * @param descripcion Descripcion del servidor.
+         * @param infoServidor Informacion del infoServidor.
          */
-        private ServidorIndividual(String direccionIP, Integer puerto, String nombre, String descripcion) {
+        private ServidorIndividual(InfoServidor infoServidor) {
 
-            _direccionIP = direccionIP;
-            _puerto = puerto;
-            _nombre = nombre;
-            _descripcion = descripcion;
+            _infoServidor = infoServidor;
 
             _eventosRaton = new EventosRaton();
             _oyenteBoton = new OyenteBoton();
@@ -299,15 +305,15 @@ public class PanelServidores extends JPanel {
             _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorFondo));
             _panelPrincipal.setBackground(_colorFondo);
             setBackground(_colorFondo);
-                        
+
             _panelPrincipal.addMouseListener(_eventosRaton);
-            _lblDireccionIP = new JLabel(direccionIP);
+            _lblDireccionIP = new JLabel(_infoServidor.getDireccionIP());
             _lblDireccionIP.addMouseListener(_eventosRaton);
-            _lblPuerto = new JLabel(Integer.toString(puerto));
+            _lblPuerto = new JLabel(Integer.toString(_infoServidor.getPuerto()));
             _lblPuerto.addMouseListener(_eventosRaton);
-            _lblNombre = new JLabel(nombre);
+            _lblNombre = new JLabel(_infoServidor.getNombre());
             _lblNombre.addMouseListener(_eventosRaton);
-            _lblDescripcion = new JLabel(descripcion);
+            _lblDescripcion = new JLabel(_infoServidor.getDescripcion());
             _lblDescripcion.addMouseListener(_eventosRaton);
 
             iniciarComponentes();
@@ -332,6 +338,16 @@ public class PanelServidores extends JPanel {
         }
 
         /**
+         * Devuelve la info del servidor.
+         * 
+         * @return Devuelve la info del servidor.
+         */
+        private InfoServidor getInfoServidor(){
+            
+            return _infoServidor;
+        }
+        
+        /**
          * Crea el menu que aparecera al hacer click con el boton derecho del raton
          * asignando los componentes que apareceran.
          */
@@ -348,7 +364,7 @@ public class PanelServidores extends JPanel {
             _lblPuerto.addMouseListener(popupListener);
             _lblNombre.addMouseListener(popupListener);
             _lblDescripcion.addMouseListener(popupListener);
-            
+
             this.addMouseListener(popupListener);
         }
 
@@ -363,7 +379,7 @@ public class PanelServidores extends JPanel {
                 if (event.getActionCommand().equals("Conectar")) {
                     try {
 
-                        _controlador.peticionConexionAServidor(_direccionIP, _puerto);
+                        _controlador.peticionConexionAServidor(_infoServidor.getDireccionIP(), _infoServidor.getPuerto());
                     } catch (Exception ex) {
 
                         JOptionPane.showMessageDialog(null, "Error de conexión",
@@ -386,7 +402,7 @@ public class PanelServidores extends JPanel {
                 if (evt.getClickCount() == 2) {
                     try {
 
-                        _controlador.peticionConexionAServidor(_direccionIP, _puerto);
+                        _controlador.peticionConexionAServidor(_infoServidor.getDireccionIP(), _infoServidor.getPuerto());
                     } catch (Exception ex) {
 
                         JOptionPane.showMessageDialog(null, "Error de conexión",
@@ -396,16 +412,16 @@ public class PanelServidores extends JPanel {
                 } else if (evt.getClickCount() == 1) {
 
                     borrarSeleccionAnterior();
-                    
+
                     // Solo se queda marcado el que ha sido seleccionado
                     _panelPrincipal.setBackground(_colorSeleccion);
                     _panelPrincipal.setBorder(BorderFactory.createLineBorder(_colorSeleccion));
                     setBorder(BorderFactory.createLineBorder(_colorBorde));
                     _panelPrincipal.repaint();
                     repaint();
-                    
+
                     // Aviso a los observadores
-                    avisarServidorSeleccionado(_direccionIP, _puerto);        
+                    avisarServidorSeleccionado(_infoServidor);
                 }
             }
 
@@ -457,7 +473,7 @@ public class PanelServidores extends JPanel {
                 _popup.show(e.getComponent(), e.getX(), e.getY());
             }
         }
-        
+
         @Override
         public void mousePressed(MouseEvent e) {
             mostrarMenuRaton(e);
@@ -468,38 +484,39 @@ public class PanelServidores extends JPanel {
             mostrarMenuRaton(e);
         }
     }
-    
+
     /**
      * Aniade un observador a la lista de observadores.
      * 
      * @param observador Nuevo observador a aniadir a la lista.
      */
-    public void addObservador(ObservadorPanelServidores observador){
-    
-        if(!_observadores.contains(observador))
+    public void addObservador(ObservadorPanelServidores observador) {
+
+        if (!_observadores.contains(observador)) {
             _observadores.add(observador);
+        }
     }
-    
+
     /**
      * Elimina un observador de la lista de observadores.
      * 
      * @param observador Observador a eliminar de la lista.
      */
-    public void eliminaObservador(ObservadorPanelServidores observador){
-    
+    public void eliminaObservador(ObservadorPanelServidores observador) {
+
         _observadores.remove(observador);
     }
-    
+
     /**
      * Avisa a todos los observadores registrados en la lista de la 
-     * seleccion de un servidor en la lista de servidores.
+     * seleccion de un infoServidor en la lista de servidores.
      * 
-     * @param direccionIP Direccion IP del servidor seleccionado.
-     * @param puerto Puerto del servidor seleccionado.
+     * @param infoServidor Informacion del infoServidor seleccionado.
      */
-    private void avisarServidorSeleccionado(String direccionIP, Integer puerto){
-    
-        for(ObservadorPanelServidores observador : _observadores)
-            observador.servidorSeleccionado(direccionIP, puerto);
-    } 
+    private void avisarServidorSeleccionado(InfoServidor infoServidor) {
+
+        for (ObservadorPanelServidores observador : _observadores) {
+            observador.servidorSeleccionado(infoServidor);
+        }
+    }
 }

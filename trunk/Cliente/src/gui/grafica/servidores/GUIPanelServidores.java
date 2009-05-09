@@ -1,15 +1,12 @@
 package gui.grafica.servidores;
 
+import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
-import gestorDeConfiguracion.FicheroInfo;
 import gestorDeConfiguracion.InfoServidor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * Panel que gestiona los distintos servidores disponibles
@@ -33,6 +30,11 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      * en la aplicacion.
      */
     private JButton _btnAnadir;
+    /**
+     * Boton que elimina el servidor de la lista de servidores disponibles en
+     * la aplicacion.
+     */
+    private JButton _btnEliminar;
     /**
      * Limpia los datos del formulario en el que el usuario introduce los 
      * datos del servidor que quiere añadir a la lista.
@@ -91,15 +93,9 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      */
     private PanelServidores _panelServidores;
     /**
-     * Direccion IP del servidor seleccionado en la lista de servidores disponibles
-     * en la aplicacion.
-     */
-    private String _direccionIPSeleccionada;
-    /**
-     * Puerto del servidor seleccionado en la lista de servidores disponibles
-     * en la aplicacion.
-     */
-    private Integer _puertoSeleccionado;
+     * Informacion del servidor seleccionado en el panel de servidores.
+     */ 
+    private InfoServidor _servidorSeleccionado;
 
     /** 
      * Constructor de la clase PanelServidores.
@@ -121,6 +117,7 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
 
         _btnConectar = new JButton();
         _btnAnadir = new JButton();
+        _btnEliminar = new JButton();
         _btnLimpiarDatos = new JButton();
         _lblNombre = new JLabel();
         _lblDireccionIP = new JLabel();
@@ -293,6 +290,22 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
         gridBagConstraints.anchor = GridBagConstraints.WEST;
         gridBagConstraints.insets = new Insets(20, 10, 10, 10);
         add(_btnConectar, gridBagConstraints);
+
+        // BOTON ELIMINAR
+        _btnEliminar.setText("Eliminar de la Lista de Servidores");
+        _btnEliminar.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent evt) {
+                pulsacionBotonEliminarServidor(evt);
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(20, 250, 10, 10);
+        add(_btnEliminar, gridBagConstraints);
     }
 
     /**
@@ -303,36 +316,54 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      */
     private void pulsacionBotonAnadirServidor(ActionEvent evt) throws ControlConfiguracionClienteException {
 
-        // Añadimos el nuevo servidor al panel
-        if (_txtDireccionIP.getText().matches("")) {
-            mostrarMensajeError("Introduce la dirección IP del servidor");
-        } else if (_txtPuerto.getText().matches("")) {
-            mostrarMensajeError("Introduce el puerto del servidor");
-        } else if (_txtNombre.getText().matches("")) {
-            mostrarMensajeError("Introduce el nombre del servidor");
-        } else if (_txtDescripcion.getText().matches("")) {
-            mostrarMensajeError("Introduce la descripcion del servidor");
-        } else {
+        // Si los datos introducidos son validos
+        if (datosIntroducidosOk()) {
 
             try {
-                FicheroInfo <InfoServidor> _oFicheroInfoServidores  = new FicheroInfo <InfoServidor> ("servidores.info");   
-                //Cargo el fichero de servidores.
-                _oFicheroInfoServidores.cargarFicheroInfo();                
-                ArrayList <InfoServidor> alInfoServidores = _oFicheroInfoServidores.obtenerConjuntoInfo();
-                InfoServidor infoServidor = new InfoServidor (_txtNombre.getText().trim(), _txtDireccionIP.getText().trim(), _txtPuerto.getText().trim(), _txtDescripcion.getText().trim());
-                //Anado el nuevo elemento a la lista de servidores.
-                alInfoServidores.add(infoServidor);
-                //Actualizo el fichero de configuracion de servidores.
-                _oFicheroInfoServidores.establecerConjuntoInfo(alInfoServidores);
-                _panelServidores.addServidor(_txtDireccionIP.getText().trim(), Integer.parseInt(_txtPuerto.getText().trim()), _txtNombre.getText().trim(), _txtDescripcion.getText().trim());
+
+                InfoServidor infoServidor = new InfoServidor(_txtNombre.getText().trim(), _txtDireccionIP.getText().trim(), Integer.parseInt(_txtPuerto.getText().trim()), _txtDescripcion.getText().trim());
+                // Añadimos el servidor a la lista de servidores
+                ControlConfiguracionCliente.obtenerInstancia().anadirServidor(infoServidor);
+
+                // Aniadimos el servidor al panel
+                _panelServidores.anadirServidor(infoServidor);
                 _scrollPaneListaServidores.add(_panelServidores);
                 _scrollPaneListaServidores.setViewportView(_panelServidores);
                 repaint();
+                
             } catch (NumberFormatException ex) {
 
                 mostrarMensajeError("El Puerto Servidor no es un valor numérico");
+            } catch (ControlConfiguracionClienteException ex) {
+
+                mostrarMensajeError("Se ha producido un fallo al añadir el Servidor a la Lista de Servidores: \n\t" + ex.getMessage());
             }
         }
+    }
+
+    /**
+     * Valida los datos del nuevo servidor introducidos en el formulario por el usuario.
+     * 
+     * @return Verdadero si todos los datos introducidos son validos y falso
+     * en caso contrario.
+     */
+    private boolean datosIntroducidosOk() {
+
+        // Añadimos el nuevo servidor al panel
+        if (_txtDireccionIP.getText().matches("")) {
+            mostrarMensajeError("Introduce la dirección IP del servidor");
+            return false;
+        } else if (_txtPuerto.getText().matches("")) {
+            mostrarMensajeError("Introduce el puerto del servidor");
+            return false;
+        } else if (_txtNombre.getText().matches("")) {
+            mostrarMensajeError("Introduce el nombre del servidor");
+            return false;
+        } else if (_txtDescripcion.getText().matches("")) {
+            mostrarMensajeError("Introduce la descripcion del servidor");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -357,11 +388,11 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
     private void pulsacionBotonConectarServidor(ActionEvent evt) {
 
         // Si se ha seleccionado un servidor primero
-        if (_direccionIPSeleccionada != null && _puertoSeleccionado != null) {
+        if (_servidorSeleccionado != null) {
 
             try {
 
-                _controlador.peticionConexionAServidor(_direccionIPSeleccionada, _puertoSeleccionado);
+                _controlador.peticionConexionAServidor(_servidorSeleccionado.getDireccionIP(), _servidorSeleccionado.getPuerto());
             } catch (Exception ex) {
 
                 JOptionPane.showMessageDialog(null, "Error de conexión",
@@ -370,6 +401,29 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
             }
         } else {
             mostrarMensajeError("Selecciona un servidor primero");
+        }
+    }
+
+    /**
+     * Metodo que se ejecuta cuando se pulsa el boton de eliminar servidor.
+     * 
+     * @param evt Evento de pulsacion del boton.
+     */
+    private void pulsacionBotonEliminarServidor(ActionEvent evt) {
+
+        try {
+
+            // Eliminamos el servidor de la lista de servidores
+            ControlConfiguracionCliente.obtenerInstancia().eliminarServidor(_servidorSeleccionado);
+
+            // Eliminamos el servidor del panel
+            _panelServidores.eliminarServidor(_servidorSeleccionado);
+            _scrollPaneListaServidores.add(_panelServidores);
+            _scrollPaneListaServidores.setViewportView(_panelServidores);
+            repaint();
+        } catch (ControlConfiguracionClienteException ex) {
+
+            mostrarMensajeError("Se ha producido un fallo al añadir el Servidor a la Lista de Servidores");
         }
     }
 
@@ -390,9 +444,8 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
     //      INTERFACE OBSERVADORPANELSERVIDORES       \\
     //------------------------------------------------\\
     @Override
-    public void servidorSeleccionado(String direccionIP, Integer puerto) {
+    public void servidorSeleccionado(InfoServidor servidorSeleccionado) {
 
-        _direccionIPSeleccionada = direccionIP;
-        _puertoSeleccionado = puerto;
+        _servidorSeleccionado = servidorSeleccionado;
     }
 }

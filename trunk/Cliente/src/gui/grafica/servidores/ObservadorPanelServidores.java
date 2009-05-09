@@ -1,5 +1,7 @@
 package gui.grafica.servidores;
 
+import gestorDeConfiguracion.InfoServidor;
+
 /**
  * Interfaz que implementa los metodos necesarios para que los observadores que
  * la implementan se enteren de los eventos producidos sobre la clase PanelServidores.
@@ -11,8 +13,7 @@ public interface ObservadorPanelServidores {
     /**
      * Avisa que se ha seleccionado una fila en el panel de servidores.
      * 
-     * @param direccionIP Direccion IP del servidor seleccionado.
-     * @param puerto Puerto del servidor seleccionado.
+     * @param servidorSeleccionado Informacion del servidor seleccionado.
      */
-    public void servidorSeleccionado(String direccionIP, Integer puerto);
+    public void servidorSeleccionado(InfoServidor servidorSeleccionado);
 }

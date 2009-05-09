@@ -251,7 +251,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla
 
         if (_controlador.conectado()) {
             if (!_txtBusqueda.getText().matches("")) {
-                _controlador.peticionBuscarFichero(_txtBusqueda.getText());
+                _controlador.peticionBuscarFichero(_txtBusqueda.getText().trim());
             } else {
                 mostrarMensaje("Debe especificar un nombre para el archivo",
                         "Búsqueda no informada",
