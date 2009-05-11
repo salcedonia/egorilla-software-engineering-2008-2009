@@ -18,6 +18,7 @@ import java.io.IOException;
 import mensajes.Mensaje;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -28,7 +29,7 @@ import peerToPeer.egorilla.GestorEgorilla;
 public class Main {
 
     private static GestorDeRed<Mensaje> _gestorDeRed;
-    private static GestorEgorilla _gestorEGorilla;
+    private static GestorP2P _gestorP2P;
     private static GestorCompartidos _gestorDeCompartidos;
     private static GestorDisco _gestorDeDisco;
     private static ControlDeErrores _gestorDeErrores;
@@ -88,14 +89,15 @@ public class Main {
         _gestorDeDisco = new GestorDisco();
         _gestorDeCompartidos = GestorCompartidos.getInstancia();
         _gestorDeCompartidos.setGestorDisco(_gestorDeDisco);
-        _gestorEGorilla = new GestorEgorilla(puertoDeEscuchaCliente,_gestorDeDisco);
+        GestorEgorilla egorilla = new GestorEgorilla(puertoDeEscuchaCliente,_gestorDeDisco);
+        _gestorP2P = egorilla;
         _gestorDeErrores = ControlDeErrores.getInstancia();
 
         //Registro a los observadores de la clase ControlConfiguracionCliente
-        ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorEGorilla);
+        ControlConfiguracionCliente.obtenerInstancia().anadirObservador(egorilla);
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);        
 
-        crearTipoGUI(modo, _gestorDeRed, _gestorEGorilla);
+        crearTipoGUI(modo, _gestorDeRed, _gestorP2P);
     }
 
     /**
@@ -106,7 +108,7 @@ public class Main {
      * @param gestorDeRed Gestor de Red de la aplicación.
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
-    private static void crearTipoGUI(String modo, GestorDeRed gestorDeRed, GestorEgorilla gestorEGorilla) throws IOException, ControlConfiguracionClienteException, Exception{
+    private static void crearTipoGUI(String modo, GestorDeRed gestorDeRed, GestorP2P gestorEGorilla) throws IOException, ControlConfiguracionClienteException, Exception{
 
         if (modo.equalsIgnoreCase("grafico") || modo.equals("")) {
 

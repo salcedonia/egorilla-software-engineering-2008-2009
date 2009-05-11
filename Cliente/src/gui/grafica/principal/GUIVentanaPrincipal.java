@@ -23,14 +23,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import peerToPeer.egorilla.GestorEgorilla;
-import peerToPeer.egorilla.ObservadorGestorEgorilla;
+import peerToPeer.ObservadorP2P;
 
 /**
  * Clase que gestiona la ventana principal de la aplicación.
  * 
  * @author Javier Salcedo, Víctor Adaíl
  */
-public class GUIVentanaPrincipal extends JFrame implements ObservadorGestorEgorilla {
+public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
 
     /**
      * Identificador de la clase. 

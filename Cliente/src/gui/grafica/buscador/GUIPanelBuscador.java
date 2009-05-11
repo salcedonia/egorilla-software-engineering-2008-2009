@@ -9,14 +9,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import peerToPeer.egorilla.GestorEgorilla;
-import peerToPeer.egorilla.ObservadorGestorEgorilla;
+import peerToPeer.ObservadorP2P;
 
 /**
  * Panel de busquedas de la aplicación.
  * 
  * @author  Javier Salcedo
  */
-public class GUIPanelBuscador extends JPanel implements ObservadorGestorEgorilla, ObservadorPanelBusqueda {
+public class GUIPanelBuscador extends JPanel implements ObservadorP2P, ObservadorPanelBusqueda {
 
     /**
      * Identificador de la clase.
