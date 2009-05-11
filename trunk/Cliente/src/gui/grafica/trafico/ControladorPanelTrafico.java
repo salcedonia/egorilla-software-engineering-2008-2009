@@ -1,5 +1,6 @@
 package gui.grafica.trafico;
 
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -12,14 +13,14 @@ public class ControladorPanelTrafico {
     /**
      * Gestor eGorilla de la aplicacion.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase ControladorPanelTrafico.
      * 
      * @param gestorEGorilla Gestor eGorilla de la aplicacion.
      */
-    public ControladorPanelTrafico(GestorEgorilla gestorEGorilla) {
+    public ControladorPanelTrafico(GestorP2P gestorEGorilla) {
         
         _gestorEGorilla = gestorEGorilla;
     }
@@ -29,7 +30,7 @@ public class ControladorPanelTrafico {
      * 
      * @return El GestorEGorilla de la aplicación.
      */
-    public GestorEgorilla getGestorEGorilla() {
+    public GestorP2P getGestorEGorilla() {
         return _gestorEGorilla;
     }
 }

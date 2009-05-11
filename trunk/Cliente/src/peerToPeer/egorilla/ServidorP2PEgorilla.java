@@ -69,6 +69,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
      * @param ip de quien?
      * @param port dnd contesto?
      */
+    @Override
     public void recibeMensaje(Mensaje msj, String ip, int port) {
         switch (msj.getTipoMensaje()){
      

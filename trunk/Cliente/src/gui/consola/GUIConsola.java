@@ -10,14 +10,14 @@ import java.io.InputStreamReader;
 import java.util.logging.Logger;
 import mensajes.serverclient.ListaArchivos;
 import peerToPeer.egorilla.GestorEgorilla;
-import peerToPeer.egorilla.ObservadorGestorEgorilla;
+import peerToPeer.ObservadorP2P;
 
 /**
  * Interfaz en modo consola de la aplicacion Cliente eGorilla.
  * 
  * @author Iván Munsuri, Javier Salcedo, Javier Sánchez
  */
-public class GUIConsola implements ObservadorGestorEgorilla {
+public class GUIConsola implements ObservadorP2P {
 
     /**
      * Log para recopilar la información en un fichero de log.

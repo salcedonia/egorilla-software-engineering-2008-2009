@@ -389,7 +389,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                     //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
                     _opcionPausar.setText("Continuar");                    
                     Archivo arch=new Archivo(_lblNombre.getText(),_hash);
-                    _controlador.getGestorEGorilla().descargaPausada(arch);
+                    _controlador.getGestorEGorilla().pausarDescarga(arch);
                 }
                 if (event.getActionCommand().equals("Continuar")) {
                     _lblEstado.setText("Descargando");

@@ -5,6 +5,7 @@ import gestorDeFicheros.GestorCompartidos;
 import gestorDeRed.GestorDeRed;
 import mensajes.Mensaje;
 import mensajes.serverclient.ListaArchivos;
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -25,7 +26,7 @@ public class ControladorConsola {
     /**
      * Gestor eGorilla.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase.
@@ -34,7 +35,7 @@ public class ControladorConsola {
      * @param gestorDeDescargas Gestor de descargas.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla) {
+    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorP2P gestorEgorilla) {
         
         _gestorDeRed = gestorDeRed;
         _gestorEGorilla = gestorEgorilla;
@@ -45,7 +46,7 @@ public class ControladorConsola {
      * 
      * @return El GestorEGorilla de la aplicación.
      */
-    public GestorEgorilla getGestorEGorilla() {
+    public GestorP2P getGestorEGorilla() {
     
         return _gestorEGorilla;
     }
@@ -59,8 +60,7 @@ public class ControladorConsola {
      * @throws java.io.IOException
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
-        
-        _gestorEGorilla.conectaServidor(IP, puerto);
+        _gestorEGorilla.conectarAServidor(IP, puerto);
     }
 
     /**

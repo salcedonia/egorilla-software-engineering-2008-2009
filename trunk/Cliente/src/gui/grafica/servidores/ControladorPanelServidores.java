@@ -1,5 +1,6 @@
 package gui.grafica.servidores;
 
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -12,14 +13,14 @@ public class ControladorPanelServidores {
     /**
      * GestorEGorilla de la aplicacion.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase ControladorPanelServidores.
      * 
      * @param gestorEGorilla Gestor eGorilla de la aplicacion.
      */
-    public ControladorPanelServidores(GestorEgorilla gestorEGorilla){
+    public ControladorPanelServidores(GestorP2P gestorEGorilla){
     
         _gestorEGorilla = gestorEGorilla;
     }
@@ -33,6 +34,6 @@ public class ControladorPanelServidores {
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
 
-        _gestorEGorilla.conectaServidor(IP, puerto);
+        _gestorEGorilla.conectarAServidor(IP, puerto);
     }
 }

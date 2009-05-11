@@ -2,6 +2,7 @@ package gui.grafica.compartidos;
 
 import gestorDeFicheros.GestorCompartidos;
 import mensajes.serverclient.ListaArchivos;
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -15,14 +16,14 @@ public class ControladorPanelCompartidos {
     /**
      * GestorEGorilla de la aplicacion.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase ControladorPanelCompartidos.
      * 
      * @param gestorEGorilla Gestor eGorilla de la aplicacion.
      */
-    public ControladorPanelCompartidos(GestorEgorilla gestorEGorilla){
+    public ControladorPanelCompartidos(GestorP2P gestorEGorilla){
     
         _gestorEGorilla = gestorEGorilla;
     }

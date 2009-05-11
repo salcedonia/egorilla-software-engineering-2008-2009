@@ -1,6 +1,7 @@
 package gui.grafica.buscador;
 
 import datos.Archivo;
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -13,14 +14,14 @@ public class ControladorPanelBuscador {
     /**
      * Gestor eGorilla de la aplicacion.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase ControladorPanelBuscador.
      * 
      * @param gestorEGorilla Gestor eGorilla de la aplicacion.
      */
-    public ControladorPanelBuscador(GestorEgorilla gestorEGorilla) {
+    public ControladorPanelBuscador(GestorP2P gestorEGorilla) {
     
         _gestorEGorilla = gestorEGorilla;
     }
@@ -60,7 +61,7 @@ public class ControladorPanelBuscador {
      * 
      * @return El GestorEGorilla de la aplicación.
      */
-    public GestorEgorilla getGestorEGorilla() {
+    public GestorP2P getGestorEGorilla() {
 
         return _gestorEGorilla;
     }

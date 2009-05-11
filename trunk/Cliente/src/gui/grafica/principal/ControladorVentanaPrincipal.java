@@ -2,6 +2,7 @@ package gui.grafica.principal;
 
 import gestorDeRed.GestorDeRed;
 import mensajes.Mensaje;
+import peerToPeer.GestorP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 
 /**
@@ -17,7 +18,7 @@ public class ControladorVentanaPrincipal {
     /**
      * Gestor eGorilla.
      */
-    private GestorEgorilla _gestorEGorilla;
+    private GestorP2P _gestorEGorilla;
     
     /**
      * Constructor de la clase ControladorGrafica.
@@ -25,7 +26,7 @@ public class ControladorVentanaPrincipal {
      * @param gestorDeRed Gestor de red de la aplicación.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorVentanaPrincipal(GestorDeRed<Mensaje> gestorDeRed, GestorEgorilla gestorEgorilla) {
+    public ControladorVentanaPrincipal(GestorDeRed<Mensaje> gestorDeRed, GestorP2P gestorEgorilla) {
 
         _gestorDeRed = gestorDeRed;
         _gestorEGorilla = gestorEgorilla;
@@ -40,7 +41,7 @@ public class ControladorVentanaPrincipal {
      */
     public void peticionConexionAServidor(String IP, int puerto) throws Exception {
 
-        _gestorEGorilla.conectaServidor(IP, puerto);
+        _gestorEGorilla.conectarAServidor(IP, puerto);
     }
 
     /**
@@ -57,7 +58,7 @@ public class ControladorVentanaPrincipal {
      * 
      * @return El GestorEGorilla de la aplicación.
      */
-    public GestorEgorilla getGestorEGorilla() {
+    public GestorP2P getGestorEGorilla() {
 
         return _gestorEGorilla;
     }
