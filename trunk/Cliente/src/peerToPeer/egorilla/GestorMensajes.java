@@ -14,39 +14,71 @@ import mensajes.Mensaje;
  * si se implementa algún control de flujo de subida DEBE ser aqui
  * @author Luis Ayuso
  */
-public class GestorMensajes extends Thread{
+class GestorMensajes extends Thread{
     private Queue<Mensaje> _cola;
     private GestorDeRed<Mensaje> _red;
 
+    private boolean _flush;
+    
     public GestorMensajes(GestorDeRed<Mensaje> red) {
         _cola = new LinkedList<Mensaje>();
         _red = red;
+        _flush = false;
         this.setName("Cola de Mensajes");
-        this.run();
     }
 
-    public synchronized  void addMensajeParaEnviar(Mensaje msj){
+    
+    /**
+     * encola un mensaje para enviar.
+     *
+     * @param msj
+     */
+    synchronized  void addMensajeParaEnviar(Mensaje msj){
+
         _cola.add(msj);
         this.notify();
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         try {
-            wait();
-            while (!_cola.isEmpty()) {
-                Mensaje msj = _cola.poll();
-                try {
-                    _red.envia(msj, msj.ipDestino(), msj.puertoDestino());
-                } catch (NetError ex) {
-                    ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_RED,
-                            "error al enviar mensaje a " + msj.ipDestino() + ": " +
-                            ex.getError());
+            while (true) {
+                wait();
+                while (!_cola.isEmpty()) {
+                    Mensaje msj = _cola.poll();
+                    try {
+                        _red.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                    } catch (NetError ex) {
+                        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_RED,
+                                "error al enviar mensaje a " + msj.ipDestino() + ": " +
+                                ex.getError());
+                    }
                 }
             }
         } catch (InterruptedException ex) {
-            // paramos y listo!
+            if (_flush) { // si hay flush vaciamos la cola
+                while (!_cola.isEmpty()) {
+                    Mensaje msj = _cola.poll();
+                    try {
+                        _red.envia(msj, msj.ipDestino(), msj.puertoDestino());
+                    } catch (NetError e) {
+                        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_RED,
+                                "error al enviar mensaje a " + msj.ipDestino() + ": " +
+                                e.getError());
+                    }
+                }
+            }
         }
+
+    }
+
+    /**
+     * fuerza el envio de todos los mensajes y acaba con las
+     * transferencias
+     */
+    void  flushYSalir() {
+        _flush = true;
+        this.parar();
     }
 
     synchronized void parar(){

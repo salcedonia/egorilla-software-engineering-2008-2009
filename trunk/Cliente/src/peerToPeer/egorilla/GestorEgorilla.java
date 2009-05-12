@@ -2,7 +2,7 @@ package peerToPeer.egorilla;
 
 import datos.Archivo;
 import datos.Fragmento;
-import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
 import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
@@ -15,22 +15,29 @@ import mensajes.p2p.Tengo;
 import mensajes.serverclient.DatosCliente;
 import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.RespuestaPeticionConsulta;
+import org.apache.log4j.Logger;
 import peerToPeer.GestorP2P;
 import peerToPeer.ObservadorP2P;
 import peerToPeer.descargas.AlmacenDescargas;
 import peerToPeer.descargas.Descargador;
+import gestorDeConfiguracion.ControlConfiguracionCliente;
+import gestorDeConfiguracion.PropiedadCliente;
+import java.net.InetAddress;
+import mensajes.p2p.Altoo;
 import peerToPeer.subidas.AlmacenSubidas;
+
 
 /**
  *
  * @author Luis Ayuso, José Miguel Guerrero
  * @author Modificado por Javier Sánchez
- * 
+ * @author rediseño por Luis Ayuso (ver 7ª iteración
+ *
  * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de ControlConfiguracionCliente 
  * y sera notificada cuando cambie la configuracion dando un tratamiento adecuado al cambio (o no hacer nada).
  * //TODO: Dar tratamiento a los cambios en la configuracion del cliente (si asi se desea).
  */
-public class GestorEgorilla extends Thread implements ObservadorControlConfiguracionCliente,
+public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
                                                       GestorP2P{
     /** gestor de red para realizar las comunicaciones. */
     private GestorDeRed<Mensaje> _red;
@@ -50,6 +57,13 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     private String _IPservidor;
     /** puerto del servidor al que conectamos */
     private int _puertoServidor;
+    /** el loger */
+    private static final Logger _log = Logger.getLogger(GestorEgorilla.class);
+    /** puerto por el que escucha este cliente */
+    private int _puertoCliente;
+    /** vigilante de conexion */
+    private VigilanteConexion _vigilante;
+
     /** almacen de subidas donde se almacenan estas */
     private AlmacenSubidas _subidas;
     
@@ -66,8 +80,15 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         _descargas = new AlmacenDescargas();
         _subidas = new AlmacenSubidas(_colaMensajes);
         _server = new ServidorP2PEgorilla(this);
+        
+        // prepara la red y el servidor
+        _puertoCliente = puerto;
         _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
+        _red.registraReceptor(_server);
         _red.comienzaEscucha();
+
+        _vigilante =null;
+        _colaMensajes = null;
     }
 
 //------------------------------------------------------------------------------
@@ -88,7 +109,24 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
 
     @Override
     public void desconectar(){
-        throw new UnsupportedOperationException("Not supported yet.");
+        // enviamos Altoo al servidor
+        Altoo alto =  new Altoo();
+        alto.setDestino(_IPservidor, _puertoServidor);
+        this.addMensajeParaEnviar(alto);
+        this._conectado = false;
+
+        // enviamos Altoo a todos los suplicantes de subidas y borramos todas
+        // estas.
+
+        // eliminamos la conexion con el servidor
+        _red.eliminaConexion(_IPservidor);
+
+        // termina las descargas.
+        _descargas.pararDescargas();
+
+        // envia y termina las transmisiones.
+        _colaMensajes.flushYSalir();
+        _colaMensajes = null;
     }
 
     @Override
@@ -136,7 +174,53 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
 
     @Override
     public void conectarAServidor(String ip, int puerto) {
-        throw new UnsupportedOperationException("Not supported yet.");
+ 
+        // mostramos la conexión que intentamos establecer
+        _log.info("IP : "+ ip+ " Puerto: "+puerto);
+        // realiza la conexion. Envia los datos al servidor
+        DatosCliente misDatos = new DatosCliente();
+        // los datos se leen directamente del fichero de configuración
+        ControlConfiguracionCliente config;
+        try {
+            config = ControlConfiguracionCliente.obtenerInstancia();
+        } catch (ControlConfiguracionClienteException ex) {
+            _log.error("error al obtener datos de cliente: " + ex.getMessage());
+            for (ObservadorP2P observadorP2P : _observadores) {
+                observadorP2P.conexionNoCompletada();
+            }
+            return;
+        }
+        
+        String nmb = config.obtenerPropiedad(PropiedadCliente.NOMBRE_USUARIO.obtenerLiteral());
+
+        misDatos.setNombreUsuario(nmb);
+        misDatos.setPuertoEscucha(_puertoCliente);
+
+        _IPservidor = ip;
+        _puertoServidor = puerto;
+        misDatos.setDestino(_IPservidor, _puertoServidor);
+
+        try {
+            misDatos.setIP(InetAddress.getLocalHost().getHostAddress());
+        } catch (Exception ex) {
+            _log.fatal("error al obtener direccíón de red, posiblemente no hay" +
+                       " tarjeta de red_ " + ex.getMessage());
+            for (ObservadorP2P observadorP2P : _observadores) {
+                observadorP2P.conexionNoCompletada();
+            }
+            return;
+        }
+        // empezamos el envio de paquetes
+        _colaMensajes = new GestorMensajes(_red);
+        _colaMensajes.start();
+        // envia mis datos
+        addMensajeParaEnviar(misDatos);
+        // comezamos a vigilar la conexion
+        _vigilante = new VigilanteConexion();
+        for (ObservadorP2P observadorP2P : _observadores) {
+            _vigilante.agregarObservador(observadorP2P);
+        }
+        _vigilante.start();
     }
 
     @Override
@@ -165,7 +249,20 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      * @param msj
      */
     public void addMensajeParaEnviar(Mensaje msj) {
-        throw new UnsupportedOperationException("Not yet implemented");
+       _colaMensajes.addMensajeParaEnviar(msj);
+    }
+
+    /**
+     * notifica que la conexión ha sido completada, hemos terminado con esto
+     * asi que paramos el vigilante y informamos a los observadores
+     */
+    void conexionCompletada(){
+        _vigilante.conexionCompletada();
+        _conectado = true;
+        this.enviaListaArchivos();
+        for (ObservadorP2P observadorP2P : _observadores) {
+            observadorP2P.conexionCompletada(this, _IPservidor, _puertoCliente);
+        }
     }
 
     boolean conectado() {
@@ -179,7 +276,6 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
      * nuevo para actualizar la BBDD del servidor.
      */
     void enviaListaArchivos() {
-        if (!conectado()) {
             // aqui enviamos la lista de archivos compartidos que se sube
             // esto incluye tanto compartidos como a medias.
 
@@ -188,9 +284,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
             ListaArchivos l = GestorCompartidos.getInstancia().getArchivosCompartidos();
             l.setDestino(_IPservidor, _puertoServidor);
             this.addMensajeParaEnviar(l);
-        }
     }
-
 
     void fragmentoDescargado(Fragmento f, Byte[] parte) {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -210,7 +304,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     }
 
     void reanudarDescargas() {
-        throw new UnsupportedOperationException("Not yet implemented");
+     // TODO:
     }
 
     void resultadoBusqueda(RespuestaPeticionConsulta respuestaPeticionConsulta) {

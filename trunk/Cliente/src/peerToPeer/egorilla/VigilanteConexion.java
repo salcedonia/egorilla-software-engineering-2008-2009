@@ -19,9 +19,9 @@ public class VigilanteConexion extends Thread{
     }
 
     @Override
-    public void run (){
+    public synchronized void run (){
         try {
-            wait(2000);
+            wait(10000);
 
             synchronized (this) {
                 for (ObservadorP2P observadorP2P : _observadores) {

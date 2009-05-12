@@ -68,4 +68,9 @@ public interface ObservadorP2P {
      * @param arch el archivo finalizado
      */
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
+
+    /**
+     * notifica que la conexion que se intentaba realizar no se ha podido realizar
+     */
+    public void conexionNoCompletada();
 }
