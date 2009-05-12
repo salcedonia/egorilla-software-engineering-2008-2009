@@ -92,24 +92,11 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
                 
             case Dame:
                 
-                // Apunto para servir más adelante.
                 Dame msjDame = (Dame) msj;
-              
-                // TODO: en este punto debemos hacer algo que evalue los fragmentos
-                // que se están enviando, cuales quiero y a quien se los pido
-                // ya que puedo haber pedido este fichero a varios peers.
+                //en el mensaje le digo a quien debe enviarselo
+                msjDame.setDestino(ip, port);
                 
-                
-                
-                // indico al gestor de subidas que vot a subir determinados fragmentos 
-                // de un fichero a un peer identificado por ip.
-                //Archivo archivo = new Archivo( msjDame.getNombre(), msjDame.getHash() );
-                //_gestor.nuevaSubida( archivo, ip, port, msjDame.getFragmentos() );
-                
-                // YA SE CONTESTARA CON TOMA, no aki
-                Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
-                Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),msjDame.getFragmento().getOffset(),informacion,ip,port);
-                _gestor.addMensajeParaEnviar(mensajeToma);
+                _gestor.getAlmacenSubidas().nuevaSubida(msjDame);
                 break;
                 
                 

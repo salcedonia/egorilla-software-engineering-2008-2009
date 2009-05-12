@@ -6,8 +6,6 @@ import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import mensajes.Mensaje;
 
 /**
@@ -16,7 +14,7 @@ import mensajes.Mensaje;
  * si se implementa algún control de flujo de subida DEBE ser aqui
  * @author Luis Ayuso
  */
-class GestorMensajes extends Thread{
+public class GestorMensajes extends Thread{
     private Queue<Mensaje> _cola;
     private GestorDeRed<Mensaje> _red;
 
@@ -26,7 +24,8 @@ class GestorMensajes extends Thread{
         this.setName("Cola de Mensajes");
         this.run();
     }
-    synchronized  void addMensajeParaEnviar(Mensaje msj){
+
+    public synchronized  void addMensajeParaEnviar(Mensaje msj){
         _cola.add(msj);
         this.notify();
     }
