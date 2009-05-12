@@ -15,15 +15,18 @@ import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
 import gui.grafica.trafico.*;
+import java.awt.event.ActionEvent;
 import util.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import peerToPeer.EstadoP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.ObservadorP2P;
 
@@ -149,6 +152,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      */
     private ImageIcon _imgAyuda = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnAyuda.png"));
 
+    
+    private EstadoP2P _estado;
     /**
      * Constructor de la clase VentanaPrincipal.
      * 
@@ -157,7 +162,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
     public GUIVentanaPrincipal(ControladorVentanaPrincipal controlador) {
 
         try {
-
+            _estado = EstadoP2P.DESCONECTADO;
             _controlador = controlador;
             _controlador.getGestorEGorilla().agregarObservador(this);
             _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(GestorEstadisticas.getInstacia());
@@ -256,7 +261,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
 
         // BOTON CONECTAR
         _btnConectar.setFont(new Font("Tahoma", Font.BOLD, 11));
-        _btnConectar.setText("Conectar");
+        _btnConectar.setText(dameTxtconexion());
         _btnConectar.setIcon(_imgConectar);
         _btnConectar.setBorderPainted(false);
         _btnConectar.setAlignmentX(0.5F);
@@ -272,11 +277,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         _btnConectar.setVerticalTextPosition(SwingConstants.BOTTOM);
 
         // Añadimos el evento de pulsación del ratón
-        _btnConectar.addMouseListener(new MouseAdapter() {
-
+        _btnConectar.addActionListener(new ActionListener() {
             @Override
-            public void mousePressed(MouseEvent evt) {
-                pulsacionBotonConectar(evt);
+            public void actionPerformed(ActionEvent evt) {
+                 pulsacionBotonConectar(evt);
             }
         });
         _botonera.add(_btnConectar);
@@ -564,11 +568,11 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      * 
      * @param evt Evento de pulsación del ratón sobre el botón _btnConectar.
      */
-    private void pulsacionBotonConectar(MouseEvent evt) {
+    private void pulsacionBotonConectar(ActionEvent evt) {
 
         try {
             // Si el botón conectar tiene el texto Conectar
-            if (_btnConectar.getText().equals("Conectar")) {
+            if (EstadoP2P.DESCONECTADO.equals(_estado)) {
                 
                 // Avisamos al Control de la ventana principal para que realice la acción de conectar con el servidor
                 int puerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
@@ -590,24 +594,25 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
     //------------------------------------------\\
     
     @Override
-    public void conexionCompletada(GestorEgorilla gestorEGorilla, String direccionIP, int puerto) {
+    public void cambioEstado(EstadoP2P estado, String direccionIP, int puerto) {
         // La imagen y el texto del botón ahora son Desconectar
-        _btnConectar.setText("Desconectar");
-        _btnConectar.setIcon(_imgDesconectar);
-
+        _estado = estado;
+        _btnConectar.setText(dameTxtconexion());
+        _btnConectar.setIcon(dameIconConexion());
+        _btnConectar.setEnabled(!_estado.equals(EstadoP2P.NEGOCIANDO));
         // Cambiamos las etiquetas de estado
-        _lblConexion.setText("Conectado");
+        _lblConexion.setText(dameTxtLabelConexion());
     }
 
-    @Override
-    public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
-        // La imagen y el texto del botón ahora son Desconectar
-        _btnConectar.setText("Conectar");
-        _btnConectar.setIcon(_imgConectar);
-
-        // Cambiamos las etiquetas de estado
-        _lblConexion.setText("Desconectado");
-    }
+//    @Override
+//    public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
+//        // La imagen y el texto del botón ahora son Desconectar
+//        _btnConectar.setText("Conectar");
+//        _btnConectar.setIcon(_imgConectar);
+//
+//        // Cambiamos las etiquetas de estado
+//        _lblConexion.setText("Desconectado");
+//    }
 
     @Override
     public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String nombre, Archivo[] lista) {
@@ -618,9 +623,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         // TODO: completa la descarga
     }
 
-    @Override
-    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
-    }
+//    @Override
+//    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
+//    }
     
     
     public class GestorEventoVentana extends WindowAdapter{
@@ -636,7 +641,6 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         
       @Override
       public void windowClosing(WindowEvent e){
-          _guiVentanaPrincipal.desconexionCompletada( _gestorEGorilla );
           //Hacer un sleep
           System.exit(0);
       }
@@ -650,5 +654,30 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
     @Override
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
         //TODO DESCARGA ELIMINADA
+    }
+    
+    private String dameTxtconexion() {
+        switch (_estado) {
+            case CONECTADO : return "Desconectar";
+            case DESCONECTADO : return "Conectar";
+            case NEGOCIANDO : return "Conectando...";
+        }
+       return "Conectar";
+    }
+    private String dameTxtLabelConexion() {
+        switch (_estado) {
+            case CONECTADO : return "Conectado";
+            case DESCONECTADO : return "Desconectado";
+            case NEGOCIANDO : return "Conectando...";
+        }
+       return "Desconectado";
+    }
+    private ImageIcon dameIconConexion() {
+        switch (_estado) {
+            case CONECTADO : return _imgDesconectar;
+            case DESCONECTADO : return _imgConectar;
+            case NEGOCIANDO : return _imgConectar;
+        }
+       return _imgConectar;
     }
 }

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import peerToPeer.EstadoP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.ObservadorP2P;
 
@@ -18,6 +19,8 @@ import peerToPeer.ObservadorP2P;
  */
 public class GUIPanelBuscador extends JPanel implements ObservadorP2P, ObservadorPanelBusqueda {
 
+    
+    private EstadoP2P _estado;
     /**
      * Identificador de la clase.
      */
@@ -84,7 +87,7 @@ public class GUIPanelBuscador extends JPanel implements ObservadorP2P, Observado
      * @param controlador Controlador del panel buscador. 
      */
     public GUIPanelBuscador(ControladorPanelBuscador controlador) {
-
+        _estado = EstadoP2P.DESCONECTADO;
         _controlador = controlador;
         _controlador.getGestorEGorilla().agregarObservador(this);
         iniciarComponentes();
@@ -378,13 +381,13 @@ public class GUIPanelBuscador extends JPanel implements ObservadorP2P, Observado
     //------------------------------------------\\
     //      INTERFACE OBSERVADOREGORILLA        \\
     //------------------------------------------\\
-    @Override
-    public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int port) {
-    }
-
-    @Override
-    public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
-    }
+//    @Override
+//    public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int port) {
+//    }
+//
+//    @Override
+//    public void desconexionCompletada(GestorEgorilla gestorEGorilla) {
+//    }
 
     @Override
     public void resultadosBusqueda(GestorEgorilla gestorEGorilla, String cad, Archivo[] lista) {
@@ -404,9 +407,9 @@ public class GUIPanelBuscador extends JPanel implements ObservadorP2P, Observado
         // TODO: descarga complet
     }
 
-    @Override
-    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
-    }
+//    @Override
+//    public void perdidaConexion(GestorEgorilla gestorEGorilla) {
+//    }
 
     //----------------------------------------------\\
     //      INTERFACE OBSERVADORPANELBUSCADOR       \\
@@ -446,5 +449,10 @@ public class GUIPanelBuscador extends JPanel implements ObservadorP2P, Observado
     @Override
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
         //TODO DESCARGA ELIMINADA
+    }
+
+    @Override
+    public void cambioEstado(EstadoP2P estado, String ip, int puerto) {
+        _estado = estado;
     }
 }

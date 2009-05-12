@@ -24,6 +24,7 @@ import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
 import java.net.InetAddress;
 import mensajes.p2p.Altoo;
+import peerToPeer.EstadoP2P;
 import peerToPeer.subidas.AlmacenSubidas;
 
 
@@ -44,7 +45,8 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     /** se encarga de enviar los mensajes */
     private GestorMensajes _colaMensajes;
     /** variable para ver si estamos o no conectados */
-    private boolean _conectado;
+    //private boolean _conectado;
+    private EstadoP2P  _estado;
     /** almacen de descargas donde se almacenan estas */
     private AlmacenDescargas _descargas;
     /** el descargador es un hilo que se encarga de gestionar las descargas*/
@@ -74,7 +76,8 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
      */
     public GestorEgorilla(int puerto, GestorDisco disco) {
         //inicialmente no estamos conectados
-        _conectado =false;
+        //_conectado =false;
+        _estado = EstadoP2P.DESCONECTADO;
 
         _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
@@ -113,17 +116,19 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         Altoo alto =  new Altoo();
         alto.setDestino(_IPservidor, _puertoServidor);
         this.addMensajeParaEnviar(alto);
-        this._conectado = false;
-
+        //this._conectado = false;
+        _estado = EstadoP2P.DESCONECTADO;
         // enviamos Altoo a todos los suplicantes de subidas y borramos todas
         // estas.
 
         // eliminamos la conexion con el servidor
         _red.eliminaConexion(_IPservidor);
-
+        
         // termina las descargas.
         _descargas.pararDescargas();
-
+        for (ObservadorP2P observadorP2P : _observadores) {
+            observadorP2P.cambioEstado(_estado, _IPservidor, -1);
+        }
         // envia y termina las transmisiones.
         _colaMensajes.flushYSalir();
         _colaMensajes = null;
@@ -150,7 +155,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
     @Override
     public boolean estaConectadoAServidor() {
-        return _conectado;
+        return EstadoP2P.CONECTADO.equals(_estado);
     }
 
     @Override
@@ -176,7 +181,11 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     public void conectarAServidor(String ip, int puerto) {
  
         // mostramos la conexión que intentamos establecer
+        _estado = EstadoP2P.NEGOCIANDO;
         _log.info("IP : "+ ip+ " Puerto: "+puerto);
+        for (ObservadorP2P observadorP2P : _observadores) {
+                observadorP2P.cambioEstado(_estado, ip, puerto);
+        }
         // realiza la conexion. Envia los datos al servidor
         DatosCliente misDatos = new DatosCliente();
         // los datos se leen directamente del fichero de configuración
@@ -185,8 +194,9 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
             config = ControlConfiguracionCliente.obtenerInstancia();
         } catch (ControlConfiguracionClienteException ex) {
             _log.error("error al obtener datos de cliente: " + ex.getMessage());
+            _estado = EstadoP2P.DESCONECTADO;
             for (ObservadorP2P observadorP2P : _observadores) {
-                observadorP2P.conexionNoCompletada();
+                observadorP2P.cambioEstado(_estado, ip, puerto);
             }
             return;
         }
@@ -206,7 +216,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
             _log.fatal("error al obtener direccíón de red, posiblemente no hay" +
                        " tarjeta de red_ " + ex.getMessage());
             for (ObservadorP2P observadorP2P : _observadores) {
-                observadorP2P.conexionNoCompletada();
+                observadorP2P.cambioEstado(_estado, ip, puerto);
             }
             return;
         }
@@ -258,16 +268,17 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
      */
     void conexionCompletada(){
         _vigilante.conexionCompletada();
-        _conectado = true;
+        //_conectado = true;
+        _estado = EstadoP2P.CONECTADO;
         this.enviaListaArchivos();
         for (ObservadorP2P observadorP2P : _observadores) {
-            observadorP2P.conexionCompletada(this, _IPservidor, _puertoCliente);
+            observadorP2P.cambioEstado(_estado, _IPservidor, _puertoCliente);
         }
     }
 
-    boolean conectado() {
-        return _conectado;
-    }
+//    boolean conectado() {
+//        return _conectado;
+//    }
 
     /**
      * envia al SERVIDOR la lista de archivos compatidos por este cliente.
@@ -293,9 +304,10 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     void perdidaDeConexion(String ip) {
        if (ip.equals(_IPservidor)){
            // hemos perido la conexion con el servidor
-           _conectado = false;
+           //_conectado = false;
+           _estado = EstadoP2P.DESCONECTADO;
            for (ObservadorP2P observadorP2P : _observadores) {
-               observadorP2P.perdidaConexion(this);
+               observadorP2P.cambioEstado(_estado, ip, -1);
            }
        }
        else {
