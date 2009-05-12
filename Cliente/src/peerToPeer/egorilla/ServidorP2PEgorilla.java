@@ -30,14 +30,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
     private GestorEgorilla _gestor;
     
     private List<ObservadorDatos> listaDeObservadores;
-   
-    //private GestorDescargas _descargas;
-
-    //private GestorDisco _gestorDisco; pasado al GestorEgorilla
-
-    //Se puede quitar y usamos solo el get del Disco
-    //private Fragmentador _fragmentador;
-    
+       
     /**
      * constructor b�sico:
      * necesita de dos cosas que estan fuera de su hambito, el gestor de egorilla
@@ -195,7 +188,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
             case Bienvenido:
                 
                 // esto indica que estamos conectados
-                _gestor.conectado();
+                _gestor.conexionCompletada();
                 _gestor.enviaListaArchivos();
                 _gestor.reanudarDescargas();
         }
