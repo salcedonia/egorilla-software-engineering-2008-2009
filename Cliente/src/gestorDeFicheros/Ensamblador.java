@@ -72,6 +72,8 @@ public class Ensamblador{
    * @param fichero indica la ruta y nombre del fichero nuevo que sera creado.
    * @param size cantidad de bytes que seran reservados en el disco para el fichero.
    */
+  //Mirar si se puede no resevar el espacio de primeras, es decir, escribir donde me de la gana
+  //O hacer crecer el fichero de forma sencilla...
   private void reservarEspacioFicheroNuevo( File fichero, long size ){
     byte[] bytes;
     int tamBuf = 9000;
@@ -153,7 +155,7 @@ public class Ensamblador{
             + _extesionIndices );
         //problema con el getNombre, puede qhaya otro con el mismo nombreee!
         manejarIndices.crearFicheroIndices( fichero, archivoNuevo, 
-            fragmentosArchivoNuevo( archivoNuevo ) );
+            _gestorDisco.fragmentosArchivoNuevo( archivoNuevo ) );
         //Creo el fichero con el tamano que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() + 
             _extesionFicheroTemporal  );
@@ -171,8 +173,7 @@ public class Ensamblador{
       }
     }else{
       System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> ya se encuentra en los temporales, actualmente en descarga" );
-      //Ya se encuentra en los temporales, actualmente en descarga.
-      
+      //Ya se encuentra en los temporales, actualmente en descarga.      
     }
     //Se puede dejar en un simple if-else sino me interesa diferenciar esos dos problemas
     return creado;
@@ -215,29 +216,6 @@ public class Ensamblador{
     }
     return eliminado;
   }
-
-  /**
-   * Crea automaticamente todos los fragmentos que tendria un fichero nuevo, en funcion del 
-   * tamano maximo del fragmento y el tamano del fichero nuevo.
-   * @param archivo representa al archivo nuevo de cual voy a generar los fragmentos que 
-   *                necesito.
-   * @return Devuelve todos los fragmentos de los que se compone el archivo nuevo.
-   */
-  private Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivo ){
-    Vector<Fragmento> listaFragmento = new Vector<Fragmento>();
-   
-    Fragmento fragmento = new Fragmento( archivo.getNombre(), 
-          archivo.getHash(), archivo.getSize(), 0 ); //0 por ser el primero
-      listaFragmento.add( fragmento );
-      for( int i = 1; fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama(); i++ ){
-        fragmento = new Fragmento( archivo.getNombre(),archivo.getHash(), 
-            archivo.getSize(), i*_tamanioBytesFragmento );
-        listaFragmento.add( fragmento );
-      }
-      return listaFragmento;
-  }
-
-
 
   /**
    * Metodo auxiliar que convierto un array de objetos de Byte a un array de tipos primitivos 

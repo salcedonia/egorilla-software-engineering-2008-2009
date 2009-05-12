@@ -479,7 +479,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         pack();
         
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addWindowListener( new GestorEventoVentana() );
+        addWindowListener( new GestorEventoVentana( this, _controlador ) );
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
     }
@@ -623,17 +623,21 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
     }
     
     
-    class GestorEventoVentana extends WindowAdapter{
+    public class GestorEventoVentana extends WindowAdapter{
+      GUIVentanaPrincipal _guiVentanaPrincipal;
+      ControladorVentanaPrincipal _controlador;
+      GestorEgorilla _gestorEGorilla;
+
+      public GestorEventoVentana( GUIVentanaPrincipal guiVentanaPrincipal, ControladorVentanaPrincipal controlador ){
+         _guiVentanaPrincipal = guiVentanaPrincipal;
+         _controlador = controlador;
+         _gestorEGorilla = (GestorEgorilla)_controlador.getGestorEGorilla();
+      }
         
       @Override
       public void windowClosing(WindowEvent e){
-          System.out.println("Exit ordenado!");
-          
-          
-          while(GestorCompartidos.getInstancia().getGestorDisco().getEstadoEscrituraEnDisco() == 2){              
-          }
-          GestorCompartidos.getInstancia().getGestorDisco().detenerEscrituraEnDisco();
-          System.out.println("Saliendo...");
+          _guiVentanaPrincipal.desconexionCompletada( _gestorEGorilla );
+          //Hacer un sleep
           System.exit(0);
       }
     }

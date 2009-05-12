@@ -4,11 +4,10 @@
 package gestorDeFicheros;
 
 import java.io.*;
-import java.util.Properties;
 import mensajes.serverclient.*;
 import datos.*;
 import gestorDeConfiguracion.*;
-import java.util.Enumeration;
+import java.util.*;
 
 /**
  * Esta clase se encarga de hacer un listado previo de todos los archivos completos y temporales
@@ -118,7 +117,7 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         //Esto en principio tampoco va como properties, xq "creo" qademas de los problemas 
         //anteriores puede haber problemas si el resto de clientes no usan el mismo tamano, yaq 
         //variara el numero de fragmentos de un mismo fichero
-        _tamanioBytesFragmento = 512;
+        _tamanioBytesFragmento = 369069; //antes era 512, en bytes
 
         try {
             ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstancia();
@@ -161,22 +160,6 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         _ensamblador = new Ensamblador(this);
     }
     //-1 sin acceder a disco, 0 se puede, 1 detenido, 2 - ya se puede cerrar, xq no va a ver mas escrituras
-
-    public void detenerEscrituraEnDisco() {
-        _detenido = 1;
-    }
-
-    public void setActivarEscrituraDisco() {
-        _detenido = 0;
-    }
-
-    public void setDiscoLiberado() {
-        _detenido = 2;
-    }
-
-    public int getEstadoEscrituraEnDisco() {
-        return _detenido;
-    }
 
     /**
      * Procesa el directorio donde se encuentra los archivos temporales, filtrando a partir de los archivos
@@ -375,6 +358,110 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         Indices indices = getManejarIndices().leeFicheroIndices(f);
         return indices.getArchivo();
     }
+
+  /**
+   * Crea automaticamente todos los fragmentos que tendria un fichero nuevo, en funcion del 
+   * tamano maximo del fragmento y el tamano del fichero nuevo.
+   * @param archivo representa al archivo nuevo de cual voy a generar los fragmentos que 
+   *                necesito.
+   * @return Devuelve todos los fragmentos de los que se compone el archivo nuevo.
+   */
+  public Vector<Fragmento> fragmentosArchivoNuevo( Archivo archivoRequerido ){
+    Vector<Fragmento> listaFragmento = null;
+    Fragmento fragmento = null;      
+      int tamBytes;
+      int cantidadFragmentos = cantidadFragmentosArchivo( archivoRequerido.getSize() );
+      listaFragmento = new Vector<Fragmento>( cantidadFragmentos );
+
+      System.out.println("Capacidad "+listaFragmento.capacity());
+
+      //Se supone que nunca va decir 0 cantidadFragmentos
+      if( cantidadFragmentos == 1 ){
+        tamBytes = (int)archivoRequerido.getSize();
+        fragmento = new Fragmento( archivoRequerido.getNombre(), 
+          archivoRequerido.getHash(), tamBytes, 0 ); //0 por ser el primero
+        listaFragmento.add( fragmento );
+      }else{
+        //Empiezo por el ultimo fragmento q es el unico que puede tener diferente tamanio
+        int i;
+        for( i = 0;  i < cantidadFragmentos - 1;  i++ ){
+          fragmento = new Fragmento( archivoRequerido.getNombre(), archivoRequerido.getHash(), 
+            _tamanioBytesFragmento, i*_tamanioBytesFragmento );
+          listaFragmento.add( fragmento );
+        }
+        tamBytes = (int)(cantidadFragmentos*_tamanioBytesFragmento-archivoRequerido.getSize() ); 
+        fragmento = new Fragmento( archivoRequerido.getNombre(), //tam - offset
+          archivoRequerido.getHash(), tamBytes, i*_tamanioBytesFragmento );
+        listaFragmento.add( fragmento );
+      }
+      return listaFragmento;
+  }
+
+  /**
+   * Crea automaticamente todos los fragmentos que tendria un fichero nuevo, en funcion del 
+   * tamano maximo del fragmento y el tamano del fichero nuevo.
+   * @param archivo representa al archivo nuevo de cual voy a generar los fragmentos que 
+   *                necesito.
+   * @return Devuelve todos los fragmentos de los que se compone el archivo nuevo.
+   */
+  public Vector<Fragmento> fragmentosArchivoCompleto( Archivo archivo ){
+    return fragmentosArchivoNuevo( archivo );
+  }
+
+
+  /**
+   * @param hash .
+   * @return .
+   */
+  public int cantidadFragmentosArchivo( String hash ){
+    int cantidadFragmentos;
+    //Busco en las listas el archivo y llamo a la otra
+    ListaArchivos listaTemporales = getListaArchivosTemporales();
+    ManejarListaArchivos manejarListaArchivos = getManejarListaArchivos();
+    Archivo archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
+    if( archivoRequerido == null ){
+        cantidadFragmentos = 0;
+    }else{
+      cantidadFragmentos = cantidadFragmentosArchivo( archivoRequerido );
+    }
+    return cantidadFragmentos;
+  }
+
+
+  /**
+   * .
+   * @param archivo .
+   * @return .
+   */
+  public int cantidadFragmentosArchivo( Archivo archivo ){
+    long tamanio = archivo.getSize();
+    int cantidadFragmentos;
+
+    cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
+
+    if( tamanio % _tamanioBytesFragmento == 0 ){
+      //Al no haber decimales, todas las partes tiene el mismo tamano
+    }else{
+      cantidadFragmentos+=1;
+    }
+
+    return cantidadFragmentos;
+  }
+
+  /**
+   * .
+   */
+  public int cantidadFragmentosArchivo( long tamanio ){
+    int cantidadFragmentos;
+    cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
+
+    if( tamanio % _tamanioBytesFragmento == 0 ){
+      //Al no haber decimales, todas las partes tiene el mismo tamano
+    }else{
+      cantidadFragmentos+=1;
+    }
+    return cantidadFragmentos;
+  }
 
     /**
      * Este metodo es llamado cuando cambia la configuracion del cliente.
