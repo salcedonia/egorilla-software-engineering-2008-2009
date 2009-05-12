@@ -490,8 +490,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             }
         }
         DescargaIndividual descarga = new DescargaIndividual(nombre, hash, tamanio);
-        int tamanioAux = GestorCompartidos.getInstancia().getGestorDisco().getFragmentador().cantidadFragmentosArchivo(hash);
-        System.out.println("TAMAÑOOOOOOOOOO "+ tamanioAux + " - " + (tamanioAux-tamanio));
+        int tamanioAux = GestorCompartidos.getInstancia().getGestorDisco().cantidadFragmentosArchivo(hash);
+        //System.out.println("TAMAÑOOOOOOOOOO "+ tamanioAux + " - " + (tamanioAux-tamanio));
         descarga.setValorProgressBar((tamanioAux-tamanio));
         _panelPrincipal.add(descarga);
         _listaDescargas.add(descarga);

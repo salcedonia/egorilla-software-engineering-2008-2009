@@ -198,47 +198,6 @@ public class Fragmentador{
     return oBytesFragmento;
   }
 
-
-  /**
-   * TODO: sin implementar.
-   * @param hash .
-   * @return .
-   */
-  public int cantidadFragmentosArchivo( String hash ){
-    int cantidadFragmentos;
-    //Busco en las listas el archivo y llamo a la otra
-    ListaArchivos listaTemporales = _gestorDisco.getListaArchivosTemporales();
-    ManejarListaArchivos manejarListaArchivos = _gestorDisco.getManejarListaArchivos();
-    Archivo archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
-    if( archivoRequerido == null ){
-        cantidadFragmentos = 0;
-    }else{
-      cantidadFragmentos = cantidadFragmentosArchivo( archivoRequerido );
-    }
-    return cantidadFragmentos;
-  }
-
-
-  /**
-   * .
-   * @param archivo .
-   * @return .
-   */
-  public int cantidadFragmentosArchivo( Archivo archivo ){
-    long tamanio = archivo.getSize();
-    int cantidadFragmentos;
-
-    cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
-
-    if( tamanio % _tamanioBytesFragmento == 0 ){
-      //Al no haber decimales, todas las partes tiene el mismo tamano
-    }else{
-      cantidadFragmentos+=1;
-    }
-
-    return cantidadFragmentos;
-  }
-
   public Vector<Fragmento> queFragmentosTienes( String hash ){
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
@@ -275,15 +234,7 @@ public class Fragmentador{
       //Puedo calcular la cantidad de partes si los bytes del mismo sin fijos
       //Si es variable mejor con un while
       //TODO: metodo ya creado por ahi
-      listaFragmento = new Vector<Fragmento>();
-      Fragmento fragmento = new Fragmento( archivoRequerido.getNombre(), 
-          archivoRequerido.getHash(), archivoRequerido.getSize(), 0 ); //0 por ser el primero
-      listaFragmento.add( fragmento );
-      for( int i = 1;  fragmento.getOffset()+_tamanioBytesFragmento < fragmento.getTama();  i++ ){
-        fragmento = new Fragmento( archivoRequerido.getNombre(),archivoRequerido.getHash(), 
-            archivoRequerido.getSize(), i*_tamanioBytesFragmento );
-        listaFragmento.add( fragmento );
-      }
+      listaFragmento = _gestorDisco.fragmentosArchivoCompleto( archivoRequerido );
       //Esto ultimo sobra, simplemente que el ultimo fragmento tiene
       //un tamano de   fragmento.getTama() - fragmento.getOffset()   y no tiene xq ser de 512
       /*if( fragmento.getOffset() < fragmento.getTama() ){

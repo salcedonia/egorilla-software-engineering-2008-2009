@@ -85,7 +85,7 @@ public class GestorCompartidos {
      * @return entero correspondiente a la cantidad de fragmentos.
      */
     public int cantidadFragmentosArchivo( Archivo archivo ){
-        return _gestorDisco.getFragmentador().cantidadFragmentosArchivo( archivo );
+        return _gestorDisco.cantidadFragmentosArchivo( archivo );
     }
 
 }
