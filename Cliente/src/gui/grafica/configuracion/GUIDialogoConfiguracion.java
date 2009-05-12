@@ -1,3 +1,5 @@
+
+
 package gui.grafica.configuracion;
 
 import gestorDeConfiguracion.ControlConfiguracionCliente;
@@ -7,18 +9,18 @@ import gestorDeConfiguracion.PropiedadCliente;
 import java.util.Properties;
 
 /**
- * Panel que se encarga de la configuración de la aplicación.
- * El panel implementa la interfaz "observador sobre el objeto 
+ * Dialogo que se encarga de la configuración de la aplicación.
+ * El dialogo implementa la interfaz "observador sobre el objeto 
  * ControlConfiguracionCliente", ya que dicho objeto es el que gestiona la configuración
- * del cliente (es la parte del Modelo en el patrón MVC). El Panel es la parte de la
+ * del cliente (es la parte del Modelo en el patrón MVC). El Dialogo es la parte de la
  * vista. 
  *
  * @author F. Javier Sánchez Pardo
  */
-public class GUIPanelConfiguracion extends javax.swing.JPanel implements ObservadorControlConfiguracionCliente{
+public class GUIDialogoConfiguracion extends javax.swing.JDialog implements ObservadorControlConfiguracionCliente{
 
     /**
-     * Constructor de la clase PanelConfiguración.
+     * Constructor de la clase.
      * 
      * @param oControlConfiguracionCliente Objeto ControlConfiguracionCliente.
      *        Mediante este parametro la Vista (este JPanel) tiene una referencia al Modelo
@@ -27,21 +29,31 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
      * @throws gestorDeConfiguracion.ControlConfiguracionClienteException
      * @see gestorDeConfiguracion.ControlConfiguracionClienteException
      */
-    public GUIPanelConfiguracion(ControlConfiguracionCliente oControlConfiguracionCliente) throws ControlConfiguracionClienteException {
-        
+    public GUIDialogoConfiguracion(java.awt.Frame parent, String title, boolean modal, ControlConfiguracionCliente oControlConfiguracionCliente) throws ControlConfiguracionClienteException {
+        super(parent, title, modal);
+        initComponents();
         // Registramos la vista como observadora del modelo
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(this);
         
+        //Guardo en la Vista una referencia al Modelo.
         _objetoModelo = oControlConfiguracionCliente;
+        //Creo el Controlador y le paso una referencia al Modelo y a la Vista
+        //Y guardo en la Vista una referencia al Controlador.
         _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
-        initComponents();
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                setVisible (false);
+            }
+        });        
         //Pongo al objeto controlador a "escuchar" al boton.
         _btnAceptar.addActionListener(_objetoControlador);
         //Pongo al objeto controlador a "escuchar" al boton.
-        _btnDeshacer.addActionListener(_objetoControlador);        
+        _btnCancelar.addActionListener(_objetoControlador);        
         //Pongo al objeto controlador a "escuchar" al boton.
         _btnRestaurar.addActionListener(_objetoControlador);
         inicializarCampos (_objetoModelo.obtenerConfiguracion());        
+        
     }
 
     /** This method is called from within the constructor to
@@ -54,7 +66,7 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jTextField4 = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
         _panelPrincipal = new javax.swing.JPanel();
         _panelConexion = new javax.swing.JPanel();
         _lblNumDescargasSim = new javax.swing.JLabel();
@@ -77,7 +89,7 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
         _panelBotones = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         _btnAceptar = new javax.swing.JButton();
-        _btnDeshacer = new javax.swing.JButton();
+        _btnCancelar = new javax.swing.JButton();
         _btnRestaurar = new javax.swing.JButton();
         _panelUsuario = new javax.swing.JPanel();
         _lblNombreUsuario = new javax.swing.JLabel();
@@ -88,10 +100,11 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
         _lblDirCompartidos = new javax.swing.JLabel();
         _txtDirCompartidos = new javax.swing.JTextField();
 
-        jTextField4.setText("jTextField1");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-        setBorder(javax.swing.BorderFactory.createTitledBorder("Configuracion"));
-        setLayout(new java.awt.GridLayout(1, 0));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Configuracion"));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
         _panelPrincipal.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         _panelPrincipal.setLayout(null);
@@ -249,10 +262,10 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
         _btnAceptar.setText("Aceptar");
         _panelBotones.add(_btnAceptar, new java.awt.GridBagConstraints());
 
-        _btnDeshacer.setText("Deshacer cambios");
+        _btnCancelar.setText("Cancelar");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
-        _panelBotones.add(_btnDeshacer, gridBagConstraints);
+        _panelBotones.add(_btnCancelar, gridBagConstraints);
 
         _btnRestaurar.setText("Config. defecto");
         _panelBotones.add(_btnRestaurar, new java.awt.GridBagConstraints());
@@ -320,7 +333,30 @@ public class GUIPanelConfiguracion extends javax.swing.JPanel implements Observa
         _panelPrincipal.add(_panelDirectorios);
         _panelDirectorios.setBounds(10, 330, 680, 120);
 
-        add(_panelPrincipal);
+        jPanel1.add(_panelPrincipal);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 728, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 580, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
 
 private void _txtLimVelocidadSubidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__txtLimVelocidadSubidaActionPerformed
@@ -339,13 +375,13 @@ private void _txtDescripServidorActionPerformed(java.awt.event.ActionEvent evt) 
 // TODO add your handling code here:
 }//GEN-LAST:event__txtDescripServidorActionPerformed
 
-private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__txtDirCompartidosActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event__txtDirCompartidosActionPerformed
-
 private void _txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__txtNombreUsuarioActionPerformed
 // TODO add your handling code here:
 }//GEN-LAST:event__txtNombreUsuarioActionPerformed
+
+private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event__txtDirCompartidosActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event__txtDirCompartidosActionPerformed
 
     // ATRIBUTOS
 
@@ -359,7 +395,7 @@ private void _txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {/
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _btnAceptar;
-    private javax.swing.JButton _btnDeshacer;
+    private javax.swing.JButton _btnCancelar;
     private javax.swing.JButton _btnRestaurar;
     private javax.swing.JLabel _lblDescripServidor;
     private javax.swing.JLabel _lblDirCompartidos;
@@ -389,8 +425,8 @@ private void _txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JTextField _txtNumDescargasSim;
     private javax.swing.JTextField _txtPuerto;
     private javax.swing.JTextField _txtPuertoServidor;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -480,12 +516,11 @@ private void _txtNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {/
         return _btnAceptar;
     }
     
-    public Object obtenerBotonDeshacer(){
-        return _btnDeshacer;
+    public Object obtenerBotonCancelar(){
+        return _btnCancelar;
     }
     
     public Object obtenerBotonRestaurar(){
         return _btnRestaurar;
-    }
-
+    }    
 }

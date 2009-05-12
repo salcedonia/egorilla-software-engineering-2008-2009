@@ -10,7 +10,7 @@ import gui.grafica.buscador.ControladorPanelBuscador;
 import gui.grafica.buscador.GUIPanelBuscador;
 import gui.grafica.compartidos.ControladorPanelCompartidos;
 import gui.grafica.compartidos.GUIPanelCompartidos;
-import gui.grafica.configuracion.GUIPanelConfiguracion;
+import gui.grafica.configuracion.GUIDialogoConfiguracion;
 import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
@@ -22,6 +22,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.ObservadorP2P;
 
@@ -185,8 +187,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         _panelPrincipal.add("Buscador", new GUIPanelBuscador(new ControladorPanelBuscador(_controlador.getGestorEGorilla())));
 
         // PANEL DE CONFIGURACION
-        _panelPrincipal.add("Configuracion", new GUIPanelConfiguracion(ControlConfiguracionCliente.obtenerInstancia()));
-
+        //La configuracion va ahora mediante un Cuadro de dialogo.
+        
         // PANEL DE TRAFICO
         _panelPrincipal.add("Descargas", new GUIPanelTrafico(new ControladorPanelTrafico(_controlador.getGestorEGorilla())));
         
@@ -437,7 +439,11 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                pulsacionBotonConfiguracion(evt);
+                try {
+                    pulsacionBotonConfiguracion(evt);
+                } catch (ControlConfiguracionClienteException ex) {
+                    Logger.getLogger(GUIVentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         _botonera.add(_btnConfiguracion);
@@ -533,9 +539,13 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      * 
      * @param evt Evento de pulsación del ratón sobre el botón _btnConfiguracion.
      */
-    private void pulsacionBotonConfiguracion(MouseEvent evt) {
+    private void pulsacionBotonConfiguracion(MouseEvent evt) throws ControlConfiguracionClienteException {
     
-        ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Configuracion");
+//        ((CardLayout) _panelPrincipal.getLayout()).show(_panelPrincipal, "Configuracion");
+        JDialog dlgConfiguracion = new GUIDialogoConfiguracion (this, "Configuracion de eGorilla", true, ControlConfiguracionCliente.obtenerInstancia());
+        dlgConfiguracion.pack();
+        dlgConfiguracion.setLocationRelativeTo(this);
+        dlgConfiguracion.setVisible(true);        
     }
 
     /**

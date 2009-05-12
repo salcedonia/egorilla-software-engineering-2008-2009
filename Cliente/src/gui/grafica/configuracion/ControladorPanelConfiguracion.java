@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Clase controladora (siguiendo el patron MVC) que se encarga de recibir los eventos
@@ -28,7 +29,7 @@ public class ControladorPanelConfiguracion implements ActionListener{
     // Se guarda una referencia a la Vista (PATRÓN MVC) que en este caso es un objeto
     // GUIPanelConfiguracion (porque puede ser necesario modificarModelo/manipular los elementos
     // de la vista desde el controlador). Así todo queda atado.
-    private GUIPanelConfiguracion _objetoVista;
+    private GUIDialogoConfiguracion _objetoVista;
     
     /**
      * Constructor que recibe una instancia del Modelo (objeto ControlConfiguracionCliente)
@@ -37,9 +38,9 @@ public class ControladorPanelConfiguracion implements ActionListener{
      * @param oGUIPanelConfig referencia a la Vista (patron MVC) 
      */
     public ControladorPanelConfiguracion(ControlConfiguracionCliente oCtrlConfigCli,
-                                        GUIPanelConfiguracion oGUIPanelConfig){
+                                        GUIDialogoConfiguracion oGUIDialogoConfig){
         _objetoModelo = oCtrlConfigCli;
-        _objetoVista = oGUIPanelConfig;
+        _objetoVista = oGUIDialogoConfig;
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -47,13 +48,16 @@ public class ControladorPanelConfiguracion implements ActionListener{
         //Boton de Aceptar
         if (source == _objetoVista.obtenerBotonAceptar()){
             try {
-                modificarModelo();
+                if (validar()){
+                    modificarModelo();
+                    _objetoVista.setVisible (false);
+                }
             } catch (ControlConfiguracionClienteException ex) {
                 Logger.getLogger(ControladorPanelConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
             }
-        //Boton de Deshacer cambios: se carga el panel de nuevo con las propiedades del Modelo
-        } else if (source == _objetoVista.obtenerBotonDeshacer()){
-            _objetoVista.inicializarCampos(_objetoModelo.obtenerConfiguracion());
+        //Boton de Cancelar: se sale sin grabar
+        } else if (source == _objetoVista.obtenerBotonCancelar()){
+            _objetoVista.setVisible (false);
         //Boton de Restaurar valores por defecto: se carga el panel con las propiedades POR DEFECTO del Modelo
         }else if (source == _objetoVista.obtenerBotonRestaurar()){
             _objetoVista.inicializarCampos(_objetoModelo.obtenerConfiguracionPorDefecto());
@@ -119,4 +123,68 @@ public class ControladorPanelConfiguracion implements ActionListener{
             _objetoModelo.establecerConfiguracion(propiedades);                
     }
 
+    /**
+     * Valida el contenido de los controles de entrada.
+     */
+    private boolean validar(){
+        String sMensajeError = "";
+        int numErrores = 0;
+
+        //Validar que se rellenan todos los campos
+        if ( (_objetoVista.obtenerNumDescargasSim().compareTo("") == 0) ||
+            (_objetoVista.obtenerLimVelocidadSubida().compareTo("") == 0) ||
+            (_objetoVista.obtenerLimVelocidadBajada().compareTo("") == 0) ||
+            (_objetoVista.obtenerPuerto().compareTo("") == 0) ||
+            (_objetoVista.obtenerDirLlegada().compareTo("") == 0) ||
+            (_objetoVista.obtenerDirCompartidos().compareTo("") == 0) ||
+            (_objetoVista.obtenerIPServidor().compareTo("") == 0) ||
+            (_objetoVista.obtenerPuertoServidor().compareTo("") == 0) ||
+            (_objetoVista.obtenerNombreServidor().compareTo("") == 0) ||
+            (_objetoVista.obtenerDescripServidor().compareTo("") == 0) ||
+            (_objetoVista.obtenerNombreUsuario().compareTo("") == 0) ){
+                sMensajeError = "Todos los campos son obligatorios.\n";
+                numErrores++;
+        }
+
+        //Validar campos numericos.
+        try {
+            Integer.parseInt(_objetoVista.obtenerNumDescargasSim());
+        }catch(NumberFormatException e){
+            sMensajeError = sMensajeError + "El Numero de Descargas debe ser un numero.\n";
+            numErrores++;
+        }
+        try {
+            Integer.parseInt(_objetoVista.obtenerLimVelocidadSubida());
+        }catch(NumberFormatException e){
+            sMensajeError = sMensajeError + "El Limite de Velocidad de subida debe ser un numero.\n";
+            numErrores++;
+        }
+        try {
+            Integer.parseInt(_objetoVista.obtenerLimVelocidadBajada());
+        }catch(NumberFormatException e){
+            sMensajeError = sMensajeError + "El Limite de Velocidad de bajada debe ser un numero.\n";
+            numErrores++;
+        }
+        try {
+            Integer.parseInt(_objetoVista.obtenerPuerto());
+        }catch(NumberFormatException e){
+            sMensajeError = sMensajeError + "El Puerto debe ser un numero.\n";
+            numErrores++;
+        }
+        try {
+            Integer.parseInt(_objetoVista.obtenerPuertoServidor());
+        }catch(NumberFormatException e){
+            sMensajeError = sMensajeError + "El Puerto del Servidor debe ser un numero.\n";
+            numErrores++;
+        }
+        
+        if (numErrores > 0){
+                JOptionPane.showMessageDialog(_objetoVista, sMensajeError,
+                    "Error configuracion", JOptionPane.ERROR_MESSAGE);
+                return false;
+        }
+        
+        return true;
+    }
+    
 }
