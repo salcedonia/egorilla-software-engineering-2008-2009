@@ -4,12 +4,16 @@ import datos.Archivo;
 import datos.Fragmento;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
+import gestorDeFicheros.GestorCompartidos;
 import gestorDeFicheros.GestorDisco;
 import gestorDeRed.GestorDeRed;
+import gestorDeRed.TCP.GestorDeRedTCPimpl;
+import java.util.ArrayList;
 import java.util.Properties;
 import mensajes.Mensaje;
 import mensajes.p2p.Tengo;
 import mensajes.serverclient.DatosCliente;
+import mensajes.serverclient.ListaArchivos;
 import mensajes.serverclient.RespuestaPeticionConsulta;
 import peerToPeer.GestorP2P;
 import peerToPeer.ObservadorP2P;
@@ -24,7 +28,6 @@ import peerToPeer.descargas.Descargador;
  * Esta clase utiliza parametros de configuracion por tanto va a ser observadora de ControlConfiguracionCliente 
  * y sera notificada cuando cambie la configuracion dando un tratamiento adecuado al cambio (o no hacer nada).
  * //TODO: Dar tratamiento a los cambios en la configuracion del cliente (si asi se desea).
- * 
  */
 public class GestorEgorilla extends Thread implements ObservadorControlConfiguracionCliente,
                                                       GestorP2P{
@@ -40,7 +43,13 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     private Descargador     _descargador;
     /** el servidor egorilla se encarga de recibir los mensajes y tratarlos*/
     private ServidorP2PEgorilla _server;
-
+    /** lista de observadores */
+    private ArrayList<ObservadorP2P> _observadores;
+    /** ip del servidor al que conectamos */
+    private String _IPservidor;
+    /** puerto del servidor al que conectamos */
+    private int _puertoServidor;
+    
     /**
      * constructor de la clase
      * @param puerto puerto por el que se escucha
@@ -50,8 +59,11 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         //inicialmente no estamos conectados
         _conectado =false;
 
+        _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
         _server = new ServidorP2PEgorilla(this);
+        _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
+        _red.comienzaEscucha();
     }
 
 //------------------------------------------------------------------------------
@@ -72,7 +84,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
 
     @Override
     public void desconectar(){
-        
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -120,13 +132,13 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     }
 
     @Override
-    public void agregarObservador(ObservadorP2P obs) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public synchronized void agregarObservador(ObservadorP2P obs) {
+        _observadores.add(obs);
     }
 
     @Override
-    public void eliminaObservador(ObservadorP2P obs) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public synchronized void eliminaObservador(ObservadorP2P obs) {
+        _observadores.remove(obs);
     }
 
     void DescargaFichero(Archivo a, DatosCliente[] lista) {
@@ -148,20 +160,45 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    void conectado() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    boolean conectado() {
+        return _conectado;
     }
 
+    /**
+     * envia al SERVIDOR la lista de archivos compatidos por este cliente.
+     * este metodo se invoca durante la conexión, pero puede ser invocado
+     * por ejemplo cuando termine la descarga de un fichero o se comparta algo
+     * nuevo para actualizar la BBDD del servidor.
+     */
     void enviaListaArchivos() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if (!conectado()) {
+            // aqui enviamos la lista de archivos compartidos que se sube
+            // esto incluye tanto compartidos como a medias.
+
+            // es un vector, por lo que hay que añadir los elementos en el consturctor
+            // en un addall o algo
+            ListaArchivos l = GestorCompartidos.getInstancia().getArchivosCompartidos();
+            l.setDestino(_IPservidor, _puertoServidor);
+            this.addMensajeParaEnviar(l);
+        }
     }
+
 
     void fragmentoDescargado(Fragmento f, Byte[] parte) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     void perdidaDeConexion(String ip) {
-        throw new UnsupportedOperationException("Not yet implemented");
+       if (ip.equals(_IPservidor)){
+           // hemos perido la conexion con el servidor
+           _conectado = false;
+           for (ObservadorP2P observadorP2P : _observadores) {
+               observadorP2P.perdidaConexion(this);
+           }
+       }
+       else {
+            // emos perdido la conexion con un cliente
+       }
     }
 
     void reanudarDescargas() {
