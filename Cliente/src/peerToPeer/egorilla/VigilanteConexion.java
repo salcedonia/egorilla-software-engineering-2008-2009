@@ -1,6 +1,7 @@
 package peerToPeer.egorilla;
 
 import java.util.ArrayList;
+import peerToPeer.EstadoP2P;
 import peerToPeer.ObservadorP2P;
 
 /**
@@ -25,7 +26,7 @@ public class VigilanteConexion extends Thread{
 
             synchronized (this) {
                 for (ObservadorP2P observadorP2P : _observadores) {
-                    observadorP2P.conexionNoCompletada();
+                    observadorP2P.cambioEstado(EstadoP2P.DESCONECTADO, null, -1);
                 }
             }
         } catch (InterruptedException ex) {

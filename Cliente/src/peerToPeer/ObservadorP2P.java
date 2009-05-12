@@ -14,20 +14,19 @@ import datos.Archivo;
 public interface ObservadorP2P {
     
     /**
-     * Para notificar que la conexion ha sido completada.
+     * Notifica cualquier cambio de estado del protocolo P2P
      *
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     * @param ip IP del servidor.
-     * @param puerto Puerto del servidor.
+     * @param estado EstadoP2P de la aplicación. Este el en el nuevo estado en el 
+     * que se encuentra la conexión de la aplicación.
+     * @param ip IP del servidor. Este párametro se utiliza cuando se pasa al estado
+     *  EstadoP2P.CONECTADO asi indica al servidor que se conectó, en el resto de los
+     *  estados será ignorado.
+     * @param puerto Puerto del servidor. Este párametro se utiliza cuando se pasa al estado
+     *  EstadoP2P.CONECTADO asi indica al puerto que se conectó, en el resto de los
+     *  estados será ignorado.
      */
-    public void conexionCompletada(GestorEgorilla gestorEGorilla, String ip, int puerto);
+    public void cambioEstado(EstadoP2P estado, String ip, int puerto);
 
-    /**
-     * Para notificar que se ha completado la desconexion.
-     * 
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     */
-    public void desconexionCompletada(GestorEgorilla GestorEGorilla);
     
     /**
      * Para notificar que se han recibido los resultados de la busqueda.
@@ -45,13 +44,7 @@ public interface ObservadorP2P {
      * @param arch el archivo finalizado
      */
     public void finDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
-    
-    /**
-     * Para notificar que la conexion se ha perdido.
-     *
-     * @param gestorEGorilla GestorEGorilla de la aplicación.
-     */
-    public void perdidaConexion(GestorEgorilla GestorEGorilla);
+   
     
     /**
      * Para notificar que la descarga ha sido pausada.
@@ -69,8 +62,5 @@ public interface ObservadorP2P {
      */
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch);
 
-    /**
-     * notifica que la conexion que se intentaba realizar no se ha podido realizar
-     */
-    public void conexionNoCompletada();
+   
 }

@@ -41,7 +41,7 @@ public class Main {
      */
     public static void main(String[] args) throws ControlConfiguracionClienteException {
 
-        //TODO Configurar los logs
+        //Configuracion de los logs
         PropertyConfigurator.configure("log4j.properties");
         Logger log = Logger.getLogger(Main.class);
 
@@ -110,7 +110,7 @@ public class Main {
      */
     private static void crearTipoGUI(String modo, GestorDeRed gestorDeRed, GestorP2P gestorEGorilla) throws IOException, ControlConfiguracionClienteException, Exception{
 
-        if (modo.equalsIgnoreCase("grafico") || modo.equals("")) {
+        if (modo == null || modo.equalsIgnoreCase("grafico")) {
 
             ControladorVentanaPrincipal controladorGrafica = new ControladorVentanaPrincipal(gestorDeRed, gestorEGorilla);
             new GUIGrafica(controladorGrafica);

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 import mensajes.serverclient.ListaArchivos;
+import peerToPeer.EstadoP2P;
 import peerToPeer.egorilla.GestorEgorilla;
 import peerToPeer.ObservadorP2P;
 
@@ -18,7 +19,7 @@ import peerToPeer.ObservadorP2P;
  * @author Iván Munsuri, Javier Salcedo, Javier Sánchez
  */
 public class GUIConsola implements ObservadorP2P {
-
+    
     /**
      * Log para recopilar la información en un fichero de log.
      */
@@ -38,7 +39,8 @@ public class GUIConsola implements ObservadorP2P {
     /**
      * Indica si está conectado a un servidor o no.
      */
-    private static boolean _conectado = false;
+    //private static boolean _conectado = false;
+    private EstadoP2P _estado;
     /**  
      * Última busqueda para tener todos los datos de los archivos al descargar 
      */
@@ -51,7 +53,7 @@ public class GUIConsola implements ObservadorP2P {
      * @throws java.io.IOException
      */
     public GUIConsola(ControladorConsola controlador) throws IOException, Exception {
-
+        _estado = EstadoP2P.DESCONECTADO;
         _controlador = controlador;
 
         // Registramos la vista como observador del GestorEGorilla
@@ -157,7 +159,7 @@ public class GUIConsola implements ObservadorP2P {
      */
     public boolean conectado() {
 
-        return _conectado;
+        return _estado.equals(EstadoP2P.CONECTADO);
     }
 
     /**
@@ -349,11 +351,11 @@ public class GUIConsola implements ObservadorP2P {
      * @param ip IP de la conexión.
      * @param port Puerto de la conexión.
      */
-    @Override
-    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
-
-        mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
-    }
+//    @Override
+//    public void conexionCompletada(GestorEgorilla obj, String ip, int port) {
+//
+//        mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + port);
+//    }
 
     /**
      * Muestra un mensaje indicativo cuando la desconexión con el servidor 
@@ -361,11 +363,11 @@ public class GUIConsola implements ObservadorP2P {
      * 
      * @param obj GestorEGorilla de la aplicación.
      */
-    @Override
-    public void desconexionCompletada(GestorEgorilla obj) {
-
-        mostrarMensaje("\nDesconectado.");
-    }
+//    @Override
+//    public void desconexionCompletada(GestorEgorilla obj) {
+//
+//        mostrarMensaje("\nDesconectado.");
+//    }
 
     /**
      * Muestra los resultados de una petición de búsqueda de un archivo
@@ -396,9 +398,9 @@ public class GUIConsola implements ObservadorP2P {
      * 
      * @param obj GestorEGorilla de la aplicación.
      */
-    @Override
-    public void perdidaConexion(GestorEgorilla obj) {
-    }
+//    @Override
+//    public void perdidaConexion(GestorEgorilla obj) {
+//    }
 
     @Override
     public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
@@ -408,5 +410,16 @@ public class GUIConsola implements ObservadorP2P {
     @Override
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
         //TODO DESCARGA ELIMINADA
+    }
+
+    @Override
+    public void cambioEstado(EstadoP2P estado, String ip, int puerto) {
+        _estado = estado;
+        switch (_estado) {
+            case DESCONECTADO: mostrarMensaje("\nDesconectado."); break;
+            case CONECTADO: mostrarMensaje("\nConectado a servidor, IP: " + ip + " Puerto: " + puerto); break;
+            case NEGOCIANDO:
+            
+        }
     }
 }

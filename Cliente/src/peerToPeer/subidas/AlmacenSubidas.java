@@ -21,7 +21,7 @@ public class AlmacenSubidas extends Thread{
         _envioMensajes= envioMensajes;
         _cola = new LinkedList<Dame>();
         setName("Almacen Subidas");
-        run();
+        //start();
     }
     
     public void nuevaSubida (Dame mensaje){
@@ -29,10 +29,14 @@ public class AlmacenSubidas extends Thread{
         notify();
     }
 
+    @Override
     public void run() {
         try {
-            wait();
-            while (!_cola.isEmpty()) {
+            
+            while (true) {
+                if (_cola.isEmpty()) {
+                    wait();        
+                }
                 Dame msjDame = _cola.poll();
                 //ahora se pide uno solo, si se envia Vector<Fragmento> crearlo en bucle
                 Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
