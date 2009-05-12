@@ -19,6 +19,7 @@ import peerToPeer.GestorP2P;
 import peerToPeer.ObservadorP2P;
 import peerToPeer.descargas.AlmacenDescargas;
 import peerToPeer.descargas.Descargador;
+import peerToPeer.subidas.AlmacenSubidas;
 
 /**
  *
@@ -49,6 +50,8 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     private String _IPservidor;
     /** puerto del servidor al que conectamos */
     private int _puertoServidor;
+    /** almacen de subidas donde se almacenan estas */
+    private AlmacenSubidas _subidas;
     
     /**
      * constructor de la clase
@@ -61,6 +64,7 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
 
         _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
+        _subidas = new AlmacenSubidas(_colaMensajes);
         _server = new ServidorP2PEgorilla(this);
         _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
         _red.comienzaEscucha();
@@ -90,6 +94,10 @@ public class GestorEgorilla extends Thread implements ObservadorControlConfigura
     @Override
     public AlmacenDescargas getAlmacenDescargas() {
        return _descargas;
+    }
+
+    public AlmacenSubidas getAlmacenSubidas() {
+       return _subidas;
     }
 
     @Override
