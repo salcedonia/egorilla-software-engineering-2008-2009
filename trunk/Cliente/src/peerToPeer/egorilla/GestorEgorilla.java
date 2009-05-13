@@ -24,6 +24,8 @@ import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
 import java.net.InetAddress;
 import mensajes.p2p.Altoo;
+import mensajes.serverclient.PeticionConsulta;
+import mensajes.serverclient.PeticionDescarga;
 import peerToPeer.EstadoP2P;
 import peerToPeer.subidas.AlmacenSubidas;
 
@@ -68,6 +70,8 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
     /** almacen de subidas donde se almacenan estas */
     private AlmacenSubidas _subidas;
+    /** el gestor de disco para hacer consultas y transferencias */
+    private GestorDisco _disco;
     
     /**
      * constructor de la clase
@@ -78,6 +82,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         //inicialmente no estamos conectados
         //_conectado =false;
         _estado = EstadoP2P.DESCONECTADO;
+        _disco = disco;
 
         _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
@@ -103,7 +108,12 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     }
 
     public void descargaCompletada(Archivo archivo) {
-        throw new UnsupportedOperationException("Not yet implemented");
+               // esta descarga no se continuará
+       _descargas.descargaCompletada(archivo);
+       
+        for (ObservadorP2P obs: _observadores) {
+            obs.finDescarga(this, archivo);
+        }
     }
     
 //------------------------------------------------------------------------------
@@ -145,12 +155,27 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
     @Override
     public void nuevaConsulta(String cadena) {
-        throw new UnsupportedOperationException("Not supported yet.");
+                // crea el paquete consulta,
+        Mensaje msj = new PeticionConsulta(cadena);
+        msj.setDestino(_IPservidor, _puertoServidor);
+       
+        // si hemos conectado antes...
+        // lo envia al servidor.
+        if (_estado != EstadoP2P.CONECTADO){
+            // TODO: notificar error
+        }
+        else
+            this.addMensajeParaEnviar(msj);
     }
 
     @Override
     public void nuevaDescarga(Archivo a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+           //si no lo tengo en los completos inicio la descarga
+        if(_disco.getEnsamblador().nuevoArchivoTemporal(a)){
+            _descargas.nuevaDescarga(a);
+            pedirPropietariosaServidor(a);
+            enviaListaArchivos();
+        }
     }
 
     @Override
@@ -160,21 +185,40 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
     @Override
     public void pausarDescarga(Archivo a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+            // esta descarga no se continuará
+       _descargas.pausaDescarga(a);
+       
+        for (ObservadorP2P obs: _observadores) {
+            obs.pausaDescarga(this, a);
+        }
+
     }
 
     @Override
     public void eliminarDescarga(Archivo a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (_disco.getEnsamblador().eliminarArchivoTemporal(a.getHash())) {
+            // esta descarga se elimina
+            _descargas.eliminaDescarga(a);
+
+            for (ObservadorP2P obs : _observadores) {
+                obs.eliminarDescarga(this, a);
+            }
+        }
     }
 
-    public void pedirPropietariosaServidor(Archivo archivo) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    public void pedirPropietariosaServidor(Archivo a) {
+         // realizamos una consulta al servidor para saber los propietarios.
+        PeticionDescarga peticion = new PeticionDescarga(a._nombre,a._hash);
+        peticion.setDestino(_IPservidor, _puertoServidor);
+        this.addMensajeParaEnviar(peticion);
     }
 
     @Override
     public void reanudarDescarga(Archivo a) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ListaArchivos l = GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales();
+        for(int i=0;i<l.size();i++){
+            nuevaDescarga(l.get(i));
+        }
     }
 
     @Override
@@ -246,11 +290,11 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     }
 
     void DescargaFichero(Archivo a, DatosCliente[] lista) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        _descargas.respuestaPeticionDescarga(a, lista);
     }
 
     void actualizaDescarga(Tengo reciv) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        _descargas.actualizaDescarga(reciv);
     }
 
 //------------------------------------------------------------------------------
@@ -302,7 +346,12 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     }
 
     void fragmentoDescargado(Fragmento f, Byte[] parte) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        if(_disco.getEnsamblador().guardarFragmentoEnArchivo(f, parte)){
+            if(_descargas.fragmentoDescargado(f)){
+            //TODO MIRAR QUE HACER
+   
+            }
+        }
     }
 
     void perdidaDeConexion(String ip) {
@@ -324,7 +373,13 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     }
 
     void resultadoBusqueda(RespuestaPeticionConsulta respuestaPeticionConsulta) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        String cad = respuestaPeticionConsulta.getConsulta();
+        Archivo[] lista = respuestaPeticionConsulta.getLista();
+        
+        for (ObservadorP2P obs : _observadores) {
+            obs.resultadosBusqueda(this,cad, lista);
+        }
+
     }
 
 //------------------------------------------------------------------------------
