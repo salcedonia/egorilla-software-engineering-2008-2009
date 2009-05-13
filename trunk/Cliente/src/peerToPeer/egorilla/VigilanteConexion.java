@@ -30,7 +30,7 @@ public class VigilanteConexion extends Thread{
                 }
             }
         } catch (InterruptedException ex) {
-            // se ha interrumpido, por lo que se ha realizado la conexión.
+             System.out.println("*** Soy el vigiliante de la conexion, todo ha ido guay");
         }
     }
 

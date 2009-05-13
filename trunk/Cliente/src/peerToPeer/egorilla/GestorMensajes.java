@@ -6,6 +6,8 @@ import gestorDeRed.GestorDeRed;
 import gestorDeRed.NetError;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mensajes.Mensaje;
 
 /**
@@ -56,6 +58,7 @@ class GestorMensajes extends Thread{
                 }
             }
         } catch (InterruptedException ex) {
+            System.out.println("*** Soy el Gestor de Mensajes: me muero");
             if (_flush) { // si hay flush vaciamos la cola
                 while (!_cola.isEmpty()) {
                     Mensaje msj = _cola.poll();
@@ -77,8 +80,12 @@ class GestorMensajes extends Thread{
      * transferencias
      */
     void  flushYSalir() {
-        _flush = true;
-        this.parar();
+        try {
+            _flush = true;
+            this.parar();
+            join();
+        } catch (InterruptedException ex) {
+        }
     }
 
     synchronized void parar(){
