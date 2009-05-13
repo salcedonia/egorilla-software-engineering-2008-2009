@@ -107,8 +107,11 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
                 _red.eliminaConexion(ip);
 
                 // lo eliminaremos de todos los lugares dnd aparezca
+                try{
                 this.perdidaDeConexion(ip);
-                
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
                 break;
                 
             default:
@@ -119,8 +122,7 @@ public class ServidorEgorilla implements Receptor<Mensaje> {
 
     public void perdidaDeConexion(String ip) {
         if (_clientes.estaDeAlta(ip)){
-
-               //TODO: logger
+            //TODO: logger
             System.out.print("perdida conexion con " + ip);
             
             DatosCliente d =_clientes.getDatosCliente(ip);
