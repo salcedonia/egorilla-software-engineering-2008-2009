@@ -64,26 +64,29 @@ public class Descargador extends Thread{
                             break;
                         case Descarga.DESCARGA:
                             // envia DAME a los propietarios
-
-                            Fragmento chunk = null;
-                            Vector<Fragmento> listado=d.getListaFragmentosPendientes();
-                            int i = (int)(Math.random()*((listado.size()-1)));
-                            if (listado.size() != 0){                           
-                                chunk = listado.get(i);
-                                Cliente propietario = d.dameClienteQueTiene(chunk);
-
-                                if(propietario!=null){
-                                    System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
-
-                                    Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
-                                                    chunk, propietario.getIP(), propietario.getPuerto());
-
-                                    _gestor.addMensajeParaEnviar(msj);
-                                }
-                            }
-                            else {// hemos acabado
-                                _gestor.descargaCompletada(d.getArchivo());
-                            }
+                            
+                            // TODO: piensate esto
+                            
+//
+//                            Fragmento chunk = null;
+//                            Vector<Fragmento> listado=d.getListaFragmentosPendientes();
+//                            int i = (int)(Math.random()*((listado.size()-1)));
+//                            if (listado.size() != 0){                           
+//                                chunk = listado.get(i);
+//                                Cliente propietario = d.dameClienteQueTiene(chunk);
+//
+//                                if(propietario!=null){
+//                                    System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
+//
+//                                    Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
+//                                                    chunk, propietario.getIP(), propietario.getPuerto());
+//
+//                                    _gestor.addMensajeParaEnviar(msj);
+//                                }
+//                            }
+//                            else {// hemos acabado
+//                                _gestor.descargaCompletada(d.getArchivo());
+//                            }
                             break;
                     }
                     d.decrementaEstado();
