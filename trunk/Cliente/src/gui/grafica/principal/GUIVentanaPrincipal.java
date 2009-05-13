@@ -642,6 +642,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
       @Override
       public void windowClosing(WindowEvent e){
           //Hacer un sleep
+          _gestorEGorilla.acabarTodo();
+          
           System.exit(0);
       }
     }

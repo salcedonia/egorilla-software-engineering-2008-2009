@@ -100,6 +100,20 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         _colaMensajes = null;
     }
 
+    public void acabarTodo() {
+
+       if (_estado == EstadoP2P.CONECTADO)
+           desconectar();
+       _colaMensajes.flushYSalir();
+       
+       if (_vigilante != null)
+           _vigilante.conexionCompletada();
+       _descargador.parar();
+       _subidas.parar();
+       
+       _red.terminaEscucha();
+    }
+
 //------------------------------------------------------------------------------
 //--------------------- interfaz ObservadorControlConfiguracionCliente ---------
 //------------------------------------------------------------------------------

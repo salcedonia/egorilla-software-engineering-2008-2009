@@ -260,7 +260,6 @@ public class AlmacenDescargas {
 
    void registraDescargador(Descargador des){
        _descargador = des;
-     //  _descargador.
    }
 
    //------------------------------------------
