@@ -52,7 +52,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     /** almacen de descargas donde se almacenan estas */
     private AlmacenDescargas _descargas;
     /** el descargador es un hilo que se encarga de gestionar las descargas*/
-    private Descargador     _descargador;
+    private Descargador _descargador;
     /** el servidor egorilla se encarga de recibir los mensajes y tratarlos*/
     private ServidorP2PEgorilla _server;
     /** lista de observadores */
@@ -88,6 +88,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         _descargas = new AlmacenDescargas();
         _subidas = new AlmacenSubidas(this);
         _server = new ServidorP2PEgorilla(this);
+        _descargador = new Descargador(this,_descargas);
         
         // prepara la red y el servidor
         _puertoCliente = puerto;
