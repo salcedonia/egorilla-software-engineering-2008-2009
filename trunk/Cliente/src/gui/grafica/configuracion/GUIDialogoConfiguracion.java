@@ -6,7 +6,9 @@ import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.ObservadorControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
+import java.io.File;
 import java.util.Properties;
+import javax.swing.JFileChooser;
 
 /**
  * Dialogo que se encarga de la configuración de la aplicación.
@@ -41,17 +43,18 @@ public class GUIDialogoConfiguracion extends javax.swing.JDialog implements Obse
         //Y guardo en la Vista una referencia al Controlador.
         _objetoControlador = new ControladorPanelConfiguracion(_objetoModelo, this);
 
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
+        //Ocultar el cuadro de dialogo al pulsar el aspa de cerrar la ventana.
+        addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent e) {
                 setVisible (false);
             }
         });        
-        //Pongo al objeto controlador a "escuchar" al boton.
+        //Pongo al objeto controlador a "escuchar" a los botones.
         _btnAceptar.addActionListener(_objetoControlador);
-        //Pongo al objeto controlador a "escuchar" al boton.
         _btnCancelar.addActionListener(_objetoControlador);        
-        //Pongo al objeto controlador a "escuchar" al boton.
         _btnRestaurar.addActionListener(_objetoControlador);
+        _btnDirCompartidos.addActionListener(_objetoControlador);
+        _btnDirLlegada.addActionListener(_objetoControlador);
         inicializarCampos (_objetoModelo.obtenerConfiguracion());        
         
     }
@@ -66,6 +69,7 @@ public class GUIDialogoConfiguracion extends javax.swing.JDialog implements Obse
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         _panelPrincipal = new javax.swing.JPanel();
         _panelConexion = new javax.swing.JPanel();
@@ -99,6 +103,11 @@ public class GUIDialogoConfiguracion extends javax.swing.JDialog implements Obse
         _txtDirLlegada = new javax.swing.JTextField();
         _lblDirCompartidos = new javax.swing.JLabel();
         _txtDirCompartidos = new javax.swing.JTextField();
+        _btnDirLlegada = new javax.swing.JButton();
+        _btnDirCompartidos = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -307,8 +316,11 @@ public class GUIDialogoConfiguracion extends javax.swing.JDialog implements Obse
         _panelDirectorios.add(_lblDirLlegada, gridBagConstraints);
 
         _txtDirLlegada.setColumns(40);
+        _txtDirLlegada.setEditable(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         _panelDirectorios.add(_txtDirLlegada, gridBagConstraints);
@@ -316,19 +328,41 @@ public class GUIDialogoConfiguracion extends javax.swing.JDialog implements Obse
         _lblDirCompartidos.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         _lblDirCompartidos.setText("Directorio de compartidos:");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         _panelDirectorios.add(_lblDirCompartidos, gridBagConstraints);
 
         _txtDirCompartidos.setColumns(40);
+        _txtDirCompartidos.setEditable(false);
         _txtDirCompartidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 _txtDirCompartidosActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
         _panelDirectorios.add(_txtDirCompartidos, gridBagConstraints);
+
+        _btnDirLlegada.setText("...");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        _panelDirectorios.add(_btnDirLlegada, gridBagConstraints);
+
+        _btnDirCompartidos.setText("...");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridwidth = java.awt.GridBagConstraints.REMAINDER;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        _panelDirectorios.add(_btnDirCompartidos, gridBagConstraints);
 
         _panelPrincipal.add(_panelDirectorios);
         _panelDirectorios.setBounds(10, 330, 680, 120);
@@ -392,10 +426,14 @@ private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {
      */
     private ControlConfiguracionCliente _objetoModelo;
     private ControladorPanelConfiguracion _objetoControlador;
+    //Cuadro de dialogo para elegir un directorio
+    private JFileChooser _fileChooser;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton _btnAceptar;
     private javax.swing.JButton _btnCancelar;
+    private javax.swing.JButton _btnDirCompartidos;
+    private javax.swing.JButton _btnDirLlegada;
     private javax.swing.JButton _btnRestaurar;
     private javax.swing.JLabel _lblDescripServidor;
     private javax.swing.JLabel _lblDirCompartidos;
@@ -425,6 +463,7 @@ private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JTextField _txtNumDescargasSim;
     private javax.swing.JTextField _txtPuerto;
     private javax.swing.JTextField _txtPuertoServidor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     // End of variables declaration//GEN-END:variables
@@ -510,6 +549,17 @@ private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     //
+    //Metodos auxiliares para establecer los controles asociados a directorios.
+    //
+    public void establecerDirLlegada(String sDirectorio){
+        _txtDirLlegada.setText(sDirectorio);
+    }
+
+    public void establecerDirCompartidos(String sDirectorio){
+        _txtDirCompartidos.setText(sDirectorio);
+    }
+    
+    //
     //Metodos auxiliares que devuelven referencias a los botones
     //
     public Object obtenerBotonAceptar(){
@@ -523,4 +573,34 @@ private void _txtDirCompartidosActionPerformed(java.awt.event.ActionEvent evt) {
     public Object obtenerBotonRestaurar(){
         return _btnRestaurar;
     }    
+
+    public Object obtenerBotonDirLlegada(){
+        return _btnDirLlegada;
+    }    
+    
+    public Object obtenerBotonDirCompartidos(){
+        return _btnDirCompartidos;
+    }    
+    
+    //Metodo que muestra un cuadro de dialogo para la eleccion de 1 directorio
+    //y devuelve una cadena con el directorio elegido o null si el usuario cancela.
+    public String obtenerDirectorio(){
+        //Crea un file chooser
+        _fileChooser = new JFileChooser();
+        //Establezco el modo de seleccion para directorios
+        _fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        //Establezco el directorio actual como directorio inicial para realizar la seleccion.
+        _fileChooser.setCurrentDirectory(new File (System.getProperty("user.dir")));
+        //Muestro el cuadro de dialogo
+        int valRetorno = _fileChooser.showOpenDialog(this);
+        //Evaluo la seleccion del usuario.
+        if (valRetorno == JFileChooser.APPROVE_OPTION) {
+            File file = _fileChooser.getSelectedFile();
+            return file.getAbsolutePath();
+        } else {
+            return null;
+        }        
+        
+
+    }
 }

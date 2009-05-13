@@ -55,12 +55,22 @@ public class ControladorPanelConfiguracion implements ActionListener{
             } catch (ControlConfiguracionClienteException ex) {
                 Logger.getLogger(ControladorPanelConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
             }
-        //Boton de Cancelar: se sale sin grabar
         } else if (source == _objetoVista.obtenerBotonCancelar()){
+            //Boton de Cancelar: se sale sin grabar
             _objetoVista.setVisible (false);
-        //Boton de Restaurar valores por defecto: se carga el panel con las propiedades POR DEFECTO del Modelo
         }else if (source == _objetoVista.obtenerBotonRestaurar()){
+            //Boton de Restaurar valores por defecto: se carga el panel con las propiedades POR DEFECTO del Modelo
             _objetoVista.inicializarCampos(_objetoModelo.obtenerConfiguracionPorDefecto());
+        }else if (source == _objetoVista.obtenerBotonDirLlegada()){
+            //Boton de eleccion del directorio de Llegada de archivos
+            String sDirectorio = _objetoVista.obtenerDirectorio();
+            if (sDirectorio != null)
+                _objetoVista.establecerDirLlegada(sDirectorio);
+        }else if (source == _objetoVista.obtenerBotonDirCompartidos()){
+            //Boton de eleccion del directorio de comparticion de archivos
+            String sDirectorio = _objetoVista.obtenerDirectorio();
+            if (sDirectorio != null)
+                _objetoVista.establecerDirCompartidos(sDirectorio);
         }
     }
     
