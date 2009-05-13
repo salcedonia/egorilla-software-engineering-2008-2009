@@ -1,14 +1,11 @@
-  <?xml version="1.0" encoding="UTF-8" ?> 
-- <!--  You may freely edit this file. See commented blocks below for 
-  --> 
-- <!--  some examples of how to customize the build. 
-  --> 
-- <!--  (If you delete it and reopen the project it will be recreated.) 
-  --> 
-- <project name="Comunicaciones" default="default" basedir=".">
-  <description>Builds, tests, and runs the project Comunicaciones.</description> 
-  <import file="nbproject/build-impl.xml" /> 
-- <!-- 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<project name="Comunicaciones" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Comunicaciones.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
 
     There exist several targets which are by default empty and which can be 
     used for execution of your tasks. These targets are usually executed 
@@ -68,7 +65,5 @@
     properties which you can use, check the target you are overriding in the
     nbproject/build-impl.xml file. 
 
-    
-
-  --> 
-  </project>
+    -->
+</project>

@@ -36,6 +36,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         _puerto = port;
         _receptores = new Stack<Receptor<E>>();
         _conexiones  = new GestorConexiones(this);
+        this.setDaemon(true); // es un demonio, así no hay que pararlo
     }
 
     /**
@@ -130,63 +131,63 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
     public void run() {
 
         this.setName("Gestor TCP");
-
+        String ip = "";
         try {
-            try {
-                _sock = new ServerSocket(_puerto);
+            _sock = new ServerSocket(_puerto);
+            // TODO: hacer que esto no sea para siempre, poder pararlo de alguna forma
+            while (true) {
+                Socket s = _sock.accept();
+                try {
+                    Paquete<E> paquete = (Paquete<E>) new ObjectInputStream(s.getInputStream()).readObject();
 
-                // TODO: hacer que esto no sea para siempre, poder pararlo de alguna forma
-                while (true) {
-                    Socket s = _sock.accept();
-                    try {
-                        Paquete<E> paquete = (Paquete<E>) new ObjectInputStream(s.getInputStream()).readObject();
+                    /***********************
+                     *    NOTA
+                     * 
+                     * la ip, se usa la publica,
+                     * que es la que se ve desde el lado
+                     * del que recibe, 
+                     * 
+                     * mientras que el puerto se usa el que 
+                     * nos dice el otro peer, no por el que
+                     * envio el fichero.
+                     * 
+                     ***********************/
+                    ip = s.getInetAddress().getHostAddress();
 
-                        /***********************
-                         *    NOTA
-                         * 
-                         * la ip, se usa la publica,
-                         * que es la que se ve desde el lado
-                         * del que recibe, 
-                         * 
-                         * mientras que el puerto se usa el que 
-                         * nos dice el otro peer, no por el que
-                         * envio el fichero.
-                         * 
-                         ***********************/
-                        String ip = s.getInetAddress().getHostAddress();
-                        
-                        // solo si el paquete lleva carga util se envia a los receptores
-                        if (paquete.getDatos() != null) {
-                            for (Receptor<E> receptor : _receptores) {
-                                receptor.recibeMensaje(paquete.getDatos(), ip, paquete.getPuertoRemite());
-                            }
+                    s.close();
+                    // solo si el paquete lleva carga util se envia a los receptores
+                    if (paquete.getDatos() != null) {
+                        for (Receptor<E> receptor : _receptores) {
+                            receptor.recibeMensaje(paquete.getDatos(), ip, paquete.getPuertoRemite());
                         }
-                        else{ // mira si es una bomba
-                            if (paquete.esBomba())
-                                return;  // finaliza el hilo
+                    } else { // mira si es una bomba
+                        if (paquete.esBomba()) {
+                            return;  // finaliza el hilo
                         }
-                    } catch (ClassNotFoundException ex) {
-                        ex.printStackTrace();
-                     
                     }
+                } catch (ClassNotFoundException ex) {
+                   // no pasa nada. pintamos un error de casting y continuamos.
+                   System.err.println("Error de mensaje: el host " + ip + " no habla " +
+                                      "el protocolo: " + ex.getMessage()); 
                 }
-            } catch (IOException ex) {
-                // problemas con el socket?? solo si es la primera vez, sino es que 
-                // hemos acabado con la ejecucion
-                ex.printStackTrace();
             }
+        } catch (IOException ex) {
+            // el socket está ocupado
+            System.err.println ("El puerto " + _puerto + " esta ocupado por otra "+
+                               " apicacion o proceso");
         } catch (Exception ex) {
+            // error al abrir el socket para leer
+            System.err.println (ex.getMessage());
             ex.printStackTrace();
         }
     }
-
 
     /**
      * comunica a los oyentes la imposibilidad de hablar con determinado host
      *
      * @param host la ip del destino perdido
      */
-    public synchronized  void generaErrorConexion (String host){
+    public synchronized void generaErrorConexion(String host) {
         for (Receptor<E> receptor : _receptores) {
                 receptor.perdidaDeConexion(host);
             }
@@ -200,6 +201,6 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
 
     @Override
     public void eliminaConexion(String host){
-        _conexiones.addConexion(host, _puerto);
+        _conexiones.eliminaConexion(host);
     }
 }
