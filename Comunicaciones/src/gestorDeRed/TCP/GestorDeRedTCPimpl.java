@@ -36,7 +36,6 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
         _puerto = port;
         _receptores = new Stack<Receptor<E>>();
         _conexiones  = new GestorConexiones(this);
-        this.setDaemon(true); // es un demonio, así no hay que pararlo
     }
 
     /**
@@ -162,6 +161,7 @@ public class GestorDeRedTCPimpl<E> extends Thread implements GestorDeRed<E> {
                         }
                     } else { // mira si es una bomba
                         if (paquete.esBomba()) {
+                            _sock.close();
                             return;  // finaliza el hilo
                         }
                     }

@@ -38,14 +38,13 @@ public class GestorConexiones extends Thread{
 
         _listaHosts = new ArrayList<String>();
         _puertos = new Hashtable<String, Integer>();
+        this.setDaemon(true);
+        this.setName("gestorConexiones");
+        this.setPriority(MIN_PRIORITY);
     }
 
     @Override
     public synchronized void run() {
-
-        this.setName("gestorConexiones");
-        this.setPriority(MIN_PRIORITY);
-
         long t = 30000; // el tiempo a esperar para el siguiente envio
         try {
             while (true) {
@@ -131,7 +130,5 @@ public class GestorConexiones extends Thread{
     public synchronized void eliminaConexion(String host){
         _listaHosts.remove(host);
         _puertos.remove(host);
-        if (_listaHosts.size() == 0)
-            this.interrupt();
     }
 }
