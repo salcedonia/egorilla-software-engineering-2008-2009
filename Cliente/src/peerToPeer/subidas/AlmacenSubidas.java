@@ -24,11 +24,12 @@ public class AlmacenSubidas extends Thread{
         start();
     }
     
-    public void nuevaSubida (Dame mensaje){
+    public synchronized void nuevaSubida (Dame mensaje){
         _cola.add(mensaje);
-        notify();
+        this.notify();
     }
 
+    @Override
     public synchronized void run() {
         try {
             wait();
@@ -45,10 +46,10 @@ public class AlmacenSubidas extends Thread{
     }
 
     public void parar(){
-        interrupt();
+        this.interrupt();
     }
 
     public synchronized void despierta (){
-         notify();
+         this.notify();
     }
 }
