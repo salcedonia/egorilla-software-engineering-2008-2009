@@ -86,7 +86,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
         _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
-       // _subidas = new AlmacenSubidas(_colaMensajes);
+        _subidas = new AlmacenSubidas(this);
         _server = new ServidorP2PEgorilla(this);
         
         // prepara la red y el servidor
@@ -368,8 +368,11 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
        }
     }
 
-    void reanudarDescargas() {
-     // TODO:
+    public void reanudarDescargas() {
+     ListaArchivos l = GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales();
+        for(int i=0;i<l.size();i++){
+            nuevaDescarga(l.get(i));
+        }
     }
 
     void resultadoBusqueda(RespuestaPeticionConsulta respuestaPeticionConsulta) {
