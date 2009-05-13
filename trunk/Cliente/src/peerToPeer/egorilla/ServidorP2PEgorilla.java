@@ -90,6 +90,7 @@ public class ServidorP2PEgorilla implements Receptor<Mensaje>, NotificadorDatos{
                 msjDame.setDestino(ip, port);
                 
                 _gestor.getAlmacenSubidas().nuevaSubida(msjDame);
+                _gestor.getAlmacenSubidas().despierta();
                 break;
                 
                 
