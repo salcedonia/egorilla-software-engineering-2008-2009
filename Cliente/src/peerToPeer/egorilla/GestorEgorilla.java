@@ -81,7 +81,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
 
         _observadores = new ArrayList<ObservadorP2P>();
         _descargas = new AlmacenDescargas();
-        _subidas = new AlmacenSubidas(_colaMensajes);
+       // _subidas = new AlmacenSubidas(_colaMensajes);
         _server = new ServidorP2PEgorilla(this);
         
         // prepara la red y el servidor
@@ -180,8 +180,12 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     @Override
     public void conectarAServidor(String ip, int puerto) {
  
+        // empezamos el envio de paquetes
+        _colaMensajes = new GestorMensajes(_red);
+        _colaMensajes.start();
+        
         // mostramos la conexión que intentamos establecer
-        _estado = EstadoP2P.NEGOCIANDO;
+//        _estado = EstadoP2P.NEGOCIANDO;
         _log.info("IP : "+ ip+ " Puerto: "+puerto);
         for (ObservadorP2P observadorP2P : _observadores) {
                 observadorP2P.cambioEstado(_estado, ip, puerto);
@@ -220,9 +224,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
             }
             return;
         }
-        // empezamos el envio de paquetes
-        _colaMensajes = new GestorMensajes(_red);
-        _colaMensajes.start();
+        
         // envia mis datos
         addMensajeParaEnviar(misDatos);
         // comezamos a vigilar la conexion
@@ -270,10 +272,12 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         _vigilante.conexionCompletada();
         //_conectado = true;
         _estado = EstadoP2P.CONECTADO;
-        this.enviaListaArchivos();
+        
         for (ObservadorP2P observadorP2P : _observadores) {
             observadorP2P.cambioEstado(_estado, _IPservidor, _puertoCliente);
         }
+        enviaListaArchivos();
+        reanudarDescargas();
     }
 
 //    boolean conectado() {
