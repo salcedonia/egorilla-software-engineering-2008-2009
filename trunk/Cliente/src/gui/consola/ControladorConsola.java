@@ -2,11 +2,7 @@ package gui.consola;
 
 import datos.Archivo;
 import gestorDeFicheros.GestorCompartidos;
-import gestorDeRed.GestorDeRed;
-import mensajes.Mensaje;
-import mensajes.serverclient.ListaArchivos;
 import peerToPeer.GestorP2P;
-import peerToPeer.egorilla.GestorEgorilla;
 
 /**
  * Controlador de la aplicación en modo consola. 
@@ -17,11 +13,6 @@ import peerToPeer.egorilla.GestorEgorilla;
  * Modificado por Javier Sánchez.
  */
 public class ControladorConsola {
-
-    /**
-     * Gestor de red de la aplicación.
-     */
-    private GestorDeRed<Mensaje> _gestorDeRed;
 
     /**
      * Gestor eGorilla.
@@ -35,9 +26,8 @@ public class ControladorConsola {
      * @param gestorDeDescargas Gestor de descargas.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorConsola(GestorDeRed<Mensaje> gestorDeRed, GestorP2P gestorEgorilla) {
-        
-        _gestorDeRed = gestorDeRed;
+    public ControladorConsola(GestorP2P gestorEgorilla) {
+     
         _gestorEGorilla = gestorEgorilla;
     }
 
@@ -69,7 +59,6 @@ public class ControladorConsola {
     public void peticionDesconexionDeServidor() {
         
         _gestorEGorilla.desconectar();
-        _gestorDeRed.terminaEscucha();
 }
 
     /**

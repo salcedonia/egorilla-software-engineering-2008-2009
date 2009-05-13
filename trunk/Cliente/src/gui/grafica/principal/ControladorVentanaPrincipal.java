@@ -10,11 +10,7 @@ import peerToPeer.egorilla.GestorEgorilla;
  * @author Javier Salcedo
  */
 public class ControladorVentanaPrincipal {
-
-    /**
-     * Gestor de red de la aplicación.
-     */
-    private GestorDeRed<Mensaje> _gestorDeRed;
+    
     /**
      * Gestor eGorilla.
      */
@@ -26,9 +22,8 @@ public class ControladorVentanaPrincipal {
      * @param gestorDeRed Gestor de red de la aplicación.
      * @param gestorEgorilla Gestor eGorilla.
      */
-    public ControladorVentanaPrincipal(GestorDeRed<Mensaje> gestorDeRed, GestorP2P gestorEgorilla) {
+    public ControladorVentanaPrincipal(GestorP2P gestorEgorilla) {
 
-        _gestorDeRed = gestorDeRed;
         _gestorEGorilla = gestorEgorilla;
     }
     
@@ -50,7 +45,6 @@ public class ControladorVentanaPrincipal {
     public void peticionDeDesconexionDeServidor() {
 
         _gestorEGorilla.desconectar();
-        _gestorDeRed.terminaEscucha();
     }
     
     /**

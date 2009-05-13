@@ -288,6 +288,7 @@ public class AlmacenDescargas {
      * finaliza las descargas
      */
     public void pararDescargas(){
-        _descargador.parar();
+        if (_descargador != null)
+            _descargador.parar();
     }
 }

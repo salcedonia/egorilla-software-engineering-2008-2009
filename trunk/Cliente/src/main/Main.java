@@ -97,7 +97,7 @@ public class Main {
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(egorilla);
         ControlConfiguracionCliente.obtenerInstancia().anadirObservador(_gestorDeDisco);        
 
-        crearTipoGUI(modo, _gestorDeRed, _gestorP2P);
+        crearTipoGUI(modo, _gestorP2P);
     }
 
     /**
@@ -108,17 +108,17 @@ public class Main {
      * @param gestorDeRed Gestor de Red de la aplicación.
      * @param gestorEGorilla GestorEGorilla de la aplicación.
      */
-    private static void crearTipoGUI(String modo, GestorDeRed gestorDeRed, GestorP2P gestorEGorilla) throws IOException, ControlConfiguracionClienteException, Exception{
+    private static void crearTipoGUI(String modo, GestorP2P gestorEGorilla) throws IOException, ControlConfiguracionClienteException, Exception{
 
         if (modo == null || modo.equalsIgnoreCase("grafico")) {
 
-            ControladorVentanaPrincipal controladorGrafica = new ControladorVentanaPrincipal(gestorDeRed, gestorEGorilla);
+            ControladorVentanaPrincipal controladorGrafica = new ControladorVentanaPrincipal(gestorEGorilla);
             new GUIGrafica(controladorGrafica);
         }
         else 
             if (modo.equalsIgnoreCase("consola")) {
                 
-                ControladorConsola controladorConsola = new ControladorConsola(gestorDeRed, gestorEGorilla);
+                ControladorConsola controladorConsola = new ControladorConsola( gestorEGorilla);
                 new GUIConsola(controladorConsola);
             } else
                 System.err.println ("Los parámetros introducidos no son válidos.");
