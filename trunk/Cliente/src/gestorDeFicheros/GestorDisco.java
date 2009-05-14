@@ -195,9 +195,11 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
      * Procesa el directorio donde se encuentra los archivos completos.
      * @param fDirectorioCompletos directorio donde se encuentran los archivos completos.
      */
-    private void listarArchivosCompletosIniciales(File fDirectorioCompletos) {
+    public void listarArchivosCompletosIniciales(File fDirectorioCompletos) {
         File[] ficherosCompletos = fDirectorioCompletos.listFiles();
 
+        _listaCompletos = new ListaArchivos();
+        
         if (ficherosCompletos.length > 0) {
             System.out.println("Procesando archivos completos...");
             for (File f : ficherosCompletos) {

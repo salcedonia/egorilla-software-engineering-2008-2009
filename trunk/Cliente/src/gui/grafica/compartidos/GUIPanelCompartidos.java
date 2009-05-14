@@ -2,11 +2,17 @@ package gui.grafica.compartidos;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import mensajes.serverclient.ListaArchivos;
 
 /**
  * Clase que gestiona el panel de compartidos en la ventana principal de la
@@ -68,6 +74,30 @@ public class GUIPanelCompartidos extends JPanel {
      * Contiene el resultado de una lista de archivos compartidos.
      */
     private PanelCompartidos _panelCompartidos;
+    /**
+     * Boton que refresca 
+     */
+    private JButton _btnRefrescar;
+    /**
+     * Panel que contiene al boton de refrescar.
+     */
+    private JPanel _panelBoton;
+    /**
+     * Lista de todos los archivos compartidos completos.
+     */
+    private ListaArchivos _listaCompletos;
+    /**
+     * Lista de los archivos compartidos incompletos. 
+     */
+    private ListaArchivos _listaIncompletos;
+    /**
+     * Lista de los todos los archivos compartidos.
+     */
+    private ListaArchivos _listaTodosLosCompartidos;
+    /**
+     * Cadena que representa al panel mostrado en la parte derecha
+     */
+    private String _panelCargado = "Todos";
 
     /** 
      * Constructor de la clase PanelCompartidos. 
@@ -77,6 +107,20 @@ public class GUIPanelCompartidos extends JPanel {
         _controlador = controlador;
 
         iniciarComponentes();
+    }
+
+    /**
+     * Configura todos los elementos 
+     */
+    private void actualizarPanelDerecha() {
+
+        _panelCompartidos.setPreferredSize(new Dimension(450, 500));
+        _scrollPaneContenido.setAutoscrolls(true);
+        _scrollPaneContenido.setViewportView(_panelCompartidos);
+        _panelContenido.add(_scrollPaneContenido);
+        _splitPanel.setDividerLocation(_splitPanel.getDividerLocation());
+        _splitPanel.setRightComponent(_panelContenido);
+        repaint();
     }
 
     /**
@@ -90,6 +134,24 @@ public class GUIPanelCompartidos extends JPanel {
         _panelArbol = new JPanel();
         _panelContenido = new JPanel();
         _explorador = new JTree();
+        _panelBoton = new JPanel();
+        _btnRefrescar = new JButton("Refrescar");
+        _btnRefrescar.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                _controlador.peticionRefrescarArchivosCompletos();
+                // Almaceno la nueva lista de completos a mostrar
+                _listaCompletos = _controlador.peticionListarCompartidosCompletos();
+                
+                // Si está cargado el panel de completos actualizamos
+                if(_panelCargado.matches("Completos"))
+                    _panelCompartidos = new PanelCompartidos(_controlador, _listaCompletos);
+                        
+                actualizarPanelDerecha(); 
+            }
+        });
 
         setBorder(BorderFactory.createTitledBorder("Archivos Compartidos"));
         setLayout(new BorderLayout());
@@ -128,34 +190,26 @@ public class GUIPanelCompartidos extends JPanel {
                     String carpeta = (String) infoDelNodo;
 
                     if (carpeta.matches("Todos los Compartidos")) {
-                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
+                        _panelCargado = "Todos";
+                        _listaTodosLosCompartidos = _controlador.peticionListarTodosCompartidos();
+                        _panelCompartidos = new PanelCompartidos(_controlador, _listaTodosLosCompartidos);
                     }
 
                     if (carpeta.matches("Completos")) {
-                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosCompletos());
+                        _panelCargado = "Completos";
+                        _listaCompletos = _controlador.peticionListarCompartidosCompletos();
+                        _panelCompartidos = new PanelCompartidos(_controlador, _listaCompletos);
                     }
 
                     if (carpeta.matches("Incompletos")) {
-                        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarCompartidosIncompletos());
+                        _panelCargado = "Incompletos";
+                        _listaIncompletos = _controlador.peticionListarCompartidosIncompletos();
+                        _panelCompartidos = new PanelCompartidos(_controlador, _listaIncompletos);
                     }
                     actualizarPanelDerecha();
 
                 // Si hay mas opciones se pondrian aqui
                 }
-            }
-
-            /**
-             * Configura todos los elementos 
-             */
-            private void actualizarPanelDerecha() {
-
-                _panelCompartidos.setPreferredSize(new Dimension(450, 500));
-                _scrollPaneContenido.setAutoscrolls(true);
-                _scrollPaneContenido.setViewportView(_panelCompartidos);
-                _panelContenido.add(_scrollPaneContenido);
-                _splitPanel.setDividerLocation(_splitPanel.getDividerLocation());
-                _splitPanel.setRightComponent(_panelContenido);
-                repaint();
             }
         });
 
@@ -164,20 +218,24 @@ public class GUIPanelCompartidos extends JPanel {
         _splitPanel.setLeftComponent(_panelArbol);
 
         // SPLIT DERECHO
-        _panelContenido.setLayout(
-                new BorderLayout());
+        _panelContenido.setLayout(new BorderLayout());
 
         // Cargamos los compartidos por defecto
-        _panelCompartidos = new PanelCompartidos(_controlador, _controlador.peticionListarTodosCompartidos());
+        _listaTodosLosCompartidos = _controlador.peticionListarTodosCompartidos();
+        _panelCompartidos = new PanelCompartidos(_controlador, _listaTodosLosCompartidos);
         _panelCompartidos.setPreferredSize(new Dimension(450, 500));
-        _scrollPaneContenido.setAutoscrolls(true);
-        _scrollPaneContenido.setViewportView(_panelCompartidos);
-
-        _panelContenido.add(_scrollPaneContenido);
-        _splitPanel.setRightComponent(_panelContenido);
-
         _splitPanel.setDividerLocation(225);
-
-        add(_splitPanel);
+        actualizarPanelDerecha(); 
+        add(_splitPanel, BorderLayout.NORTH);
+        
+        // PANEL BOTON
+        _panelBoton.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        gridBagConstraints.insets = new Insets(10, 20, 10, 10);
+        _panelBoton.add(_btnRefrescar, gridBagConstraints);
+        add(_panelBoton, BorderLayout.SOUTH);
     }
 }
