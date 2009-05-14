@@ -3,6 +3,9 @@ package gui.grafica.servidores;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.InfoServidor;
+import gestorDeConfiguracion.PropiedadCliente;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -281,7 +284,11 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
 
             @Override
             public void actionPerformed(ActionEvent evt) {
-                pulsacionBotonConectarServidor(evt);
+                try {
+                    pulsacionBotonConectarServidor(evt);
+                } catch (ControlConfiguracionClienteException ex) {
+                    Logger.getLogger(GUIPanelServidores.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         gridBagConstraints = new GridBagConstraints();
@@ -385,19 +392,34 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
      * 
      * @param evt Evento de pulsacion del boton.
      */
-    private void pulsacionBotonConectarServidor(ActionEvent evt) {
+    private void pulsacionBotonConectarServidor(ActionEvent evt) throws ControlConfiguracionClienteException {
 
         // Si se ha seleccionado un servidor primero
         if (_servidorSeleccionado != null) {
-
+            //Me guardo los datos del servidor actualmente seleccionado como servidor por defecto.
+            InfoServidor servidorAnterior = new InfoServidor(
+                    ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral()),
+                    ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral()),
+                    Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral())),
+                    ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral()));
             try {
-
+                //Intento realizar la conexion al servidor seleccionado
                 _controlador.peticionConexionAServidor(_servidorSeleccionado.getDireccionIP(), _servidorSeleccionado.getPuerto());
+                //Actualizo el servidor por defecto en la configuracion con los datos del servidor seleccionado.
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral(), _servidorSeleccionado.getNombre());
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral(), _servidorSeleccionado.getDireccionIP());
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral(), Integer.toString(_servidorSeleccionado.getPuerto()));
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral(), _servidorSeleccionado.getDescripcion());
+                
             } catch (Exception ex) {
-
                 JOptionPane.showMessageDialog(null, "Error de conexión",
                         "Error al conectarse al servidor",
                         JOptionPane.ERROR_MESSAGE);
+                //Restauro el servidor por defecto en la configuracion con el que habia antes.
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.NOMBRE_SERVIDOR.obtenerLiteral(), servidorAnterior.getNombre());
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral(), servidorAnterior.getDireccionIP());
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral(), Integer.toString(servidorAnterior.getPuerto()));
+                ControlConfiguracionCliente.obtenerInstancia().establecerPropiedad(PropiedadCliente.DESCRIP_SERVIDOR.obtenerLiteral(), servidorAnterior.getDescripcion());
             }
         } else {
             mostrarMensajeError("Selecciona un servidor primero");
