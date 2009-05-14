@@ -102,6 +102,8 @@ public class Ensamblador{
       ficheroIndices.close();
       }else{
         System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );
+        //TODO: crear el temporal con el nuevo nombre, entonces tal vez quitar de
+        //de mover
       }
     }catch( FileNotFoundException e ){
         System.out.println( "No existe el fichero <"+fichero.getName()+">" );
@@ -347,7 +349,7 @@ public class Ensamblador{
   private boolean mover(File source, File destination) {
     if( !destination.exists() ) {
       // intentamos con renameTo
-      boolean result = source.renameTo(destination);
+      boolean result = source.renameTo( destination );
       if( result == false ) {
         System.out.println("No se ha podido mover el temporal, copiando...");
         // intentamos copiar
@@ -357,8 +359,10 @@ public class Ensamblador{
       }
       return result;
     } else {
-      // Si el fichero destination existe, cancelamos...
-      return false;
+      String nombreNuevoFichero = destination.getName();
+      nombreNuevoFichero += "_"+MD5Sum.getFileMD5Sum( destination );
+      File newDestination = new File( _directorioCompletos+"//"+nombreNuevoFichero );      
+      return mover( source, newDestination);
     } 
   }
 
