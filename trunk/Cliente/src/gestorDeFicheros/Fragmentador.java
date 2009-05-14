@@ -131,11 +131,15 @@ public class Fragmentador{
           try{
           punteroFichero = new RandomAccessFile( fichero, "r" );
           off = (int)fragmento.getOffset();
-          int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
+          //falla al no enviar bien el tamaño del archivo, comprobar directamente en gertorDisco
+          /*
+          int tamanioBytesFragmentoAux = (int)(tamanioArchivo - fragmento.getOffset() );
           if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
             len = tamanioBytesFragmentoAux;
           else
-            len = _tamanioBytesFragmento;
+            len = _tamanioBytesFragmento;*/
+          len = (int)fragmento.getTama();
+          
           bytesFragmento = new byte[ len ];
           //System.out.println("offset "+off +" len "+len+" point "+
           //punteroFichero.getFilePointer() );
@@ -168,11 +172,13 @@ public class Fragmentador{
       fichero = new File( _directorioCompletos+"//"+ archivoRequerido.getNombre() );
       punteroFichero = new RandomAccessFile( fichero, "r" );
       off = (int)fragmento.getOffset();
+      /*
       int tamanioBytesFragmentoAux = (int)(fragmento.getTama() - fragmento.getOffset() );
       if( tamanioBytesFragmentoAux < _tamanioBytesFragmento )
         len = tamanioBytesFragmentoAux;
       else
-        len = _tamanioBytesFragmento;
+        len = _tamanioBytesFragmento;*/
+      len = (int)fragmento.getTama();
       bytesFragmento = new byte[ len ];
       //System.out.println("offset "+off +" len "+len+" point "+
       //punteroFichero.getFilePointer() );
@@ -184,7 +190,8 @@ public class Fragmentador{
       punteroFichero.close();
       }catch( Exception e ){
         System.out.println("Auch! se escogorcio el fichero <"+ archivoRequerido.getNombre()+">");
-        //e.printStackTrace();
+        
+        e.printStackTrace();
       }
       //bytesLeidos debe coincidir con fragmento.getTama() - fragmento.getOffset()
       //Fragmento corrupto! o archivo corrupto

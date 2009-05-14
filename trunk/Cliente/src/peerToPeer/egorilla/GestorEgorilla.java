@@ -319,7 +319,9 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
      * @param msj
      */
     public void addMensajeParaEnviar(Mensaje msj) {
-       _colaMensajes.addMensajeParaEnviar(msj);
+            if(_colaMensajes!=null){
+                _colaMensajes.addMensajeParaEnviar(msj);
+            }
     }
 
     /**

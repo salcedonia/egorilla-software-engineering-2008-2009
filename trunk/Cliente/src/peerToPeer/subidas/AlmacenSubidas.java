@@ -31,17 +31,19 @@ public class AlmacenSubidas extends Thread{
 
     @Override
     public synchronized void run() {
-        try {
-            wait();
-            while (!_cola.isEmpty()) {
-                Dame msjDame = _cola.poll();
-                //ahora se pide uno solo, si se envia Vector<Fragmento> crearlo en bucle
-                Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
-                Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),msjDame.getFragmento().getOffset(),informacion,msjDame.ipDestino(),msjDame.puertoDestino());
-                _gestor.addMensajeParaEnviar(mensajeToma);
+        while(true){
+            try {
+                wait();
+                while (!_cola.isEmpty()) {
+                    Dame msjDame = _cola.poll();
+                    //ahora se pide uno solo, si se envia Vector<Fragmento> crearlo en bucle
+                    Byte[] informacion=GestorCompartidos.getInstancia().dameBytesDelFragmento(msjDame.getFragmento());
+                    Toma mensajeToma=new Toma(msjDame.getNombre(),msjDame.getHash(),msjDame.getFragmento().getOffset(),informacion,msjDame.ipDestino(),msjDame.puertoDestino());
+                    _gestor.addMensajeParaEnviar(mensajeToma);
+                }
+            } catch (InterruptedException ex) {
+                System.out.println("*** Soy Almacen de Subidas: "+ex);
             }
-        } catch (InterruptedException ex) {
-            System.out.println("*** Soy Almacen de Subidas: "+ex);
         }
     }
 
