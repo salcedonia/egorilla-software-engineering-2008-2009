@@ -448,7 +448,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                 asignar(e, _colorSeleccion, _colorBorde);
                 if (e.getClickCount() == 2){
                     if (_completada) {
-                        String ruta=GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos()+"//"+_lblNombre.getText();
+                        String ruta=GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos()+"/"+_lblNombre.getText();
                         if (Desktop.isDesktopSupported()) {
                           try {
                             Desktop desktop = Desktop.getDesktop();
