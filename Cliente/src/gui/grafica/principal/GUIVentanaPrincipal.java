@@ -14,6 +14,7 @@ import gui.grafica.configuracion.GUIDialogoConfiguracion;
 import gui.grafica.estadisticas.GUIPanelEstadisticas;
 import gui.grafica.servidores.ControladorPanelServidores;
 import gui.grafica.servidores.GUIPanelServidores;
+import gui.grafica.splash_screen.ThreadSplash;
 import gui.grafica.trafico.*;
 import java.awt.event.ActionEvent;
 import util.*;
@@ -154,6 +155,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
 
     
     private EstadoP2P _estado;
+    private ThreadSplash hiloSplash;
     /**
      * Constructor de la clase VentanaPrincipal.
      * 
@@ -166,6 +168,10 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
             _controlador = controlador;
             _controlador.getGestorEGorilla().agregarObservador(this);
             _controlador.getGestorEGorilla().getAlmacenDescargas().agregarObservador(GestorEstadisticas.getInstacia());
+            
+            hiloSplash = new ThreadSplash();
+            hiloSplash.run();
+        
             iniciarComponentes();
             
         } catch (ControlConfiguracionClienteException ex) {
