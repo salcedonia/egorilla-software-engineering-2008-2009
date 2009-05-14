@@ -1,14 +1,17 @@
 package gui.grafica.trafico;
 
+import com.sun.jndi.toolkit.url.Uri;
 import datos.Archivo;
 import gestorDeFicheros.GestorCompartidos;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.net.URI;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -50,6 +53,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
      * Color del borde del panel.
      */
     private Color _colorBorde = Color.BLACK;
+    
 
     /**
      * Constructor de la clase PanelDescargas.
@@ -239,6 +243,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         private JPanel _panelPrincipal;
         
         private int _valorMaximo;
+        
+        private boolean _completada=false;
 
         /**
          * Constructor de la clase DescargaIndividual.
@@ -359,7 +365,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @param c Color del borde.
          */
         public void crearBorde(Color c) {
-
             setBorder(BorderFactory.createLineBorder(c));
         }
 
@@ -369,7 +374,6 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @param texto Nuevo valor a establecer.
          */
         public void setEstado(String texto) {
-
             _lblEstado.setText(texto);
         }
 
@@ -379,8 +383,11 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @return El estado de una descarga.
          */
         public String getEstado() {
-
             return _lblEstado.getText();
+        }
+        
+        public void setCompletado(boolean completo) {
+            _completada=completo;
         }
 
         /**
@@ -433,13 +440,27 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
              * @param pop Popup asociado.
              */
             public OyenteRaton(JPopupMenu pop) {
-
-                popup = pop;
+               popup = pop;
             }
 
             @Override
             public void mouseClicked(MouseEvent e) {
                 asignar(e, _colorSeleccion, _colorBorde);
+                if (e.getClickCount() == 2){
+                    if (_completada) {
+                        String ruta=GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos()+"//"+_lblNombre.getText();
+                        if (Desktop.isDesktopSupported()) {
+                          try {
+                            Desktop desktop = Desktop.getDesktop();
+                            if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                              desktop.browse(new URI(ruta));
+                            }
+                          } catch (Exception ex) {
+                              ex.printStackTrace();
+                          }
+                        } 
+                    }
+                }
             }
 
             @Override
@@ -534,6 +555,7 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
             if (_listaDescargas.get(i).getHash().equals(hash)) {
                 _listaDescargas.get(i).cambiarColorBarra(new Color(61, 194, 106));
                 _listaDescargas.get(i).setEstado("COMPLETADO");
+                _listaDescargas.get(i).setCompletado(true);
                 break;
             }
         }
