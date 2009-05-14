@@ -21,7 +21,7 @@ public class Descarga {
 
     public static final int PIDEASERVIDOR = 13;
     public static final int PIDEALOSPROPIETARIOS = 1;
-    public static final int DESCARGA = 70;
+    public static final int DESCARGA = 25;
     public static final int MAX_ESPERA = -100;
 
     private int _estado, _estado_aux;

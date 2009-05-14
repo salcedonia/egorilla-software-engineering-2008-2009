@@ -37,7 +37,7 @@ public class Descargador extends Thread{
                 if (_almacen.getListaDescargas().isEmpty())
                     wait();
                 else 
-                    wait(100);
+                    wait(1000);
                 
                 // 3 casos:
                 // no se nada -> espero al servidor

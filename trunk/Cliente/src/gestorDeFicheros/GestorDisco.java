@@ -117,7 +117,7 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         //Esto en principio tampoco va como properties, xq "creo" qademas de los problemas 
         //anteriores puede haber problemas si el resto de clientes no usan el mismo tamano, yaq 
         //variara el numero de fragmentos de un mismo fichero
-        _tamanioBytesFragmento = 369069; //antes era 512, en bytes
+        _tamanioBytesFragmento = 369069; //antes era 512, en bytes, luego 369069
 
         try {
             ControlConfiguracionCliente config = ControlConfiguracionCliente.obtenerInstancia();
@@ -389,7 +389,8 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
             _tamanioBytesFragmento, i*_tamanioBytesFragmento );
           listaFragmento.add( fragmento );
         }
-        tamBytes = (int)(cantidadFragmentos*_tamanioBytesFragmento-archivoRequerido.getSize() ); 
+        tamBytes = (int)(cantidadFragmentos*_tamanioBytesFragmento-archivoRequerido.getSize() );
+        tamBytes = _tamanioBytesFragmento-tamBytes;
         fragmento = new Fragmento( archivoRequerido.getNombre(), //tam - offset
           archivoRequerido.getHash(), tamBytes, i*_tamanioBytesFragmento );
         listaFragmento.add( fragmento );
@@ -437,13 +438,18 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
     long tamanio = archivo.getSize();
     int cantidadFragmentos;
 
-    cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
+    if( tamanio == 0 )
+        cantidadFragmentos = 1;
+    else{
+        cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
-    if( tamanio % _tamanioBytesFragmento == 0 ){
-      //Al no haber decimales, todas las partes tiene el mismo tamano
-    }else{
-      cantidadFragmentos+=1;
+        if( tamanio % _tamanioBytesFragmento == 0 ){
+          //Al no haber decimales, todas las partes tiene el mismo tamano
+        }else{
+          cantidadFragmentos+=1;
+        }
     }
+    
 
     return cantidadFragmentos;
   }
@@ -455,10 +461,14 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
     int cantidadFragmentos;
     cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
 
-    if( tamanio % _tamanioBytesFragmento == 0 ){
-      //Al no haber decimales, todas las partes tiene el mismo tamano
-    }else{
-      cantidadFragmentos+=1;
+    if( tamanio == 0 )
+        cantidadFragmentos = 1;
+    else{
+        if( tamanio % _tamanioBytesFragmento == 0 ){
+          //Al no haber decimales, todas las partes tiene el mismo tamano
+        }else{
+          cantidadFragmentos+=1;
+        }
     }
     return cantidadFragmentos;
   }

@@ -183,13 +183,19 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     }
 
     @Override
-    public void nuevaDescarga(Archivo a) {
-           //si no lo tengo en los completos inicio la descarga
-        if(_disco.getEnsamblador().nuevoArchivoTemporal(a)){
-            _descargas.nuevaDescarga(a);
-            pedirPropietariosaServidor(a);
-            enviaListaArchivos();
-        }
+    public void nuevaDescarga(final Archivo a) {
+        Thread nuevaDescarga=new Thread(new Runnable(){
+            @Override
+            public synchronized void run(){
+              //si no lo tengo en los completos inicio la descarga
+                if(_disco.getEnsamblador().nuevoArchivoTemporal(a)){
+                    _descargas.nuevaDescarga(a);
+                    pedirPropietariosaServidor(a);
+                    enviaListaArchivos();
+                }
+            }
+        });
+         nuevaDescarga.start();
     }
 
     @Override

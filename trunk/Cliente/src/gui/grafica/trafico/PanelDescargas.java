@@ -237,6 +237,8 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * Panel principal que contiene a todos los elementos anteriores.
          */
         private JPanel _panelPrincipal;
+        
+        private int _valorMaximo;
 
         /**
          * Constructor de la clase DescargaIndividual.
@@ -246,9 +248,10 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * @param maximo Tamanio del archivo de la descarga.
          */
         private DescargaIndividual(String nombre, String hash, int maximo) {
-
-            _barraProgreso = new JProgressBar(0, maximo);
+            _valorMaximo= maximo;
+            _barraProgreso = new JProgressBar(0, _valorMaximo);
             _barraProgreso.setValue(0);
+            _progreso=0;
             _barraProgreso.setStringPainted(true);
             cambiarColorBarra(new Color(19, 6, 255));
             _hash = hash;
@@ -290,9 +293,12 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          * Incrementa el valor y el dibujo de la barra de progreso.
          */
         private void incrementaProgressBar() {
-
             _progreso++;
             _barraProgreso.setValue(_progreso);
+            if(_progreso==_valorMaximo){
+                setEstado("Moviendo...");
+            }
+            
         }
         
         private void setValorProgressBar(int numero) {
