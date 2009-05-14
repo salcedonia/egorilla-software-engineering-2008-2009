@@ -26,6 +26,7 @@ public class Descargador extends Thread{
         _gestor = gestor;
         _almacen = almacen;
         _almacen.registraDescargador(this);
+        start();
     }
 
     @Override
