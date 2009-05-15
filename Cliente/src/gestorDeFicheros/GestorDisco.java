@@ -276,7 +276,16 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
      * @return Devuelve la lista de todos los archivos.
      */
     public ListaArchivos getListaArchivosTodos() {
-        return _listaTodos;
+      return _listaTodos;
+    }
+
+    /**
+     * Obtiene la lista de todos los archivos que tiene el usuario, tanto los completos como los
+     * incompletos.
+     * @return Devuelve la lista de todos los archivos.
+     */
+    public void setListaArchivosTodos( ListaArchivos listaTodos ) {
+      _listaTodos = listaTodos;
     }
 
     /*

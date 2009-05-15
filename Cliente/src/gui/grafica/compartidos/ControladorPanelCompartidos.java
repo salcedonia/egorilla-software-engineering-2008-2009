@@ -70,6 +70,11 @@ public class ControladorPanelCompartidos {
     public void peticionRefrescarArchivosCompletos() {
     
         String dirCompletos = GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos();
-        GestorCompartidos.getInstancia().getGestorDisco().listarArchivosCompletosIniciales(new File(dirCompletos));
+        GestorCompartidos.getInstancia().getGestorDisco().listarArchivosCompletosIniciales( new File(dirCompletos) );
+        GestorCompartidos.getInstancia().getGestorDisco().setListaArchivosTodos(
+            GestorCompartidos.getInstancia().getGestorDisco().getManejarListaArchivos().unirListas( 
+              GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosTemporales(), 
+              GestorCompartidos.getInstancia().getGestorDisco().getListaArchivosCompletos() ) 
+            );
     }
 }

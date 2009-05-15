@@ -11,12 +11,14 @@ import datos.*;
  */
 public class ManejarIndices {
 
+  /**
+   */
   public void crearFicheroIndices( File fichero, Archivo archivo, Vector<Fragmento> fragmentos ){
     Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
       fragFaltan = fragmentos;
     Indices indices = new Indices( archivo, fragTengo, fragFaltan );
     ByteArrayOutputStream bs = new ByteArrayOutputStream();
-    try{      
+    try{
       ObjectOutputStream os = new ObjectOutputStream( bs );
       os.writeObject( indices );
       os.close();
@@ -32,6 +34,11 @@ public class ManejarIndices {
     byte[] bytes = bs.toByteArray(); // devuelve byte[]
 
     try{
+      if( fichero.exists() == true ){
+        String nombreNuevoFichero = fichero.getName();
+        nombreNuevoFichero += "_"+archivo.getHash();
+        fichero = new File( nombreNuevoFichero );
+      }
       FileOutputStream ficheroIndices = new FileOutputStream( fichero );
       BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
       bufferedOutput.write( bytes, 0, bytes.length );
@@ -95,6 +102,7 @@ public class ManejarIndices {
     ObjectInputStream is = new ObjectInputStream( bs );
     indices = (Indices)is.readObject();
     is.close();
+    bs.close();
     }catch( Exception e ){
       e.printStackTrace();
       return indices;
