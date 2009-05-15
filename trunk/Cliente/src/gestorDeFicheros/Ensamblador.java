@@ -74,36 +74,42 @@ public class Ensamblador{
    */
   //Mirar si se puede no resevar el espacio de primeras, es decir, escribir donde me de la gana
   //O hacer crecer el fichero de forma sencilla...
-  private void reservarEspacioFicheroNuevo( File fichero, long size ){
+  private void reservarEspacioFicheroNuevo( File fichero, long size, String hash ){
     byte[] bytes;
     int tamBuf = 9000;
     try{
-      if( fichero.createNewFile() == true ){ //crea el fichero pero con 0 bytes
-      FileOutputStream ficheroIndices = new FileOutputStream( fichero );
-      BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
-      //Meto bytes aleatorios (basura) para llegar al tamamno indicado
-      if( tamBuf < size ){
-        bytes = new byte[ tamBuf ];
-        long i;
-        for( i = size;  i > tamBuf;  i-=tamBuf )
-          bufferedOutput.write( bytes, 0, bytes.length );
-        if( i > 0 ){
-          //Si quedan todavia bytes por escribir
-          bytes = new byte[ (int)i ];
-          bufferedOutput.write( bytes, 0, bytes.length );
-        }
-      }else{
-        //Si es menor que 9000, pues grabo de un golpe todos los q sean
-        bytes = new byte[ (int)size ];
-        bufferedOutput.write( bytes, 0, bytes.length );
-      }
-      bufferedOutput.close();
-      //creo que tambien hace falta cerrar el otro
-      ficheroIndices.close();
-      }else{
-        System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );
+      if( fichero.exists() == true ){
+        System.out.println( "cambiando el nombre del archivo temporal..." );
         //TODO: crear el temporal con el nuevo nombre, entonces tal vez quitar de
         //de mover
+        String nombreNuevoFichero = fichero.getName();
+        nombreNuevoFichero += "_"+hash;
+        fichero = new File( nombreNuevoFichero );
+      }
+      if( fichero.createNewFile() == true ){ //crea el fichero pero con 0 bytes
+        FileOutputStream ficheroIndices = new FileOutputStream( fichero );
+        BufferedOutputStream bufferedOutput = new BufferedOutputStream( ficheroIndices );
+        //Meto bytes aleatorios (basura) para llegar al tamamno indicado
+        if( tamBuf < size ){
+          bytes = new byte[ tamBuf ];
+          long i;
+          for( i = size;  i > tamBuf;  i-=tamBuf )
+            bufferedOutput.write( bytes, 0, bytes.length );
+          if( i > 0 ){
+            //Si quedan todavia bytes por escribir
+            bytes = new byte[ (int)i ];
+            bufferedOutput.write( bytes, 0, bytes.length );
+          }
+        }else{
+          //Si es menor que 9000, pues grabo de un golpe todos los q sean
+          bytes = new byte[ (int)size ];
+          bufferedOutput.write( bytes, 0, bytes.length );
+        }
+        bufferedOutput.close();
+        //creo que tambien hace falta cerrar el otro
+        ficheroIndices.close();
+      }else{ //si existe
+        System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );        
       }
     }catch( FileNotFoundException e ){
         System.out.println( "No existe el fichero <"+fichero.getName()+">" );
@@ -161,7 +167,8 @@ public class Ensamblador{
         //Creo el fichero con el tamano que se me indica, pero sin tener sentido
         fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre() + 
             _extesionFicheroTemporal  );
-        reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize() );
+        //Le paso tambien el hash xsi el nombre del fichero ya existe
+        reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize(), archivoNuevo.getHash() );
         
         //Y si todo ha ido bien actualizo las listas
         System.out.println( "Actualizo las listas de los archivos" );
