@@ -37,10 +37,10 @@ public class ManejarListaArchivos {
   }
 
   /**
-   * .
-   * @param hashA .
-   * @param hashB .
-   * @return .
+   * Compara los hash de los archivos para determinar si son o no el mismo.
+   * @param hashA es el hash de un archivo que queremos comparar.
+   * @param hashB es el hash de otro archivo que queremos comparar.
+   * @return Devuelve es un booleano indicando si dichos hash han sido iguales o no.
    */
   protected boolean comparaHash( String hashA, String hashB){
     if( hashA.compareTo( hashB ) == 0 )
@@ -50,18 +50,18 @@ public class ManejarListaArchivos {
   }
 
   /**
-   *
-   * @param archivo .
-   * @param lista .
+   * Incluye un archivo determinado a una lista de archivos.
+   * @param archivo es el archivo que se va incluir en una lista.
+   * @param lista es la lista donde se va a incluir un archivo determinado.
    */
   protected void includirArchivoEnLista( Archivo archivo, ListaArchivos lista ){
     lista.add( archivo );
   }
 
   /**
-   *
-   * @param archivo .
-   * @param lista .
+   * Elimina un archivo determinado de una lista de archivos, en caso de contener dicho archivo.
+   * @param archivo es el archivo que se va eliminar de una lista.
+   * @param lista es la lista donde se va a eliminar un archivo determinado.
    */
   protected void eliminarArchivoDeLista( Archivo archivo, ListaArchivos lista ){
     //System.out.println( lista.remove( archivo ) );
@@ -81,10 +81,10 @@ public class ManejarListaArchivos {
   }
 
   /**
-   *
-   * @param archivo .
-   * @param listaA .
-   * @param listaB .
+   * Mueve un objeto archivo de una lista a otra.
+   * @param archivo es el archivo que se va mover.
+   * @param listaA es la lista donde se va a eliminar un archivo determinado.
+   * @param listaB es la lista donde se va a incluir un archivo determinado.
    */
   protected void moverArchivoEntreListas( Archivo archivo, ListaArchivos listaA, ListaArchivos listaB ){
     //Un archivo de la lista A se elimina, pasando a la listaB
@@ -94,9 +94,10 @@ public class ManejarListaArchivos {
  
 
   /**
-   *
-   * @param listaA .
-   * @param listaB .
+   * Une dos listas de archivos, con el fin de obtener una lista que contenga los archivos de las dos.
+   * @param listaA es la lista donde se va a eliminar un archivo determinado.
+   * @param listaB es la lista donde se va a incluir un archivo determinado.
+   * @return Devuelve una lista con todos los archivos incluidos en las dos listas.
    */
   public ListaArchivos unirListas( ListaArchivos listaA, ListaArchivos listaB ){
     ListaArchivos listaNueva = new ListaArchivos();
@@ -104,18 +105,16 @@ public class ManejarListaArchivos {
     for( int i = 0;  i < listaA.size();  i++ ){
       listaNueva.add( listaA.get( i ) );
     }
-
     for( int i = 0;  i < listaB.size();  i++ ){
       listaNueva.add( listaB.get( i ) );
     }
-
     return listaNueva;
   }
 
 
   /**
-   *
-   * @param lista .
+   * Muetra por la salida estandar un listado de los archivos que contiene dicha lista.
+   * @param lista es la lista de la que se va a mostar cada uno de los archivos que contiene.
    */
   public void recorrerListaArchivos( ListaArchivos lista ){
     if( lista == null ){

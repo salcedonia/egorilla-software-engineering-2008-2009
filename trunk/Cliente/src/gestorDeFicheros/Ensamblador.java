@@ -339,8 +339,7 @@ public class Ensamblador{
       }      
       
       //Y la cantidad de fragmentos que tengo o me faltan segun como lo este haciendo
-    }
-    
+    }    
     return guardado;
   }
 

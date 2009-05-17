@@ -205,6 +205,12 @@ public class Fragmentador{
     return oBytesFragmento;
   }
 
+
+  /**
+   * Obtiene un array de los fragmentos que tenemos de un fichero determinado, identificado por su hash.
+   * @param hash identificador unico del archivo del que queremos los fragmentos que tenemos.
+   * @return Devuelve una lista con todos los fragmentos que tenemos.
+   */
   public Vector<Fragmento> queFragmentosTienes( String hash ){
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
@@ -255,7 +261,11 @@ public class Fragmentador{
     return listaFragmento;
   }
 
-  
+  /**
+   * Obtiene un array de los fragmentos que tenemos de un fichero determinado, identificado por su hash.
+   * @param hash identificador unico del archivo del que queremos los fragmentos que tenemos.
+   * @return Devuelve una lista con todos los fragmentos que tenemos.
+   */
   public Vector<Fragmento> queFragmentosFaltan( String hash ){
     //Lo primero que hago es bucar en hash en la lista de temporales y de completos
     Archivo archivoRequerido;
