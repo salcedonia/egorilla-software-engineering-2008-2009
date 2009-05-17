@@ -6,12 +6,18 @@ import java.io.*;
 import datos.*;
 
 /**
+ * Clase que ofrece las operaciones que se pueden realizar sobre los indices de los archivos.
  *
  * @author Ivan Munsuri Ibanez
  */
 public class ManejarIndices {
 
   /**
+   * Crea el fichero de indices con la informacion inicial necesaria para un archivo concreto.
+   * @param fichero es el fichero de indices que tendra toda la informacion.
+   * @param archivo es el objeto que representa el archivo en concreto.
+   * @param fragmentos .
+   * @return .
    */
   public void crearFicheroIndices( File fichero, Archivo archivo, Vector<Fragmento> fragmentos ){
     Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
@@ -55,6 +61,11 @@ public class ManejarIndices {
     }
   }
 
+  /**
+   * Se encarga de borrar el fichero de indices correspondiente a un archivo determinado.
+   * @param fichero es el fichero de indices que sera borrado.
+   * @return Devuelve un booleano que indica si se pueod borrar o no.
+   */
   public boolean borrarFicheroIndices( File fichero ){
     //En principio lo borro directamente
     return fichero.delete();
@@ -63,6 +74,11 @@ public class ManejarIndices {
   //Fusionar el crear y el guardar, argumento en crear y se unen
   //Ademas, llevar estos a una clase del estilo TratarIndices
 
+  /**
+   * Guarda la nueva informacion sobre los indices de un archivo concreto en su fichero correspondiente.
+   * @param fichero es el fichero donde se almacenara el indice.
+   * @param indices es el objeto que contiene la informacion sobre lo que tenemos del archivo.
+   */
   public void guardarFicheroIndices( File fichero, Indices indices ){
     try{      
       ByteArrayOutputStream bs = new ByteArrayOutputStream();
@@ -85,6 +101,11 @@ public class ManejarIndices {
     }
   }
 
+  /**
+   * Se encarga de leer y obtener de un fichero el indice de un archivo concreto.
+   * @param fichero es el fichero donde se tiene almacenado el indice de un archivo concreto.
+   * @return Devuelve el objeto de indices que contiene la infomacion sobre un archivo concreto.
+   */
   public Indices leeFicheroIndices( File fichero ){
     Indices indices = null;
     try{

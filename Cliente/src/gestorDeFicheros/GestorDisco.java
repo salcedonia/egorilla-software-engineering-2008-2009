@@ -147,12 +147,12 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         System.out.println("\nDirectorio de completos: ");
         System.out.println(fDirectorioCompletos.getAbsolutePath() + "\n");
 
-        listarArchivosTemporalesIniciales(fDirectorioTemporales);
+        listarArchivosTemporalesIniciales( fDirectorioTemporales );
 
-        listarArchivosCompletosIniciales(fDirectorioCompletos);
+        listarArchivosCompletosIniciales( fDirectorioCompletos );
 
         //Creo una nueva lista con todos los ficheros actuales
-        _listaTodos = getManejarListaArchivos().unirListas(_listaTemporales, _listaCompletos);
+        setListaArchivosTodos( getManejarListaArchivos().unirListas(_listaTemporales, _listaCompletos) );
         //Cuando haya varios directorio por cada una se hara la union , usando un for
         //incluso, como son atributos de clase no hace falta pasarlos como parametros
 
@@ -280,9 +280,9 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
     }
 
     /**
-     * Obtiene la lista de todos los archivos que tiene el usuario, tanto los completos como los
+     * Establece la lista de todos los archivos que tiene el usuario, tanto los completos como los
      * incompletos.
-     * @return Devuelve la lista de todos los archivos.
+     * @param listaTodos es la lista de todos los archivos.
      */
     public void setListaArchivosTodos( ListaArchivos listaTodos ) {
       _listaTodos = listaTodos;
@@ -422,8 +422,9 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
 
 
   /**
-   * @param hash .
-   * @return .
+   * Calcula la cantidad de fragmento de los que se compone un archivo determinado.
+   * @param hash es el identificador unico de un archivo determinado.
+   * @return Devuelve la cantidad de fragmentos en funcion de tamanio del archivo.
    */
   public int cantidadFragmentosArchivo( String hash ){
     int cantidadFragmentos;
@@ -441,32 +442,19 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
 
 
   /**
-   * .
+   * Calcula la cantidad de fragmento de los que se compone un archivo determinado.
    * @param archivo .
-   * @return .
+   * @return Devuelve la cantidad de fragmentos en funcion de tamanio del archivo.
    */
   public int cantidadFragmentosArchivo( Archivo archivo ){
     long tamanio = archivo.getSize();
-    int cantidadFragmentos;
-
-    if( tamanio == 0 )
-        cantidadFragmentos = 1;
-    else{
-        cantidadFragmentos = (int)tamanio / _tamanioBytesFragmento;
-
-        if( tamanio % _tamanioBytesFragmento == 0 ){
-          //Al no haber decimales, todas las partes tiene el mismo tamano
-        }else{
-          cantidadFragmentos+=1;
-        }
-    }
-    
-
-    return cantidadFragmentos;
+    return cantidadFragmentosArchivo( tamanio );
   }
 
   /**
-   * .
+   * Calcula la cantidad de fragmento de los que se compone un archivo determinado.
+   * @param long es la cantidad de bytes que ocupa un archivo determinado.
+   * @return Devuelve la cantidad de fragmentos en funcion de tamanio del archivo.
    */
   public int cantidadFragmentosArchivo( long tamanio ){
     int cantidadFragmentos;

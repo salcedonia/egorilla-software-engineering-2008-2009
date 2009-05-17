@@ -38,7 +38,9 @@ public class Indices implements Serializable{
   }*/
 
   /**
-   * .
+   * Constructor que crea el indice de un fichero concreto. Basicamente el indice contiene la
+   * informacion del archivo del que lleva la cuenta, y los fragmentos que tengo y que faltan
+   * del mismo.
    * @param archivo .
    * @param indicesTengo .
    * @param indicesFaltan .
@@ -51,32 +53,33 @@ public class Indices implements Serializable{
   }
 
   /**
-   * .
-   * @return .
+   * Obtiene el archivo en concreto al que pertenece el indice.
+   * @return Devuelve un objeto archivo de dicho indice.
    */
   public Archivo getArchivo(){
     return _archivo;
   }
 
   /**
-   * .
-   * @return .
+   * Obtiene una lista con los fragmentos que tenemos de un archivo en concreto.
+   * @return Devuelve la lista de fragmento que tengo del archivo en concreto.
    */
   public Vector<Fragmento> getIndicesTengo(){
     return _indicesTengo;
   }
 
   /**
-   * .
-   * @return .
+   * Obtiene una lista con los fragmentos que faltan de un archivo en concreto.
+   * @return Devuelve la lista de fragmento que faltan del archivo en concreto.
    */
   public Vector<Fragmento> getIndicesFaltan(){
     return _indicesFaltan;
   }
 
   /**
-   * .
-   * @param fragmento .
+   * Incluye un fragmento en la lista de fragmentos que tengo de un archivo concreto. Esto hace
+   * que dicho fragmento que ahora tengo se elimine de la lista de los fragmento que faltan.
+   * @param fragmento es el fragmento ahora ya tengo.
    */
   public void addTengo( Fragmento fragmento ){
     _indicesTengo.add( fragmento );
@@ -84,8 +87,9 @@ public class Indices implements Serializable{
   }
 
   /**
-   * .
-   * @param fragmento .
+   * Incluye un fragmento en la lista de fragmentos que faltan de un archivo concreto. Esto hace
+   * que dicho fragmento que me falta se elimine de la lista de los fragmentos que tengo.
+   * @param fragmento es el fragmento que ahora me falta.
    */
   public void addFaltan( Fragmento fragmento ){ //No creo q se llame nunca a este
     _indicesFaltan.add( fragmento );
@@ -97,33 +101,36 @@ public class Indices implements Serializable{
   }*/
 
   /**
-   * .
-   * @param fragmento .
-   * @return .
+   * Devuelve un booleano indicando si el fragmento esta, o no, en la lista de los fragmentos que
+   * tengo.
+   * @param fragmento es el fragmento que se va a comprobar si esta.
+   * @return Devuelve un booleano indicando si esta o no.
    */
   public boolean containsTengo( Fragmento fragmento ){ //comprobar q funciona el contains
     return _indicesTengo.contains( fragmento );
   }
 
   /**
-   * .
-   * @param fragmento .
-   * @return .
-   */  public boolean containsFaltan( Fragmento fragmento ){
+   * Devuelve un booleano indicando si el fragmento esta, o no, en la lista de los fragmentos que
+   * faltan.
+   * @param fragmento es el fragmento que se va a comprobar si esta.
+   * @return Devuelve un booleano indicando si esta o no.
+   */
+  public boolean containsFaltan( Fragmento fragmento ){
     return _indicesFaltan.contains( fragmento );
   }
 
   /**
-   * .
-   * @param fragmento .
+   * Elimina un fragmento concreto de la lista de los fragmentos que tengo.
+   * @param fragmento es el fragmento a eliminar.
    */
   public void removeTengo( Fragmento fragmento ){
     _indicesTengo.remove( fragmento );
   }
 
   /**
-   * .
-   * @param fragmento .
+   * Elimina un fragmento concreto de la lista de los fragmentos que faltan.
+   * @param fragmento es el fragmento a eliminar.
    */
   public void removeFaltan( Fragmento fragmento ){
     //_indicesFaltan.remove( fragmento ); probar!!!!!!
