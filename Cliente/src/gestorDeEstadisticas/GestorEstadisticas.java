@@ -4,15 +4,13 @@
  */
 package gestorDeEstadisticas;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import org.apache.log4j.Logger;
@@ -52,17 +50,17 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
     protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;
     AdministradorSubida subida;
-    protected final static String PATH = "temp/statistics";
+    protected final static String PATH = "/estadisticas.txt";
     private static Logger log = Logger.getLogger(GestorEstadisticas.class);
 
     protected GestorEstadisticas() {
-        DataInputStream fichero = null;
+        BufferedReader fichero = null;
         try {
             File fila = new File(PATH);
             log.info(fila.getAbsolutePath());
             if (fila.exists()) {
-                InputStream stream = new FileInputStream(fila);
-                fichero = new DataInputStream(stream);
+                FileReader  stream = new FileReader (fila);
+                fichero = new BufferedReader(stream);
             }
             descarga = new AdministradorDescarga(fichero);
             subida = new AdministradorSubida(fichero);
@@ -121,13 +119,14 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
      * el objeto.
      */
    public  void cerrar() {
-        OutputStream stream = null;
+        File fichero = null;
+        BufferedWriter  writer = null;
         try {
-            DataOutputStream fichero;
-            stream = new FileOutputStream(PATH);
-            fichero = new DataOutputStream(stream);
-            descarga.cerrar(fichero);
-            subida.cerrar(fichero);
+            fichero = new File(PATH);
+            writer = new  BufferedWriter(new FileWriter(fichero));
+            descarga.cerrar(writer);
+            subida.cerrar(writer);
+            writer.flush();
 
         } catch (FileNotFoundException ex) {
             log.error("Error al abrir el fichero de estadisticas", ex);
@@ -135,7 +134,8 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
             log.error("Error al escribir los datos de estadisticas", ex);
         } finally {
             try {
-                stream.close();
+                if (writer != null)
+                writer.close();
             } catch (IOException ex) {
                 log.error("Error al cerrar el fichero de estadisticas", ex);
             }
@@ -219,7 +219,7 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
     public void llegadaDatosDescarga(double longitud) {
         descarga.llegadaDatos(longitud);
     }
-
+    @Override
     public void llegadaDatosSubida(double longitud) {
         subida.llegadaDatos(longitud);
     }
