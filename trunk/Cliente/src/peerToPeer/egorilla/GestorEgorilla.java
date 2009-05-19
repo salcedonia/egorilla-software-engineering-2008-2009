@@ -22,6 +22,7 @@ import peerToPeer.descargas.AlmacenDescargas;
 import peerToPeer.descargas.Descargador;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.PropiedadCliente;
+import gestorDeEstadisticas.GestorEstadisticas;
 import java.net.InetAddress;
 import mensajes.p2p.Altoo;
 import mensajes.serverclient.PeticionConsulta;
@@ -72,7 +73,8 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
     private AlmacenSubidas _subidas;
     /** el gestor de disco para hacer consultas y transferencias */
     private GestorDisco _disco;
-    
+   
+    private GestorEstadisticas _gestorEstadisticas;
     /**
      * constructor de la clase
      * @param puerto puerto por el que se escucha
@@ -89,7 +91,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         _subidas = new AlmacenSubidas(this);
         _server = new ServidorP2PEgorilla(this);
         _descargador = new Descargador(this,_descargas);
-        
+        _gestorEstadisticas = GestorEstadisticas.getInstacia();
         // prepara la red y el servidor
         _puertoCliente = puerto;
         _red = new GestorDeRedTCPimpl<Mensaje>(puerto);
@@ -140,6 +142,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         Altoo alto =  new Altoo();
         alto.setDestino(_IPservidor, _puertoServidor);
         this.addMensajeParaEnviar(alto);
+        _gestorEstadisticas.cerrar();
         //this._conectado = false;
         _estado = EstadoP2P.DESCONECTADO;
         // enviamos Altoo a todos los suplicantes de subidas y borramos todas
@@ -338,7 +341,7 @@ public class GestorEgorilla implements ObservadorControlConfiguracionCliente,
         _vigilante.conexionCompletada();
         //_conectado = true;
         _estado = EstadoP2P.CONECTADO;
-        
+        _gestorEstadisticas.inicioSesion();
         for (ObservadorP2P observadorP2P : _observadores) {
             observadorP2P.cambioEstado(_estado, _IPservidor, _puertoCliente);
         }

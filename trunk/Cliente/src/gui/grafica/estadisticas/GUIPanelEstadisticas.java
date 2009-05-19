@@ -6,15 +6,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import org.apache.log4j.Logger;
 
 /**
  * Panel de estadisticas de la aplicación.
  * 
+ * @author Qiang
  * @author Victor
  * @author S@L-c
- * @author Qiang
  */
 public class GUIPanelEstadisticas extends JSplitPane {
 
@@ -22,7 +24,6 @@ public class GUIPanelEstadisticas extends JSplitPane {
     private static final long serialVersionUID = 1L;
     public static final String RUTA_RECURSOS = "src/interfaz/recursos/imagenes/estadisticas/";    // ATRIBUTOS
     private static final Logger log = Logger.getLogger(GUIPanelEstadisticas.class);
-    
     private PanelGrafica _panelSubidas;
     private PanelGrafica _panelDescargas;
     private JPanel _panelDatos;
@@ -31,6 +32,7 @@ public class GUIPanelEstadisticas extends JSplitPane {
     private boolean primerPintado = true;
     private JLabel[] info;
     private JLabel[] titulos;
+    private JButton refresco;
 //	************************************************************************************//
     /**
      * Constructor de la clase PanelEstadisticas.
@@ -38,8 +40,6 @@ public class GUIPanelEstadisticas extends JSplitPane {
     public GUIPanelEstadisticas() {
         super();
         inciarComponentes();
-//        log.info(this.getWidth());
-//        log.info(this.getHeight());
 
     }
 
@@ -54,13 +54,12 @@ public class GUIPanelEstadisticas extends JSplitPane {
             {"Total de datos enviados : ", String.valueOf(estadisticas.getTotalDatosSubidaGlobal())},
             {"Datos enviados en la Sesion: ", String.valueOf(estadisticas.getTotalDatosSubidaSesion())}
         };
-//        _panelDatos.setBackground(new java.awt.Color(153, 255, 153));
-//        setName("BackGround"); // NOI18N
         _panelDatos.setLayout(new GridBagLayout());
         int size = listatitulos.length;
         info = new JLabel[size];
         titulos = new JLabel[size];
-        for (int cont = 0; cont < size; cont++) {
+        int cont = 0;
+        for (cont = 0; cont < size; cont++) {
             titulos[cont] = new JLabel(listatitulos[cont][0]);
             gridBagConstraints = new GridBagConstraints();
             gridBagConstraints.anchor = GridBagConstraints.WEST;
@@ -75,15 +74,35 @@ public class GUIPanelEstadisticas extends JSplitPane {
             gridBagConstraints.gridy = cont;
             gridBagConstraints.insets = new Insets(20, 0, 20, 0);
             _panelDatos.add(info[cont], gridBagConstraints);
+
         }
+        refresco = new JButton("Refrescar");
+        refresco.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizaPanelDatos();
+                _panelDescargas.setinicio(estadisticas.getFechaInicio());
+                _panelDescargas.setListaEjeX(estadisticas.getListaVelocidadMediaBajadaSesion());
+                _panelSubidas.setinicio(estadisticas.getFechaInicio());
+                _panelSubidas.setListaEjeX(estadisticas.getListaVelocidadMediaSubidaSesion());
+                _panelSubidas.actualiza();
+                _panelDescargas.actualiza();
+            }
+        });
+        gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = cont;
+        gridBagConstraints.insets = new Insets(20, 0, 20, 0);
+        _panelDatos.add(refresco, gridBagConstraints);
     }
-    
+
     private void actualizaPanelDatos() {
         String[] listatitulos = {
             String.valueOf(estadisticas.getTotalDatosDescargaGlobal()),
             String.valueOf(estadisticas.getTotalDatosDescargaSesion()),
             String.valueOf(estadisticas.getFicherosDescargadosGlobal()),
-            String.valueOf(estadisticas.getFicherosDescargadosSesion()), 
+            String.valueOf(estadisticas.getFicherosDescargadosSesion()),
             String.valueOf(estadisticas.getTotalDatosSubidaGlobal()),
             String.valueOf(estadisticas.getTotalDatosSubidaSesion())
         };
@@ -119,7 +138,7 @@ public class GUIPanelEstadisticas extends JSplitPane {
         panelGrafica.setOrientation(JSplitPane.VERTICAL_SPLIT);
         this.setRightComponent(panelGrafica);
         this.setDividerLocation(319);
-
+        this.setEnabled(false);
         _panelSubidas = new PanelGrafica("Velocidad de Subida");
         panelGrafica.setRightComponent(_panelSubidas.getPanel());
         _panelDescargas = new PanelGrafica("Velocidad de Descarga");
@@ -148,10 +167,33 @@ public class GUIPanelEstadisticas extends JSplitPane {
         _panelSubidas.setListaEjeX(estadisticas.getListaVelocidadMediaSubidaSesion());
         _panelSubidas.actualiza();
         _panelDescargas.actualiza();
-         actualizaPanelDatos();
+        actualizaPanelDatos();
 //        _panelDescargas.getPanel().repaint();
 //        _panelSubidas.repaint();
 
         super.paint(grafico);
+    }
+
+    @Override
+    public void printAll(Graphics g) {
+        super.print(g);
+    }
+
+    @Override
+    public void paintAll(Graphics grafico) {
+        super.printAll(grafico);
+    }
+
+    public String formatearBytes(int tam) {
+        String[] unidades = {
+            "Bytes",
+            "Kbs",
+            "Mbs",
+            "Gbs"
+        };
+        double base = Math.log(tam) / Math.log(2);
+        double entero = tam / Math.pow(10, base);
+
+        return "";
     }
 }

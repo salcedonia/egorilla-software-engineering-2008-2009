@@ -5,8 +5,8 @@
 
 package gestorDeEstadisticas;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Date;
@@ -25,11 +25,11 @@ public class AdministradorSubida extends ModuloTrafico{
     private String ruta = "../stadUpload.bin";
   
     private static final Logger log = Logger.getLogger(AdministradorSubida.class.getName());
-    AdministradorSubida(DataInputStream fichero){
+    AdministradorSubida(BufferedReader fichero){
         if (fichero != null) {
             try {
                 cargaDatosGlobales(fichero);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 incioGlobal();
                 log.info("Las estadisticas no se han podido cargar, comenzaran desde 0");
             }
@@ -39,18 +39,18 @@ public class AdministradorSubida extends ModuloTrafico{
         inicioSesion();
     }
 
-    private void cargaDatosGlobales(DataInputStream fichero) throws IOException {
+    private void cargaDatosGlobales(BufferedReader fichero) throws IOException {
         //TODO cargar los datos de fichero.
-        velocidadGlobal = fichero.readInt();
-        datosGlobal = fichero.readDouble();
-        pesoGlobal = fichero.readInt();
+        velocidadGlobal = Integer.parseInt(fichero.readLine());
+        datosGlobal = Double.valueOf(fichero.readLine());
+        pesoGlobal = Integer.parseInt(fichero.readLine());
 
     }
 
     private void incioGlobal() {
         velocidadGlobal = 0;
         datosGlobal = 0.0;
-        pesoGlobal = 0;
+        pesoGlobal = 1;
     }
     
      public void inicioSesion() {
@@ -62,14 +62,17 @@ public class AdministradorSubida extends ModuloTrafico{
         listaDatosSesion = new LinkedList();
     }
      
-     public void cerrar(DataOutputStream file) throws IOException {
+     public void cerrar(BufferedWriter file) throws IOException {
           //TODO: Volcar datos de sesion en globales.
         datosGlobal += datosSesion;
-        velocidadGlobal = ((velocidadGlobal * pesoGlobal) + (velocidadSesion * pesoSesion)) / (pesoSesion + pesoGlobal);
+        int dividendo = pesoSesion + pesoGlobal;
+        if (dividendo == 0) dividendo = 1;
+        velocidadGlobal = ((velocidadGlobal * pesoGlobal) + (velocidadSesion * pesoSesion)) / dividendo;
         pesoGlobal += pesoSesion;
-        file.writeDouble(velocidadGlobal);
-        file.writeDouble(datosGlobal);
-        file.write(pesoGlobal);
+        file.append(String.valueOf(velocidadGlobal));file.newLine();
+        file.append(String.valueOf(datosGlobal));file.newLine();
+        file.append(String.valueOf(pesoGlobal));file.newLine();
+        
     }
 
     private void volcarDatosGlobal(ObjectOutputStream writer) {

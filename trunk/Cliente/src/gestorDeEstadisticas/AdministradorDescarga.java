@@ -4,8 +4,8 @@
  */
 package gestorDeEstadisticas;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.LinkedList;
@@ -24,11 +24,11 @@ class AdministradorDescarga extends ModuloTrafico {
     private static final Logger log = Logger.getLogger(AdministradorDescarga.class.getName());
 
     
-    protected AdministradorDescarga(DataInputStream fichero) {
+    protected AdministradorDescarga(BufferedReader fichero) {
         if (fichero != null) {
             try {
                 cargaDatosGlobales(fichero);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 incioGlobal();
                 log.info("Las estadisticas no se han podido cargar, comenzaran desde 0");
             }
@@ -38,12 +38,11 @@ class AdministradorDescarga extends ModuloTrafico {
         inicioSesion();
     }
     
-    private void cargaDatosGlobales(DataInputStream fichero) throws IOException {
-        //TODO cargar los datos de fichero.
-        velocidadGlobal = fichero.readDouble();
-        ficherosGlobal = fichero.readInt();
-        datosGlobal = fichero.readDouble();
-        pesoGlobal = fichero.readInt();
+    private void cargaDatosGlobales(BufferedReader fichero) throws IOException {
+        velocidadGlobal = Double.valueOf(fichero.readLine());
+        ficherosGlobal = Integer.parseInt(fichero.readLine());
+        datosGlobal = Double.valueOf(fichero.readLine());
+        pesoGlobal = Integer.parseInt(fichero.readLine());
 
     }
 
@@ -51,7 +50,7 @@ class AdministradorDescarga extends ModuloTrafico {
         velocidadGlobal = 0;
         ficherosGlobal = 0;
         datosGlobal = 0.0;
-        pesoGlobal = 0;
+        pesoGlobal = 1;
     }
 
     public void llegadaFichero(int cantidad) {
@@ -78,16 +77,18 @@ class AdministradorDescarga extends ModuloTrafico {
         //TODO para que sirve esto?
     }
 
-    public void cerrar(DataOutputStream file) throws IOException {
+    public void cerrar(BufferedWriter file) throws IOException {
         //TODO: Volcar datos de sesion en globales.
         datosGlobal += datosSesion;
         ficherosGlobal += ficherosSesion;
-        velocidadGlobal = ((velocidadGlobal * pesoGlobal) + (velocidadSesion * pesoSesion)) / (pesoSesion + pesoGlobal);
+        int dividendo = pesoSesion + pesoGlobal;
+        if (dividendo == 0) dividendo = 1;
+        velocidadGlobal = ((velocidadGlobal * pesoGlobal) + (velocidadSesion * pesoSesion)) / dividendo;
         pesoGlobal += pesoSesion;
-        file.writeDouble(velocidadGlobal);
-        file.write(ficherosGlobal);
-        file.writeDouble(datosGlobal);
-        file.write(pesoGlobal);
+        file.append(String.valueOf(velocidadGlobal));file.newLine();
+        file.append(String.valueOf(ficherosGlobal));file.newLine();
+        file.append(String.valueOf(datosGlobal));file.newLine();
+        file.append(String.valueOf(pesoGlobal));file.newLine();
     }
 
 
