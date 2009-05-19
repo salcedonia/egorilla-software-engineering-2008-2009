@@ -36,4 +36,14 @@ public class ControladorPanelServidores {
 
         _gestorEGorilla.conectarAServidor(IP, puerto);
     }
+    
+    /**
+     * Devuelve el GestorEGorilla de la aplicación.
+     * 
+     * @return El GestorEGorilla de la aplicación.
+     */
+    public GestorP2P getGestorEGorilla() {
+
+        return _gestorEGorilla;
+    }    
 }
