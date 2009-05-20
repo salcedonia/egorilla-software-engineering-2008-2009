@@ -5,6 +5,7 @@ import gestorDeEstadisticas.GestorEstadisticas;
 import gestorDeConfiguracion.ControlConfiguracionCliente;
 import gestorDeConfiguracion.ControlConfiguracionClienteException;
 import gestorDeConfiguracion.PropiedadCliente;
+import gestorDeErrores.ControlDeErrores;
 import gestorDeFicheros.GestorCompartidos;
 import gui.grafica.buscador.ControladorPanelBuscador;
 import gui.grafica.buscador.GUIPanelBuscador;
@@ -120,6 +121,11 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      */
     private ImageIcon _imgConectar = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnConectar.png"));
     /**
+     * Icono del boton de conexion cuando la aplicacion se encuentra negociando con
+     * un servidor.
+     */
+    private ImageIcon _imgNegociando = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnNegociando.png"));
+    /**
      * Icono del boton de conexion cuando la aplicacion se encuentra conectada a
      * un servidor.
      */
@@ -152,10 +158,35 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      * Icono del boton de ayuda.
      */
     private ImageIcon _imgAyuda = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "botones/btnAyuda.png"));
-
-    
+    /**
+     * Estado del sistema P2P.
+     */
     private EstadoP2P _estado;
+    /**
+     * Hilo de Splash dinamico.
+     */
     private ThreadSplash hiloSplash;
+    /**
+     * tray del sistema.
+     */
+    private SystemTray tray;
+    /**
+     * Imagen tray conectado.
+     */
+    private Image imageConectado = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/iconoCon.png")).getImage();
+    /**
+     * Imagen tray desconectado.
+     */
+    private Image imageDesconectado = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/iconoDes.png")).getImage();
+    /**
+     * Imagen tray negociando.
+     */
+    private Image imageNegociando = new ImageIcon(getClass().getResource(RUTA_RECURSOS + "iconos/iconoNeg.png")).getImage();
+    /**
+     * Tray icon de la aplicacion.
+     */
+    private TrayIcon trayIcon = new TrayIcon(imageDesconectado, "eGorilla - Desconectado -");
+
     /**
      * Constructor de la clase VentanaPrincipal.
      * 
@@ -171,7 +202,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
             
             hiloSplash = new ThreadSplash();
             hiloSplash.run();
-        
+
+            activarTrayIcon();
+
             iniciarComponentes();
             
         } catch (ControlConfiguracionClienteException ex) {
@@ -180,6 +213,83 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         }    
     }
 
+    /**
+     * Activa el trayIcon de la aplicacion.
+     *
+     */
+    private void activarTrayIcon() {
+        if (SystemTray.isSupported()) {
+            tray = SystemTray.getSystemTray();
+
+            setPropiedadesTrayIcon(imageDesconectado, "eGorilla - Desconectado -");
+
+            trayIcon.displayMessage("Bienvenido", "Bienvenido a eGorilla", TrayIcon.MessageType.INFO);
+
+        }
+    }
+
+    /**
+     * Establece las propiedades del trayIcon de la aplicacion.
+     * 
+     * @param imagen imagen del trayIcon.
+     * @param texto Titulo del trayIcon.
+     */
+    private void setPropiedadesTrayIcon(Image imagen, String texto) {
+
+        try {
+            tray.remove(trayIcon);
+
+        } catch (Exception e) {}
+
+        PopupMenu menu = new PopupMenu();
+
+        MenuItem conectarItem = new MenuItem("Conectar/Desconectar");
+        conectarItem.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            pulsacionBotonConectar(e);
+          }
+        });
+        menu.add(conectarItem);
+
+        MenuItem ayudaItem = new MenuItem("Ayuda");
+        ayudaItem.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            pulsacionBotonAyuda(null);
+          }
+        });
+        menu.add(ayudaItem);
+
+        MenuItem salirItem = new MenuItem("Salir");
+        salirItem.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            ((GestorEgorilla)_controlador.getGestorEGorilla()).acabarTodo();
+
+            System.exit(0);
+          }
+        });
+        menu.add(salirItem);
+
+        trayIcon = new TrayIcon(imagen, texto, menu);
+
+        trayIcon.setImageAutoSize(true);
+        trayIcon.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            if(isVisible()){
+                setVisible(false);
+            }
+            else{
+                setVisible(true);
+            }
+        }
+        });
+
+        try {
+        tray.add(trayIcon);
+
+        ControlDeErrores.getInstancia().setTray(trayIcon);
+
+        } catch (AWTException e) {}
+    }
     /**
      * Crea y configura todos los paneles que se visualizan el panel principal.
      * 
@@ -584,6 +694,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
                 int puerto = Integer.parseInt(ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.PUERTO_SERVIDOR.obtenerLiteral()));
                 String direccionIP = ControlConfiguracionCliente.obtenerInstancia().obtenerPropiedad(PropiedadCliente.IP_SERVIDOR.obtenerLiteral());
                 _controlador.peticionConexionAServidor(direccionIP, puerto);
+
             } else {   
                 // Avisamos al Control de la ventana principal para que realice la acción de desconectar con el servidor
                 _controlador.peticionDeDesconexionDeServidor();
@@ -608,6 +719,9 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         _btnConectar.setEnabled(!_estado.equals(EstadoP2P.NEGOCIANDO));
         // Cambiamos las etiquetas de estado
         _lblConexion.setText(dameTxtLabelConexion());
+        setPropiedadesTrayIcon(dameImagenConexion(), "eGorilla " + dameTxtLabelConexion());
+        trayIcon.displayMessage(dameTxtLabelConexion(), "eGorilla " + dameTxtLabelConexion().toLowerCase(), TrayIcon.MessageType.INFO);
+
     }
 
 //    @Override
@@ -684,8 +798,16 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
         switch (_estado) {
             case CONECTADO : return _imgDesconectar;
             case DESCONECTADO : return _imgConectar;
-            case NEGOCIANDO : return _imgConectar;
+            case NEGOCIANDO : return _imgNegociando;
         }
        return _imgConectar;
+    }
+    private Image dameImagenConexion() {
+        switch (_estado) {
+            case CONECTADO : return imageConectado;
+            case DESCONECTADO : return imageDesconectado;
+            case NEGOCIANDO : return imageNegociando;
+        }
+       return imageDesconectado;
     }
 }
