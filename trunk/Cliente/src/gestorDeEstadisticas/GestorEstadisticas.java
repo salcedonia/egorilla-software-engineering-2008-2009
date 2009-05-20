@@ -50,7 +50,7 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
     protected static GestorEstadisticas intancia;
     AdministradorDescarga descarga;
     AdministradorSubida subida;
-    protected final static String PATH = "/estadisticas.txt";
+    protected final static String PATH = "estadisticas.txt";
     private static Logger log = Logger.getLogger(GestorEstadisticas.class);
 
     protected GestorEstadisticas() {
@@ -123,6 +123,10 @@ public class GestorEstadisticas implements ObservadorAlmacenDescargas, Observado
         BufferedWriter  writer = null;
         try {
             fichero = new File(PATH);
+            if (!fichero.exists()) {
+                log.info("La direccion del fichero es :"+fichero.getPath());
+                fichero.createNewFile();
+            }
             writer = new  BufferedWriter(new FileWriter(fichero));
             descarga.cerrar(writer);
             subida.cerrar(writer);
