@@ -15,6 +15,7 @@ import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.IllegalOptionValueException;
 import jargs.gnu.CmdLineParser.UnknownOptionException;
 import java.io.IOException;
+import javax.swing.UIManager;
 import mensajes.Mensaje;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -41,6 +42,11 @@ public class Main {
      */
     public static void main(String[] args) throws ControlConfiguracionClienteException {
 
+        try{
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        }catch(Exception ex){
+            
+        }
         //Configuracion de los logs
         PropertyConfigurator.configure("log4j.properties");
         Logger log = Logger.getLogger(Main.class);
