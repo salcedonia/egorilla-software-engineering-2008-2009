@@ -489,21 +489,25 @@ public class GUIPanelServidores extends JPanel implements ObservadorPanelServido
 
     @Override
     public void resultadosBusqueda(GestorEgorilla GestorEGorilla, String nombre, Archivo[] lista) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       // throw new UnsupportedOperationException("Not supported yet.");
+        //NO HACE NADA
     }
 
     @Override
     public void finDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       // throw new UnsupportedOperationException("Not supported yet.");
+       //NO HACE NADA
     }
 
     @Override
     public void pausaDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //throw new UnsupportedOperationException("Not supported yet.");
+        //NO HACE NADA
     }
 
     @Override
     public void eliminarDescarga(GestorEgorilla GestorEGorilla, Archivo arch) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       // throw new UnsupportedOperationException("Not supported yet.");
+       //NO HACE NADA
     }
 }
