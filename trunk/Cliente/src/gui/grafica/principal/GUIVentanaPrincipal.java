@@ -740,7 +740,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
 
     @Override
     public void finDescarga(GestorEgorilla gestorEGorilla, Archivo arch) {
-        // TODO: completa la descarga
+       trayIcon.displayMessage("Descarga Completada", "Archivo: "+arch.getNombre(), TrayIcon.MessageType.INFO);
     }
 
 //    @Override
