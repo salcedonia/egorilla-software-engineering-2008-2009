@@ -28,8 +28,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -476,6 +479,18 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                               ex.printStackTrace();
                           }
                         } 
+                    }else{
+                        if(_lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi") ){
+                            try {
+                                String previsualizador = "utils//vlc-0.9.9//vlc.exe";
+                                String rutaTemp = GestorCompartidos.getInstancia().getGestorDisco().getDirectorioTemporales();
+                                String ficheroTemp = "//"+_lblNombre.getText()+".tmp";
+                                System.out.println( previsualizador+" "+rutaTemp+ficheroTemp );
+                                Runtime.getRuntime().exec( previsualizador+" "+rutaTemp+ficheroTemp );
+                            } catch (IOException ex) {
+                                Logger.getLogger(PanelDescargas.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
                 }
             }
