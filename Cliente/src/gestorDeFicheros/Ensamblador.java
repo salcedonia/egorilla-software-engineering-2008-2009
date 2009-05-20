@@ -21,8 +21,9 @@ package gestorDeFicheros;
 
 import mensajes.serverclient.*;
 import datos.*;
+import gestorDeErrores.ControlDeErrores;
+import gestorDeErrores.ErrorEGorilla;
 import java.io.*;
-import java.util.*;
 
 /**
  * Se encarga principalmente de guardar el par fragmento-byte's en su lugar correspondiente, 
@@ -95,7 +96,7 @@ public class Ensamblador{
     int tamBuf = 9000;
     try{
       if( fichero.exists() == true ){
-        System.out.println( "cambiando el nombre del archivo temporal..." );
+        //System.out.println( "Cambiando el nombre del archivo temporal..." );
         //TODO: crear el temporal con el nuevo nombre, entonces tal vez quitar de
         //de mover
         String nombreNuevoFichero = fichero.getName();
@@ -125,15 +126,24 @@ public class Ensamblador{
         //creo que tambien hace falta cerrar el otro
         ficheroIndices.close();
       }else{ //si existe
-        System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );        
+        //System.out.println( "Problemas al crear el archivo <"+fichero.getName()+">" );
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al crear el archivo <"+fichero.getName()+">" );
       }
     }catch( FileNotFoundException e ){
-        System.out.println( "No existe el fichero <"+fichero.getName()+">" );
+        //System.out.println( "No existe el fichero <"+fichero.getName()+">" );
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "No existe el fichero <"+fichero.getName()+">" );
     }catch( IOException e ){
-        System.out.println("Error -> posibles causas: ");
+        /*System.out.println("Error -> posibles causas: ");
         System.out.println( "\tProblemas al crear el fichero <"+fichero.getName()+">" );
         System.out.println( "\tProblemas al reservar <"+size+"> bytes de espacio para el fichero <"+fichero.getName()+">" );
-        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );*/
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                "Error -> posibles causas: " +
+                "\tProblemas al crear el fichero <"+fichero.getName()+">"+
+                "\tProblemas al reservar <"+size+"> bytes de espacio para el fichero <"+fichero.getName()+">"+
+                "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );
     }
   }
 
@@ -167,13 +177,13 @@ public class Ensamblador{
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, 
         hashFragmento );
     if( archivoExistencia == null ){
-      System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de temporales" );
+      //System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de temporales" );
       //Entonces miro tambien en los completos
       archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaCompletos, 
           hashFragmento );
       if( archivoExistencia == null ){
-        System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de completos" );
-        System.out.println( "Asi que creo el fichero temporal y su indice" );
+        /*System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> no esta en la lista de completos" );
+        System.out.println( "Asi que creo el fichero temporal y su indice" );*/
         //El archivo no se encuentra, es nuevo! Lo creo en los temporales
         File fichero = new File( _directorioTemporales+"//" + archivoNuevo.getNombre()
             + _extesionIndices );
@@ -187,17 +197,17 @@ public class Ensamblador{
         reservarEspacioFicheroNuevo( fichero, archivoNuevo.getSize(), archivoNuevo.getHash() );
         
         //Y si todo ha ido bien actualizo las listas
-        System.out.println( "Actualizo las listas de los archivos" );
+        //System.out.println( "Actualizo las listas de los archivos" );
         manejarListaArchivos.includirArchivoEnLista( archivoNuevo, listaTemporales );
         manejarListaArchivos.includirArchivoEnLista( archivoNuevo, listaTodos );
         //creado = true;
       }else{
-        System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> esta en los archivos completos, ya ha sido descargado!" );
+        //System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> esta en los archivos completos, ya ha sido descargado!" );
         //Esta en los archivos completos, ya ha sido descargado.
         creado = false;
       }
     }else{
-      System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> ya se encuentra en los temporales, actualmente en descarga" );
+      //System.out.println( "El archivo <"+archivoNuevo.getNombre()+"> ya se encuentra en los temporales, actualmente en descarga" );
       //Ya se encuentra en los temporales, actualmente en descarga.      
     }
     //Se puede dejar en un simple if-else sino me interesa diferenciar esos dos problemas
@@ -220,7 +230,7 @@ public class Ensamblador{
 
     archivoExistencia = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
     if( archivoExistencia == null ){
-      System.out.println("No se puede eliminar un archivo que no existe");
+      //System.out.println("No se puede eliminar un archivo que no existe");
       eliminado = false;
     }else{
       File ficheroIndices = new File( _directorioTemporales+"//" + 
@@ -231,9 +241,9 @@ public class Ensamblador{
 
       //Puede qsten en uso cuando los quiera borrar
       eliminado = ficheroIndices.delete() && ficheroTemporal.delete();
-      if( eliminado == false )
+      /*if( eliminado == false )
         System.out.println("Problemas al eliminar el archivo temporal y/o de indices("+
-            archivoExistencia.getNombre()+")");
+            archivoExistencia.getNombre()+")");*/
 
       //comprobar que deja la lista actualizada
       manejarListaArchivos.eliminarArchivoDeLista( archivoExistencia, listaTemporales );
@@ -286,13 +296,13 @@ public class Ensamblador{
         hashFragmento );
     if( archivoExistencia == null ){
       //No esta en la lista, posible Fragmento corrupto
-      System.out.println( "El archivo <"+fragmento.getNombre()+"> no esta en la lista temporales, posiblemente fragmento corrupto o"+
-          "tardio (ver completos)" );
+      /*System.out.println( "El archivo <"+fragmento.getNombre()+"> no esta en la lista temporales, posiblemente fragmento corrupto o"+
+          "tardio (ver completos)" );*/
       //guardado = false;
     }else{
       //Guardo la parte donde toque
       try{
-        System.out.println( "El archivo <"+fragmento.getNombre()+"> esta en los temporales, guardamos par Fragmento-Byte's" );
+        //System.out.println( "El archivo <"+fragmento.getNombre()+"> esta en los temporales, guardamos par Fragmento-Byte's" );
       fichero = new File( _directorioTemporales+"//" + archivoExistencia.getNombre()+
           _extesionFicheroTemporal );
       RandomAccessFile punteroFichero = new RandomAccessFile( fichero, "rw" );
@@ -316,14 +326,21 @@ public class Ensamblador{
       //archivo.close();
       punteroFichero.close();
       }catch( FileNotFoundException e ){
-        System.out.println( "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
+        //System.out.println( "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
         //e.printStackTrace();
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Algun bruto se ha cargado el fichero temporal <"+fichero.getName()+">" );
         return false;
       }catch( IOException e ){
-        System.out.println("Error -> posibles causas: ");
+        /*System.out.println("Error -> posibles causas: ");
         System.out.println( "\tProblemas al movernos a la posicion <"+off+"> del fichero <"+fichero.getName()+">" );
         System.out.println( "\tProblemas al escribir en el fichero <"+fichero.getName()+">" );
-        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el fichero <"+fichero.getName()+">" );*/
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Error -> posibles causas: "+
+                                "\tProblemas al movernos a la posicion <"+off+"> del fichero <"+fichero.getName()+">"+
+                                "\tProblemas al escribir en el fichero <"+fichero.getName()+">"+
+                                "\tProblemas al cerrar el fichero <"+fichero.getName()+">");
         return false;
       }
 
@@ -336,7 +353,7 @@ public class Ensamblador{
 
       //Si era el ultimo fragmento que quedaba, el archivo se ha completado
       if( indices.getIndicesFaltan().size() == 0 ){
-        System.out.println( "Acabo de completar el fichero <"+fragmento.getNombre()+"> lo muevo a los completos" );
+        /*System.out.println( "Acabo de completar el fichero <"+fragmento.getNombre()+"> lo muevo a los completos" );*/
         manejarListaArchivos.eliminarArchivoDeLista( indices.getArchivo(), listaTemporales );
         manejarListaArchivos.includirArchivoEnLista( indices.getArchivo(), listaCompletos );
 
@@ -345,8 +362,8 @@ public class Ensamblador{
         mover( fichero, ficheroCompleto );
         //TODO: comprobar realmente que el fichero se ha completado correctamente.
         
-        if( manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
-          System.out.println( "Problemas al borrar el archivo de indices" );      
+        /*if( manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
+          System.out.println( "Problemas al borrar el archivo de indices" );*/
 
         /*_gestorDisco.recorrerListaArchivos( _listaTemporales );
         _gestorDisco.recorrerListaArchivos( _listaCompletos );*/
@@ -373,7 +390,7 @@ public class Ensamblador{
       // intentamos con renameTo
       boolean result = source.renameTo( destination );
       if( result == false ) {
-        System.out.println("No se ha podido mover el temporal, copiando...");
+        //System.out.println("No se ha podido mover el temporal, copiando...");
         // intentamos copiar
         result = true;
         result &= copiar(source, destination);
@@ -416,11 +433,17 @@ public class Ensamblador{
       resultado = true;
       }
     } catch( FileNotFoundException f ) {
-      System.out.println("No existe el fichero origen o no se ha podido crear el fichero "+
+      /*System.out.println("No existe el fichero origen o no se ha podido crear el fichero "+
+          "destino");*/
+      ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "No existe el fichero origen o no se ha podido crear el fichero "+
           "destino");
         //f.printStackTrace();
     } catch( IOException e ) {
-      System.out.println("Problemas al leer del fichero origen o al escribir en el fichero "+
+      /*System.out.println("Problemas al leer del fichero origen o al escribir en el fichero "+
+          "destino");*/
+      ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al leer del fichero origen o al escribir en el fichero "+
           "destino");
         //e.printStackTrace();
     } finally {
@@ -428,13 +451,17 @@ public class Ensamblador{
       try {
         sourceFile.close();
       } catch(Exception e) {
-        System.out.println("Problemas al cerrar el fichero origen");
+        //System.out.println("Problemas al cerrar el fichero origen");
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al cerrar el fichero origen");
         //e.printStackTrace();
       }
       try {
         destinationFile.close();
       } catch(Exception e) {
-          System.out.println("Problemas al cerrar el fichero destino");
+          ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al cerrar el fichero destino");
+          //System.out.println("Problemas al cerrar el fichero destino");
           //e.printStackTrace();
       }
     } 

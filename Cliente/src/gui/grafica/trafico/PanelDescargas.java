@@ -19,6 +19,7 @@ package gui.grafica.trafico;
 
 import com.sun.jndi.toolkit.url.Uri;
 import datos.Archivo;
+import datos.TipoArchivo;
 import gestorDeFicheros.GestorCompartidos;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -480,17 +481,29 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                           }
                         } 
                     }else{
-                        if(_lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi") ){
+                        TipoArchivo _tipo;
+                        TipoArchivo.iniciarTiposArchivo();
+                        String nombre = _lblNombre.getText();
+                        String[] extensiones = nombre.split("\\.");
+                        if (extensiones.length != 0) {
+                            _tipo = TipoArchivo.devuelveTipo(extensiones[extensiones.length - 1].toLowerCase());
+                        } else {
+                            _tipo = TipoArchivo.OTRO;
+                        }
+                        if( _tipo == TipoArchivo.AUDIO || _tipo == TipoArchivo.VIDEO/*lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi")*/ ){
                             try {
                                 String previsualizador = "utils//vlc-0.9.9//vlc.exe";
                                 String rutaTemp = GestorCompartidos.getInstancia().getGestorDisco().getDirectorioTemporales();
                                 String ficheroTemp = "//"+_lblNombre.getText()+".tmp";
-                                System.out.println( previsualizador+" "+rutaTemp+ficheroTemp );
+                                //System.out.println( previsualizador+" "+rutaTemp+ficheroTemp );
                                 Runtime.getRuntime().exec( previsualizador+" "+rutaTemp+ficheroTemp );
                             } catch (IOException ex) {
                                 Logger.getLogger(PanelDescargas.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
+
+
+
                     }
                 }
             }

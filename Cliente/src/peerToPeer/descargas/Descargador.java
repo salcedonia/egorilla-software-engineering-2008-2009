@@ -93,7 +93,7 @@ public class Descargador extends Thread{
                                 Cliente propietario = d.dameClienteQueTiene(chunk);
 
                                 if(propietario!=null){
-                                    System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
+                                    //System.out.println("Dame enviado a " + propietario.getIP() + " del chunk " + Integer.toString(i));
 
                                     Dame msj = new Dame(chunk.getNombre(), chunk.getHash(),
                                                     chunk, propietario.getIP(), propietario.getPuerto());
