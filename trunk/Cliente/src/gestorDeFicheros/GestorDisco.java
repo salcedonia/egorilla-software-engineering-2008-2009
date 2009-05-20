@@ -23,6 +23,8 @@ import java.io.*;
 import mensajes.serverclient.*;
 import datos.*;
 import gestorDeConfiguracion.*;
+import gestorDeErrores.ControlDeErrores;
+import gestorDeErrores.ErrorEGorilla;
 import java.util.*;
 
 /**
@@ -104,7 +106,6 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
      * Es la clase que contiene la funcionalidad para tratar adecuadamente las listas de archivos.
      */
     private ManejarListaArchivos _manejarListaArchivos;
-    private int _detenido;
 
     /**
      * Constructor por defecto del Gestor de Disco, el cual realiza todas una serie de operaciones 
@@ -140,8 +141,11 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
             _directorioTemporales = config.obtenerPropiedad(PropiedadCliente.DIR_LLEGADA.obtenerLiteral());
             _directorioCompletos = config.obtenerPropiedad(PropiedadCliente.DIR_COMPARTIDOS.obtenerLiteral());
         } catch (Exception e) {
-            System.out.println("No se encuentra el fichero de configuracion. Estableciendo" +
-                    "valores por defecto.");
+            /*System.out.println("No se encuentra el fichero de configuracion. Estableciendo" +
+                    "valores por defecto.");*/
+            ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "No se encuentra el fichero de configuracion. Estableciendo" +
+                    "valores por defecto." );
             _directorioTemporales = "temp";
             _directorioCompletos = "compartidos";
         }
@@ -149,11 +153,29 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
         File fDirectorioTemporales = new File(_directorioTemporales),
                 fDirectorioCompletos = new File(_directorioCompletos);
 
+        if( fDirectorioTemporales.exists() == false ){
+            if( fDirectorioTemporales.mkdir() == false ){
+                //System.out.println("Problemas al crear el directorio <"+fDirectorioTemporales.getName()+">");
+                ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al crear el directorio <"+fDirectorioTemporales.getName()+">" );
+            }
+        }
+
+        if( fDirectorioCompletos.exists() == false ){
+            if( fDirectorioCompletos.mkdir() == false ){
+                //System.out.println("Problemas al crear el directorio <"+fDirectorioCompletos.getName()+">");
+                ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Problemas al crear el directorio <"+fDirectorioCompletos.getName()+">" );
+            }
+        }
+
         //Cuando haya multiples directorio, hacer un for para comprobar todos
 
         if (fDirectorioTemporales.isDirectory() == false ||
                 fDirectorioCompletos.isDirectory() == false) {
-            System.out.println("Directorio de temporales o de completos no valido");
+            //System.out.println("Directorio de temporales o de completos no valido");
+            ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Directorio de temporales o de completos no valido" );
         //throw new IOException("Algun directorio no es un directorio valido");
         }
 
@@ -400,7 +422,7 @@ public class GestorDisco implements ObservadorControlConfiguracionCliente {
       int cantidadFragmentos = cantidadFragmentosArchivo( archivoRequerido.getSize() );
       listaFragmento = new Vector<Fragmento>( cantidadFragmentos );
 
-      System.out.println("Capacidad "+listaFragmento.capacity());
+      //System.out.println("Capacidad "+listaFragmento.capacity());
 
       //Se supone que nunca va decir 0 cantidadFragmentos
       if( cantidadFragmentos == 1 ){

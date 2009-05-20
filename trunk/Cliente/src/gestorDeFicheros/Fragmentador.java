@@ -21,6 +21,8 @@ package gestorDeFicheros;
 
 import mensajes.serverclient.*;
 import datos.*;
+import gestorDeErrores.ControlDeErrores;
+import gestorDeErrores.ErrorEGorilla;
 import java.io.*;
 import java.util.*;
 
@@ -45,11 +47,6 @@ public class Fragmentador{
   private String _extesionIndices;
 
   //private String _extesionFicheroTemporal;
-
-  /**
-   * Es el tamano de bytes maximo que puede tener un fragmento.
-   */
-  private int _tamanioBytesFragmento;
 
   /**
    * Es la ruta relativa del directorio de los ficheros temporales.
@@ -81,7 +78,6 @@ public class Fragmentador{
     _gestorDisco = gestorDisco;
 
     _extesionIndices = gestorDisco.getExtesionIndices();
-    _tamanioBytesFragmento = gestorDisco.getTamanioBytesFragmento();
   }
 
 
@@ -136,7 +132,7 @@ public class Fragmentador{
         //El fichero no EXISTE - devuelvo un null - ERROR
       }else{
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)     
-        System.out.println("Obteniendo bytes del archivo temporal <"+ archivoRequerido.getNombre()+">");
+        //System.out.println("Obteniendo bytes del archivo temporal <"+ archivoRequerido.getNombre()+">");
         fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
         Indices indices = manejarIndices.leeFicheroIndices( fichero );
@@ -184,7 +180,7 @@ public class Fragmentador{
       //Obtengo los bytes del fragmento que me han pedido - como esta completo no 
       //tengo que hacer na
       try{
-        System.out.println("Obteniendo bytes del archivo completo <"+ archivoRequerido.getNombre()+">");
+        //System.out.println("Obteniendo bytes del archivo completo <"+ archivoRequerido.getNombre()+">");
       fichero = new File( _directorioCompletos+"//"+ archivoRequerido.getNombre() );
       punteroFichero = new RandomAccessFile( fichero, "r" );
       off = (int)fragmento.getOffset();
@@ -205,9 +201,10 @@ public class Fragmentador{
       oBytesFragmento = primitivoAObjeto( bytesFragmento );
       punteroFichero.close();
       }catch( Exception e ){
-        System.out.println("Auch! se escogorcio el fichero <"+ archivoRequerido.getNombre()+">");
-        
-        e.printStackTrace();
+        //System.out.println("Auch! se escogorcio el fichero <"+ archivoRequerido.getNombre()+">");
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Auch! se escogorcio el fichero <"+ archivoRequerido.getNombre()+">" );
+        //e.printStackTrace();
       }
       //bytesLeidos debe coincidir con fragmento.getTama() - fragmento.getOffset()
       //Fragmento corrupto! o archivo corrupto
@@ -242,13 +239,13 @@ public class Fragmentador{
     if( archivoRequerido == null && hash != null){
       //Debo buscarlo en los temporales
       //No esta en los completos, asi que miramos en los incompletos
-      System.out.println("El archivo <"+hash+"> NO esta en los completos");
+      //System.out.println("El archivo <"+hash+"> NO esta en los completos");
       archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
       if( archivoRequerido == null ){
-        System.out.println("El archivo <"+hash+"> TAMPOCO esta en los temporales - ERROR");
+        //System.out.println("El archivo <"+hash+"> TAMPOCO esta en los temporales - ERROR");
         //El fichero no EXISTE - devuelvo un null - ERROR
       }else{
-        System.out.println("El archivo <"+archivoRequerido.getNombre()+"> SI esta en los temporales - Abro fichero indices...");
+        //System.out.println("El archivo <"+archivoRequerido.getNombre()+"> SI esta en los temporales - Abro fichero indices...");
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
@@ -256,7 +253,7 @@ public class Fragmentador{
         listaFragmento = indices.getIndicesTengo();
       }
     }else{
-      System.out.println("El archivo <"+archivoRequerido.getNombre()+"> se encuentra en los completos");
+      //System.out.println("El archivo <"+archivoRequerido.getNombre()+"> se encuentra en los completos");
       //Tengo todo los fragmentos, asi que los digo todos!
       //Esto igual seria mejor: serializarlo y guardado - No va a cambiar asi no tengo que 
       //recarcular ni volver a crear todos los objetos o guardarlo en mem.
@@ -299,13 +296,13 @@ public class Fragmentador{
     if( archivoRequerido == null && hash != null){
       //Debo buscarlo en los temporales
       //No esta en los completos, asi que miramos en los incompletos
-      System.out.println("El archivo <"+hash+"> NO esta en los completos");
+      //System.out.println("El archivo <"+hash+"> NO esta en los completos");
       archivoRequerido = manejarListaArchivos.buscarArchivoEnLista( listaTemporales, hash );
       if( archivoRequerido == null ){
         //El fichero no EXISTE - devuelvo un null - ERROR
-        System.out.println("El archivo <"+hash+"> TAMPOCO esta en los temporales - ERROR");
+        //System.out.println("El archivo <"+hash+"> TAMPOCO esta en los temporales - ERROR");
       }else{
-        System.out.println("El archivo <"+archivoRequerido.getNombre()+"> esta en los temporales");
+        //System.out.println("El archivo <"+archivoRequerido.getNombre()+"> esta en los temporales");
         //Voy al fichero de indices y miro si esa parte del fragmento (offset)        
         File fichero = new File( _directorioTemporales+"//" + archivoRequerido.getNombre()
             + _extesionIndices );
@@ -313,7 +310,7 @@ public class Fragmentador{
         listaFragmento = indices.getIndicesFaltan();
       }
     }else{
-      System.out.println("El archivo <"+archivoRequerido.getNombre()+"> esta en los completos");
+      //System.out.println("El archivo <"+archivoRequerido.getNombre()+"> esta en los completos");
       //Tengo todo los fragmentos, asi que los digo todos!
       //Esto igual seria mejor: serializarlo y guardado - No va a cambiar asi no tengo que 
       //recarcular ni volver a crear todos los objetos o guardarlo en mem.

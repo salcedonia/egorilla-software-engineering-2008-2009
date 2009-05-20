@@ -20,6 +20,8 @@ import java.util.*;
 import java.io.*;
 
 import datos.*;
+import gestorDeErrores.ControlDeErrores;
+import gestorDeErrores.ErrorEGorilla;
 
 /**
  * Clase que ofrece las operaciones que se pueden realizar sobre los indices de los archivos.
@@ -32,8 +34,7 @@ public class ManejarIndices {
    * Crea el fichero de indices con la informacion inicial necesaria para un archivo concreto.
    * @param fichero es el fichero de indices que tendra toda la informacion.
    * @param archivo es el objeto que representa el archivo en concreto.
-   * @param fragmentos .
-   * @return .
+   * @param fragmentos es la lista de fragmentos que faltan de dicho archivo.
    */
   public void crearFicheroIndices( File fichero, Archivo archivo, Vector<Fragmento> fragmentos ){
     Vector<Fragmento> fragTengo = new Vector<Fragmento>(),
@@ -46,10 +47,15 @@ public class ManejarIndices {
       os.close();
       
     }catch( IOException e ){
-        System.out.println("Error -> posibles causas: ");
+        /*System.out.println("Error -> posibles causas: ");
         System.out.println( "\tProblemas al crear un flujo de bytes serializable" );
         System.out.println( "\tProblemas al serializar el objeto indice" );
-        System.out.println( "\tProblemas al cerrar el flujo serializable" );
+        System.out.println( "\tProblemas al cerrar el flujo serializable" );*/
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Error -> posibles causas: "+
+                                "\tProblemas al crear un flujo de bytes serializable"+
+                                "\tProblemas al serializar el objeto indice"+
+                                "\tProblemas al cerrar el flujo serializable");
         //e.printStackTrace();
     }
 
@@ -70,9 +76,13 @@ public class ManejarIndices {
     }catch( FileNotFoundException e ){
         System.out.println( "No existe el fichero <"+fichero.getName()+">" );
     }catch( IOException e ){
-        System.out.println("Error -> posibles causas: ");
+        /*System.out.println("Error -> posibles causas: ");
         System.out.println( "\tProblemas al escribir en el fichero <"+fichero.getName()+">" );
-        System.out.println( "\tProblemas al cerrar el flujo o el fichero <"+fichero.getName()+">" );
+        System.out.println( "\tProblemas al cerrar el flujo o el fichero <"+fichero.getName()+">" );*/
+        ControlDeErrores.getInstancia().registrarError(ErrorEGorilla.ERROR_DISCO,
+                                "Error -> posibles causas: "+
+                                "\tProblemas al escribir en el fichero <"+fichero.getName()+">"+
+                                "\tProblemas al cerrar el flujo o el fichero <"+fichero.getName()+">" );
         //e.printStackTrace();
     }
   }
