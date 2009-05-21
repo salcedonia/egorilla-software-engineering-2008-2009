@@ -57,7 +57,7 @@ public class Util {
                 return Runtime.getRuntime().exec(new String[]{"command.com", "/C", "start", url});
             }
             if(System.getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1) {
-                return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", url});
+                return Runtime.getRuntime().exec(new String[]{"cmd.exe", "/C", "start", filepath});
             }
             if(System.getProperty("os.name").toUpperCase().indexOf("MAC") != -1) {
                 return Runtime.getRuntime().exec(new String[]{"open", url});
