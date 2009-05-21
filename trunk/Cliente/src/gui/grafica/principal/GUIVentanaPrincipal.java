@@ -690,9 +690,8 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      * 
      * @param evt Evento de pulsación del ratón sobre el botón _btnAyuda.
      */
-    private void pulsacionBotonAyuda(MouseEvent evt) {
-        
-        Util.lanzarVisualizadorDefecto("src/gui/grafica/ayuda/index.html");
+    private void pulsacionBotonAyuda(MouseEvent evt) {        
+        Util.lanzarVisualizadorDefecto("ayuda/index.html");
     }
 
     /**
