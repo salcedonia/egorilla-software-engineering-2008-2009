@@ -362,8 +362,8 @@ public class Ensamblador{
         mover( fichero, ficheroCompleto );
         //TODO: comprobar realmente que el fichero se ha completado correctamente.
         
-        /*if( manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
-          System.out.println( "Problemas al borrar el archivo de indices" );*/
+        if( manejarIndices.borrarFicheroIndices( ficheroIndices ) == false )
+          System.out.println( "Problemas al borrar el archivo de indices" );
 
         /*_gestorDisco.recorrerListaArchivos( _listaTemporales );
         _gestorDisco.recorrerListaArchivos( _listaCompletos );*/
