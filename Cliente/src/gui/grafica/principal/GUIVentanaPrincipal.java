@@ -202,7 +202,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
     /**
      * Tray icon de la aplicacion.
      */
-    private TrayIcon trayIcon = new TrayIcon(imageDesconectado, "eGorilla - Desconectado -");
+    private TrayIcon trayIcon;
 
     /**
      * Constructor de la clase VentanaPrincipal.
@@ -236,6 +236,7 @@ public class GUIVentanaPrincipal extends JFrame implements ObservadorP2P {
      */
     private void activarTrayIcon() {
         if (SystemTray.isSupported()) {
+            trayIcon = new TrayIcon(imageDesconectado, "eGorilla - Desconectado -");
             tray = SystemTray.getSystemTray();
 
             setPropiedadesTrayIcon(imageDesconectado, "eGorilla - Desconectado -");
