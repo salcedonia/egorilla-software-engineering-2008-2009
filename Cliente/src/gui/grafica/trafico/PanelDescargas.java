@@ -251,6 +251,10 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          */
         private JMenuItem _opcionLimpiarTodo;
         /**
+         * Opcion de visualizar o previsualizar
+         */
+        private JMenuItem _ejecucion;
+        /**
          * Oyente para los eventos de pulsacion de las opciones del menu contextual.
          */
         private OyenteBoton _oyenteBoton;
@@ -341,17 +345,38 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
         private void createPopupMenu() {
             JPopupMenu popup = new JPopupMenu();
 
-            _opcionPausar = new JMenuItem("Pausar"/*,new ImageIcon("img/pause.gif")*/);
+            //vemos si el archivo es compatible con el VLC para la opcion de previsualizar
+            TipoArchivo _tipo;
+            TipoArchivo.iniciarTiposArchivo();
+            String nombre = _lblNombre.getText();
+            String[] extensiones = nombre.split("\\.");
+            if (extensiones.length != 0) {
+                _tipo = TipoArchivo.devuelveTipo(extensiones[extensiones.length - 1].toLowerCase());
+            } else {
+                _tipo = TipoArchivo.OTRO;
+            }
+            if( _tipo == TipoArchivo.AUDIO || _tipo == TipoArchivo.VIDEO/*lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi")*/ ){
+                _ejecucion = new JMenuItem("Previsualizar");
+            }else{
+                _ejecucion = new JMenuItem("");
+                _ejecucion.setVisible(false);
+            }
+            
+            _ejecucion.addActionListener(_oyenteBoton);
+            popup.add(_ejecucion);
+
+            _opcionPausar = new JMenuItem("Pausar");
             _opcionPausar.addActionListener(_oyenteBoton);
             popup.add(_opcionPausar);
 
-            _opcionEliminar = new JMenuItem("Eliminar"/*,new ImageIcon("img/cross.gif")*/);
+            _opcionEliminar = new JMenuItem("Eliminar");
             _opcionEliminar.addActionListener(_oyenteBoton);
             popup.add(_opcionEliminar);
 
-            _opcionLimpiarTodo = new JMenuItem("Limpiar completos"/*,new ImageIcon("img/cross.gif")*/);
+            _opcionLimpiarTodo = new JMenuItem("Limpiar completos");
             _opcionLimpiarTodo.addActionListener(_oyenteBoton);
             popup.add(_opcionLimpiarTodo);
+
 
             _oyenteRaton = new OyenteRaton(popup);
 
@@ -396,6 +421,10 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
          */
         public void setEstado(String texto) {
             _lblEstado.setText(texto);
+            if(texto.equalsIgnoreCase("COMPLETADO")){
+                _ejecucion.setText("Abrir");
+                _ejecucion.setVisible(true);
+            }
         }
 
         /**
@@ -427,19 +456,67 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                 }
                 if (event.getActionCommand().equals("Continuar")) {
                     _lblEstado.setText("Descargando");
-                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de parar la descarga
                     _opcionPausar.setText("Pausar");
                     Archivo arch=new Archivo(_lblNombre.getText(),_hash);
                     _controlador.getGestorEGorilla().nuevaDescarga(arch);
                 }
-                if (event.getActionCommand().equals("Eliminar")) {
-                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
-                    Archivo arch=new Archivo(_lblNombre.getText(),_hash);
+                if (event.getActionCommand().equals("Eliminar")) { Archivo arch=new Archivo(_lblNombre.getText(),_hash);
                     _controlador.getGestorEGorilla().eliminarDescarga(arch);
                 }
                 if (event.getActionCommand().equals("Limpiar completos")) {
-                    //TODO enviar orden al GestorEGorilla/AlmacenDescarga de eliminar la descarga
                     borrarCompletos();
+                }
+                if (event.getActionCommand().equals("Abrir")) {
+                    //Deberia estar completa pero nos aseguramos de que lo esta
+                    if(_completada){
+                        ejecutarSeleccionado();
+                    }
+                }
+                if (event.getActionCommand().equals("Previsualizar")) {
+                    previsualizarSeleccionado();
+                }
+            }
+        }
+
+        /**
+         * Abre el archivo con el programa por defecto del usuario
+         */
+        public void ejecutarSeleccionado(){
+            String ruta=GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos()+"/"+_lblNombre.getText();
+            if (Desktop.isDesktopSupported()) {
+              try {
+                Desktop desktop = Desktop.getDesktop();
+                if (desktop.isSupported(Desktop.Action.BROWSE)) {
+                  desktop.browse(new URI(ruta));
+                }
+              } catch (Exception ex) {
+                  ex.printStackTrace();
+              }
+            }
+        }
+
+        /**
+         * Metodo que previsualiza un archivo si es compatible con el VLC
+         */
+        public void previsualizarSeleccionado(){
+            TipoArchivo _tipo;
+            TipoArchivo.iniciarTiposArchivo();
+            String nombre = _lblNombre.getText();
+            String[] extensiones = nombre.split("\\.");
+            if (extensiones.length != 0) {
+                _tipo = TipoArchivo.devuelveTipo(extensiones[extensiones.length - 1].toLowerCase());
+            } else {
+                _tipo = TipoArchivo.OTRO;
+            }
+            if( _tipo == TipoArchivo.AUDIO || _tipo == TipoArchivo.VIDEO/*lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi")*/ ){
+                try {
+                    String previsualizador = "utils//vlc-0.9.9//vlc.exe";
+                    String rutaTemp = GestorCompartidos.getInstancia().getGestorDisco().getDirectorioTemporales();
+                    String ficheroTemp = "//"+_lblNombre.getText()+".tmp";
+                    //System.out.println( previsualizador+" "+rutaTemp+ficheroTemp );
+                    Runtime.getRuntime().exec( previsualizador+" "+rutaTemp+ficheroTemp );
+                } catch (IOException ex) {
+                    Logger.getLogger(PanelDescargas.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -469,41 +546,9 @@ public class PanelDescargas extends JPanel implements ObservadorAlmacenDescargas
                 asignar(e, _colorSeleccion, _colorBorde);
                 if (e.getClickCount() == 2){
                     if (_completada) {
-                        String ruta=GestorCompartidos.getInstancia().getGestorDisco().getDirectorioCompletos()+"/"+_lblNombre.getText();
-                        if (Desktop.isDesktopSupported()) {
-                          try {
-                            Desktop desktop = Desktop.getDesktop();
-                            if (desktop.isSupported(Desktop.Action.BROWSE)) {
-                              desktop.browse(new URI(ruta));
-                            }
-                          } catch (Exception ex) {
-                              ex.printStackTrace();
-                          }
-                        } 
+                        ejecutarSeleccionado();
                     }else{
-                        TipoArchivo _tipo;
-                        TipoArchivo.iniciarTiposArchivo();
-                        String nombre = _lblNombre.getText();
-                        String[] extensiones = nombre.split("\\.");
-                        if (extensiones.length != 0) {
-                            _tipo = TipoArchivo.devuelveTipo(extensiones[extensiones.length - 1].toLowerCase());
-                        } else {
-                            _tipo = TipoArchivo.OTRO;
-                        }
-                        if( _tipo == TipoArchivo.AUDIO || _tipo == TipoArchivo.VIDEO/*lblNombre.getText().contains(".mp3") || _lblNombre.getText().contains(".avi")*/ ){
-                            try {
-                                String previsualizador = "utils//vlc-0.9.9//vlc.exe";
-                                String rutaTemp = GestorCompartidos.getInstancia().getGestorDisco().getDirectorioTemporales();
-                                String ficheroTemp = "//"+_lblNombre.getText()+".tmp";
-                                //System.out.println( previsualizador+" "+rutaTemp+ficheroTemp );
-                                Runtime.getRuntime().exec( previsualizador+" "+rutaTemp+ficheroTemp );
-                            } catch (IOException ex) {
-                                Logger.getLogger(PanelDescargas.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        }
-
-
-
+                        previsualizarSeleccionado();
                     }
                 }
             }
