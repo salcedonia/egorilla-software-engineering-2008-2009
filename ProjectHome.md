@@ -1,0 +1,2 @@
+eGorilla P2P es una aplicación desarrollada en Java como parte de la asignatura de Ingeniería del Software en el grupo 4ºB de la Facultad de Informática de la Universidad Complutense de Madrid correspondiente al curso académico 2008/2009.
+El fin de la aplicación es el de poner en práctica los conocimientos de la asignatura en una aplicación real en la que además se muestran conocimientos en otras áreas de la informática como teoría de redes principalmente.
